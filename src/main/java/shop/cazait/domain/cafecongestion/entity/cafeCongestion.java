@@ -28,7 +28,7 @@ public class cafeCongestion {
 
     @OneToOne
     @JoinColumn(name = "cafe_id")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Cafe cafe;
 
     @Enumerated(EnumType.STRING)
