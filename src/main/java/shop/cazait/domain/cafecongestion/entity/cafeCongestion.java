@@ -25,8 +25,7 @@ public class cafeCongestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "cafe_id")
+    @OneToOne(mappedBy = "status")
     private Cafe cafe;
 
     @Enumerated(EnumType.STRING)
