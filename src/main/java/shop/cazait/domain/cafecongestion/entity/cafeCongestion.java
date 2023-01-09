@@ -1,5 +1,6 @@
 package shop.cazait.domain.cafecongestion.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,9 +28,11 @@ public class cafeCongestion {
 
     @OneToOne
     @JoinColumn(name = "cafe_id")
+    @Column(nullable = false)
     private Cafe cafe;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private congestionStatus status;
 
 }
