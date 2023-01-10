@@ -1,14 +1,11 @@
-package shop.cazait.domain.cafecongestion.entity;
+package shop.cazait.domain.cafemenu.entity;
 
 import jakarta.persistence.Entity;
-
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,16 +17,20 @@ import shop.cazait.domain.cafe.entity.Cafe;
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeCongestion {
+public class CafeMenu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "status")
+    @ManyToOne
+    @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
-    @Enumerated(EnumType.STRING)
-    private congestionStatus status;
+    private String name;
+
+    private int price;
+
+    private String imageUrl;
 
 }

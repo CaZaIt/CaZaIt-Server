@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.entity;
+package shop.cazait.domain.cafevisit.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,26 +11,25 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.user.entity.User;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeMenu {
+public class CafeVisit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
-
-    private String name;
-
-    private int price;
-
-    private String imageUrl;
 
 }

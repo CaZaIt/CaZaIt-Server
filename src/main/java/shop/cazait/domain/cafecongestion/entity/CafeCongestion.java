@@ -1,35 +1,34 @@
-package shop.cazait.domain.cafevisit.entity;
+package shop.cazait.domain.cafecongestion.entity;
 
 import jakarta.persistence.Entity;
+
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.user.entity.User;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeVisit {
+public class CafeCongestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "cafe_id")
+    @OneToOne(mappedBy = "status")
     private Cafe cafe;
+
+    @Enumerated(EnumType.STRING)
+    private CongestionStatus status;
 
 }

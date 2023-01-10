@@ -18,7 +18,7 @@ import shop.cazait.domain.user.entity.User;
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeFavorites {
+public class CafeFavorites {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
