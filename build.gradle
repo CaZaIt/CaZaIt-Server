@@ -36,6 +36,11 @@ dependencies {
 	// p6spy
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
 
+	// Swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+
 }
 
 tasks.named('test') {
