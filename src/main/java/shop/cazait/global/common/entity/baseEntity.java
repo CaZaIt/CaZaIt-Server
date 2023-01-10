@@ -7,7 +7,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import lombok.AllArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import shop.cazait.global.common.status.BaseStatus;
