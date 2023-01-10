@@ -25,7 +25,7 @@ public class cafeMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "cafe_id")
     @Column(nullable = false)
     private Cafe cafe;
