@@ -1,12 +1,16 @@
 package shop.cazait.domain.master.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import shop.cazait.global.common.entity.baseEntity;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class Master extends baseEntity {
 
