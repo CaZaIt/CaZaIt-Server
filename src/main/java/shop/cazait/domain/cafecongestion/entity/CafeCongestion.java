@@ -28,8 +28,7 @@ public class CafeCongestion extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(nullable = false, unique = true)
+    @OneToOne(mappedBy = "cafeCongestion", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cafe cafe;
 
     @Enumerated(EnumType.STRING)
