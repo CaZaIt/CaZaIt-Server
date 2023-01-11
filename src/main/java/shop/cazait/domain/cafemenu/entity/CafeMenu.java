@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,9 +16,7 @@ import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CafeMenu {
 
@@ -37,5 +36,14 @@ public class CafeMenu {
     private int price;
 
     private String imageUrl;
+
+    @Builder
+    public CafeMenu(Long id, Cafe cafe, String name, int price, String imageUrl) {
+        this.id = id;
+        this.cafe = cafe;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
 }

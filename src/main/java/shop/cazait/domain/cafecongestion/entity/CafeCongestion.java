@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +19,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class CafeCongestion extends BaseEntity {
 
@@ -36,4 +35,10 @@ public class CafeCongestion extends BaseEntity {
     @Column(nullable = false)
     private CongestionStatus status;
 
+    @Builder
+    public CafeCongestion(Long id, Cafe cafe, CongestionStatus status) {
+        this.id = id;
+        this.cafe = cafe;
+        this.status = status;
+    }
 }
