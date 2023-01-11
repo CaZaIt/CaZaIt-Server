@@ -1,5 +1,7 @@
 package shop.cazait.domain.cafecongestion.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.EnumType;
@@ -25,10 +27,12 @@ public class cafeCongestion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "status")
+    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false, unique = true)
     private Cafe cafe;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private congestionStatus status;
 
 }

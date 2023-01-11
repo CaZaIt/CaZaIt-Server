@@ -1,5 +1,7 @@
 package shop.cazait.domain.cafevisit.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,10 +28,12 @@ public class cafeVisit {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Column(nullable = false)
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "cafe_id")
+    @Column(nullable = false)
     private Cafe cafe;
 
 }
