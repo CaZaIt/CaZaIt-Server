@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.global.common.entity.BaseEntity;
-import shop.cazait.domain.cafecongestion.entity.cafeCongestion;
+import shop.cazait.domain.cafecongestion.entity.CafeCongestion;
 
 @Entity
 @NoArgsConstructor
@@ -22,7 +22,7 @@ public class Cafe extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congestion_id")
     @Column(nullable = false)
-    private cafeCongestion cafeCongestion;
+    private CafeCongestion cafeCongestion;
 
     @Column(nullable = false)
     private String name;

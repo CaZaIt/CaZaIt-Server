@@ -12,7 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import shop.cazait.global.common.status.BaseStatus;
 
 @MappedSuperclass
-public abstract class baseEntity {
+public abstract class BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private BaseStatus status;

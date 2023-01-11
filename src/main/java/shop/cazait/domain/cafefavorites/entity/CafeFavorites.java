@@ -1,6 +1,5 @@
 package shop.cazait.domain.cafefavorites.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,7 +20,7 @@ import shop.cazait.domain.user.entity.User;
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeFavorites {
+public class CafeFavorites {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
