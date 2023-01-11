@@ -19,7 +19,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 @AllArgsConstructor
 @Builder
 @Getter
-public class CafeCongestion {
+public class cafeCongestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
