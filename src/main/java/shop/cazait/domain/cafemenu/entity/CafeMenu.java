@@ -27,7 +27,6 @@ public class CafeMenu {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
-    @Column(nullable = false)
     private Cafe cafe;
 
     @Column(nullable = false)
