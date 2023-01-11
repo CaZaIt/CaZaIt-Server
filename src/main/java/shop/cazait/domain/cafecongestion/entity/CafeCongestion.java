@@ -1,40 +1,39 @@
-package shop.cazait.domain.cafefavorites.entity;
+package shop.cazait.domain.cafecongestion.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.user.entity.User;
+import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeFavorites {
+public class CafeCongestion extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cafe_id")
-    @Column(nullable = false)
+    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false, unique = true)
     private Cafe cafe;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CongestionStatus status;
 
 }

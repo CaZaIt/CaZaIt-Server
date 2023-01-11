@@ -1,6 +1,5 @@
 package shop.cazait.domain.cafemenu.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +19,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeMenu {
+public class CafeMenu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
