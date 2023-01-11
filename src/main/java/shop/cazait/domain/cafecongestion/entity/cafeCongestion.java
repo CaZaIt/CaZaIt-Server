@@ -15,13 +15,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.global.common.entity.baseEntity;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class cafeCongestion {
+public class cafeCongestion extends baseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
