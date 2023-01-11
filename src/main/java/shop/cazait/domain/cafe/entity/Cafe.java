@@ -21,7 +21,6 @@ public class Cafe extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congestion_id")
-    @Column(nullable = false)
     private CafeCongestion cafeCongestion;
 
     @Column(nullable = false)
