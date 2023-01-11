@@ -1,6 +1,8 @@
 package shop.cazait.domain.cafevisit.api;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +26,15 @@ public class CafeVisitApiController {
     /**
      * 최근 본 카페 기록 조회
      */
+    @ApiOperation(
+            value = "최근 본 카페 기록 조회", notes = "사용자의 ID를 통해 최근 본 카페 목록을 조회"
+    )
+    @ApiImplicitParam(
+            name = "userId", value = "사용자 ID"
+    )
     @ResponseBody
     @GetMapping("/{userId}")
-    public BaseResponse<List<GetCafeVisitRes>> getCafeVisitLog(@PathVariable("userId") Long userId) {
+    public BaseResponse<List<GetCafeVisitRes>> getCafeVisitLog(@PathVariable(name = "userId") Long userId) {
 
         List<GetCafeVisitRes> cafeVisitRes = cafeVisitService.getCafeVisitLog(userId);
 
