@@ -19,7 +19,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CafeCongestion extends BaseEntity {
 
@@ -41,4 +41,5 @@ public class CafeCongestion extends BaseEntity {
         this.cafe = cafe;
         this.status = status;
     }
+
 }
