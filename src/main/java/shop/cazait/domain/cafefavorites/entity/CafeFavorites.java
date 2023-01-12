@@ -1,53 +1,40 @@
-package shop.cazait.domain.review.entity;
+package shop.cazait.domain.cafefavorites.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.user.entity.User;
 
-
-
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Review {
+public class CafeFavorites {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @Column(nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
-    @Column(nullable = false)
     private Cafe cafe;
 
-    @Column(nullable = false)
-    private int score;
-
-    private String content;
-
-    /**
-     * 추후 확장
-     *@NonNull
-     *private int seat;
-     *@NonNull
-     *private int cleanliness;
-     */
+    @Builder
+    public CafeFavorites(User user, Cafe cafe) {
+        this.user = user;
+        this.cafe = cafe;
+    }
 }

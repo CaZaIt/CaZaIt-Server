@@ -1,13 +1,16 @@
 package shop.cazait.domain.master.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
-import shop.cazait.global.common.entity.baseEntity;
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Master extends baseEntity {
+public class Master extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
