@@ -6,7 +6,6 @@ import shop.cazait.global.common.entity.baseEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
 public class Master extends baseEntity {
 
