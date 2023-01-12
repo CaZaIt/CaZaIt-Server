@@ -1,8 +1,11 @@
 package shop.cazait.domain.cafefavorites.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.cafefavorites.dto.GetCafeFavoritesRes;
 import shop.cazait.domain.cafefavorites.entity.CafeFavorites;
 import shop.cazait.domain.cafefavorites.repository.CafeFavoritesRepository;
 
@@ -27,6 +30,19 @@ public class CafeFavoritesService {
 
         return cafeFavoritesId;
 
+    }
+
+    public List<GetCafeFavoritesRes> getCafeFavorites(Long userId) {
+        List<CafeFavorites> findCafeFavorites = cafeFavoritesRepository.findAllByUserId(userId);
+        List<GetCafeFavoritesRes> cafeFavoritesRes = findCafeFavorites.stream()
+                .map(cafeFavorites -> {
+                    return GetCafeFavoritesRes.builder()
+                            .name(cafeFavorites.getCafe().getName())
+                            .imageUrl(cafeFavorites.getCafe().getImageUrl())
+                            .build();
+                }).collect(Collectors.toList());
+
+        return cafeFavoritesRes;
     }
 
 }
