@@ -46,4 +46,13 @@ public class CafeFavoritesService {
         return cafeFavoritesRes;
     }
 
+    public String deleteCafeFavorites(Long userId, Long cafeId) {
+
+        CafeFavorites findCafeFavorites = cafeFavoritesRepository.findCafeFavoritesByUserIdAndCafeId(userId, cafeId);
+        cafeFavoritesRepository.delete(findCafeFavorites);
+
+        return "즐겨찾기 삭제가 완료 되었습니다.";
+
+    }
+
 }

@@ -8,4 +8,5 @@ public interface CafeFavoritesRepository extends JpaRepository<CafeFavorites, Lo
 
     List<CafeFavorites> findAllByUserId(Long userId);
 
+    CafeFavorites findCafeFavoritesByUserIdAndCafeId(Long userId, Long cafeId);
 }
