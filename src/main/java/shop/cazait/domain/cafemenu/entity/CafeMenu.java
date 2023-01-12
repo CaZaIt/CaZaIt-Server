@@ -37,8 +37,7 @@ public class CafeMenu {
     private String imageUrl;
 
     @Builder
-    public CafeMenu(Long id, Cafe cafe, String name, int price, String imageUrl) {
-        this.id = id;
+    public CafeMenu(Cafe cafe, String name, int price, String imageUrl) {
         this.cafe = cafe;
         this.name = name;
         this.price = price;

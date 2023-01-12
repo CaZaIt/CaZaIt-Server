@@ -35,8 +35,7 @@ public class CafeFavorites {
     private Cafe cafe;
 
     @Builder
-    public CafeFavorites(Long id, User user, Cafe cafe) {
-        this.id = id;
+    public CafeFavorites(User user, Cafe cafe) {
         this.user = user;
         this.cafe = cafe;
     }

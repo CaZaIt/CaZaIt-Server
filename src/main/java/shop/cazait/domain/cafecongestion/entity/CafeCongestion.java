@@ -36,8 +36,7 @@ public class CafeCongestion extends BaseEntity {
     private CongestionStatus status;
 
     @Builder
-    public CafeCongestion(Long id, Cafe cafe, CongestionStatus status) {
-        this.id = id;
+    public CafeCongestion(Cafe cafe, CongestionStatus status) {
         this.cafe = cafe;
         this.status = status;
     }

@@ -35,8 +35,7 @@ public class CafeVisit {
     private Cafe cafe;
 
     @Builder
-    public CafeVisit(Long id, User user, Cafe cafe) {
-        this.id = id;
+    public CafeVisit(User user, Cafe cafe) {
         this.user = user;
         this.cafe = cafe;
     }
