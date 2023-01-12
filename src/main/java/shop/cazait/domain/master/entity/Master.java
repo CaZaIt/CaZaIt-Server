@@ -1,10 +1,7 @@
 package shop.cazait.domain.master.entity;
 
-import lombok.*;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
@@ -24,4 +21,12 @@ public class Master extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String nickname;
+
+    @Builder
+    public Master(String email, String password, String nickname){
+        this.email =email;
+        this.password=password;
+        this.nickname=nickname;
+
+    }
 }
