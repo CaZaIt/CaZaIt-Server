@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import shop.cazait.global.common.entity.baseEntity;
 
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User extends baseEntity{
 
