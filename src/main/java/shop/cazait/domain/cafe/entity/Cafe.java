@@ -1,17 +1,12 @@
 package shop.cazait.domain.cafe.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.cafecongestion.entity.CafeCongestion;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Cafe extends BaseEntity {
 
@@ -37,5 +32,15 @@ public class Cafe extends BaseEntity {
 
     @Column(nullable = false)
     private String imageUrl;
+
+    @Builder
+    protected Cafe(CafeCongestion cafeCongestion, String name, String location, double longitude, double latitude, String imageUrl) {
+        this.cafeCongestion = cafeCongestion;
+        this.name = name;
+        this.location = location;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.imageUrl = imageUrl;
+    }
 
 }
