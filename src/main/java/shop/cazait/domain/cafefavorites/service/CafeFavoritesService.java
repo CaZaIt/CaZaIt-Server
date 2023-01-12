@@ -37,6 +37,7 @@ public class CafeFavoritesService {
         List<GetCafeFavoritesRes> cafeFavoritesRes = findCafeFavorites.stream()
                 .map(cafeFavorites -> {
                     return GetCafeFavoritesRes.builder()
+                            .cafeId(cafeFavorites.getCafe().getId())
                             .name(cafeFavorites.getCafe().getName())
                             .imageUrl(cafeFavorites.getCafe().getImageUrl())
                             .build();
