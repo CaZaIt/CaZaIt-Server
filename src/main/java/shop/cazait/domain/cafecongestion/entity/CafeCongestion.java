@@ -1,16 +1,7 @@
 package shop.cazait.domain.cafecongestion.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
+import javax.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +9,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CafeCongestion extends BaseEntity {
 
@@ -28,12 +17,17 @@ public class CafeCongestion extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(nullable = false, unique = true)
+    @OneToOne(mappedBy = "cafeCongestion", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cafe cafe;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CongestionStatus status;
+
+    @Builder
+    public CafeCongestion(Cafe cafe, CongestionStatus status) {
+        this.cafe = cafe;
+        this.status = status;
+    }
 
 }
