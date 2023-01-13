@@ -1,6 +1,6 @@
 package shop.cazait.domain.cafe.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.cafecongestion.entity.CafeCongestion;
