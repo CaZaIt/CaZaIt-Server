@@ -22,12 +22,12 @@ public class CafeCongestion extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private CongestionStatus status;
+    private CongestionStatus congestionStatus;
 
     @Builder
     public CafeCongestion(Cafe cafe, CongestionStatus status) {
         this.cafe = cafe;
-        this.status = status;
+        this.congestionStatus = status;
     }
 
 }
