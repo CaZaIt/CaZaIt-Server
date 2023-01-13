@@ -1,6 +1,13 @@
 package shop.cazait.domain.review.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,30 +19,33 @@ import shop.cazait.domain.user.entity.User;
 
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @Column(nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
-    @Column(nullable = false)
     private Cafe cafe;
 
     @Column(nullable = false)
     private int score;
 
     private String content;
+
+    @Builder
+    public Review(User user, Cafe cafe, int score, String content) {
+        this.user = user;
+        this.cafe = cafe;
+        this.score = score;
+        this.content = content;
+    }
 
     /**
      * 추후 확장
