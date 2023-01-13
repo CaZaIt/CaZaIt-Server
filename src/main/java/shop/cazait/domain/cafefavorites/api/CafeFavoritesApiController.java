@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @RequiredArgsConstructor
 public class CafeFavoritesApiController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final CafeFavoritesService cafeFavoritesService;
 
     @ApiOperation(value = "즐겨찾기 등록", notes = "사용자 ID와 카페 ID를 받아 즐겨찾기 등록")
