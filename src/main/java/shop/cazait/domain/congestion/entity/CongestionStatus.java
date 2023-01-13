@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafecongestion.entity;
+package shop.cazait.domain.congestion.entity;
 
 public enum CongestionStatus {
 
