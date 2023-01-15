@@ -4,10 +4,15 @@ Spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/cazait
+    url: jdbc:h2:tcp://localhost/~/cazait;NON_KEYWORDS=USER
     hikari:
       username: sa
       password:
+
+    h2:
+      console:
+        enabled: true
+        path: /h2-console
 
   jpa:
     hibernate:
@@ -15,6 +20,10 @@ Spring:
     properties:
       hibernate:
         format_sql: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 logging:
   level:

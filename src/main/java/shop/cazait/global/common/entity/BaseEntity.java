@@ -1,25 +1,32 @@
 package shop.cazait.global.common.entity;
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.AllArgsConstructor;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import shop.cazait.global.common.status.BaseStatus;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public abstract class timeEntity {
+@MappedSuperclass
+@Getter
+public abstract class BaseEntity {
+
+    @Enumerated(EnumType.STRING)
+    private BaseStatus status;
 
     @CreatedDate
+    @Column(updatable = false)
     private String createdAt;
 
     @LastModifiedDate
     private String updatedAt;
+
+    protected BaseEntity() {
+        this.status = BaseStatus.ACTIVE;
+    }
 
     /**
      * Execute before entity insert
