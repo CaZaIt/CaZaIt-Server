@@ -15,19 +15,17 @@ import shop.cazait.domain.review.repository.ReviewRepository;
 @Service
 @RequiredArgsConstructor
 public class ReviewProvideService {
+    private static final double scoreDivider = 5.0;
     private final ReviewRepository reviewRepository;
 
-    public GetReviewsRes getReviews(long cafeId) {
+    public GetReviewsRes getReviews(Long cafeId) {
         List<Review> reviews = reviewRepository.findAllByCafeId(cafeId);
+        double averageScore = reviews.stream()
+                .mapToInt(Review::getScore)
+                .sum() / scoreDivider;
 
-        GetReviewsRes getReviewsRes = GetReviewsRes.builder()
-                .reviews(reviews)
-                .averageScore(reviews.stream()
-                        .mapToInt(Review::getScore)
-                        .sum() / 5.0)
-                .build();
 
-        return getReviewsRes;
+        return GetReviewsRes.from(averageScore, reviews);
     }
 
     public GetReviewRes getReview(Long reviewId) {
