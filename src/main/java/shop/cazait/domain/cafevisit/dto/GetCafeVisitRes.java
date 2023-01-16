@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 
-@Data
 @NoArgsConstructor
 @ApiModel(value = "카페 정보", description = "조회한 카페 정보")
 public class GetCafeVisitRes {
