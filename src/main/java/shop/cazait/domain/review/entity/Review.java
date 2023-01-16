@@ -1,18 +1,19 @@
 package shop.cazait.domain.review.entity;
 
-import javax.persistence.*;
-import javax.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.user.entity.User;
+import shop.cazait.global.common.entity.BaseEntity;
+
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Review {
+public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
