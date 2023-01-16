@@ -6,20 +6,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafefavorites.dto.GetCafeFavoritesRes;
+import shop.cazait.domain.cafefavorites.dto.PostCafeFavoritesRes;
 import shop.cazait.domain.cafefavorites.entity.CafeFavorites;
 import shop.cazait.domain.cafefavorites.repository.CafeFavoritesRepository;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CafeFavoritesService {
 
     private final CafeFavoritesRepository cafeFavoritesRepository;
     private final CafeRepositoy cafeRepositoy;
     private final UserRepositoy userRepositoy;
 
-    @Transactional
-    public Long addCafeFavorites(Long userId, Long cafeId) {
+    public PostCafeFavoritesRes addCafeFavorites(Long userId, Long cafeId) {
 
         CafeFavorites cafeFavorites = CafeFavorites.builder()
                 .user(userRepositoy.findById(userId))
@@ -28,10 +28,13 @@ public class CafeFavoritesService {
 
         Long cafeFavoritesId = cafeFavoritesRepository.save(cafeFavorites).getId();
 
-        return cafeFavoritesId;
+        return PostCafeFavoritesRes.builder()
+                .id(cafeFavoritesId)
+                .build();
 
     }
 
+    @Transactional(readOnly = true)
     public List<GetCafeFavoritesRes> getCafeFavorites(Long userId) {
         List<CafeFavorites> findCafeFavorites = cafeFavoritesRepository.findAllByUserId(userId);
         List<GetCafeFavoritesRes> cafeFavoritesRes = findCafeFavorites.stream()

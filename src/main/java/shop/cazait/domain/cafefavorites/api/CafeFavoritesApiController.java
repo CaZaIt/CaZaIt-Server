@@ -34,11 +34,7 @@ public class CafeFavoritesApiController {
     public BaseResponse<PostCafeFavoritesRes> addCafeFavorites(@PathVariable(name = "userId") Long userId,
                                                               @PathVariable(name = "cafeId") Long cafeId) {
 
-        Long resultId = cafeFavoritesService.addCafeFavorites(userId, cafeId);
-        PostCafeFavoritesRes postCafeFavoritesRes = PostCafeFavoritesRes.builder()
-                .id(resultId)
-                .build();
-
+        PostCafeFavoritesRes postCafeFavoritesRes = cafeFavoritesService.addCafeFavorites(userId, cafeId);
         return new BaseResponse<>(postCafeFavoritesRes);
 
     }
