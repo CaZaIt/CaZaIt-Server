@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.cafefavorites.dto.PostCafeFavoritesRes;
 import shop.cazait.domain.cafefavorites.service.CafeFavoritesService;
@@ -18,6 +19,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @Api(tags = "즐겨찾기 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/cafe_favorites")
 public class CafeFavoritesApiController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
