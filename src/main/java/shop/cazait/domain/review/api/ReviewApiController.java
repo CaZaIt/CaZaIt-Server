@@ -19,7 +19,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "리뷰 API")
-@RequestMapping("/app/cafe")
+@RequestMapping("/api/reviews")
 public class ReviewApiController {
     private final ReviewDaoService reviewDaoService;
     private final ReviewProvideService reviewProvideService;
@@ -30,7 +30,7 @@ public class ReviewApiController {
             name = "cafeId",
             value = "카페 ID"
     )
-    @GetMapping("/{cafeId}/reviews")
+    @GetMapping("/{cafeId}")
     public BaseResponse<GetReviewsRes> getReviews(@PathVariable long cafeId) {
         GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId);
 
