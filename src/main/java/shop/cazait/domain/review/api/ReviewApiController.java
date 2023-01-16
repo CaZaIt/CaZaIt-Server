@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
@@ -36,4 +37,12 @@ public class ReviewApiController {
 
         return new BaseResponse<>(getReviewsRes);
     }
+
+    @GetMapping("/{reviewId}")
+    public BaseResponse<GetReviewRes> getReview(@PathVariable Long reviewId) {
+        GetReviewRes getReviewRes = reviewProvideService.getReview(reviewId);
+
+        return new BaseResponse<>(getReviewRes);
+    }
+
 }

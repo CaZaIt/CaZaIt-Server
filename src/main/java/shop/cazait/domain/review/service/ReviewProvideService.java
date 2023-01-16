@@ -1,8 +1,11 @@
 package shop.cazait.domain.review.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.repository.ReviewRepository;
@@ -25,5 +28,16 @@ public class ReviewProvideService {
                 .build();
 
         return getReviewsRes;
+    }
+
+    public GetReviewRes getReview(Long reviewId) {
+        Optional<Review> reviewOptional = reviewRepository.findById(reviewId);
+
+        try {
+            Review review = reviewOptional.get();
+            return GetReviewRes.from(review);
+        } catch (NoSuchElementException e) {
+            throw e;
+        }
     }
 }
