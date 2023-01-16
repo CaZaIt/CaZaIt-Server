@@ -17,7 +17,7 @@ import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CafeMenuService {
 
     private final CafeRepository cafeRepository;
@@ -26,26 +26,27 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 조회
      */
+    @Transactional(readOnly = true)
     public List<getCafeMenuRes> getCafeMenus(Long cafeId) {
 
         List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId);
         List<getCafeMenuRes> cafeMenuRes = findMenus.stream()
                 .map(cafeMenu -> getCafeMenuRes.builder()
+                        .cafeMenuId(cafeMenu.getId())
                         .name(cafeMenu.getName())
                         .price(cafeMenu.getPrice())
                         .imageUrl(cafeMenu.getImageUrl())
                         .build()).
                 collect(Collectors.toList());
 
-
         return cafeMenuRes;
+
     }
 
 
     /**
      * 카페 메뉴 등록
      */
-    @Transactional
     public void addCafeMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs) {
 
         Cafe findCafe = cafeRepository.findById(cafeId);
@@ -64,7 +65,6 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    @Transactional
     public PutCafeMenuRes updateCafeMenu(Long cafeId, Long cafeMenuId, PutCafeMenuReq putCafeMenuReq) {
 
         CafeMenu findCafeMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
@@ -90,12 +90,12 @@ public class CafeMenuService {
                 .price(updateCafeMenu.getPrice())
                 .imageUrl(updateCafeMenu.getImageUrl())
                 .build();
+
     }
 
     /**
      * 카페 메뉴 삭제
      */
-    @Transactional
     public void deleteCafeMenu(Long cafeMenuId) {
         cafeMenuRepository.deleteById(cafeMenuId);
     }
