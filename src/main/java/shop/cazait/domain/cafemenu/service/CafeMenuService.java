@@ -76,7 +76,7 @@ public class CafeMenuService {
         }
 
         if (putCafeMenuReq.getImageUrl() != null) {
-            findCafeMenu.changeCafeMenuName(putCafeMenuReq.getImageUrl());
+            findCafeMenu.changeCafeMenuImageUrl(putCafeMenuReq.getImageUrl());
         }
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findCafeMenu);
