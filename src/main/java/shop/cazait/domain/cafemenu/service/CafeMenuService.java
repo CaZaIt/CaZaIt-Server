@@ -45,6 +45,7 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 등록
      */
+    @Transactional
     public void addCafeMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs) {
 
         Cafe findCafe = cafeRepository.findById(cafeId);
@@ -63,6 +64,7 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
+    @Transactional
     public PutCafeMenuRes updateCafeMenu(Long cafeId, Long cafeMenuId, PutCafeMenuReq putCafeMenuReq) {
 
         CafeMenu findCafeMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
@@ -93,6 +95,7 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 삭제
      */
+    @Transactional
     public void deleteCafeMenu(Long cafeMenuId) {
         cafeMenuRepository.deleteById(cafeMenuId);
     }
