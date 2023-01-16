@@ -1,8 +1,10 @@
 package shop.cazait.domain.cafemenu.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
@@ -91,5 +93,8 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 삭제
      */
+    public void deleteCafeMenu(Long cafeMenuId) {
+        cafeMenuRepository.deleteById(cafeMenuId);
+    }
 
 }
