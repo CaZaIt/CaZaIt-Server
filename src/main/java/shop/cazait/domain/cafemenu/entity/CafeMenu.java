@@ -36,4 +36,15 @@ public class CafeMenu {
         this.imageUrl = imageUrl;
     }
 
+    public void changeCafeMenuName(String name) {
+        this.name = name;
+    }
+
+    public void changeCafeMenuPrice(int price) {
+        this.price = price;
+    }
+
+    public void changeCafeMenuImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

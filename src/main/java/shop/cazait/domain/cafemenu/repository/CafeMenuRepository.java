@@ -8,4 +8,7 @@ import shop.cazait.domain.cafemenu.entity.CafeMenu;
 public interface CafeMenuRepository extends JpaRepository<CafeMenu, Long> {
 
     List<CafeMenu> findAllByCafeId(Long cafeId);
+
+    CafeMenu findByMenuAndCafe(Long cafeMenuId,Long cafeId);
+
 }
