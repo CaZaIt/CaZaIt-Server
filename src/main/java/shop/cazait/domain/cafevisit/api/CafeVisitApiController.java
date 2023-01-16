@@ -18,7 +18,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @Api(tags = "최근 본 카페 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cafe_visit")
+@RequestMapping("/cafe_visits")
 public class CafeVisitApiController {
 
     private final CafeVisitService cafeVisitService;

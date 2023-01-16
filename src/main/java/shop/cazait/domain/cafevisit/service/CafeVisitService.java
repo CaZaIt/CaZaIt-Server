@@ -14,7 +14,7 @@ import shop.cazait.domain.user.entity.User;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CafeVisitService {
 
     private final UserRepository userRepository;
@@ -24,12 +24,17 @@ public class CafeVisitService {
     /**
      * 최근 본 카페 기록 조회
      */
+    @Transactional(readOnly = true)
     public List<GetCafeVisitRes> getCafeVisitLog(Long userId) {
 
         List<CafeVisit> CafeVisits = cafeVisitRepository.findCafeVisitsByUserId(userId);
 
         return CafeVisits.stream()
-                .map(CafeVisit -> new GetCafeVisitRes(CafeVisit.getCafe()))
+                .map(CafeVisit -> GetCafeVisitRes.builder()
+                        .cafeId(CafeVisit.getCafe().getId())
+                        .name(CafeVisit.getCafe().getName())
+                        .imageUrl(CafeVisit.getCafe().getName())
+                        .build())
                 .collect(Collectors.toList());
     }
 
