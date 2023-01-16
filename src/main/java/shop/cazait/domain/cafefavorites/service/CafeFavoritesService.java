@@ -1,5 +1,7 @@
 package shop.cazait.domain.cafefavorites.service;
 
+import static shop.cazait.domain.cafefavorites.exception.CafeFavoritesErrorStatus.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafefavorites.dto.GetCafeFavoritesRes;
 import shop.cazait.domain.cafefavorites.dto.PostCafeFavoritesRes;
 import shop.cazait.domain.cafefavorites.entity.CafeFavorites;
+import shop.cazait.domain.cafefavorites.exception.CafeFavoritesErrorStatus;
+import shop.cazait.domain.cafefavorites.exception.CafeFavoritesException;
 import shop.cazait.domain.cafefavorites.repository.CafeFavoritesRepository;
 
 @Service
@@ -51,7 +55,10 @@ public class CafeFavoritesService {
 
     public String deleteCafeFavorites(Long userId, Long cafeId) {
 
-        CafeFavorites findCafeFavorites = cafeFavoritesRepository.findCafeFavoritesByUserIdAndCafeId(userId, cafeId);
+        CafeFavorites findCafeFavorites = cafeFavoritesRepository
+                .findCafeFavoritesByUserIdAndCafeId(userId, cafeId)
+                .orElseThrow(() -> new CafeFavoritesException(INVALID_CAFE_FAVORITES));
+
         cafeFavoritesRepository.delete(findCafeFavorites);
 
         return "즐겨찾기 삭제가 완료 되었습니다.";
