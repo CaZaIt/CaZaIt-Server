@@ -25,9 +25,13 @@ public class Congestion extends BaseEntity {
     private CongestionStatus congestionStatus;
 
     @Builder
-    public Congestion(Cafe cafe, CongestionStatus status) {
+    public Congestion(Cafe cafe, CongestionStatus congestionStatus) {
         this.cafe = cafe;
-        this.congestionStatus = status;
+        this.congestionStatus = congestionStatus;
+    }
+
+    public void changeCongestionStatus(CongestionStatus congestionStatus) {
+        this.congestionStatus = congestionStatus;
     }
 
 }
