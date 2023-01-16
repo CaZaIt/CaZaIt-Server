@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
+import shop.cazait.domain.cafemenu.dto.PutCafeMenuReq;
+import shop.cazait.domain.cafemenu.dto.PutCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.getCafeMenuRes;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
@@ -59,7 +61,32 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
+    public PutCafeMenuRes updateCafeMenu(Long cafeId, Long cafeMenuId, PutCafeMenuReq putCafeMenuReq) {
 
+        CafeMenu findCafeMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
+
+        if (putCafeMenuReq.getName() != null) {
+            findCafeMenu.changeCafeMenuName(putCafeMenuReq.getName());
+        }
+
+        if (putCafeMenuReq.getPrice() != -1) {
+            findCafeMenu.changeCafeMenuPrice(putCafeMenuReq.getPrice());
+        }
+
+        if (putCafeMenuReq.getImageUrl() != null) {
+            findCafeMenu.changeCafeMenuName(putCafeMenuReq.getImageUrl());
+        }
+
+        CafeMenu updateCafeMenu = cafeMenuRepository.save(findCafeMenu);
+
+        return PutCafeMenuRes.builder()
+                .cafeMenuId(updateCafeMenu.getId())
+                .cafeId(updateCafeMenu.getCafe().getId())
+                .name(updateCafeMenu.getName())
+                .price(updateCafeMenu.getPrice())
+                .imageUrl(updateCafeMenu.getImageUrl())
+                .build();
+    }
 
     /**
      * 카페 메뉴 삭제
