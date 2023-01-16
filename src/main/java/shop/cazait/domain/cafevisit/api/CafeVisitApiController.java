@@ -15,7 +15,7 @@ import shop.cazait.domain.cafevisit.dto.GetCafeVisitRes;
 import shop.cazait.domain.cafevisit.service.CafeVisitService;
 import shop.cazait.global.common.response.BaseResponse;
 
-@Api
+@Api(tags = "최근 본 카페 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cafe_visit")
