@@ -1,19 +1,20 @@
 package shop.cazait.domain.congestion.api;
 
+import static shop.cazait.domain.congestion.exception.CongestionErrorStatus.CONGESTION_STATUS_EMPTY;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
+import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.service.CongestionService;
 import shop.cazait.global.common.response.BaseResponse;
 
@@ -33,11 +34,14 @@ public class CongestionApiController {
     @PostMapping("/{masterId}/{cafeId}")
     public BaseResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
                                                          @PathVariable(name = "cafeId") Long cafeId,
-                                                         @RequestBody PostCongestionReq postCongestionReq) {
+                                                         @RequestBody PostCongestionReq postCongestionReq)
+            throws CongestionException {
 
         // masterId 유효 확인
         // cafeId NULL 확인
-        // PostCongestionReq NULL 확인
+        if (postCongestionReq.getCongestionStatus().isEmpty()) {
+            throw new CongestionException(CONGESTION_STATUS_EMPTY);
+        }
 
         PostCongestionRes postCongestionRes = congestionService.addAndUpdateCongestion(cafeId, postCongestionReq);
         return new BaseResponse<>(postCongestionRes);
