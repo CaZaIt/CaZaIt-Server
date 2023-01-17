@@ -26,7 +26,7 @@ public class ReviewProvideService {
                 .mapToInt(Review::getScore)
                 .sum() / scoreDivider;
 
-        return GetReviewsRes.from(averageScore, reviews);
+        return GetReviewsRes.of(averageScore, reviews);
     }
 
     public GetReviewRes getReview(Long reviewId) {
@@ -34,7 +34,7 @@ public class ReviewProvideService {
 
         try {
             Review review = reviewOptional.get();
-            return GetReviewRes.from(review);
+            return GetReviewRes.of(review);
         } catch (NoSuchElementException e) {
             throw e;
         }

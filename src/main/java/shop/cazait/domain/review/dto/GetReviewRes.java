@@ -13,7 +13,7 @@ public class GetReviewRes {
     private Integer score;
     private String content;
 
-    public static GetReviewRes from(Review review) {
+    public static GetReviewRes of(Review review) {
         return GetReviewRes.builder()
                 .userId(review.getUser().getId())
                 .cafeId(review.getCafe().getId())

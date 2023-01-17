@@ -22,9 +22,9 @@ public class GetReviewsRes {
     private List<GetReviewRes> reviewDtos;
 
 
-    public static GetReviewsRes from(double averageScore, List<Review> reviews) {
+    public static GetReviewsRes of(double averageScore, List<Review> reviews) {
         List<GetReviewRes> reviewDtos = reviews.stream()
-                .map(review -> GetReviewRes.from(review))
+                .map(review -> GetReviewRes.of(review))
                 .collect(Collectors.toList());
 
         return GetReviewsRes.builder()
