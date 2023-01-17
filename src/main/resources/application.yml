@@ -2,6 +2,13 @@ Spring:
   application:
     name: cazait
 
+  # h2 Setting Information
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # DataBase Setting Information
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:tcp://localhost/~/cazait;NON_KEYWORDS=USER
@@ -9,17 +16,14 @@ Spring:
       username: sa
       password:
 
-    h2:
-      console:
-        enabled: true
-        path: /h2-console
-
+  # JPA Setting Information
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
 
   mvc:
     pathmatch:
