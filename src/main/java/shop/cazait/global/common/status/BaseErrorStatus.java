@@ -1,25 +1,21 @@
 package shop.cazait.global.common.status;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum BaseErrorStatus {
 
     /**
      * Request 관련 공통 오류
      */
-    SUCCESS(true, "요청에 성공하였습니다."),
+    SUCCESS("SUCCESS", "요청에 성공하였습니다."),
+    EMPTY_JWT("FAIL","JWT를 입력해주세요."),
+    INVALID_JWT("FAIL", "유효하지 않은 JWT입니다.");
 
-    EMPTY_JWT(false,"JWT를 입력해주세요."),
-    INVALID_JWT(false, "유효하지 않은 JWT입니다."),
-    INVALID_USER_JWT(false,"권한이 없는 유저의 접근입니다.");
-
-    private final boolean status;
+    private final String result;
     private final String message;
-
-    private BaseErrorStatus(boolean status, String message) {
-        this.status = status;
-        this.message = message;
-    }
 
 }
