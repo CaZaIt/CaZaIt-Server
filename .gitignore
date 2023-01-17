@@ -166,4 +166,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# CheckSums
+/.gradle/**/checksums/
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,java
+
