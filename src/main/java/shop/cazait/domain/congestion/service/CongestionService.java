@@ -1,5 +1,7 @@
 package shop.cazait.domain.congestion.service;
 
+import static shop.cazait.domain.congestion.exception.CongestionErrorStatus.INVALID_CONGESTION_STATUS;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +9,7 @@ import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
+import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.repository.CongestionRepository;
 
 @Service
@@ -19,10 +22,16 @@ public class CongestionService {
 
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
-        Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
-        CongestionStatus congestionStatus = CongestionStatus.valueOf(postCongestionReq.getCongestionStatus());
-
         Congestion newCongestion = null;
+        CongestionStatus congestionStatus = null;
+        Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
+
+        try {
+            congestionStatus = CongestionStatus.valueOf(postCongestionReq.getCongestionStatus());
+        } catch (IllegalArgumentException ex) {
+            throw new CongestionException(INVALID_CONGESTION_STATUS);
+        }
+
 
         if (findCongestion == null) {
             newCongestion = addCongestion(cafeId, congestionStatus);
