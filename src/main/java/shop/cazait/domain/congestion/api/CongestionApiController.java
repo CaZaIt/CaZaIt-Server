@@ -20,7 +20,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @Api(tags = "혼잡도 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/congestions")
+@RequestMapping("/api/congestions")
 public class CongestionApiController {
 
     private final CongestionService congestionService;
