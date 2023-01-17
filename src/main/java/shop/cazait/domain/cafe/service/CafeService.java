@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
+import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.global.common.status.BaseStatus;
@@ -14,29 +15,54 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CafeService {
 
     private final CafeRepository cafeRepository;
 
-    public List<GetCafeRes> getCafeList(BaseStatus status) {
+    public void addCafe(PostCafeReq cafeReq) {
+        Cafe cafe = Cafe.builder()
+                .congestion(cafeReq.getCongestion())
+                .name(cafeReq.getName())
+                .location(cafeReq.getLocation())
+                .longitude(cafeReq.getLongitude())
+                .latitude(cafeReq.getLatitude())
+                .build();
+
+        cafeRepository.save(cafe);
+    }
+
+    public List<GetCafeRes> getCafeByStatus(BaseStatus status) {
         List<Cafe> cafeList = cafeRepository.findCafeByStatus(status);
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
-            GetCafeRes cafeRes = GetCafeRes.builder()
-                    .cafeId(cafe.getId())
-                    .congestionId(cafe.getCongestion().getId())
-                    .name(cafe.getName())
-                    .location(cafe.getLocation())
-                    .longitude(cafe.getLongitude())
-                    .latitude(cafe.getLatitude())
-                    .build();
+            GetCafeRes cafeRes;
+            if (cafe.getCongestion() == null) {
+                cafeRes = GetCafeRes.builder()
+                        .cafeId(cafe.getId())
+                        .congestionId(1L)
+                        .name(cafe.getName())
+                        .location(cafe.getLocation())
+                        .longitude(cafe.getLongitude())
+                        .latitude(cafe.getLatitude())
+                        .build();
+            }
+            else {
+                cafeRes = GetCafeRes.builder()
+                        .cafeId(cafe.getId())
+                        .congestionId(cafe.getCongestion().getId())
+                        .name(cafe.getName())
+                        .location(cafe.getLocation())
+                        .longitude(cafe.getLongitude())
+                        .latitude(cafe.getLatitude())
+                        .build();
+            }
             cafeResList.add(cafeRes);
         }
         return cafeResList;
     }
 
-    public GetCafeRes findCafeById(Long id) {
+    public GetCafeRes getCafeById(Long id) {
         Optional<Cafe> cafe = cafeRepository.findCafeById(id);
         GetCafeRes cafeRes = GetCafeRes.builder()
                 .cafeId(cafe.get().getId())
@@ -49,7 +75,7 @@ public class CafeService {
         return cafeRes;
     }
 
-    public List<GetCafeRes> findCafeByName(String name) {
+    public List<GetCafeRes> getCafeByName(String name) {
         List<Cafe> cafeList = cafeRepository.findCafeByName(name);
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
