@@ -22,8 +22,8 @@ public class CongestionService {
 
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
+        CongestionStatus congestionStatus;
         Congestion newCongestion = null;
-        CongestionStatus congestionStatus = null;
         Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
 
         try {
