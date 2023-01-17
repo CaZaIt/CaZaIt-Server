@@ -14,7 +14,7 @@ import shop.cazait.domain.congestion.entity.CongestionStatus;
 public class PostCongestionReq {
 
     @ApiModelProperty(value = "혼잡도 상태")
-    private CongestionStatus congestionStatus;
+    private String congestionStatus;
 
     public static Congestion toEntity(Cafe cafe, CongestionStatus congestionStatus) {
         return Congestion.builder()

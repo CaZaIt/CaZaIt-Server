@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.entity.Congestion;
+import shop.cazait.domain.congestion.entity.CongestionStatus;
 import shop.cazait.domain.congestion.repository.CongestionRepository;
 
 @Service
@@ -35,7 +36,8 @@ public class CongestionService {
 
     public Congestion addCongestion(Long cafeId, PostCongestionReq request) {
 
-        Congestion congestion = PostCongestionReq.toEntity(cafeRepository.findById(cafeId), request.getCongestionStatus());
+        CongestionStatus congestionStatus = CongestionStatus.valueOf(request.getCongestionStatus());
+        Congestion congestion = PostCongestionReq.toEntity(cafeRepository.findById(cafeId), congestionStatus);
         Congestion addCongestion =  congestionRepository.save(congestion);
 
         return addCongestion;
@@ -44,7 +46,8 @@ public class CongestionService {
 
     public Congestion updateCongestion(Congestion findCongestion, PostCongestionReq request) {
 
-        findCongestion.changeCongestionStatus(request.getCongestionStatus());
+        CongestionStatus congestionStatus = CongestionStatus.valueOf(request.getCongestionStatus());
+        findCongestion.changeCongestionStatus(congestionStatus);
         Congestion updateCongestion = congestionRepository.save(findCongestion);
 
         return updateCongestion;
