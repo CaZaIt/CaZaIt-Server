@@ -24,9 +24,9 @@ public class Master extends BaseEntity {
 
     @Builder
     public Master(String email, String password, String nickname){
-        this.email =email;
-        this.password=password;
-        this.nickname=nickname;
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
 
     }
 }
