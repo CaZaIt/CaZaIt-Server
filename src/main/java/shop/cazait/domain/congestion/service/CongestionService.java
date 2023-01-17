@@ -1,7 +1,5 @@
 package shop.cazait.domain.congestion.service;
 
-import static shop.cazait.domain.congestion.entity.FirstAccessStatus.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,33 +26,25 @@ public class CongestionService {
         }
 
         if (findCongestion != null) {
-            newCongestion = updateCongestion(findCongestion, cafeId, postCongestionReq);
+            newCongestion = updateCongestion(findCongestion, postCongestionReq);
         }
 
-        return PostCongestionRes.builder()
-                .congestionId(newCongestion.getId())
-                .cafeId(newCongestion.getCafe().getId())
-                .congestionStatus(newCongestion.getCongestionStatus())
-                .build();
+        return PostCongestionRes.of(newCongestion);
 
     }
 
-    public Congestion addCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
+    public Congestion addCongestion(Long cafeId, PostCongestionReq request) {
 
-        Congestion congestion = Congestion.builder()
-                .cafe(cafeRepository.findById(cafeId))
-                .congestionStatus(postCongestionReq.getCongestionStatus())
-                .build();
-
+        Congestion congestion = PostCongestionReq.toEntity(cafeRepository.findById(cafeId), request.getCongestionStatus());
         Congestion addCongestion =  congestionRepository.save(congestion);
 
         return addCongestion;
 
     }
 
-    public Congestion updateCongestion(Congestion findCongestion, Long cafeId, PostCongestionReq postCongestionReq) {
+    public Congestion updateCongestion(Congestion findCongestion, PostCongestionReq request) {
 
-        findCongestion.changeCongestionStatus(postCongestionReq.getCongestionStatus());
+        findCongestion.changeCongestionStatus(request.getCongestionStatus());
         Congestion updateCongestion = congestionRepository.save(findCongestion);
 
         return updateCongestion;
