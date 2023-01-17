@@ -20,23 +20,24 @@ public class CongestionService {
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
         Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
+        CongestionStatus congestionStatus = CongestionStatus.valueOf(postCongestionReq.getCongestionStatus());
+
         Congestion newCongestion = null;
 
         if (findCongestion == null) {
-            newCongestion = addCongestion(cafeId, postCongestionReq);
+            newCongestion = addCongestion(cafeId, congestionStatus);
         }
 
         if (findCongestion != null) {
-            newCongestion = updateCongestion(findCongestion, postCongestionReq);
+            newCongestion = updateCongestion(findCongestion, congestionStatus);
         }
 
         return PostCongestionRes.of(newCongestion);
 
     }
 
-    public Congestion addCongestion(Long cafeId, PostCongestionReq request) {
+    private Congestion addCongestion(Long cafeId, CongestionStatus congestionStatus) {
 
-        CongestionStatus congestionStatus = CongestionStatus.valueOf(request.getCongestionStatus());
         Congestion congestion = PostCongestionReq.toEntity(cafeRepository.findById(cafeId), congestionStatus);
         Congestion addCongestion =  congestionRepository.save(congestion);
 
@@ -44,9 +45,8 @@ public class CongestionService {
 
     }
 
-    public Congestion updateCongestion(Congestion findCongestion, PostCongestionReq request) {
+    private Congestion updateCongestion(Congestion findCongestion, CongestionStatus congestionStatus) {
 
-        CongestionStatus congestionStatus = CongestionStatus.valueOf(request.getCongestionStatus());
         findCongestion.changeCongestionStatus(congestionStatus);
         Congestion updateCongestion = congestionRepository.save(findCongestion);
 
