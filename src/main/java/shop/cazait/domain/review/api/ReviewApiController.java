@@ -38,7 +38,7 @@ public class ReviewApiController {
             value = "카페 ID"
     )
     @GetMapping("/{cafeId}")
-    public BaseResponse<GetReviewsRes> getReviews(@PathVariable long cafeId) {
+    public BaseResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId) {
         GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId);
 
         return new BaseResponse<>(getReviewsRes);

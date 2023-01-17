@@ -7,12 +7,12 @@ import lombok.Getter;
 
 @Getter
 public class PatchReviewReq {
-    private final long reviewId;
-    private final int score;
+    private final Long reviewId;
+    private final Integer score;
     private final String content;
 
     @Builder
-    public PatchReviewReq(long reviewId, int score, String content) {
+    public PatchReviewReq(Long reviewId, Integer score, String content) {
         this.reviewId = reviewId;
         this.score = score;
         this.content = content;

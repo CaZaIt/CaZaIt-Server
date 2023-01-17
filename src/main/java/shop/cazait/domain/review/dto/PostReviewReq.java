@@ -10,14 +10,14 @@ import shop.cazait.domain.user.entity.User;
 
 @Getter
 public class PostReviewReq {
-    private long cafeId;
-    private long userId;
-    private int score;
+    private Long cafeId;
+    private Long userId;
+    private Integer score;
     private String content;
 
 
     @Builder
-    public PostReviewReq(long cafeId, long userId, int score, String content) {
+    public PostReviewReq(Long cafeId, Long userId, Integer score, String content) {
         this.cafeId = cafeId;
         this.userId = userId;
         this.score = score;

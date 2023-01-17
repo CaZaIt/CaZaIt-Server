@@ -8,7 +8,7 @@ import shop.cazait.domain.review.entity.Review;
 
 @Builder(access = AccessLevel.PRIVATE)
 public class DelReviewRes {
-    private long reviewId;
+    private Long reviewId;
 
     public static DelReviewRes of(Review review) {
         return DelReviewRes.builder()

@@ -8,10 +8,10 @@ import shop.cazait.domain.review.entity.Review;
 
 @Builder(access = AccessLevel.PRIVATE)
 public class PostReviewRes {
-    private long reviewId;
-    private long cafeId;
-    private long userId;
-    private int score;
+    private Long reviewId;
+    private Long cafeId;
+    private Long userId;
+    private Integer score;
     private String content;
     private String createdAt;
 

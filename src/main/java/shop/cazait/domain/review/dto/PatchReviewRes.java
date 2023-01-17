@@ -8,8 +8,8 @@ import shop.cazait.domain.review.entity.Review;
 
 @Builder(access = AccessLevel.PRIVATE)
 public class PatchReviewRes {
-    private long reviewId;
-    private int score;
+    private Long reviewId;
+    private Integer score;
     private String content;
     private String updatedAt;
 
