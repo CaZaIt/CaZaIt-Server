@@ -8,23 +8,23 @@ import shop.cazait.global.common.status.BaseErrorStatus;
 import static shop.cazait.global.common.status.BaseErrorStatus.SUCCESS;
 
 @Getter
-@JsonPropertyOrder({"status", "message", "data"})
+@JsonPropertyOrder({"result", "message", "data"})
 public class BaseResponse<T> {
 
-    private Boolean status;
+    private String result;
     private String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public BaseResponse(T data) {
-        this.status = SUCCESS.isStatus();
+        this.result = SUCCESS.getResult();
         this.message = SUCCESS.getMessage();
         this.data = data;
     }
 
     public BaseResponse(BaseErrorStatus status) {
-        this.status = status.isStatus();
+        this.result = status.getResult();
         this.message = status.getMessage();
     }
 
