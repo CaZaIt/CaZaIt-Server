@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.review.dto.DelReviewRes;
 import shop.cazait.domain.review.dto.GetReviewRes;
@@ -34,7 +32,6 @@ public class ReviewApiController {
     private final ReviewDaoService reviewDaoService;
     private final ReviewProvideService reviewProvideService;
 
-    @ResponseBody
     @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 및 평점을 반환")
     @ApiImplicitParam(
             name = "cafeId",

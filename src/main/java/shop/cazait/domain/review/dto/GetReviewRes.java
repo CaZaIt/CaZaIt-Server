@@ -6,7 +6,7 @@ import shop.cazait.domain.review.entity.Review;
 
 
 
-@Builder (access = AccessLevel.PRIVATE)
+@Builder(access = AccessLevel.PRIVATE)
 public class GetReviewRes {
     private final long userId;
     private final long cafeId;

@@ -24,7 +24,6 @@ public class ReviewProvideService {
                 .mapToInt(Review::getScore)
                 .sum() / scoreDivider;
 
-
         return GetReviewsRes.from(averageScore, reviews);
     }
 

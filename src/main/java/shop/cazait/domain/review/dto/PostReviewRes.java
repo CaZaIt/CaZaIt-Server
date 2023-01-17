@@ -2,7 +2,6 @@ package shop.cazait.domain.review.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
-import org.springframework.data.annotation.CreatedDate;
 import shop.cazait.domain.review.entity.Review;
 
 

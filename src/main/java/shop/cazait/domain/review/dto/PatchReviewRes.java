@@ -5,6 +5,7 @@ import lombok.Builder;
 import shop.cazait.domain.review.entity.Review;
 
 
+
 @Builder(access = AccessLevel.PRIVATE)
 public class PatchReviewRes {
     private long reviewId;

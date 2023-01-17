@@ -41,7 +41,7 @@ public class ReviewDaoService {
     @Transactional
     public PatchReviewRes updateReview(PatchReviewReq patchReviewReq) {
         Review review = reviewRepository.findById(patchReviewReq.getReviewId()).get()
-                        .update(patchReviewReq);
+                .update(patchReviewReq);
 
         reviewRepository.save(review);
 
