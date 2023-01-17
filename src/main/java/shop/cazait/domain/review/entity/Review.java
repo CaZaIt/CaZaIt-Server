@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.review.dto.PatchReviewReq;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.global.common.entity.BaseEntity;
 
@@ -38,6 +39,13 @@ public class Review extends BaseEntity {
         this.cafe = cafe;
         this.score = score;
         this.content = content;
+    }
+
+    public Review update(PatchReviewReq patchReviewReq) {
+        this.score = patchReviewReq.getScore();
+        this.content = patchReviewReq.getContent();
+
+        return this;
     }
 
     /**

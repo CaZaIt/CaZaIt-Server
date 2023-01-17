@@ -61,6 +61,13 @@ public class ReviewApiController {
         return new BaseResponse<>(postReviewRes);
     }
 
+    @PatchMapping("/{reviewId}")
+    public BaseResponse<PatchReviewRes> updateReview(PatchReviewReq patchReviewReq) {
+        PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
+
+        return new BaseResponse<>(patchReviewRes);
+    }
+
     @DeleteMapping("/{reviewId}")
     public BaseResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) {
         DelReviewRes delReviewRes = reviewDaoService.deleteReview(reviewId);

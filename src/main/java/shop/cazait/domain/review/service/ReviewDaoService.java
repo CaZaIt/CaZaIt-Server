@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.review.dto.DelReviewRes;
+import shop.cazait.domain.review.dto.PatchReviewReq;
+import shop.cazait.domain.review.dto.PatchReviewRes;
 import shop.cazait.domain.review.dto.PostReviewReq;
 import shop.cazait.domain.review.dto.PostReviewRes;
 import shop.cazait.domain.review.entity.Review;
@@ -34,6 +36,16 @@ public class ReviewDaoService {
         reviewRepository.save(review);
 
         return PostReviewRes.of(review);
+    }
+
+    @Transactional
+    public PatchReviewRes updateReview(PatchReviewReq patchReviewReq) {
+        Review review = reviewRepository.findById(patchReviewReq.getReviewId()).get()
+                        .update(patchReviewReq);
+
+        reviewRepository.save(review);
+
+        return PatchReviewRes.of(review);
     }
 
     @Transactional
