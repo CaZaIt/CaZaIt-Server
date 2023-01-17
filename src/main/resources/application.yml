@@ -16,6 +16,11 @@ Spring:
       username: sa
       password:
 
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:h2/data.sql
+
   # JPA Setting Information
   jpa:
     hibernate:
@@ -24,6 +29,7 @@ Spring:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
 
   mvc:
     pathmatch:
