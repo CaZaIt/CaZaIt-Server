@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.master.dto.post.PostRegisterReq;
 import shop.cazait.domain.master.dto.post.PostRegisterRes;
+import shop.cazait.domain.master.encrypt.SHA256;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;

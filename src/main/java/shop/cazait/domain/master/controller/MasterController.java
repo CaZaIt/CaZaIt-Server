@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.master.dto.post.PostRegisterReq;
 import shop.cazait.domain.master.dto.post.PostRegisterRes;
+import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.global.common.response.BaseResponse;
 
@@ -19,7 +20,7 @@ public class MasterController {
     private final MasterService masterService;
 
     @PostMapping
-    public BaseResponse<PostRegisterRes> registerMaster(@Validated @RequestBody PostRegisterReq dto){
+    public BaseResponse<PostRegisterRes> registerMaster(@Validated @RequestBody PostRegisterReq dto) throws MasterException {
         PostRegisterRes postCreatMasterRes = masterService.registerMaster(dto);
         return new BaseResponse<>(postCreatMasterRes);
     }
