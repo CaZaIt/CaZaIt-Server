@@ -8,13 +8,13 @@ import shop.cazait.domain.master.entity.Master;
 @Getter
 @Setter
 @Builder
-public class PostRegisterRes {
+public class PostMasterRes {
 
     private  String email;
     private  String nickname;
 
-    static public PostRegisterRes toDto(Master master) {
-        return PostRegisterRes.builder()
+    static public PostMasterRes toDto(Master master) {
+        return PostMasterRes.builder()
                 .email(master.getEmail())
                 .nickname(master.getNickname())
                 .build();

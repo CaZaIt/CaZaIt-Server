@@ -3,13 +3,12 @@ package shop.cazait.domain.master.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.cazait.domain.master.dto.post.PostRegisterReq;
-import shop.cazait.domain.master.dto.post.PostRegisterRes;
+import shop.cazait.domain.master.dto.post.PostMasterReq;
+import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.encrypt.SHA256;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
-import shop.cazait.global.error.BaseException;
 
 import static shop.cazait.domain.master.error.MasterResStatus.DUPLICATE_USER_LOGIN_EMAIL;
 
@@ -20,7 +19,7 @@ public class MasterService {
     private final MasterRepository masterRepository;
 
     @Transactional(readOnly = false)
-    public PostRegisterRes registerMaster(PostRegisterReq dto) throws MasterException {
+    public PostMasterRes registerMaster(PostMasterReq dto) throws MasterException {
 
         //이메일 확인
         if (!masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
@@ -33,8 +32,8 @@ public class MasterService {
         Master master = dto.toEntity();
         masterRepository.save(master);
 
-        PostRegisterRes postRegisterRes = PostRegisterRes.toDto(master);
-        return postRegisterRes;
+        PostMasterRes postMasterRes = PostMasterRes.toDto(master);
+        return postMasterRes;
     }
 
 }
