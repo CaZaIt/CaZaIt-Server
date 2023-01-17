@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.repository.CafeRepository;
+import shop.cazait.domain.review.dto.DelReviewRes;
 import shop.cazait.domain.review.dto.PostReviewReq;
 import shop.cazait.domain.review.dto.PostReviewRes;
 import shop.cazait.domain.review.entity.Review;
@@ -33,5 +34,15 @@ public class ReviewDaoService {
         reviewRepository.save(review);
 
         return PostReviewRes.of(review);
+    }
+
+    @Transactional
+    public DelReviewRes deleteReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).get();
+        DelReviewRes delReviewRes = DelReviewRes.of(review);
+
+        reviewRepository.delete(review);
+
+        return delReviewRes;
     }
 }
