@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.entity.Review;
@@ -14,6 +15,7 @@ import shop.cazait.domain.review.repository.ReviewRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReviewProvideService {
     private static final double scoreDivider = 5.0;
     private final ReviewRepository reviewRepository;
