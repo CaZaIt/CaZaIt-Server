@@ -17,31 +17,33 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-    @ResponseBody
-    @PostMapping("/")
+    @PostMapping("/add")
     public BaseResponse<String> addCafe(@RequestBody PostCafeReq cafeReq) {
         this.cafeService.addCafe(cafeReq);
         return new BaseResponse<>("카페 등록 완료");
     }
 
-    @ResponseBody
     @GetMapping("/all")
     public BaseResponse<List<GetCafeRes>> getCafeByStatus() {
         List<GetCafeRes> cafeResList = this.cafeService.getCafeByStatus(BaseStatus.ACTIVE);
         return new BaseResponse<>(cafeResList);
     }
 
-    @ResponseBody
     @GetMapping("/id/{cafeId}")
     public BaseResponse<GetCafeRes> getCafeById(@PathVariable Long cafeId) {
         GetCafeRes cafeRes = this.cafeService.getCafeById(cafeId);
         return new BaseResponse<>(cafeRes);
     }
 
-    @ResponseBody
     @GetMapping("/name/{cafeName}")
     public BaseResponse<List<GetCafeRes>> getCafeByName(@PathVariable String cafeName) {
         List<GetCafeRes> cafeResList = this.cafeService.getCafeByName(cafeName);
         return new BaseResponse<>(cafeResList);
+    }
+
+    @PostMapping("/update/{cafeId}")
+    public BaseResponse<String> updateCafe(@PathVariable Long cafeId, @RequestBody PostCafeReq cafeReq) {
+        this.cafeService.updateCafe(cafeId, cafeReq);
+        return new BaseResponse<>("카페 수정 완료");
     }
 }

@@ -44,4 +44,11 @@ public class Cafe extends BaseEntity {
         this.latitude = latitude;
     }
 
+    public void changeCafeInfo(String name, String location, double longitude, double latitude) {
+        this.name = name;
+        this.location = location;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
 }

@@ -36,19 +36,7 @@ public class CafeService {
         List<Cafe> cafeList = cafeRepository.findCafeByStatus(status);
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
-            GetCafeRes cafeRes;
-            if (cafe.getCongestion() == null) {
-                cafeRes = GetCafeRes.builder()
-                        .cafeId(cafe.getId())
-                        .congestionId(1L)
-                        .name(cafe.getName())
-                        .location(cafe.getLocation())
-                        .longitude(cafe.getLongitude())
-                        .latitude(cafe.getLatitude())
-                        .build();
-            }
-            else {
-                cafeRes = GetCafeRes.builder()
+            GetCafeRes cafeRes = GetCafeRes.builder()
                         .cafeId(cafe.getId())
                         .congestionId(cafe.getCongestion().getId())
                         .name(cafe.getName())
@@ -56,7 +44,6 @@ public class CafeService {
                         .longitude(cafe.getLongitude())
                         .latitude(cafe.getLatitude())
                         .build();
-            }
             cafeResList.add(cafeRes);
         }
         return cafeResList;
@@ -90,6 +77,12 @@ public class CafeService {
             cafeResList.add(cafeRes);
         }
         return cafeResList;
+    }
+
+    public void updateCafe(Long id, PostCafeReq cafeReq) {
+        Optional<Cafe> cafe = cafeRepository.findCafeById(id);
+        cafe.get().changeCafeInfo(cafeReq.getName(), cafeReq.getLocation(), cafeReq.getLongitude(), cafeReq.getLatitude());
+        cafeRepository.save(cafe.get());
     }
 
 }
