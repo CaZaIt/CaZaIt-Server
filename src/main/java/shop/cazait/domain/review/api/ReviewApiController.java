@@ -6,11 +6,15 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.dto.GetReviewsRes;
+import shop.cazait.domain.review.dto.PostReviewReq;
+import shop.cazait.domain.review.dto.PostReviewRes;
 import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
 import shop.cazait.global.common.response.BaseResponse;
@@ -45,4 +49,10 @@ public class ReviewApiController {
         return new BaseResponse<>(getReviewRes);
     }
 
+    @PostMapping("/{cafeId}")
+    public BaseResponse<PostReviewRes> addReview(PostReviewReq postReviewReq) {
+        PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
+
+        return new BaseResponse<>(postReviewRes);
+    }
 }

@@ -31,6 +31,7 @@ public class Review extends BaseEntity {
 
     private String content;
 
+
     @Builder
     public Review(User user, Cafe cafe, int score, String content) {
         this.user = user;
