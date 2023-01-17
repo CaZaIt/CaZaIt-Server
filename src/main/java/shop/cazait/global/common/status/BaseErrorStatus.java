@@ -3,7 +3,7 @@ package shop.cazait.global.common.status;
 import lombok.Getter;
 
 @Getter
-public enum BaseResponseStatus {
+public enum BaseErrorStatus {
 
     /**
      * Request 관련 공통 오류
@@ -17,7 +17,7 @@ public enum BaseResponseStatus {
     private final boolean status;
     private final String message;
 
-    private BaseResponseStatus(boolean status, String message) {
+    private BaseErrorStatus(boolean status, String message) {
         this.status = status;
         this.message = message;
     }
