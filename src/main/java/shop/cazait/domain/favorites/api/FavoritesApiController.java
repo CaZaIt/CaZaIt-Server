@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import shop.cazait.domain.favorites.dto.PostCafeFavoritesRes;
+import shop.cazait.domain.favorites.dto.PostFavoritesRes;
 import shop.cazait.domain.favorites.service.FavoritesService;
 import shop.cazait.global.common.response.BaseResponse;
 
@@ -30,10 +30,10 @@ public class FavoritesApiController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @PostMapping("/user/{userId}/cafe/{cafeId}")
-    public BaseResponse<PostCafeFavoritesRes> addCafeFavorites(@PathVariable(name = "userId") Long userId,
+    public BaseResponse<PostFavoritesRes> addCafeFavorites(@PathVariable(name = "userId") Long userId,
                                                               @PathVariable(name = "cafeId") Long cafeId) {
 
-        PostCafeFavoritesRes postCafeFavoritesRes = favoritesService.addFavorites(userId, cafeId);
+        PostFavoritesRes postCafeFavoritesRes = favoritesService.addFavorites(userId, cafeId);
 
         return new BaseResponse<>(postCafeFavoritesRes);
 
