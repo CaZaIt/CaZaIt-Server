@@ -46,4 +46,10 @@ public class CafeController {
         this.cafeService.updateCafe(cafeId, cafeReq);
         return new BaseResponse<>("카페 수정 완료");
     }
+
+    @PostMapping("/delete/{cafeId}")
+    public BaseResponse<String> deleteCafe(@PathVariable Long cafeId) {
+        this.cafeService.deleteCafe(cafeId);
+        return new BaseResponse<>("카페 삭제 완료");
+    }
 }

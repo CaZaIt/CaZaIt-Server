@@ -85,4 +85,10 @@ public class CafeService {
         cafeRepository.save(cafe.get());
     }
 
+    public void deleteCafe(Long id) {
+        Optional<Cafe> cafe = cafeRepository.findCafeById(id);
+        cafe.get().changeCafeStatus(BaseStatus.INACTIVE);
+        cafeRepository.save(cafe.get());
+    }
+
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.congestion.entity.Congestion;
+import shop.cazait.global.common.status.BaseStatus;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -49,6 +50,10 @@ public class Cafe extends BaseEntity {
         this.location = location;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public void changeCafeStatus(BaseStatus status) {
+        this.status = status;   // BaseEntity의 status가 protected일 때 가능
     }
 
 }
