@@ -41,6 +41,7 @@ public class MasterService {
 
 
     // 회원 탈퇴하기
+    @Transactional(readOnly = false)
     public void removeMaster(int id) throws MasterException{
         Optional<Master> masterEntity = masterRepository.findMasterById(id);
 
