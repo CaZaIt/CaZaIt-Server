@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafefavorites.entity;
+package shop.cazait.domain.favorites.entity;
 
 import javax.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +11,7 @@ import shop.cazait.domain.user.entity.User;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CafeFavorites {
+public class Favorites {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class CafeFavorites {
     private Cafe cafe;
 
     @Builder
-    public CafeFavorites(User user, Cafe cafe) {
+    public Favorites(User user, Cafe cafe) {
         this.user = user;
         this.cafe = cafe;
     }

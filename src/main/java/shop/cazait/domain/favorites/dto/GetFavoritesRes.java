@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafefavorites.dto;
+package shop.cazait.domain.favorites.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @ApiModel(value = "즐겨찾기 한 카페 정보", description = "카페 ID, 이름, 이미지를 가진 DTO")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GetCafeFavoritesRes {
+public class GetFavoritesRes {
 
     @ApiModelProperty(value = "카페 ID")
     private Long cafeId;
@@ -18,7 +18,7 @@ public class GetCafeFavoritesRes {
     private String imageUrl;
 
     @Builder
-    public GetCafeFavoritesRes(Long cafeId, String name, String imageUrl) {
+    public GetFavoritesRes(Long cafeId, String name, String imageUrl) {
         this.cafeId = cafeId;
         this.name = name;
         this.imageUrl = imageUrl;
