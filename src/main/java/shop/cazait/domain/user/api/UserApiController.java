@@ -32,4 +32,11 @@ public class UserApiController {
         List<GetUserRes> allGetUserRes = userService.getAllUsers();
         return new BaseResponse<>(allGetUserRes);
     }
+
+    @ResponseBody
+    @GetMapping("/{email}")
+    public BaseResponse<GetUserRes> getUser(@PathVariable("email") String email){
+        GetUserRes emailGetUserRes = userService.getUserByEmail(email);
+        return new BaseResponse<>(emailGetUserRes);
+    }
 }
