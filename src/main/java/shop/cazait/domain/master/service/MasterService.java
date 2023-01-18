@@ -10,7 +10,9 @@ import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
 
-import static shop.cazait.domain.master.error.MasterResStatus.DUPLICATE_USER_LOGIN_EMAIL;
+import java.util.Optional;
+
+import static shop.cazait.domain.master.error.MasterResStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class MasterService {
 
     private final MasterRepository masterRepository;
 
+    //회원가입
     @Transactional(readOnly = false)
     public PostMasterRes registerMaster(PostMasterReq dto) throws MasterException {
 
@@ -34,6 +37,25 @@ public class MasterService {
 
         PostMasterRes postMasterRes = PostMasterRes.toDto(master);
         return postMasterRes;
+    }
+
+
+    // 회원 탈퇴하기
+    public void removeMaster(int id) throws MasterException{
+        Optional<Master> masterEntity = masterRepository.findMasterById(id);
+
+        if(masterRepository.findMasterById(id).isEmpty()){
+            throw new MasterException(NOT_EXISTS_MASTER);
+        }
+
+        if(masterEntity.get().getStatus().toString().equals("INACTIVE")){
+            throw new MasterException(ALREADY_INACTIVE_MASTER);
+        }
+
+        Master master = masterRepository.findMasterById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다. id=" + id));
+
+        masterRepository.delete(master);
     }
 
 }

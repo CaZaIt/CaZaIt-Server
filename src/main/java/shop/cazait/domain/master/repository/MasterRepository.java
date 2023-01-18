@@ -9,6 +9,8 @@ import java.util.Optional;
 @Repository
 public interface MasterRepository extends JpaRepository<Master, Integer> {
 
-    Optional<Master> findMasterByEmail(String email);
+   Optional<Master> findMasterById(int id);
+
+   Optional<Master> findMasterByEmail(String email);
 
 }

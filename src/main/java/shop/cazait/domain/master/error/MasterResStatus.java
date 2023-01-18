@@ -8,7 +8,10 @@ import lombok.Getter;
 @Getter
 public enum MasterResStatus {
 
-    DUPLICATE_USER_LOGIN_EMAIL(false, "중복된 이메일입니다.");
+    DUPLICATE_USER_LOGIN_EMAIL(false, "중복된 마스터 계정의 이메일입니다."),
+
+    ALREADY_INACTIVE_MASTER(true,"이미 탈퇴한 계정입니다"),
+    NOT_EXISTS_MASTER(false, "없는 마스터 계정입니다.");
 
     private final boolean isSuccess;
     private final String message;
