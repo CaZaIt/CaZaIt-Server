@@ -17,7 +17,7 @@ public class Cafe extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "congestion_id")
     private Congestion congestion;
 
@@ -46,6 +46,10 @@ public class Cafe extends BaseEntity {
         this.latitude = latitude;
     }
 
+    public void initCafeCongestion(Congestion congestion) {
+        this.congestion = congestion;
+    }
+
     public void changeCafeInfo(PostCafeReq postCafeReq) {
         this.name = postCafeReq.getName();
         this.location = postCafeReq.getLocation();
@@ -55,7 +59,7 @@ public class Cafe extends BaseEntity {
 
     public void changeCafeStatus(BaseStatus status) {
         this.status = status;
-        // todo: BaseEntity의 status가 protected일 때 가능
+        // todo: BaseEntity의 status가 protected여야 함
     }
 
 }
