@@ -1,14 +1,14 @@
 package shop.cazait.domain.favorites.exception;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum FavoritesErrorStatus {
 
-    INVALID_CAFE_FAVORITES(false, "유효하지 않은 즐겨찾기 입니다.");
+    INVALID_CAFE_FAVORITES("FAIL", "유효하지 않은 즐겨찾기 입니다.");
 
-    private final boolean status;
+    private final String result;
     private final String message;
 
-    private FavoritesErrorStatus(boolean status, String message) {
-        this.status = status;
-        this.message = message;
-    }
 }
