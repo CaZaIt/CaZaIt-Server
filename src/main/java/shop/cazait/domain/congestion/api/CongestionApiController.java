@@ -34,7 +34,7 @@ public class CongestionApiController {
     @PostMapping("/{masterId}/{cafeId}")
     public BaseResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
                                                          @PathVariable(name = "cafeId") Long cafeId,
-                                                         @RequestBody PostCongestionReq postCongestionReq)
+                                                         @RequestBody(required = true) PostCongestionReq postCongestionReq)
             throws CongestionException {
 
         // masterId 유효 확인
