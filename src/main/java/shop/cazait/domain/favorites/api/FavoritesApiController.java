@@ -31,7 +31,7 @@ public class FavoritesApiController {
     })
     @PostMapping("/user/{userId}/cafe/{cafeId}")
     public BaseResponse<PostFavoritesRes> addCafeFavorites(@PathVariable(name = "userId") Long userId,
-                                                              @PathVariable(name = "cafeId") Long cafeId) {
+                                                           @PathVariable(name = "cafeId") Long cafeId) {
 
         PostFavoritesRes postCafeFavoritesRes = favoritesService.addFavorites(userId, cafeId);
 

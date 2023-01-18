@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.favorites.entity.Favorites;
 
-@ApiModel(value = "즐겨찾기 한 카페 정보", description = "카페 ID, 이름, 이미지를 가진 DTO")
+@ApiModel(value = "즐겨찾기 한 카페 정보", description = "카페 ID, 이름, 이미지를 포함")
 @Builder(access = AccessLevel.PROTECTED)
 public class GetFavoritesRes {
 
