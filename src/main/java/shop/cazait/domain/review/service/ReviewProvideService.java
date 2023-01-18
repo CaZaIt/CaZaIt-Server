@@ -1,16 +1,18 @@
 package shop.cazait.domain.review.service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.repository.ReviewRepository;
+import shop.cazait.domain.review.requestvalue.SortType;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @Service
@@ -20,8 +22,12 @@ public class ReviewProvideService {
     private static final double scoreDivider = 5.0;
     private final ReviewRepository reviewRepository;
 
-    public GetReviewsRes getReviews(Long cafeId) {
-        List<Review> reviews = reviewRepository.findAllByCafeId(cafeId);
+    public GetReviewsRes getReviews(Long cafeId, String sortBy) {
+        SortType sortType = SortType.of(sortBy);
+        List<Review> reviews = reviewRepository.findAllByCafeId(
+                cafeId,
+                Sort.by(sortType.getDirection(), sortType.getColumn()));
+
         double averageScore = reviews.stream()
                 .mapToInt(Review::getScore)
                 .sum() / scoreDivider;
