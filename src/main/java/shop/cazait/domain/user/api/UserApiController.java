@@ -2,12 +2,11 @@ package shop.cazait.domain.user.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import shop.cazait.domain.user.dto.PostLoginReq;
-import shop.cazait.domain.user.dto.PostLoginRes;
-import shop.cazait.domain.user.dto.PostUserReq;
-import shop.cazait.domain.user.dto.PostUserRes;
+import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.response.BaseResponse;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,5 +24,12 @@ public class UserApiController {
     public BaseResponse<PostLoginRes> logIn (@RequestBody PostLoginReq postLoginReq){
         PostLoginRes postLoginRes = userService.logIn(postLoginReq);
         return new BaseResponse<>(postLoginRes);
+    }
+
+    @ResponseBody
+    @GetMapping("/all")
+    public BaseResponse<List<GetUserRes>> getUsers(){
+        List<GetUserRes> allGetUserRes = userService.getAllUsers();
+        return new BaseResponse<>(allGetUserRes);
     }
 }
