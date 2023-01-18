@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CongestionException extends RuntimeException {
 
-    private final CongestionErrorStatus congestionErrorStatus;
+    private final CongestionErrorStatus error;
 
 }
