@@ -30,11 +30,12 @@ public class CafeFavoritesApiController {
             @ApiImplicitParam(name = "userId", value = "사용자 ID"),
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
-    @PostMapping("/user/{userId}/favorites/{cafeId}")
+    @PostMapping("/user/{userId}/cafe/{cafeId}")
     public BaseResponse<PostCafeFavoritesRes> addCafeFavorites(@PathVariable(name = "userId") Long userId,
                                                               @PathVariable(name = "cafeId") Long cafeId) {
 
         PostCafeFavoritesRes postCafeFavoritesRes = cafeFavoritesService.addCafeFavorites(userId, cafeId);
+
         return new BaseResponse<>(postCafeFavoritesRes);
 
     }
