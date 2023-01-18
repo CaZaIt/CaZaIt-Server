@@ -4,7 +4,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.review.dto.DelReviewRes;
 import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.dto.GetReviewsRes;
@@ -12,7 +20,6 @@ import shop.cazait.domain.review.dto.PatchReviewReq;
 import shop.cazait.domain.review.dto.PatchReviewRes;
 import shop.cazait.domain.review.dto.PostReviewReq;
 import shop.cazait.domain.review.dto.PostReviewRes;
-import shop.cazait.domain.review.requestvalue.SortType;
 import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
 import shop.cazait.global.common.response.BaseResponse;
@@ -48,14 +55,14 @@ public class ReviewApiController {
     }
 
     @PostMapping("/{cafeId}")
-    public BaseResponse<PostReviewRes> addReview(PostReviewReq postReviewReq) {
+    public BaseResponse<PostReviewRes> addReview(@RequestBody PostReviewReq postReviewReq) {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 
         return new BaseResponse<>(postReviewRes);
     }
 
     @PatchMapping("/{reviewId}")
-    public BaseResponse<PatchReviewRes> updateReview(PatchReviewReq patchReviewReq) {
+    public BaseResponse<PatchReviewRes> updateReview(@RequestBody PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
 
         return new BaseResponse<>(patchReviewRes);
