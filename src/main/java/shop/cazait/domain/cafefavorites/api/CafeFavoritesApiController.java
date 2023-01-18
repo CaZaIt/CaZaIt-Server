@@ -19,7 +19,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @Api(tags = "즐겨찾기 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cafe_favorites")
+@RequestMapping("/api/favorites")
 public class CafeFavoritesApiController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
