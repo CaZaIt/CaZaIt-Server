@@ -29,8 +29,8 @@ public class ReviewProvideService {
                 Sort.by(sortType.getDirection(), sortType.getColumn()));
 
         double averageScore = reviews.stream()
-                .mapToInt(Review::getScore)
-                .sum() / scoreDivider;
+                .mapToDouble(Review::getScore)
+                .sum() / reviews.size();
 
         return GetReviewsRes.of(averageScore, reviews);
     }
