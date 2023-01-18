@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.encrypt;
+package shop.cazait.global.config.encrypt;
 
 import java.security.MessageDigest;
 
