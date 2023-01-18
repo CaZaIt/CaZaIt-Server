@@ -2,8 +2,9 @@ package shop.cazait.domain.cafe.entity;
 
 import javax.persistence.*;
 import lombok.*;
+import shop.cazait.domain.master.entity.Master;
 import shop.cazait.global.common.entity.BaseEntity;
-import shop.cazait.domain.cafecongestion.entity.CafeCongestion;
+import shop.cazait.domain.congestion.entity.Congestion;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +17,10 @@ public class Cafe extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "congestion_id")
-    private CafeCongestion cafeCongestion;
+    private Congestion congestion;
+
+    @OneToOne(mappedBy = "cafe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Master master;
 
     @Column(nullable = false)
     private String name;
@@ -30,17 +34,14 @@ public class Cafe extends BaseEntity {
     @Column(nullable = false)
     private double latitude;
 
-    @Column(nullable = false)
-    private String imageUrl;
-
     @Builder
-    protected Cafe(CafeCongestion cafeCongestion, String name, String location, double longitude, double latitude, String imageUrl) {
-        this.cafeCongestion = cafeCongestion;
+    protected Cafe(Congestion congestion, Master master, String name, String location, double longitude, double latitude) {
+        this.congestion = congestion;
+        this.master = master;
         this.name = name;
         this.location = location;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.imageUrl = imageUrl;
     }
 
 }

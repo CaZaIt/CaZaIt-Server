@@ -10,7 +10,6 @@ import shop.cazait.global.common.entity.BaseEntity;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-
 public class User extends BaseEntity {
 
     @Id

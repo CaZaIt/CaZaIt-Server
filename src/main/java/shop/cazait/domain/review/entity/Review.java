@@ -1,41 +1,43 @@
 package shop.cazait.domain.review.entity;
 
-import javax.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.user.entity.User;
+import shop.cazait.global.common.entity.BaseEntity;
 
-
+import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Review {
+public class Review extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @Column(nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
-    @Column(nullable = false)
     private Cafe cafe;
 
     @Column(nullable = false)
     private int score;
 
     private String content;
+
+    @Builder
+    public Review(User user, Cafe cafe, int score, String content) {
+        this.user = user;
+        this.cafe = cafe;
+        this.score = score;
+        this.content = content;
+    }
 
     /**
      * 추후 확장
