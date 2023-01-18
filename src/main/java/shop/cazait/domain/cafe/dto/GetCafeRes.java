@@ -1,28 +1,36 @@
 package shop.cazait.domain.cafe.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import shop.cazait.domain.cafe.entity.Cafe;
 
-@Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
 public class GetCafeRes {
+    @JsonProperty
     private Long cafeId;
+    @JsonProperty
     private Long congestionId;
+    @JsonProperty
     private String name;
+    @JsonProperty
     private String location;
+    @JsonProperty
     private double longitude;
+    @JsonProperty
     private double latitude;
 
-    @Builder
-    public GetCafeRes(Long cafeId, Long congestionId, String name, String location, double longitude, double latitude) {
-        this.cafeId = cafeId;
-        this.congestionId = congestionId;
-        this.name = name;
-        this.location = location;
-        this.longitude = longitude;
-        this.latitude = latitude;
+    public static GetCafeRes of(Cafe cafe) {
+        return GetCafeRes.builder()
+                .cafeId(cafe.getId())
+                .congestionId(cafe.getCongestion().getId())
+                .name(cafe.getName())
+                .location(cafe.getLocation())
+                .longitude(cafe.getLongitude())
+                .latitude(cafe.getLatitude())
+                .build();
     }
 
 }

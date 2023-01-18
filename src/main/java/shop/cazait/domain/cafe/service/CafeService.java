@@ -32,63 +32,45 @@ public class CafeService {
         cafeRepository.save(cafe);
     }
 
+    @Transactional(readOnly = true)
     public List<GetCafeRes> getCafeByStatus(BaseStatus status) {
         List<Cafe> cafeList = cafeRepository.findCafeByStatus(status);
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
-            GetCafeRes cafeRes = GetCafeRes.builder()
-                        .cafeId(cafe.getId())
-                        .congestionId(cafe.getCongestion().getId())
-                        .name(cafe.getName())
-                        .location(cafe.getLocation())
-                        .longitude(cafe.getLongitude())
-                        .latitude(cafe.getLatitude())
-                        .build();
+            GetCafeRes cafeRes = GetCafeRes.of(cafe);
             cafeResList.add(cafeRes);
         }
         return cafeResList;
     }
 
+    @Transactional(readOnly = true)
     public GetCafeRes getCafeById(Long id) {
-        Optional<Cafe> cafe = cafeRepository.findCafeById(id);
-        GetCafeRes cafeRes = GetCafeRes.builder()
-                .cafeId(cafe.get().getId())
-                .congestionId(cafe.get().getCongestion().getId())
-                .name(cafe.get().getName())
-                .location(cafe.get().getLocation())
-                .longitude(cafe.get().getLongitude())
-                .latitude(cafe.get().getLatitude())
-                .build();
+        Cafe cafe = cafeRepository.findById(id).get();
+        GetCafeRes cafeRes = GetCafeRes.of(cafe);
         return cafeRes;
     }
 
+    @Transactional(readOnly = true)
     public List<GetCafeRes> getCafeByName(String name) {
         List<Cafe> cafeList = cafeRepository.findCafeByName(name);
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
-            GetCafeRes cafeRes = GetCafeRes.builder()
-                    .cafeId(cafe.getId())
-                    .congestionId(cafe.getCongestion().getId())
-                    .name(cafe.getName())
-                    .location(cafe.getLocation())
-                    .longitude(cafe.getLongitude())
-                    .latitude(cafe.getLatitude())
-                    .build();
+            GetCafeRes cafeRes = GetCafeRes.of(cafe);
             cafeResList.add(cafeRes);
         }
         return cafeResList;
     }
 
     public void updateCafe(Long id, PostCafeReq cafeReq) {
-        Optional<Cafe> cafe = cafeRepository.findCafeById(id);
-        cafe.get().changeCafeInfo(cafeReq.getName(), cafeReq.getLocation(), cafeReq.getLongitude(), cafeReq.getLatitude());
-        cafeRepository.save(cafe.get());
+        Cafe cafe = cafeRepository.findById(id).get();
+        cafe.changeCafeInfo(cafeReq);
+        cafeRepository.save(cafe);
     }
 
     public void deleteCafe(Long id) {
-        Optional<Cafe> cafe = cafeRepository.findCafeById(id);
-        cafe.get().changeCafeStatus(BaseStatus.INACTIVE);
-        cafeRepository.save(cafe.get());
+        Cafe cafe = cafeRepository.findById(id).get();
+        cafe.changeCafeStatus(BaseStatus.INACTIVE);
+        cafeRepository.save(cafe);
     }
 
 }

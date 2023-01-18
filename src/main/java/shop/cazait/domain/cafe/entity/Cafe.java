@@ -2,6 +2,7 @@ package shop.cazait.domain.cafe.entity;
 
 import javax.persistence.*;
 import lombok.*;
+import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.congestion.entity.Congestion;
@@ -45,15 +46,16 @@ public class Cafe extends BaseEntity {
         this.latitude = latitude;
     }
 
-    public void changeCafeInfo(String name, String location, double longitude, double latitude) {
-        this.name = name;
-        this.location = location;
-        this.longitude = longitude;
-        this.latitude = latitude;
+    public void changeCafeInfo(PostCafeReq postCafeReq) {
+        this.name = postCafeReq.getName();
+        this.location = postCafeReq.getLocation();
+        this.longitude = postCafeReq.getLongitude();
+        this.latitude = postCafeReq.getLatitude();
     }
 
     public void changeCafeStatus(BaseStatus status) {
-        this.status = status;   // BaseEntity의 status가 protected일 때 가능
+        this.status = status;
+        // todo: BaseEntity의 status가 protected일 때 가능
     }
 
 }

@@ -8,11 +8,9 @@ import shop.cazait.global.common.status.BaseStatus;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface CafeRepository extends JpaRepository <Cafe, Long> {
 
     List<Cafe> findCafeByStatus(BaseStatus status);
-    Optional<Cafe> findCafeById(Long id);
     List<Cafe> findCafeByName(String name);
 
 }

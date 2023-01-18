@@ -3,15 +3,13 @@ package shop.cazait.domain.cafe.dto;
 import lombok.*;
 import shop.cazait.domain.congestion.entity.Congestion;
 
-@Data
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PostCafeReq {
-    private Congestion congestion;
-    private String name;
-    private String location;
-    private double longitude;
-    private double latitude;
+    private final Congestion congestion;
+    private final String name;
+    private final String location;
+    private final double longitude;
+    private final double latitude;
 
     @Builder
     public PostCafeReq(Congestion congestion, String name, String location, double longitude, double latitude) {
