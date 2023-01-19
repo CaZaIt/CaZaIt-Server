@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 public class CafeException extends Exception{
 
-    private CafeErrorStatus error;
+    private CafeErrorStatus cafeErrorStatus;
 
 }
