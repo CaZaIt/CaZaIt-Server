@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.PutCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PutCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
 import shop.cazait.global.common.response.BaseResponse;
@@ -54,10 +55,13 @@ public class CafeMenuApiController {
     /**
      * 카페 메뉴 수정
      */
-    @PutMapping("/{menuId}")
-    public BaseResponse<PutCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId) {
+    @PutMapping("/{menuId}/cafe/{cafeId}")
+    public BaseResponse<PutCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
+                                                   @PathVariable(name = "cafeId") Long cafeId,
+                                                   @RequestBody PutCafeMenuReq putCafeMenuReq) {
 
-        return cafeMenuService.updateCafeMenu(menuId);
+        PutCafeMenuRes result = cafeMenuService.updateMenu(menuId, cafeId, putCafeMenuReq);
+        return new BaseResponse<>(result);
 
     }
 

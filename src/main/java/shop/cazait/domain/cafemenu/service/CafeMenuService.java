@@ -2,6 +2,9 @@ package shop.cazait.domain.cafemenu.service;
 
 import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.INVALID_MENU;
 import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.NOT_REGISTER_MENU;
+import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
+import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
+import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_PRICE;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -65,15 +68,15 @@ public class CafeMenuService {
 
         CafeMenu findMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
 
-        if (putCafeMenuReq.getName() != null) {
+        if (putCafeMenuReq.getName() != NOT_UPDATE_NAME) {
             findMenu.changeCafeMenuName(putCafeMenuReq.getName());
         }
 
-        if (putCafeMenuReq.getPrice() != -1) {
+        if (putCafeMenuReq.getPrice() != NOT_UPDATE_PRICE) {
             findMenu.changeCafeMenuPrice(putCafeMenuReq.getPrice());
         }
 
-        if (putCafeMenuReq.getImageUrl() != null) {
+        if (putCafeMenuReq.getImageUrl() != NOT_UPDATE_IMAGE) {
             findMenu.changeCafeMenuImageUrl(putCafeMenuReq.getImageUrl());
         }
 
