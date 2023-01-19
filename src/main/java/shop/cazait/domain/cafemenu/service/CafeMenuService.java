@@ -28,16 +28,8 @@ public class CafeMenuService {
     public List<GetCafeMenuRes> getCafeMenus(Long cafeId) {
 
         List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId);
-        List<GetCafeMenuRes> cafeMenuRes = findMenus.stream()
-                .map(cafeMenu -> GetCafeMenuRes.builder()
-                        .cafeMenuId(cafeMenu.getId())
-                        .name(cafeMenu.getName())
-                        .price(cafeMenu.getPrice())
-                        .imageUrl(cafeMenu.getImageUrl())
-                        .build()).
-                collect(Collectors.toList());
 
-        return cafeMenuRes;
+        return GetCafeMenuRes.of(findMenus);
 
     }
 
@@ -81,13 +73,7 @@ public class CafeMenuService {
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findCafeMenu);
 
-        return PutCafeMenuRes.builder()
-                .cafeMenuId(updateCafeMenu.getId())
-                .cafeId(updateCafeMenu.getCafe().getId())
-                .name(updateCafeMenu.getName())
-                .price(updateCafeMenu.getPrice())
-                .imageUrl(updateCafeMenu.getImageUrl())
-                .build();
+        return PutCafeMenuRes.of(updateCafeMenu);
 
     }
 

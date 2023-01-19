@@ -2,12 +2,15 @@ package shop.cazait.domain.cafemenu.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
 @ApiModel(value = "카페 메뉴 조회", description = "메뉴 ID, 이름, 가격, 이미지를 담고 있는 Response 객체")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(access = AccessLevel.PRIVATE)
 public class GetCafeMenuRes {
 
     @ApiModelProperty(value = "메뉴 ID")
@@ -22,12 +25,16 @@ public class GetCafeMenuRes {
     @ApiModelProperty(value = "메뉴 이미지 주소")
     private String imageUrl;
 
-    @Builder
-    public GetCafeMenuRes(Long cafeMenuId, String name, int price, String imageUrl) {
-        this.cafeMenuId = cafeMenuId;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public static List<GetCafeMenuRes> of(List<CafeMenu> Menus) {
+        return Menus.stream()
+                .map(Menu -> GetCafeMenuRes.builder()
+                        .cafeMenuId(Menu.getId())
+                        .name(Menu.getName())
+                        .price(Menu.getPrice())
+                        .imageUrl(Menu.getImageUrl())
+                        .build()).
+                collect(Collectors.toList());
     }
+
 
 }
