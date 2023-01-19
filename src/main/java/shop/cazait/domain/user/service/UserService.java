@@ -21,10 +21,10 @@ public class UserService {
     private final UserRepository userRepository;
 
 
-    public BaseResponse<PostUserRes> createUser(PostUserReq postUserReq){
+    public PostUserRes createUser(PostUserReq postUserReq){
         User user = postUserReq.toEntity();
         userRepository.save(user);
-        return new BaseResponse<>(PostUserRes.of(user));
+        return PostUserRes.of(user);
     }
 
     public PostLoginRes logIn(PostLoginReq postLoginReq) {
