@@ -9,20 +9,20 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "카페 메뉴 조회", description = "메뉴 ID, 이름, 가격, 이미지를 담고 있는 Response 객체")
+@ApiModel(value = "카페 메뉴 조회", description = "카페의 모든 메뉴에 대한 정보")
 @Builder(access = AccessLevel.PRIVATE)
 public class GetCafeMenuRes {
 
-    @ApiModelProperty(value = "메뉴 ID")
+    @ApiModelProperty(value = "ID")
     private Long cafeMenuId;
 
-    @ApiModelProperty(value = "메뉴 이름")
+    @ApiModelProperty(value = "이름")
     private String name;
 
-    @ApiModelProperty(value = "메뉴 가격")
+    @ApiModelProperty(value = "가격")
     private int price;
 
-    @ApiModelProperty(value = "메뉴 이미지 주소")
+    @ApiModelProperty(value = "이미지 URL")
     private String imageUrl;
 
     public static List<GetCafeMenuRes> of(List<CafeMenu> Menus) {

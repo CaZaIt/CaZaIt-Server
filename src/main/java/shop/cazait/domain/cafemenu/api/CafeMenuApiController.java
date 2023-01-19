@@ -1,5 +1,9 @@
 package shop.cazait.domain.cafemenu.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +22,7 @@ import shop.cazait.domain.cafemenu.dto.PutCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
 import shop.cazait.global.common.response.BaseResponse;
 
+@Api(tags = "카페 메뉴 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/menus")
@@ -28,6 +33,10 @@ public class CafeMenuApiController {
     /**
      * 카페 메뉴 등록
      */
+    @ApiOperation(value = "카페 메뉴 등록", notes = "카페 ID와 메뉴에 대한 정보를 받아 등록")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
+    })
     @PostMapping("/cafe/{cafeId}")
     public BaseResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
                                                             @RequestBody List<PostCafeMenuReq> postCafeMenuReq) {
@@ -44,6 +53,10 @@ public class CafeMenuApiController {
     /**
      * 카페 메뉴 조회
      */
+    @ApiOperation(value = "카페 메뉴 조회", notes = "카페 ID를 받아 해당 카페에 대한 모든 메뉴 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
+    })
     @GetMapping("/cafe/{cafeId}")
     public BaseResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
 
@@ -55,6 +68,11 @@ public class CafeMenuApiController {
     /**
      * 카페 메뉴 수정
      */
+    @ApiOperation(value = "카페 메뉴 수정", notes = "카페 ID, 카페 메뉴 ID를 받아 수정")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID"),
+            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
+    })
     @PutMapping("/{menuId}/cafe/{cafeId}")
     public BaseResponse<PutCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
                                                    @PathVariable(name = "cafeId") Long cafeId,
@@ -68,6 +86,10 @@ public class CafeMenuApiController {
     /**
      * 카페 메뉴 삭제
      */
+    @ApiOperation(value = "카페 메뉴 삭제", notes = "카페 메뉴 ID를 받아 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menuId", value = "메뉴 ID")
+    })
     @DeleteMapping("/{menuId}")
     public BaseResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
 
