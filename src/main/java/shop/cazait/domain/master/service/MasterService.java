@@ -3,6 +3,9 @@ package shop.cazait.domain.master.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.cafefavorites.dto.GetCafeFavoritesRes;
+import shop.cazait.domain.cafefavorites.entity.CafeFavorites;
+import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.global.config.encrypt.SHA256;
@@ -10,7 +13,9 @@ import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static shop.cazait.domain.master.error.MasterResStatus.*;
 
@@ -37,6 +42,20 @@ public class MasterService {
 
         PostMasterRes postMasterRes = PostMasterRes.toDto(master);
         return postMasterRes;
+    }
+
+    //마스터 회원 전체 조회
+    public List<GetMasterRes> getMasters(Long id){
+        List<Master> findMaster = masterRepository.findAllMasterById(id);
+        List<GetMasterRes> masterRes = findMaster.stream()
+                .map(master -> {
+                    return GetMasterRes.builder()
+                            .id(master.getId())
+                            .email(master.getEmail())
+                            .nickname(master.getNickname())
+                            .build();
+                }).collect(Collectors.toList());
+        return masterRes;
     }
 
 
