@@ -2,6 +2,7 @@ package shop.cazait.domain.favorites.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -18,7 +19,7 @@ public class GetFavoritesRes {
     @ApiModelProperty(value = "카페 이름")
     private String name;
     @ApiModelProperty(value = "카페 이미지")
-    private String imageUrl;
+    private List<String> imageUrl = new ArrayList<>();
 
     public static List<GetFavoritesRes> of(List<Favorites> findFavorites) {
         return findFavorites.stream()
