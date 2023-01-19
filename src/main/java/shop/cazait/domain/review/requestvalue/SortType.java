@@ -12,12 +12,12 @@ import java.util.stream.Stream;
 @Getter
 @AllArgsConstructor
 public enum SortType {
-    NEWEST("newest", "created_at", Sort.Direction.DESC),
-    OLDEST("oldest", "created_at", Sort.Direction.ASC),
+    NEWEST("newest", "createdAt", Sort.Direction.DESC),
+    OLDEST("oldest", "createdAt", Sort.Direction.ASC),
     POPULARITY("popularity", "score", Sort.Direction.DESC);
 
     private final String value;
-    private final String column;
+    private final String property;  // Sort.by()로 생성 시, column명이 아닌 엔티티의 property명이 기준임
     private final Sort.Direction direction;
 
     public static final Map<String, SortType> map = new HashMap<>();

@@ -26,7 +26,7 @@ public class ReviewProvideService {
         SortType sortType = SortType.of(sortBy);
         List<Review> reviews = reviewRepository.findAllByCafeId(
                 cafeId,
-                Sort.by(sortType.getDirection(), sortType.getColumn()));
+                Sort.by(sortType.getDirection(), sortType.getProperty()));
 
         double averageScore = reviews.stream()
                 .mapToDouble(Review::getScore)
