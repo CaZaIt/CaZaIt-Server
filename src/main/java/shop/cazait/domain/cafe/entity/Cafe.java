@@ -65,7 +65,6 @@ public class Cafe extends BaseEntity {
 
     public void changeCafeStatus(BaseStatus status) {
         super.setStatus(status);
-        // todo: BaseEntity에 @Setter 추가해야 함
     }
 
 }
