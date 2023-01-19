@@ -29,7 +29,7 @@ public class CafeMenuService {
      * 카페 메뉴 조회
      */
     @Transactional(readOnly = true)
-    public List<GetCafeMenuRes> getCafeMenus(Long cafeId) {
+    public List<GetCafeMenuRes> getMenu(Long cafeId) {
 
         List<CafeMenu> findMenus;
 
@@ -61,23 +61,23 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    public PutCafeMenuRes updateCafeMenu(Long cafeId, Long cafeMenuId, PutCafeMenuReq putCafeMenuReq) {
+    public PutCafeMenuRes updateMenu(Long cafeId, Long cafeMenuId, PutCafeMenuReq putCafeMenuReq) {
 
-        CafeMenu findCafeMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
+        CafeMenu findMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
 
         if (putCafeMenuReq.getName() != null) {
-            findCafeMenu.changeCafeMenuName(putCafeMenuReq.getName());
+            findMenu.changeCafeMenuName(putCafeMenuReq.getName());
         }
 
         if (putCafeMenuReq.getPrice() != -1) {
-            findCafeMenu.changeCafeMenuPrice(putCafeMenuReq.getPrice());
+            findMenu.changeCafeMenuPrice(putCafeMenuReq.getPrice());
         }
 
         if (putCafeMenuReq.getImageUrl() != null) {
-            findCafeMenu.changeCafeMenuImageUrl(putCafeMenuReq.getImageUrl());
+            findMenu.changeCafeMenuImageUrl(putCafeMenuReq.getImageUrl());
         }
 
-        CafeMenu updateCafeMenu = cafeMenuRepository.save(findCafeMenu);
+        CafeMenu updateCafeMenu = cafeMenuRepository.save(findMenu);
 
         return PutCafeMenuRes.of(updateCafeMenu);
 
@@ -86,7 +86,7 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 삭제
      */
-    public void deleteCafeMenu(Long cafeMenuId) {
+    public void deleteMenu(Long cafeMenuId) {
 
         try {
             cafeMenuRepository.deleteById(cafeMenuId);

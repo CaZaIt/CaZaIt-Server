@@ -46,7 +46,8 @@ public class CafeMenuApiController {
     @GetMapping("/cafe/{cafeId}")
     public BaseResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
 
-        return cafeMenuService.getCafeMenus(cafeId);
+        List<GetCafeMenuRes> result = cafeMenuService.getMenu(cafeId);
+        return new BaseResponse<>(result);
 
     }
 
