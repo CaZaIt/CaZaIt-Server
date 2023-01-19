@@ -10,12 +10,12 @@ import lombok.Builder;
 import shop.cazait.domain.cafe.entity.CafeImage;
 import shop.cazait.domain.favorites.entity.Favorites;
 
-@ApiModel(value = "즐겨찾기 한 카페 정보", description = "카페 ID, 이름, 이미지를 포함")
+@ApiModel(value = "즐겨찾기 한 카페 정보", description = "즐겨찾기로 등록한 모든 카페에 대한 정보 ")
 @Builder(access = AccessLevel.PROTECTED)
 public class GetFavoritesRes {
 
+    @ApiModelProperty(value = "즐겨찾기 ID")
     private Long favoritesId;
-
     @ApiModelProperty(value = "카페 ID")
     private Long cafeId;
     @ApiModelProperty(value = "카페 이름")

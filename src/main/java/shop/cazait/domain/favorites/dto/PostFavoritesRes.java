@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 
-@ApiModel(value = "즐겨찾기 정보", description = "등록한 즐겨찾기 ID를 포함")
+@ApiModel(value = "등록한 즐겨찾기", description = "등록한 즐겨찾기 정보")
 @Builder(access = AccessLevel.PRIVATE)
 public class PostFavoritesRes {
 
