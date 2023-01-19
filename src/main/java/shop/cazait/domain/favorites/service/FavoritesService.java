@@ -3,15 +3,20 @@ package shop.cazait.domain.favorites.service;
 import static shop.cazait.domain.favorites.exception.FavoritesErrorStatus.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.error.CafeErrorStatus;
+import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.favorites.dto.GetFavoritesRes;
 import shop.cazait.domain.favorites.dto.PostFavoritesRes;
 import shop.cazait.domain.favorites.entity.Favorites;
 import shop.cazait.domain.favorites.exception.FavoritesException;
 import shop.cazait.domain.favorites.repository.FavoritesRepository;
+import shop.cazait.domain.user.entity.User;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +27,14 @@ public class FavoritesService {
     private final CafeRepository cafeRepository;
     private final UserRepository userRepository;
 
-    public PostFavoritesRes addFavorites(Long userId, Long cafeId) {
+    public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException {
+
+        User findUser = findUserById(userId);
+        Cafe findCafe = findCafeById(cafeId);
 
         Favorites favorites = Favorites.builder()
-                .user(userRepository.findById(userId))
-                .cafe(cafeRepository.findById(cafeId))
+                .user(findUser)
+                .cafe(findCafe)
                 .build();
 
         Long addFavoritesId = favoritesRepository.save(favorites).getId();
@@ -34,6 +42,27 @@ public class FavoritesService {
         return PostFavoritesRes.of(addFavoritesId);
 
     }
+
+    private User findUserById(Long userId) throws UserException {
+        User findUser;
+        try{
+            findUser = userRepository.findById(userId).get();
+        } catch (NoSuchElementException exception) {
+            throw new UserException(UserErrorStauts.NON_EXIST_USER);
+        }
+        return findUser;
+    }
+
+    private Cafe findCafeById(Long cafeId) throws CafeException {
+        Cafe findCafe;
+        try {
+            findCafe = cafeRepository.findById(cafeId).get();
+        } catch (NoSuchElementException exception) {
+            throw new CafeException(CafeErrorStatus.NON_EXIST_CAFE);
+        }
+        return findCafe;
+    }
+
 
     @Transactional(readOnly = true)
     public List<GetFavoritesRes> getFavorites(Long userId) {
