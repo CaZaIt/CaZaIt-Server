@@ -8,6 +8,8 @@ import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.global.common.status.BaseStatus;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -35,6 +37,10 @@ public class Cafe extends BaseEntity {
 
     @Column(nullable = false)
     private double latitude;
+
+    @ElementCollection
+    @Column
+    private List<String> imageUrl;
 
     @Builder
     protected Cafe(Congestion congestion, Master master, String name, String location, double longitude, double latitude) {
