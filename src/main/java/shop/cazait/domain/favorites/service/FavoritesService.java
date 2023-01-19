@@ -44,10 +44,10 @@ public class FavoritesService {
 
     }
 
-    public String deleteFavorites(Long userId, Long cafeId) {
+    public String deleteFavorites(Long favoritesId) {
 
         Favorites findFavorites = favoritesRepository
-                .findCafeFavoritesByUserIdAndCafeId(userId, cafeId)
+                .findById(favoritesId)
                 .orElseThrow(() -> new FavoritesException(INVALID_CAFE_FAVORITES));
 
         favoritesRepository.delete(findFavorites);

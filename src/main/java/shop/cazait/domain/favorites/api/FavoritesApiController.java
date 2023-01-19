@@ -51,4 +51,12 @@ public class FavoritesApiController {
 
     }
 
+    @DeleteMapping("/{favoritesId}")
+    public BaseResponse<String> deleteFavorites(@PathVariable(name = "favoritesId") Long favoritesId) {
+
+        String result =  favoritesService.deleteFavorites(favoritesId);
+        return new BaseResponse<>(result);
+
+    }
+
 }
