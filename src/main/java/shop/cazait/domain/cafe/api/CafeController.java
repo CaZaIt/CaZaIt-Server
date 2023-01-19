@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafe.error.CafeErrorStatus;
 import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.global.common.response.BaseResponse;
@@ -31,13 +32,12 @@ public class CafeController {
 
     @GetMapping("/all")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
-    public BaseResponse<List<GetCafeRes>> getCafeByStatus() {
+    public BaseResponse<List<GetCafeRes>> getCafeByStatus() throws CafeException {
         try {
             List<GetCafeRes> cafeResList = this.cafeService.getCafeByStatus(BaseStatus.ACTIVE);
             return new BaseResponse<>(cafeResList);
         } catch (CafeException e) {
-            return new BaseResponse<>(e.getError());
-            // todo: BaseResponse에 CafeErrorStatus를 파라미터로 갖는 함수 추가해야 함
+            return new BaseResponse<>(e.getCafeErrorStatus());
         }
     }
 
