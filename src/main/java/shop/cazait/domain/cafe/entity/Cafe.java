@@ -58,8 +58,8 @@ public class Cafe extends BaseEntity {
     }
 
     public void changeCafeStatus(BaseStatus status) {
-        this.status = status;
-        // todo: BaseEntity의 status가 protected여야 함
+        super.setStatus(status);
+        // todo: BaseEntity에 @Setter 추가해야 함
     }
 
 }
