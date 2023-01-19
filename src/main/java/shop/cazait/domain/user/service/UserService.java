@@ -64,4 +64,10 @@ public class UserService {
         userRepository.save(existUser);
         return PatchUserRes.of(existUser);
     }
+
+    public DeleteUserRes deleteUser(String email){
+        User deleteUser = userRepository.findByEmail(email);
+        userRepository.delete(deleteUser);
+        return DeleteUserRes.of(deleteUser);
+    }
 }

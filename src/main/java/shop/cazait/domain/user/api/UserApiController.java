@@ -47,4 +47,11 @@ public class UserApiController {
         return new BaseResponse<>(patchUserRes);
     }
 
+    @ResponseBody
+    @DeleteMapping("/{email}")
+    public BaseResponse<DeleteUserRes> deleteUser(@PathVariable("email") String email){
+        DeleteUserRes deleteUserRes = userService.deleteUser(email);
+        return new BaseResponse<>(deleteUserRes);
+    }
+
 }
