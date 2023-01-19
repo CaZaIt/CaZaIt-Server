@@ -39,7 +39,7 @@ public class Cafe extends BaseEntity {
     private double latitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "imageUrl")
+    @JoinColumn(name = "cafe_image_id")
     private CafeImage cafeImage;
 
     @Builder
