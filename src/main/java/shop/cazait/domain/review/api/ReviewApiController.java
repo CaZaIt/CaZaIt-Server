@@ -58,7 +58,7 @@ public class ReviewApiController {
     }
 
     @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
-    @PostMapping("/{cafeId}")
+    @PostMapping("/cafes/{cafeId}")
     public BaseResponse<PostReviewRes> addReview(@RequestBody PostReviewReq postReviewReq) {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 

@@ -4,11 +4,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.review.entity.Review;
 
 
 
 @ApiModel(value = "리뷰 수정 Response DTO", description = "수정한 리뷰 내용")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class PatchReviewRes {
     @ApiModelProperty(value = "리뷰 ID")
