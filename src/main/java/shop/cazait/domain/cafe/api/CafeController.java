@@ -33,12 +33,8 @@ public class CafeController {
     @GetMapping("/all")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
     public BaseResponse<List<GetCafeRes>> getCafeByStatus() throws CafeException {
-        try {
-            List<GetCafeRes> cafeResList = this.cafeService.getCafeByStatus(BaseStatus.ACTIVE);
-            return new BaseResponse<>(cafeResList);
-        } catch (CafeException e) {
-            return new BaseResponse<>(e.getCafeErrorStatus());
-        }
+        List<GetCafeRes> cafeResList = this.cafeService.getCafeByStatus(BaseStatus.ACTIVE);
+        return new BaseResponse<>(cafeResList);
     }
 
     @GetMapping("/id/{cafeId}")
