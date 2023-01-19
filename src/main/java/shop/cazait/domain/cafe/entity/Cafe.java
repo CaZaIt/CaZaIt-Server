@@ -38,9 +38,8 @@ public class Cafe extends BaseEntity {
     @Column(nullable = false)
     private double latitude;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cafe_image_id")
-    private CafeImage cafeImage;
+    @OneToMany(mappedBy = "cafe")
+    private List<CafeImage> cafeImage;
 
     @Builder
     protected Cafe(Congestion congestion, Master master, String name, String location, double longitude, double latitude) {
@@ -65,7 +64,6 @@ public class Cafe extends BaseEntity {
 
     public void changeCafeStatus(BaseStatus status) {
         super.setStatus(status);
-        // todo: BaseEntity에 @Setter 추가해야 함
     }
 
 }
