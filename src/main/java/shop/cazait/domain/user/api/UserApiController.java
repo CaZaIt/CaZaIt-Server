@@ -39,4 +39,12 @@ public class UserApiController {
         GetUserRes emailGetUserRes = userService.getUserByEmail(email);
         return new BaseResponse<>(emailGetUserRes);
     }
+
+    @ResponseBody
+    @PatchMapping("/{email}")
+    public BaseResponse<PatchUserRes> modifyUser(@PathVariable("email") String email,@RequestBody PatchUserReq patchUserReq){
+        PatchUserRes patchUserRes = userService.modifyUser(email, patchUserReq);
+        return new BaseResponse<>(patchUserRes);
+    }
+
 }

@@ -12,6 +12,7 @@ import shop.cazait.global.error.BaseException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +49,19 @@ public class UserService {
     public GetUserRes getUserByEmail(String email){
         User findUser = userRepository.findByEmail(email);
         return GetUserRes.of(findUser);
+    }
+
+    public PatchUserRes modifyUser(String email, PatchUserReq patchUserReq){
+        User modifyUser = patchUserReq.toEntity();
+        User existUser = userRepository.findByEmail(email);
+
+        existUser = User.builder()
+                .id(existUser.getId())
+                .email(modifyUser.getEmail())
+                .password(modifyUser.getPassword())
+                .nickname(modifyUser.getNickname())
+                .build();
+        userRepository.save(existUser);
+        return PatchUserRes.of(existUser);
     }
 }
