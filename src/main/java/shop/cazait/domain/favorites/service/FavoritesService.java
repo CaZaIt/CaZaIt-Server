@@ -38,7 +38,7 @@ public class FavoritesService {
     @Transactional(readOnly = true)
     public List<GetFavoritesRes> getFavorites(Long userId) {
 
-        List<Favorites> findFavorites = favoritesRepository.findAllByUserId(userId);
+        List<Favorites> findFavorites = favoritesRepository.findAllByUserId(userId).get();
 
         return GetFavoritesRes.of(findFavorites);
 
