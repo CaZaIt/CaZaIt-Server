@@ -14,6 +14,8 @@ import shop.cazait.domain.favorites.entity.Favorites;
 @Builder(access = AccessLevel.PROTECTED)
 public class GetFavoritesRes {
 
+    private Long favoritesId;
+
     @ApiModelProperty(value = "카페 ID")
     private Long cafeId;
     @ApiModelProperty(value = "카페 이름")
@@ -25,6 +27,7 @@ public class GetFavoritesRes {
         return findFavorites.stream()
                 .map(favorites -> {
                     return GetFavoritesRes.builder()
+                            .favoritesId(favorites.getId())
                             .cafeId(favorites.getCafe().getId())
                             .name(favorites.getCafe().getName())
                             .imageUrl(favorites.getCafe().getCafeImage().stream()
