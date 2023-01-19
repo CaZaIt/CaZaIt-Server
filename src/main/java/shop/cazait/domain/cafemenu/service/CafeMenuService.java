@@ -89,13 +89,17 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 삭제
      */
-    public void deleteMenu(Long cafeMenuId) {
+    public String deleteMenu(Long cafeMenuId) {
+
+        CafeMenu findMenu = cafeMenuRepository.findById(cafeMenuId).get();
 
         try {
-            cafeMenuRepository.deleteById(cafeMenuId);
-        } catch (CafeMenuException exception) {
+            cafeMenuRepository.delete(findMenu);
+        } catch (IllegalArgumentException exception) {
             throw new CafeMenuException(INVALID_MENU);
         }
+
+        return "메뉴 삭제 완료";
 
     }
 

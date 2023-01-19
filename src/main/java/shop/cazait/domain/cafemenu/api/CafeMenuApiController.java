@@ -69,9 +69,10 @@ public class CafeMenuApiController {
      * 카페 메뉴 삭제
      */
     @DeleteMapping("/{menuId}")
-    public BaseResponse<PutCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId) {
+    public BaseResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
 
-        return cafeMenuService.deleteCafeMenu(menuId);
+        String result = cafeMenuService.deleteMenu(menuId);
+        return new BaseResponse<>(result);
 
     }
 

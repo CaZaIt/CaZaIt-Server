@@ -14,6 +14,4 @@ public interface CafeMenuRepository extends JpaRepository<CafeMenu, Long> {
 
     CafeMenu findByMenuAndCafe(Long cafeMenuId,Long cafeId);
 
-    void deleteById(Long cafeMenuId);
-
 }
