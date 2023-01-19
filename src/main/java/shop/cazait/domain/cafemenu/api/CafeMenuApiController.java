@@ -35,7 +35,8 @@ public class CafeMenuApiController {
         // 가격 확인
         // 이미지 확인
 
-        return cafeMenuService.addCafeMenu(cafeId, postCafeMenuReq);
+        List<PostCafeMenuRes> result = cafeMenuService.registerMenu(cafeId, postCafeMenuReq);
+        return new BaseResponse<>(result);
 
     }
 
