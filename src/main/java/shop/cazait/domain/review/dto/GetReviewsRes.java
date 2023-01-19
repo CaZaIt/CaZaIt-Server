@@ -11,14 +11,14 @@ import shop.cazait.domain.review.entity.Review;
 
 
 
+@ApiModel(value = "전체 리뷰 조회 Response DTO", description = "해당 카페에 등록된 리뷰들 및 카페 평점")
 @Getter
-@ApiModel(value = "리뷰들 및 평점", description = "해당 카페에 등록된 리뷰들 및 카페 평점")
 @Builder(access = AccessLevel.PRIVATE)
 public class GetReviewsRes {
     @ApiModelProperty(value = "카페 평점")
     private double averageScore;
 
-    @ApiModelProperty(value = "카페에 등록된 리뷰들")
+    @ApiModelProperty(value = "카페에 등록된 리뷰들의 DTO")
     private List<GetReviewRes> reviewDtos;
 
 
