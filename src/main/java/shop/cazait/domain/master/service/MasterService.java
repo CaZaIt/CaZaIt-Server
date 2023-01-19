@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafefavorites.dto.GetCafeFavoritesRes;
 import shop.cazait.domain.cafefavorites.entity.CafeFavorites;
+import shop.cazait.domain.cafemenu.dto.PutCafeMenuRes;
+import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
+import shop.cazait.domain.master.dto.patch.PutMasterRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.global.config.encrypt.SHA256;
@@ -58,6 +61,28 @@ public class MasterService {
         return masterRes;
     }
 
+    //마스터 회원 정보 수정
+    public PutMasterRes updateMaster(Long id, PutMasterRes putMasterRes){
+        Master findMaster = masterRepository.findByMaster(id);
+        if(putMasterRes.getEmail() != null){
+            findMaster.changeMasterEmail(putMasterRes.getEmail());
+        }
+        if(putMasterRes.getPassword() != null){
+            findMaster.changeMasterPassword(putMasterRes.getPassword());
+        }
+        if(putMasterRes.getNickname() != null){
+            findMaster.changeMasterNickname(putMasterRes.getNickname());
+        }
+
+        Master updateMaster = masterRepository.save(findMaster);
+        return PutMasterRes.builder()
+                .id(updateMaster.getId())
+                .email(updateMaster.getEmail())
+                .password(updateMaster.getPassword())
+                .nickname(updateMaster.getNickname())
+                .build();
+
+    }
 
     // 회원 탈퇴하기
     public void removeMaster(int id) throws MasterException{

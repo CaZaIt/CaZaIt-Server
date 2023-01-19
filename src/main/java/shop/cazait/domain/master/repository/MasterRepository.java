@@ -15,4 +15,6 @@ public interface MasterRepository extends JpaRepository<Master, Integer> {
    Optional<Master> findMasterByEmail(String email);
 
     List<Master> findAllMasterById(Long id);
+
+    Master findByMaster(Long id);
 }

@@ -34,4 +34,16 @@ public class Master extends BaseEntity {
         this.nickname=nickname;
         this.cafe=cafe;
     }
+
+    public void changeMasterEmail(String email) {
+        this.email = email;
+    }
+
+    public void changeMasterPassword(String password) {
+        this.password = password;
+    }
+
+    public void changeMasterNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
