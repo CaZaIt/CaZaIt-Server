@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.PutCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PutCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
+import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.exception.CafeMenuException;
@@ -64,25 +64,25 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    public PutCafeMenuRes updateMenu(Long cafeId, Long cafeMenuId, PutCafeMenuReq putCafeMenuReq) {
+    public PatchCafeMenuRes updateMenu(Long cafeId, Long cafeMenuId, PatchCafeMenuReq patchCafeMenuReq) {
 
         CafeMenu findMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
 
-        if (putCafeMenuReq.getName() != NOT_UPDATE_NAME) {
-            findMenu.changeCafeMenuName(putCafeMenuReq.getName());
+        if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {
+            findMenu.changeCafeMenuName(patchCafeMenuReq.getName());
         }
 
-        if (putCafeMenuReq.getPrice() != NOT_UPDATE_PRICE) {
-            findMenu.changeCafeMenuPrice(putCafeMenuReq.getPrice());
+        if (patchCafeMenuReq.getPrice() != NOT_UPDATE_PRICE) {
+            findMenu.changeCafeMenuPrice(patchCafeMenuReq.getPrice());
         }
 
-        if (putCafeMenuReq.getImageUrl() != NOT_UPDATE_IMAGE) {
-            findMenu.changeCafeMenuImageUrl(putCafeMenuReq.getImageUrl());
+        if (patchCafeMenuReq.getImageUrl() != NOT_UPDATE_IMAGE) {
+            findMenu.changeCafeMenuImageUrl(patchCafeMenuReq.getImageUrl());
         }
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findMenu);
 
-        return PutCafeMenuRes.of(updateCafeMenu);
+        return PatchCafeMenuRes.of(updateCafeMenu);
 
     }
 
