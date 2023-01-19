@@ -40,13 +40,7 @@ public class CafeMenuService {
     public void addCafeMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs) {
 
         Cafe findCafe = cafeRepository.findById(cafeId);
-        List<CafeMenu> cafeMenus = postCafeMenuReqs.stream()
-                .map(postCafeMenuReq -> CafeMenu.builder()
-                        .cafe(findCafe)
-                        .name(postCafeMenuReq.getName())
-                        .price(postCafeMenuReq.getPrice())
-                        .imageUrl(postCafeMenuReq.getImageUrl())
-                        .build()).collect(Collectors.toList());
+        List<CafeMenu> cafeMenus = PostCafeMenuReq.toEntity(findCafe ,postCafeMenuReqs);
 
         cafeMenuRepository.saveAll(cafeMenus);
 
