@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafevisit.service;
+package shop.cazait.domain.checklog.service;
 
 import static shop.cazait.domain.cafe.error.CafeErrorStatus.*;
 
@@ -8,49 +8,48 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.error.CafeErrorStatus;
 import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.cafevisit.dto.GetCafeVisitRes;
-import shop.cazait.domain.cafevisit.dto.PostCafeVisitRes;
-import shop.cazait.domain.cafevisit.entity.CafeVisit;
-import shop.cazait.domain.cafevisit.repository.CafeVisitRepository;
+import shop.cazait.domain.checklog.dto.GetCheckLogRes;
+import shop.cazait.domain.checklog.dto.PostCheckLogRes;
+import shop.cazait.domain.checklog.entity.CheckLog;
+import shop.cazait.domain.checklog.repository.CheckLogRepository;
 import shop.cazait.domain.user.entity.User;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CafeVisitService {
+public class CheckLogService {
 
     private final UserRepository userRepository;
     private final CafeRepository cafeRepository;
-    private final CafeVisitRepository cafeVisitRepository;
+    private final CheckLogRepository checkLogRepository;
 
     /**
      * 최근 본 카페 기록 조회
      */
     @Transactional(readOnly = true)
-    public List<GetCafeVisitRes> getVisitLog(Long userId) {
+    public List<GetCheckLogRes> getVisitLog(Long userId) {
 
-        List<CafeVisit> findVisitLogs = cafeVisitRepository.findCafeVisitsByUserId(userId).orElse(null);
+        List<CheckLog> findVisitLogs = checkLogRepository.findCafeVisitsByUserId(userId).orElse(null);
 
-        return GetCafeVisitRes.of(findVisitLogs);
+        return GetCheckLogRes.of(findVisitLogs);
     }
 
     /**
      * 최근 본 카페 등록
      */
-    public PostCafeVisitRes addVisitLog(Long userId, Long cafeId) throws CafeException {
+    public PostCheckLogRes addVisitLog(Long userId, Long cafeId) throws CafeException {
 
         User user = findUser(userId);
         Cafe cafe = findCafe(cafeId);
 
-        CafeVisit addVisitLog = cafeVisitRepository.save(CafeVisit.builder()
+        CheckLog addVisitLog = checkLogRepository.save(CheckLog.builder()
                 .user(user)
                 .cafe(cafe)
                 .build());
 
-        return PostCafeVisitRes.of(addVisitLog);
+        return PostCheckLogRes.of(addVisitLog);
 
     }
 

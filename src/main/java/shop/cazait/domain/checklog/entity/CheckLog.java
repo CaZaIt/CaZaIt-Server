@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafevisit.entity;
+package shop.cazait.domain.checklog.entity;
 
 import javax.persistence.*;
 import lombok.AccessLevel;
@@ -11,7 +11,7 @@ import shop.cazait.domain.user.entity.User;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CafeVisit {
+public class CheckLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class CafeVisit {
     private Cafe cafe;
 
     @Builder
-    public CafeVisit(User user, Cafe cafe) {
+    public CheckLog(User user, Cafe cafe) {
         this.user = user;
         this.cafe = cafe;
     }

@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafevisit.dto;
+package shop.cazait.domain.checklog.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import shop.cazait.domain.cafe.entity.CafeImage;
-import shop.cazait.domain.cafevisit.entity.CafeVisit;
+import shop.cazait.domain.checklog.entity.CheckLog;
 
-@ApiModel(value = "최근 본 카페 리스트 정보", description = "방문 ID, 카페 ID, 이름, 이미지를 포함")
+@ApiModel(value = "조회 기록 정보", description = "방문 ID, 카페 ID, 이름, 이미지를 포함")
 @Builder(access = AccessLevel.PRIVATE)
-public class GetCafeVisitRes {
+public class GetCheckLogRes {
 
-    @ApiModelProperty(value = "방문 ID", example = "1")
+    @ApiModelProperty(value = "조회 기록 ID", example = "1")
     private Long cafeVisitId;
 
     @ApiModelProperty(value = "카페 ID", example = "1")
@@ -25,9 +25,9 @@ public class GetCafeVisitRes {
     @ApiModelProperty(value = "카페 이미지 URL", example = "image.png")
     private List<String> imageUrl;
 
-    public static List<GetCafeVisitRes> of(List<CafeVisit> visitLogs) {
+    public static List<GetCheckLogRes> of(List<CheckLog> visitLogs) {
         return visitLogs.stream()
-                .map(visitLog -> GetCafeVisitRes.builder()
+                .map(visitLog -> GetCheckLogRes.builder()
                         .cafeVisitId(visitLog.getId())
                         .cafeId(visitLog.getCafe().getId())
                         .name(visitLog.getCafe().getName())
