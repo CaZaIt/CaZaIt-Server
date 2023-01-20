@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "카페 메뉴 등록", description = "등록할 메뉴에 대한 정보")
 @Data
+@NoArgsConstructor
 public class PostCafeMenuReq {
 
     @ApiParam(value = "이름", example = "아이스 아메리카노", required = true)

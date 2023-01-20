@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@ApiModel(value = "카페 메뉴 수정", description = "수정할 메뉴에 대한 정보(단, 변경하지 않는 부분은 null, 숫자는 -1)")
 @Data
+@NoArgsConstructor
 public class PatchCafeMenuReq {
 
     @ApiParam(value = "이름", example = "아이스 아메리카노(미수정 : null)")
