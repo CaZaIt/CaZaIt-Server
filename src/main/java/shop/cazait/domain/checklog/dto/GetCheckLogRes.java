@@ -9,7 +9,7 @@ import lombok.Builder;
 import shop.cazait.domain.cafe.entity.CafeImage;
 import shop.cazait.domain.checklog.entity.CheckLog;
 
-@ApiModel(value = "조회 기록 정보", description = "방문 ID, 카페 ID, 이름, 이미지를 포함")
+@ApiModel(value = "조회 기록 정보", description = "조회 기록에 대한 정보")
 @Builder(access = AccessLevel.PRIVATE)
 public class GetCheckLogRes {
 
