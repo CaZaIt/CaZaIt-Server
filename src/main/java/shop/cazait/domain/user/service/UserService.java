@@ -2,6 +2,7 @@ package shop.cazait.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.repository.UserRepository;
@@ -9,7 +10,7 @@ import shop.cazait.global.common.response.BaseResponse;
 import shop.cazait.global.common.status.BaseErrorStatus;
 import shop.cazait.global.error.BaseException;
 
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class UserService {
         }
         return new PostLoginRes(404L, "fail");
     }
-
+    @Transactional(readOnly=true)
     public List<GetUserRes> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
         List<GetUserRes> userResList = new ArrayList<>();
@@ -45,7 +46,7 @@ public class UserService {
         }
         return userResList;
     }
-
+    @Transactional(readOnly = true)
     public GetUserRes getUserByEmail(String email){
         User findUser = userRepository.findByEmail(email);
         return GetUserRes.of(findUser);
