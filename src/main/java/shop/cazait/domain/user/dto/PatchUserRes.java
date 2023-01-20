@@ -2,10 +2,12 @@ package shop.cazait.domain.user.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 @Getter
+@Builder(access = AccessLevel.PRIVATE)
 @ApiModel(value = "PatchUserRes/회원 수정 정보",description = "수정 완료된 회원 정보 dto")
 public class PatchUserRes {
     @ApiModelProperty(value = "회원 id", example = "1")
@@ -17,13 +19,6 @@ public class PatchUserRes {
     @ApiModelProperty(value = "닉네임", example = "토마스")
     private String nickname;
 
-    @Builder
-    public PatchUserRes(Long id, String email, String password, String nickname) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-    }
 
     public static PatchUserRes of(User user) {
         return PatchUserRes.builder()

@@ -2,9 +2,11 @@ package shop.cazait.domain.user.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
+@Builder(access = AccessLevel.PRIVATE)
 @Getter
 @ApiModel(value = "DeleteUserRes/회원 삭제 정보",description = "삭제 완료된 회원 정보 dto")
 public class DeleteUserRes {
@@ -17,13 +19,7 @@ public class DeleteUserRes {
     @ApiModelProperty(value = "닉네임", example = "토마스")
     private String nickname;
 
-    @Builder
-    public DeleteUserRes(Long id, String password, String email, String nickname) {
-        this.id = id;
-        this.password = password;
-        this.email = email;
-        this.nickname = nickname;
-    }
+
 
     public static DeleteUserRes of(User user){
         return DeleteUserRes
