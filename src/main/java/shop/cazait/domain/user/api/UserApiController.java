@@ -17,14 +17,13 @@ import java.util.List;
 public class UserApiController {
     private final UserService userService;
     @ApiOperation(value = "회원 가입", notes = "User 정보를 추가하여 회원가입을 진행")
-    @ResponseBody
     @PostMapping("/sign-up")
     public BaseResponse<PostUserRes> createUser (@RequestBody PostUserReq postUserReq){
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new BaseResponse<>(postUserRes);
     }
 
-    @ResponseBody
+
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
     public BaseResponse<PostLoginRes> logIn (@RequestBody PostLoginReq postLoginReq){
@@ -32,7 +31,7 @@ public class UserApiController {
         return new BaseResponse<>(postLoginRes);
     }
 
-    @ResponseBody
+
     @GetMapping("/all")
     @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
     public BaseResponse<List<GetUserRes>> getUsers(){
@@ -40,7 +39,7 @@ public class UserApiController {
         return new BaseResponse<>(allGetUserRes);
     }
 
-    @ResponseBody
+
     @GetMapping("/{email}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam(name="email", value = "회원의 email")
@@ -49,7 +48,7 @@ public class UserApiController {
         return new BaseResponse<>(emailGetUserRes);
     }
 
-    @ResponseBody
+
     @PatchMapping("/{email}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
     @ApiImplicitParam(name="email", value = "회원의 email")
@@ -58,7 +57,7 @@ public class UserApiController {
         return new BaseResponse<>(patchUserRes);
     }
 
-    @ResponseBody
+    
     @DeleteMapping("/{email}")
     @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
     @ApiImplicitParam(name="email", value = "회원의 email")
