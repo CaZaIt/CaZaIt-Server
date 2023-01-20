@@ -1,11 +1,11 @@
 package shop.cazait.domain.cafevisit.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafevisit.dto.GetCafeVisitRes;
 import shop.cazait.domain.cafevisit.dto.PostCafeVisitRes;
 import shop.cazait.domain.cafevisit.entity.CafeVisit;
@@ -27,15 +27,9 @@ public class CafeVisitService {
     @Transactional(readOnly = true)
     public List<GetCafeVisitRes> getCafeVisitLog(Long userId) {
 
-        List<CafeVisit> CafeVisits = cafeVisitRepository.findCafeVisitsByUserId(userId);
+        List<CafeVisit> findVisitLogs = cafeVisitRepository.findCafeVisitsByUserId(userId).orElse(null);
 
-        return CafeVisits.stream()
-                .map(CafeVisit -> GetCafeVisitRes.builder()
-                        .cafeId(CafeVisit.getCafe().getId())
-                        .name(CafeVisit.getCafe().getName())
-                        .imageUrl(CafeVisit.getCafe().getName())
-                        .build())
-                .collect(Collectors.toList());
+        return GetCafeVisitRes.of(findVisitLogs);
     }
 
     /**

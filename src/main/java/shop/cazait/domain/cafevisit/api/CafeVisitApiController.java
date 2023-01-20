@@ -15,7 +15,7 @@ import shop.cazait.domain.cafevisit.dto.GetCafeVisitRes;
 import shop.cazait.domain.cafevisit.service.CafeVisitService;
 import shop.cazait.global.common.response.BaseResponse;
 
-@Api(tags = "최근 본 카페 관련 API")
+@Api(tags = "방문 기록 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/visits")
@@ -32,13 +32,15 @@ public class CafeVisitApiController {
     @ApiImplicitParam(
             name = "userId", value = "사용자 ID"
     )
-    @ResponseBody
     @GetMapping("/user/{userId}")
-    public BaseResponse<List<GetCafeVisitRes>> getCafeVisitLog(@PathVariable(name = "userId") Long userId) {
+    public BaseResponse<List<GetCafeVisitRes>> getVisitLog(@PathVariable(name = "userId") Long userId) {
 
-        List<GetCafeVisitRes> cafeVisitRes = cafeVisitService.getCafeVisitLog(userId);
+        // User ID가 null 인지 확인
+        // JWT에서 받아온 User ID와 같은지 확인
 
-        return new BaseResponse<>(cafeVisitRes);
+        List<GetCafeVisitRes> result = cafeVisitService.getCafeVisitLog(userId);
+
+        return new BaseResponse<>(result);
     }
 
 }
