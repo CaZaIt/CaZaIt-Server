@@ -38,9 +38,9 @@ public class CafeVisitApiController {
         // User ID가 null 인지 확인
         // JWT에서 받아온 User ID와 같은지 확인
 
-        List<GetCafeVisitRes> result = cafeVisitService.getCafeVisitLog(userId);
-
+        List<GetCafeVisitRes> result = cafeVisitService.getVisitLog(userId);
         return new BaseResponse<>(result);
+
     }
 
 }

@@ -9,8 +9,6 @@ import shop.cazait.domain.cafevisit.entity.CafeVisit;
 @Repository
 public interface CafeVisitRepository extends JpaRepository<CafeVisit, Long> {
 
-    List<CafeVisit> findCafeVisitById(Long id);
-
     Optional<List<CafeVisit>> findCafeVisitsByUserId(Long userId);
 
 }
