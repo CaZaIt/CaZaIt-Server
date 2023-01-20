@@ -18,13 +18,13 @@ public class PostCongestionRes {
     private Long cafeId;
 
     @ApiModelProperty(example = "혼잡도 상태", value = "free")
-    private CongestionStatus congestionStatus;
+    private String congestionStatus;
 
     public static PostCongestionRes of(Congestion newCongestion) {
         return PostCongestionRes.builder()
                 .congestionId(newCongestion.getId())
                 .cafeId(newCongestion.getCafe().getId())
-                .congestionStatus(newCongestion.getCongestionStatus())
+                .congestionStatus(newCongestion.getCongestionStatus().getValue())
                 .build();
     }
 
