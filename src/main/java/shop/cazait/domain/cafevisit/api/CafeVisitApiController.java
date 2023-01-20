@@ -18,7 +18,7 @@ import shop.cazait.global.common.response.BaseResponse;
 @Api(tags = "최근 본 카페 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cafe_visits")
+@RequestMapping("/api/visits")
 public class CafeVisitApiController {
 
     private final CafeVisitService cafeVisitService;
@@ -33,7 +33,7 @@ public class CafeVisitApiController {
             name = "userId", value = "사용자 ID"
     )
     @ResponseBody
-    @GetMapping("/{userId}")
+    @GetMapping("/user/{userId}")
     public BaseResponse<List<GetCafeVisitRes>> getCafeVisitLog(@PathVariable(name = "userId") Long userId) {
 
         List<GetCafeVisitRes> cafeVisitRes = cafeVisitService.getCafeVisitLog(userId);
