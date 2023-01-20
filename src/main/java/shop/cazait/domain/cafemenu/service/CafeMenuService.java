@@ -34,14 +34,7 @@ public class CafeMenuService {
     @Transactional(readOnly = true)
     public List<GetCafeMenuRes> getMenu(Long cafeId) {
 
-        List<CafeMenu> findMenus;
-
-        try {
-            findMenus = cafeMenuRepository.findAllByCafeId(cafeId);
-        } catch (CafeMenuException exception) {
-            throw new CafeMenuException(NOT_REGISTER_MENU);
-        }
-
+        List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId);
         return GetCafeMenuRes.of(findMenus);
 
     }
