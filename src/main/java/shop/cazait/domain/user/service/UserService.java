@@ -6,14 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.repository.UserRepository;
-import shop.cazait.global.common.response.BaseResponse;
-import shop.cazait.global.common.status.BaseErrorStatus;
-import shop.cazait.global.error.BaseException;
+
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
