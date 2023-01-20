@@ -13,7 +13,7 @@ import java.util.List;
 @Api
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserApiController {
     private final UserService userService;
     @ApiOperation(value = "회원 가입", notes = "User 정보를 추가하여 회원가입을 진행")
