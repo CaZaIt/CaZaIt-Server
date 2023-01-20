@@ -14,13 +14,13 @@ import shop.cazait.domain.favorites.entity.Favorites;
 @Builder(access = AccessLevel.PROTECTED)
 public class GetFavoritesRes {
 
-    @ApiModelProperty(value = "즐겨찾기 ID")
+    @ApiModelProperty(value = "즐겨찾기 ID", example = "1")
     private Long favoritesId;
-    @ApiModelProperty(value = "카페 ID")
+    @ApiModelProperty(value = "카페 ID", example = "1")
     private Long cafeId;
-    @ApiModelProperty(value = "카페 이름")
+    @ApiModelProperty(value = "카페 이름", example = "롬곡")
     private String name;
-    @ApiModelProperty(value = "카페 이미지")
+    @ApiModelProperty(value = "카페 이미지", example = "image.png")
     private List<String> imageUrl = new ArrayList<>();
 
     public static List<GetFavoritesRes> of(List<Favorites> findFavorites) {

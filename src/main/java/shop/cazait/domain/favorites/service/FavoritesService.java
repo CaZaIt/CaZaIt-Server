@@ -32,12 +32,12 @@ public class FavoritesService {
      */
     public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException {
 
-        User findUser = findUserById(userId);
-        Cafe findCafe = findCafeById(cafeId);
+        User user = findUser(userId);
+        Cafe cafe = findCafe(cafeId);
 
         Favorites favorites = Favorites.builder()
-                .user(findUser)
-                .cafe(findCafe)
+                .user(user)
+                .cafe(cafe)
                 .build();
 
         Long addFavoritesId = favoritesRepository.save(favorites).getId();
@@ -46,7 +46,7 @@ public class FavoritesService {
 
     }
 
-    private User findUserById(Long userId) throws UserException {
+    private User findUser(Long userId) throws UserException {
         User findUser;
         try{
             findUser = userRepository.findById(userId).get();
@@ -56,7 +56,7 @@ public class FavoritesService {
         return findUser;
     }
 
-    private Cafe findCafeById(Long cafeId) throws CafeException {
+    private Cafe findCafe(Long cafeId) throws CafeException {
         Cafe findCafe;
         try {
             findCafe = cafeRepository.findById(cafeId).get();
