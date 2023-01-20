@@ -1,8 +1,5 @@
 package shop.cazait.domain.congestion.dto;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import lombok.NoArgsConstructor;
