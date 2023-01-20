@@ -2,6 +2,7 @@ package shop.cazait.domain.cafemenu.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -12,17 +13,16 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
 @ApiModel(value = "카페 메뉴 등록", description = "등록할 메뉴에 대한 정보")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 public class PostCafeMenuReq {
 
-    @ApiModelProperty(value = "이름")
+    @ApiParam(value = "이름", example = "아이스 아메리카노", required = true)
     private String name;
 
-    @ApiModelProperty(value = "가격")
+    @ApiModelProperty(value = "가격", example = "4500", required = true)
     private int price;
 
-    @ApiModelProperty(value = "이미지 URL")
+    @ApiModelProperty(value = "이미지 URL", example = "americano.png(미등록 : null)")
     private String imageUrl;
 
     public static List<CafeMenu> toEntity(Cafe cafe, List<PostCafeMenuReq> postCafeMenuReqs) {

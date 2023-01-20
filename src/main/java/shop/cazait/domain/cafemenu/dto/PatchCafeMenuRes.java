@@ -10,19 +10,19 @@ import shop.cazait.domain.cafemenu.entity.CafeMenu;
 @Builder(access = AccessLevel.PRIVATE)
 public class PatchCafeMenuRes {
 
-    @ApiModelProperty("메뉴 ID")
+    @ApiModelProperty(value = "메뉴 ID", example = "1")
     private Long cafeMenuId;
 
-    @ApiModelProperty("카페 ID")
+    @ApiModelProperty(value = "카페 ID", example = "1")
     private Long cafeId;
 
-    @ApiModelProperty(value = "이름")
+    @ApiModelProperty(value = "이름", example = "아이스 바닐라라떼")
     private String name;
 
-    @ApiModelProperty(value = "가격")
+    @ApiModelProperty(value = "가격", example = "5000")
     private int price;
 
-    @ApiModelProperty(value = "이미지 URL")
+    @ApiModelProperty(value = "이미지 URL", example = "iceVanillaLatte.png")
     private String imageUrl;
 
     public static PatchCafeMenuRes of(CafeMenu menu) {

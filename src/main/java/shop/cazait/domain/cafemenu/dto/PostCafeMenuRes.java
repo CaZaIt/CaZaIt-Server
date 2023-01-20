@@ -12,16 +12,16 @@ import shop.cazait.domain.cafemenu.entity.CafeMenu;
 @Builder(access = AccessLevel.PRIVATE)
 public class PostCafeMenuRes {
 
-    @ApiModelProperty(value = "ID")
+    @ApiModelProperty(value = "ID", example = "1")
     private Long menuId;
 
-    @ApiModelProperty(value = "이름")
+    @ApiModelProperty(value = "이름", example = "아메리카노")
     private String name;
 
-    @ApiModelProperty(value = "가격")
+    @ApiModelProperty(value = "가격", example = "3000")
     private int price;
 
-    @ApiModelProperty(value = "이미지 URL")
+    @ApiModelProperty(value = "이미지 URL", example = "americano.png")
     private String imageUrl;
 
     public static List<PostCafeMenuRes> of(List<CafeMenu> menus) {
