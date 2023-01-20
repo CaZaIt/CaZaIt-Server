@@ -11,13 +11,13 @@ import shop.cazait.domain.congestion.entity.CongestionStatus;
 @Builder(access = AccessLevel.PRIVATE)
 public class PostCongestionRes {
 
-    @ApiModelProperty(example = "혼잡도 ID", value = "1")
+    @ApiModelProperty(value = "혼잡도 ID", example = "1")
     private Long congestionId;
 
-    @ApiModelProperty(example = "카페 ID", value = "1")
+    @ApiModelProperty(value = "카페 ID", example = "1")
     private Long cafeId;
 
-    @ApiModelProperty(example = "혼잡도 상태", value = "free")
+    @ApiModelProperty(value = "혼잡도 상태", example = "free")
     private String congestionStatus;
 
     public static PostCongestionRes of(Congestion newCongestion) {
