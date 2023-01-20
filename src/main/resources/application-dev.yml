@@ -1,0 +1,26 @@
+Server:
+  port: 8081
+
+Spring:
+  config:
+    activate:
+      on-profile: dev
+
+  # MySQL Setting Information
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://cazait-rds.ceaz787lkdus.ap-northeast-2.rds.amazonaws.com:3306/CAZAIT
+    hikari:
+      username: root
+      password: Cazait0214!
+
+  sql:
+    init:
+      platform: mysql
+
+  # JPA Setting Information
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true

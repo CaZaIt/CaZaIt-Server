@@ -1,11 +1,13 @@
 package shop.cazait.global.error;
 
 import lombok.AllArgsConstructor;
-import shop.cazait.global.common.status.BaseResponseStatus;
+import lombok.Data;
+import shop.cazait.global.common.status.BaseErrorStatus;
 
+@Data
 @AllArgsConstructor
 public class BaseException extends Exception{
 
-    private BaseResponseStatus error;
+    private BaseErrorStatus error;
 
 }

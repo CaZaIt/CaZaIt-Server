@@ -1,17 +1,17 @@
+Server:
+  port: 8080
+
 Spring:
+  profiles:
+    default: local
+
   application:
     name: cazait
 
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/cazait;NON_KEYWORDS=USER
-    hikari:
-      username: sa
-      password:
-
+  # JPA Setting Information
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true

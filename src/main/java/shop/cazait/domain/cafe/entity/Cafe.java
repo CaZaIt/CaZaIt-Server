@@ -2,8 +2,13 @@ package shop.cazait.domain.cafe.entity;
 
 import javax.persistence.*;
 import lombok.*;
+import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.master.entity.Master;
 import shop.cazait.global.common.entity.BaseEntity;
-import shop.cazait.domain.cafecongestion.entity.CafeCongestion;
+import shop.cazait.domain.congestion.entity.Congestion;
+import shop.cazait.global.common.status.BaseStatus;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,9 +19,12 @@ public class Cafe extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "congestion_id")
-    private CafeCongestion cafeCongestion;
+    private Congestion congestion;
+
+    @OneToOne(mappedBy = "cafe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Master master;
 
     @Column(nullable = false)
     private String name;
@@ -30,17 +38,32 @@ public class Cafe extends BaseEntity {
     @Column(nullable = false)
     private double latitude;
 
-    @Column(nullable = false)
-    private String imageUrl;
+    @OneToMany(mappedBy = "cafe")
+    private List<CafeImage> cafeImage;
 
     @Builder
-    protected Cafe(CafeCongestion cafeCongestion, String name, String location, double longitude, double latitude, String imageUrl) {
-        this.cafeCongestion = cafeCongestion;
+    protected Cafe(Congestion congestion, Master master, String name, String location, double longitude, double latitude) {
+        this.congestion = congestion;
+        this.master = master;
         this.name = name;
         this.location = location;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.imageUrl = imageUrl;
+    }
+
+    public void initCafeCongestion(Congestion congestion) {
+        this.congestion = congestion;
+    }
+
+    public void changeCafeInfo(PostCafeReq postCafeReq) {
+        this.name = postCafeReq.getName();
+        this.location = postCafeReq.getLocation();
+        this.longitude = postCafeReq.getLongitude();
+        this.latitude = postCafeReq.getLatitude();
+    }
+
+    public void changeCafeStatus(BaseStatus status) {
+        super.setStatus(status);
     }
 
 }
