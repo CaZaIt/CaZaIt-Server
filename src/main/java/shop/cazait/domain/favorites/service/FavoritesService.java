@@ -27,6 +27,9 @@ public class FavoritesService {
     private final CafeRepository cafeRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 즐겨찾기 추가
+     */
     public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException {
 
         User findUser = findUserById(userId);
@@ -64,6 +67,9 @@ public class FavoritesService {
     }
 
 
+    /**
+     * 즐겨찾기 조회
+     */
     @Transactional(readOnly = true)
     public List<GetFavoritesRes> getFavorites(Long userId) {
 
@@ -73,6 +79,9 @@ public class FavoritesService {
 
     }
 
+    /**
+     * 즐겨찾기 삭제
+     */
     public String deleteFavorites(Long favoritesId) {
 
         Favorites findFavorites = favoritesRepository

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.favorites.dto.GetFavoritesRes;
 import shop.cazait.domain.favorites.dto.PostFavoritesRes;
 import shop.cazait.domain.favorites.service.FavoritesService;
@@ -25,7 +26,6 @@ import shop.cazait.global.common.response.BaseResponse;
 @RequestMapping("/api/favorites")
 public class FavoritesApiController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final FavoritesService favoritesService;
 
     @ApiOperation(value = "즐겨찾기 등록", notes = "사용자 ID와 카페 ID를 받아 즐겨찾기 등록")
@@ -35,7 +35,8 @@ public class FavoritesApiController {
     })
     @PostMapping("/user/{userId}/cafe/{cafeId}")
     public BaseResponse<PostFavoritesRes> addFavorites(@PathVariable(name = "userId") Long userId,
-                                                           @PathVariable(name = "cafeId") Long cafeId) {
+                                                           @PathVariable(name = "cafeId") Long cafeId)
+            throws CafeException {
 
         PostFavoritesRes postCafeFavoritesRes = favoritesService.addFavorites(userId, cafeId);
 
