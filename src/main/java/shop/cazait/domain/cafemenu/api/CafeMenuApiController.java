@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
@@ -39,7 +40,8 @@ public class CafeMenuApiController {
     })
     @PostMapping("/cafe/{cafeId}")
     public BaseResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
-                                                            @RequestBody List<PostCafeMenuReq> postCafeMenuReq) {
+                                                            @RequestBody List<PostCafeMenuReq> postCafeMenuReq)
+            throws CafeException {
 
         // 이름 확인
         // 가격 확인
@@ -71,14 +73,12 @@ public class CafeMenuApiController {
     @ApiOperation(value = "카페 메뉴 수정", notes = "카페 ID, 카페 메뉴 ID를 받아 수정")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID"),
-            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @PatchMapping("/{menuId}/cafe/{cafeId}")
     public BaseResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
-                                                     @PathVariable(name = "cafeId") Long cafeId,
                                                      @RequestBody PatchCafeMenuReq patchCafeMenuReq) {
 
-        PatchCafeMenuRes result = cafeMenuService.updateMenu(menuId, cafeId, patchCafeMenuReq);
+        PatchCafeMenuRes result = cafeMenuService.updateMenu(menuId, patchCafeMenuReq);
         return new BaseResponse<>(result);
 
     }
