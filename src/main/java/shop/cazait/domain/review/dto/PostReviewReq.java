@@ -2,6 +2,9 @@ package shop.cazait.domain.review.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.cafe.entity.Cafe;
@@ -14,12 +17,17 @@ import shop.cazait.domain.user.entity.User;
 @Getter
 public class PostReviewReq {
     @ApiModelProperty(value = "카페 ID")
+    @NotNull(message = "존재하지 않는 카페입니다.")
     private Long cafeId;
 
     @ApiModelProperty(value = "유저 ID")
+    @NotNull(message = "존재하지 않는 유저입니다.")
     private Long userId;
 
     @ApiModelProperty(value = "점수")
+    @NotNull(message = "점수를 입력해주세요.")
+    @Min(value = 1, message = "점수는 1점 이상이여야합니다.")
+    @Max(value = 5, message = "점수는 5점 이하여야합니다.")
     private Integer score;
 
     @ApiModelProperty(value = "내용")

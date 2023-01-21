@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,7 +60,7 @@ public class ReviewApiController {
 
     @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
     @PostMapping("/cafes/{cafeId}")
-    public BaseResponse<PostReviewRes> addReview(@RequestBody PostReviewReq postReviewReq) {
+    public BaseResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq) {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 
         return new BaseResponse<>(postReviewRes);
@@ -67,7 +68,7 @@ public class ReviewApiController {
 
     @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
     @PatchMapping("/{reviewId}")
-    public BaseResponse<PatchReviewRes> updateReview(@RequestBody PatchReviewReq patchReviewReq) {
+    public BaseResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
 
         return new BaseResponse<>(patchReviewRes);
