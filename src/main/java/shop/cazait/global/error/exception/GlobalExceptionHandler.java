@@ -1,7 +1,6 @@
-package shop.cazait.global.error;
+package shop.cazait.global.error.exception;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.global.common.response.BaseResponse;
 
