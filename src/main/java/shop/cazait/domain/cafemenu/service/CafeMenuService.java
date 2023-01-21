@@ -1,5 +1,6 @@
 package shop.cazait.domain.cafemenu.service;
 
+import static shop.cazait.domain.cafe.error.CafeErrorStatus.NON_EXIST_CAFE;
 import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.INVALID_MENU;
 import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.NOT_REGISTER_MENU;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
@@ -7,10 +8,14 @@ import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_PRICE;
 
 import java.util.List;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.error.CafeErrorStatus;
+import shop.cazait.domain.cafe.error.CafeException;
+import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
@@ -44,14 +49,24 @@ public class CafeMenuService {
      * 카페 메뉴 등록
      *
      */
-    public List<PostCafeMenuRes> registerMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs) {
+    public List<PostCafeMenuRes> registerMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs)
+            throws CafeException {
 
-        Cafe findCafe = cafeRepository.findById(cafeId);
+        Cafe findCafe = getCafe(cafeId);
         List<CafeMenu> menus = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReqs);
         List<CafeMenu> addMenus = cafeMenuRepository.saveAll(menus);
 
         return PostCafeMenuRes.of(addMenus);
 
+    }
+
+    private Cafe getCafe(Long cafeId) throws CafeException {
+        try {
+            return cafeRepository.getReferenceById(cafeId);    
+        } catch (EntityNotFoundException exception) {
+            throw new CafeException(NON_EXIST_CAFE);
+        }
+        
     }
 
     /**
