@@ -1,5 +1,9 @@
 package shop.cazait.domain.congestion.exception;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CongestionErrorStatus {
 
     CONGESTION_STATUS_EMPTY("FAIL", "혼잡도를 입력해 주세요."),
@@ -8,8 +12,4 @@ public enum CongestionErrorStatus {
     private final String result;
     private final String message;
 
-    private CongestionErrorStatus(String result, String message) {
-        this.result = result;
-        this.message = message;
-    }
 }

@@ -39,7 +39,7 @@ public class CongestionApiController {
 
         // masterId 유효 확인
         // cafeId NULL 확인
-        if (postCongestionReq.getCongestionStatus().isEmpty()) {
+        if (postCongestionReq.getCongestionStatus().isBlank()) {
             throw new CongestionException(CONGESTION_STATUS_EMPTY);
         }
 
