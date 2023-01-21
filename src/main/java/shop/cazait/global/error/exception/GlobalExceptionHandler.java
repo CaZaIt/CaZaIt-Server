@@ -17,4 +17,5 @@ public class GlobalExceptionHandler {
     protected BaseResponse handleCongestionException(CongestionException exception) {
         return new BaseResponse(exception.getError());
     }
+
 }
