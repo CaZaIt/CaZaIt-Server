@@ -2,6 +2,7 @@ package shop.cazait.domain.review.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,10 +36,10 @@ public class ReviewApiController {
     private final ReviewProvideService reviewProvideService;
 
     @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 및 평점을 반환")
-    @ApiImplicitParam(
-            name = "cafeId",
-            value = "카페 ID"
-    )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
+            @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest")
+    })
     @GetMapping("/{cafeId}")
     public BaseResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
                                                   @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
@@ -47,6 +48,8 @@ public class ReviewApiController {
         return new BaseResponse<>(getReviewsRes);
     }
 
+    @ApiOperation(value = "리뷰 하나 조회", notes = "리뷰 ID를 받아 해당 리뷰 조회")
+    @ApiImplicitParam(name = "reviewId", value = "리뷰 ID")
     @GetMapping("/{reviewId}")
     public BaseResponse<GetReviewRes> getReview(@PathVariable Long reviewId) {
         GetReviewRes getReviewRes = reviewProvideService.getReview(reviewId);
@@ -54,13 +57,15 @@ public class ReviewApiController {
         return new BaseResponse<>(getReviewRes);
     }
 
-    @PostMapping("/{cafeId}")
+    @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
+    @PostMapping("/cafes/{cafeId}")
     public BaseResponse<PostReviewRes> addReview(@RequestBody PostReviewReq postReviewReq) {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 
         return new BaseResponse<>(postReviewRes);
     }
 
+    @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
     @PatchMapping("/{reviewId}")
     public BaseResponse<PatchReviewRes> updateReview(@RequestBody PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
@@ -68,6 +73,7 @@ public class ReviewApiController {
         return new BaseResponse<>(patchReviewRes);
     }
 
+    @ApiOperation(value = "리뷰 삭제", notes = "리뷰 ID를 받아 해당 리뷰 삭제")
     @DeleteMapping("/{reviewId}")
     public BaseResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) {
         DelReviewRes delReviewRes = reviewDaoService.deleteReview(reviewId);

@@ -35,7 +35,7 @@ public class CafeService {
         if (cafeReq.getCongestion() == null) {
             Congestion tmp = Congestion.builder()
                     .cafe(cafe)
-                    .status(CongestionStatus.FREE)
+                    .congestionStatus(CongestionStatus.FREE)
                     .build();
             cafe.initCafeCongestion(tmp);
         }
