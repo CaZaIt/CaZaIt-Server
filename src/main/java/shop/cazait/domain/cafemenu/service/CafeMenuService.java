@@ -2,7 +2,6 @@ package shop.cazait.domain.cafemenu.service;
 
 import static shop.cazait.domain.cafe.error.CafeErrorStatus.NON_EXIST_CAFE;
 import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.INVALID_MENU;
-import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.NOT_REGISTER_MENU;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_PRICE;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.error.CafeErrorStatus;
 import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
@@ -39,7 +37,7 @@ public class CafeMenuService {
     @Transactional(readOnly = true)
     public List<GetCafeMenuRes> getMenu(Long cafeId) {
 
-        List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId);
+        List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId).orElse(null);
         return GetCafeMenuRes.of(findMenus);
 
     }
@@ -47,7 +45,6 @@ public class CafeMenuService {
 
     /**
      * 카페 메뉴 등록
-     *
      */
     public List<PostCafeMenuRes> registerMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs)
             throws CafeException {
@@ -72,9 +69,11 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    public PatchCafeMenuRes updateMenu(Long cafeId, Long cafeMenuId, PatchCafeMenuReq patchCafeMenuReq) {
+    public PatchCafeMenuRes updateMenu(Long cafeMenuId, PatchCafeMenuReq patchCafeMenuReq) {
 
-        CafeMenu findMenu = cafeMenuRepository.findByMenuAndCafe(cafeMenuId, cafeId);
+        CafeMenu findMenu = cafeMenuRepository
+                .findById(cafeMenuId)
+                .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
 
         if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {
             findMenu.changeCafeMenuName(patchCafeMenuReq.getName());
@@ -99,13 +98,11 @@ public class CafeMenuService {
      */
     public String deleteMenu(Long cafeMenuId) {
 
-        CafeMenu findMenu = cafeMenuRepository.findById(cafeMenuId).get();
+        CafeMenu findMenu = cafeMenuRepository
+                .findById(cafeMenuId)
+                .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
 
-        try {
-            cafeMenuRepository.delete(findMenu);
-        } catch (IllegalArgumentException exception) {
-            throw new CafeMenuException(INVALID_MENU);
-        }
+        cafeMenuRepository.delete(findMenu);
 
         return "메뉴 삭제 완료";
 
