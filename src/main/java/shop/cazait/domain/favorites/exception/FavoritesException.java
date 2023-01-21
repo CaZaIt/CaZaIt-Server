@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FavoritesException extends IllegalArgumentException {
+public class FavoritesException extends RuntimeException {
 
     private FavoritesErrorStatus error;
 

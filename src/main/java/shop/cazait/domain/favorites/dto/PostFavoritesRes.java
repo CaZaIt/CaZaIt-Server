@@ -12,9 +12,9 @@ public class PostFavoritesRes {
     @ApiModelProperty(value = "즐겨찾기 ID", example = "1")
     private Long id;
 
-    public static PostFavoritesRes of(Long cafeFavoritesId) {
+    public static PostFavoritesRes of(Long favoritesId) {
         return PostFavoritesRes.builder()
-                .id(cafeFavoritesId)
+                .id(favoritesId)
                 .build();
     }
 

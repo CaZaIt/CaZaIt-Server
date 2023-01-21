@@ -3,7 +3,7 @@ package shop.cazait.domain.favorites.service;
 import static shop.cazait.domain.favorites.exception.FavoritesErrorStatus.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,38 +32,44 @@ public class FavoritesService {
      */
     public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException {
 
-        User user = findUser(userId);
-        Cafe cafe = findCafe(cafeId);
+        User user = getUser(userId);
+        Cafe cafe = getCafe(cafeId);
 
         Favorites favorites = Favorites.builder()
                 .user(user)
                 .cafe(cafe)
                 .build();
 
-        Long addFavoritesId = favoritesRepository.save(favorites).getId();
+        Long favoritesId = favoritesRepository.save(favorites).getId();
 
-        return PostFavoritesRes.of(addFavoritesId);
+        return PostFavoritesRes.of(favoritesId);
 
     }
 
-    private User findUser(Long userId) throws UserException {
-        User findUser;
+    private User getUser(Long userId) throws UserException {
+
+        User user;
+
         try{
-            findUser = userRepository.findById(userId).get();
-        } catch (NoSuchElementException exception) {
+            user = getReferenceById(userId);
+        } catch (EntityNotFoundException exception) {
             throw new UserException(UserErrorStauts.NON_EXIST_USER);
         }
-        return findUser;
+        return user;
+
     }
 
-    private Cafe findCafe(Long cafeId) throws CafeException {
-        Cafe findCafe;
+    private Cafe getCafe(Long cafeId) throws CafeException {
+
+        Cafe cafe;
+
         try {
-            findCafe = cafeRepository.findById(cafeId).get();
-        } catch (NoSuchElementException exception) {
+            cafe = cafeRepository.getReferenceById(cafeId);
+        } catch (EntityNotFoundException exception) {
             throw new CafeException(CafeErrorStatus.NON_EXIST_CAFE);
         }
-        return findCafe;
+        return cafe;
+
     }
 
 
@@ -73,9 +79,9 @@ public class FavoritesService {
     @Transactional(readOnly = true)
     public List<GetFavoritesRes> getFavorites(Long userId) {
 
-        List<Favorites> findFavorites = favoritesRepository.findAllByUserId(userId).orElse(null);
+        List<Favorites> favorites = favoritesRepository.findAllByUserId(userId).orElse(null);
 
-        return GetFavoritesRes.of(findFavorites);
+        return GetFavoritesRes.of(favorites);
 
     }
 
@@ -84,11 +90,11 @@ public class FavoritesService {
      */
     public String deleteFavorites(Long favoritesId) {
 
-        Favorites findFavorites = favoritesRepository
+        Favorites favorites = favoritesRepository
                 .findById(favoritesId)
                 .orElseThrow(() -> new FavoritesException(INVALID_CAFE_FAVORITES));
 
-        favoritesRepository.delete(findFavorites);
+        favoritesRepository.delete(favorites);
 
         return "즐겨찾기 삭제 완료";
 
