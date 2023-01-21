@@ -6,15 +6,16 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.error.CafeErrorStatus;
-import shop.cazait.domain.cafe.error.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 import shop.cazait.global.common.status.BaseStatus;
+import shop.cazait.global.error.exception.BaseException;
+import shop.cazait.global.error.status.ErrorStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,29 +45,37 @@ public class CafeService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetCafeRes> getCafeByStatus(BaseStatus status) throws CafeException {
+    public List<GetCafeRes> getCafeByStatus(BaseStatus status) throws BaseException {
         List<Cafe> cafeList = cafeRepository.findCafeByStatus(status);
+        if (cafeList.size() == 0) {
+            throw new BaseException(ErrorStatus.NON_EXIST_CAFE);
+        }
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
             GetCafeRes cafeRes = GetCafeRes.of(cafe);
             cafeResList.add(cafeRes);
         }
-        if (cafeResList.isEmpty()) {
-            throw new CafeException(CafeErrorStatus.NON_EXIST_CAFE);
-        }
         return cafeResList;
     }
 
     @Transactional(readOnly = true)
-    public GetCafeRes getCafeById(Long id) {
-        Cafe cafe = cafeRepository.findById(id).get();
-        GetCafeRes cafeRes = GetCafeRes.of(cafe);
-        return cafeRes;
+    public GetCafeRes getCafeById(Long id) throws BaseException {
+        Optional<Cafe> cafe = cafeRepository.findById(id);
+        if (cafe.isPresent()) {
+            GetCafeRes cafeRes = GetCafeRes.of(cafe.get());
+            return cafeRes;
+        }
+        else {
+            throw new BaseException(ErrorStatus.INVALID_CAFE_ID);
+        }
     }
 
     @Transactional(readOnly = true)
-    public List<GetCafeRes> getCafeByName(String name) {
+    public List<GetCafeRes> getCafeByName(String name) throws BaseException {
         List<Cafe> cafeList = cafeRepository.findCafeByName(name);
+        if (cafeList.size() == 0) {
+            throw new BaseException(ErrorStatus.INVALID_CAFE_NAME);
+        }
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
             GetCafeRes cafeRes = GetCafeRes.of(cafe);
@@ -75,16 +84,28 @@ public class CafeService {
         return cafeResList;
     }
 
-    public void updateCafe(Long id, PostCafeReq cafeReq) {
-        Cafe cafe = cafeRepository.findById(id).get();
-        cafe.changeCafeInfo(cafeReq);
-        cafeRepository.save(cafe);
+    public void updateCafe(Long id, PostCafeReq cafeReq) throws BaseException {
+        Optional<Cafe> cafe = cafeRepository.findById(id);
+        if (cafe.isPresent()) {
+            Cafe uCafe = cafe.get();
+            uCafe.changeCafeInfo(cafeReq);
+            cafeRepository.save(uCafe);
+        }
+        else {
+            throw new BaseException(ErrorStatus.INVALID_CAFE_ID);
+        }
     }
 
-    public void deleteCafe(Long id) {
-        Cafe cafe = cafeRepository.findById(id).get();
-        cafe.changeCafeStatus(BaseStatus.INACTIVE);
-        cafeRepository.save(cafe);
+    public void deleteCafe(Long id) throws BaseException {
+        Optional<Cafe> cafe = cafeRepository.findById(id);
+        if (cafe.isPresent()) {
+            Cafe uCafe = cafe.get();
+            uCafe.changeCafeStatus(BaseStatus.INACTIVE);
+            cafeRepository.save(uCafe);
+        }
+        else {
+            throw new BaseException(ErrorStatus.INVALID_CAFE_ID);
+        }
     }
 
 }

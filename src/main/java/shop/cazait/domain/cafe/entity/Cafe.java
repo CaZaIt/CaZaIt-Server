@@ -3,6 +3,7 @@ package shop.cazait.domain.cafe.entity;
 import javax.persistence.*;
 import lombok.*;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.congestion.entity.Congestion;
