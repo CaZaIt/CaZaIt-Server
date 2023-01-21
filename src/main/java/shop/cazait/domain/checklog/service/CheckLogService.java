@@ -3,7 +3,7 @@ package shop.cazait.domain.checklog.service;
 import static shop.cazait.domain.cafe.error.CafeErrorStatus.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +31,9 @@ public class CheckLogService {
     @Transactional(readOnly = true)
     public List<GetCheckLogRes> getVisitLog(Long userId) {
 
-        List<CheckLog> findVisitLogs = checkLogRepository.findCafeVisitsByUserId(userId).orElse(null);
+        List<CheckLog> visitLogs = checkLogRepository.findVisitLogByUserId(userId).orElse(null);
 
-        return GetCheckLogRes.of(findVisitLogs);
+        return GetCheckLogRes.of(visitLogs);
     }
 
     /**
@@ -41,30 +41,30 @@ public class CheckLogService {
      */
     public PostCheckLogRes addVisitLog(Long userId, Long cafeId) throws CafeException {
 
-        User user = findUser(userId);
-        Cafe cafe = findCafe(cafeId);
+        User user = getUser(userId);
+        Cafe cafe = getCafe(cafeId);
 
-        CheckLog addVisitLog = checkLogRepository.save(CheckLog.builder()
+        CheckLog visitLog = checkLogRepository.save(CheckLog.builder()
                 .user(user)
                 .cafe(cafe)
                 .build());
 
-        return PostCheckLogRes.of(addVisitLog);
+        return PostCheckLogRes.of(visitLog);
 
     }
 
-    private User findUser(Long userId) {
+    private User getUser(Long userId) {
         try {
-            return userRepository.findById(userId).get();
-        } catch (NoSuchElementException exception) {
+            return userRepository.getReferenceById(userId);
+        } catch (EntityNotFoundException exception) {
             throw new UserException();
         }
     }
 
-    private Cafe findCafe(Long cafeId) throws CafeException {
+    private Cafe getCafe(Long cafeId) throws CafeException {
         try {
-            return cafeRepository.findById(cafeId).get();
-        } catch (NoSuchElementException exception) {
+            return cafeRepository.getReferenceById(cafeId);
+        } catch (EntityNotFoundException exception) {
             throw new CafeException(NON_EXIST_CAFE);
         }
     }

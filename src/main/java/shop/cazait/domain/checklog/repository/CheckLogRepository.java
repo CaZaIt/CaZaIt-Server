@@ -9,6 +9,6 @@ import shop.cazait.domain.checklog.entity.CheckLog;
 @Repository
 public interface CheckLogRepository extends JpaRepository<CheckLog, Long> {
 
-    Optional<List<CheckLog>> findCafeVisitsByUserId(Long userId);
+    Optional<List<CheckLog>> findVisitLogByUserId(Long userId);
 
 }
