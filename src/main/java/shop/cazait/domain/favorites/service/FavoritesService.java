@@ -48,27 +48,21 @@ public class FavoritesService {
 
     private User getUser(Long userId) throws UserException {
 
-        User user;
-
         try{
-            user = getReferenceById(userId);
+            reture userRepository.getReferenceById(userId);
         } catch (EntityNotFoundException exception) {
             throw new UserException(UserErrorStauts.NON_EXIST_USER);
         }
-        return user;
 
     }
 
     private Cafe getCafe(Long cafeId) throws CafeException {
 
-        Cafe cafe;
-
         try {
-            cafe = cafeRepository.getReferenceById(cafeId);
+            return cafeRepository.getReferenceById(cafeId);
         } catch (EntityNotFoundException exception) {
             throw new CafeException(CafeErrorStatus.NON_EXIST_CAFE);
         }
-        return cafe;
 
     }
 
