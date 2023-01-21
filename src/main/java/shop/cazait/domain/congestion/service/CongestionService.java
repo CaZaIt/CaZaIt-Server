@@ -21,18 +21,14 @@ public class CongestionService {
     private final CafeRepository cafeRepository;
     private final CongestionRepository congestionRepository;
 
+    /**
+     * 혼잡도 등록 및 수정
+     */
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
-        CongestionStatus congestionStatus;
         Congestion newCongestion = null;
         Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
-
-        try {
-            congestionStatus = CongestionStatus.valueOf(postCongestionReq.getCongestionStatus());
-        } catch (IllegalArgumentException ex) {
-            throw new CongestionException(INVALID_CONGESTION_STATUS);
-        }
-
+        CongestionStatus congestionStatus = getCongestionStatus(postCongestionReq.getCongestionStatus());
 
         if (findCongestion == CONGESTION_NOT_EXIST) {
             newCongestion = addCongestion(cafeId, congestionStatus);
@@ -43,6 +39,16 @@ public class CongestionService {
         }
 
         return PostCongestionRes.of(newCongestion);
+
+    }
+
+    private CongestionStatus getCongestionStatus(String congestionStatus) {
+
+        try {
+            return CongestionStatus.valueOf(congestionStatus);
+        } catch (IllegalArgumentException ex) {
+            throw new CongestionException(INVALID_CONGESTION_STATUS);
+        }
 
     }
 
