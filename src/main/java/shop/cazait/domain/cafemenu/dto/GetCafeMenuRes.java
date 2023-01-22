@@ -25,13 +25,13 @@ public class GetCafeMenuRes {
     @ApiModelProperty(value = "이미지 URL", example = "iceAmericano.png")
     private String imageUrl;
 
-    public static List<GetCafeMenuRes> of(List<CafeMenu> Menus) {
-        return Menus.stream()
-                .map(Menu -> GetCafeMenuRes.builder()
-                        .cafeMenuId(Menu.getId())
-                        .name(Menu.getName())
-                        .price(Menu.getPrice())
-                        .imageUrl(Menu.getImageUrl())
+    public static List<GetCafeMenuRes> of(List<CafeMenu> menus) {
+        return menus.stream()
+                .map(menu -> GetCafeMenuRes.builder()
+                        .cafeMenuId(menu.getId())
+                        .name(menu.getName())
+                        .price(menu.getPrice())
+                        .imageUrl(menu.getImageUrl())
                         .build()).
                 collect(Collectors.toList());
     }
