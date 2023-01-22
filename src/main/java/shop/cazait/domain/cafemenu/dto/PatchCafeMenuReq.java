@@ -14,7 +14,7 @@ public class PatchCafeMenuReq {
     private String name;
 
     @ApiModelProperty(value = "가격", example = "4500(미수정 : -1)")
-    private int price;
+    private Integer price;
 
     @ApiModelProperty(value = "이미지 URL", example = "iceAmericano.png(미수정 : null)")
     private String imageUrl;

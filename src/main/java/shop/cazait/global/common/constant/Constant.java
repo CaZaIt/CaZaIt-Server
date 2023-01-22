@@ -14,7 +14,7 @@ public class Constant {
      */
     public static String NOT_UPDATE_NAME = null;
     public static String NOT_UPDATE_IMAGE = null;
-    public static int NOT_UPDATE_PRICE = -1;
+    public static Integer NOT_UPDATE_PRICE = -1;
 
     /**
      * Congestion
