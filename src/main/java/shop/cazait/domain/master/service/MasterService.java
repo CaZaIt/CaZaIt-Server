@@ -27,7 +27,7 @@ public class MasterService {
 	private final MasterRepository masterRepository;
 
 	//회원가입
-	@Transactional(readOnly = false)
+	@Transactional
 	public PostMasterRes registerMaster(PostMasterReq dto) throws MasterException {
 
 		//이메일 확인
@@ -46,6 +46,7 @@ public class MasterService {
 	}
 
 	//마스터 회원 전체 조회
+	@Transactional(readOnly = true)
 	public List<GetMasterRes> getMasters(Long id) {
 		List<Master> findMaster = masterRepository.findAllMasterById(id);
 		List<GetMasterRes> masterRes = findMaster.stream()
@@ -59,7 +60,8 @@ public class MasterService {
 		return masterRes;
 	}
 
-	//마스터 회원 정보 수정
+	//마스터 회원 정보
+	@Transactional
 	public PutMasterRes updateMaster(Long id, PutMasterRes putMasterRes) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		if (putMasterRes.getEmail() != null) {
@@ -83,6 +85,7 @@ public class MasterService {
 	}
 
 	// 회원 탈퇴하기
+	@Transactional
 	public void removeMaster(int id) throws MasterException {
 		Optional<Master> masterEntity = masterRepository.findMasterById(id);
 
