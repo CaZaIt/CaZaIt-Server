@@ -32,12 +32,12 @@ public class MasterController {
 	@Autowired
 	private final MasterService masterService;
 
-	@ApiOperation(value = "마스터 회원가입", notes = "마스터 사용자의 정보들을 이용해서 회원가입을 진행한다.")
 	@PostMapping
+	@ApiOperation(value = "마스터 회원가입", notes = "마스터 사용자의 정보들을 이용해서 회원가입을 진행한다.")
 	public BaseResponse<PostMasterRes> registerMaster(@Validated @RequestBody PostMasterReq dto) throws
 		MasterException {
-		PostMasterRes postCreatMasterRes = masterService.registerMaster(dto);
-		return new BaseResponse<>(postCreatMasterRes);
+		PostMasterRes postCreateMasterRes = masterService.registerMaster(dto);
+		return new BaseResponse<>(postCreateMasterRes);
 	}
 
 	@GetMapping("/all")
@@ -55,6 +55,7 @@ public class MasterController {
 	}
 
 	@DeleteMapping
+	@ApiOperation(value = "마스터 계정 탈퇴(상태  변경)", notes = "특정 ID의 마스터 상태를 INACTIVE로 변경한다.")
 	public BaseResponse<String> deleteMaster(@Validated @PathVariable int id) throws MasterException {
 		masterService.removeMaster(id);
 		String response = "회원 탈퇴가 성공하였습니다.";
