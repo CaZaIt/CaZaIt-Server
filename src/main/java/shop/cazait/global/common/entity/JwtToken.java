@@ -1,15 +1,22 @@
 package shop.cazait.global.common.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class JwtToken {
 
-    private String grantType;
-    private String accessToken;
-    private String refreshToken;
-    private String key;
+	private String grantType;
+	private String accessToken;
+	private String refreshToken;
+	private String key;
+
+	@Builder
+	public JwtToken(String grantType, String accessToken, String refreshToken, String key) {
+		this.grantType = grantType;
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
+		this.key = key;
+	}
 
 }
