@@ -40,7 +40,7 @@ public class MasterService {
 		Master master = dto.toEntity();
 		masterRepository.save(master);
 
-		PostMasterRes postMasterRes = PostMasterRes.toDto(master);
+		PostMasterRes postMasterRes = PostMasterRes.ofDto(master);
 		return postMasterRes;
 	}
 

@@ -20,7 +20,7 @@ public class PostMasterRes {
 	@ApiModelProperty(value = "마스터 계정 이름")
 	private String nickname;
 
-	static public PostMasterRes toDto(Master master) {
+	static public PostMasterRes ofDto(Master master) {
 		return PostMasterRes.builder()
 			.email(master.getEmail())
 			.nickname(master.getNickname())
