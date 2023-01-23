@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MasterException extends Exception{
-    private MasterResStatus error;  //BaseResoinseStatus 객체에 매핑
+public class MasterException extends Exception {
+	private MasterResStatus error;  //BaseResoinseStatus 객체에 매핑
 }

@@ -9,13 +9,13 @@ import lombok.Setter;
 @Setter
 @Builder
 public class GetMasterRes {
-    @ApiModelProperty(value = "마스터 계정 ID")
-    private  Long id;
+	@ApiModelProperty(value = "마스터 계정 ID")
+	private Long id;
 
-    @ApiModelProperty(value = "마스터 계정 이메일")
-    private  String email;
+	@ApiModelProperty(value = "마스터 계정 이메일")
+	private String email;
 
-    @ApiModelProperty(value = "마스터 계정 이름")
-    private  String nickname;
+	@ApiModelProperty(value = "마스터 계정 이름")
+	private String nickname;
 
 }
