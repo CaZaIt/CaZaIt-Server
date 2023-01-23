@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
+import shop.cazait.domain.master.dto.patch.PutMasterReq;
 import shop.cazait.domain.master.dto.patch.PutMasterRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
@@ -62,16 +63,16 @@ public class MasterService {
 
 	//마스터 회원 정보
 	@Transactional
-	public PutMasterRes updateMaster(Long id, PutMasterRes putMasterRes) {
+	public PutMasterRes updateMaster(Long id, PutMasterReq putMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
-		if (putMasterRes.getEmail() != null) {
-			findMaster.changeMasterEmail(putMasterRes.getEmail());
+		if (putMasterReq.getEmail() != null) {
+			findMaster.changeMasterEmail(putMasterReq.getEmail());
 		}
-		if (putMasterRes.getPassword() != null) {
-			findMaster.changeMasterPassword(putMasterRes.getPassword());
+		if (putMasterReq.getPassword() != null) {
+			findMaster.changeMasterPassword(putMasterReq.getPassword());
 		}
-		if (putMasterRes.getNickname() != null) {
-			findMaster.changeMasterNickname(putMasterRes.getNickname());
+		if (putMasterReq.getNickname() != null) {
+			findMaster.changeMasterNickname(putMasterReq.getNickname());
 		}
 
 		Master updateMaster = masterRepository.save(findMaster);

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
+import shop.cazait.domain.master.dto.patch.PutMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.error.MasterException;
@@ -43,6 +45,13 @@ public class MasterController {
 	public BaseResponse<List<GetMasterRes>> getMasterByStatus() throws MasterException {
 		List<GetMasterRes> masterResList = this.masterService.getMasterByStatus(BaseStatus.ACTIVE);
 		return new BaseResponse<>(masterResList);
+	}
+
+	@PutMapping("/update/{cafeId}")
+	@ApiOperation(value = "마스터 정보 수정", notes = "특정 ID의 마스터 관련 정보를 수정한다.")
+	public BaseResponse<String> updateMaster(@PathVariable Long masterId, @RequestBody PutMasterReq masterReq) {
+		this.masterService.updateMaster(masterId, masterReq);
+		return new BaseResponse<>("카페 수정 완료");
 	}
 
 	@DeleteMapping
