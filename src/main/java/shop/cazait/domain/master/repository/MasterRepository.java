@@ -11,11 +11,9 @@ import shop.cazait.domain.master.entity.Master;
 @Repository
 public interface MasterRepository extends JpaRepository<Master, Integer> {
 
-	Optional<Master> findMasterById(int id);
+	Optional<Master> findMasterById(long id);
 
 	Optional<Master> findMasterByEmail(String email);
 
 	List<Master> findAllMasterById(Long id);
-
-	Master findByMaster(Long id);
 }

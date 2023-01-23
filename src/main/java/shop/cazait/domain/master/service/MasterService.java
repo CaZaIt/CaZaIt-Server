@@ -60,7 +60,7 @@ public class MasterService {
 
 	//마스터 회원 정보 수정
 	public PutMasterRes updateMaster(Long id, PutMasterRes putMasterRes) {
-		Master findMaster = masterRepository.findByMaster(id);
+		Master findMaster = masterRepository.findMasterById(id).get();
 		if (putMasterRes.getEmail() != null) {
 			findMaster.changeMasterEmail(putMasterRes.getEmail());
 		}
