@@ -3,9 +3,9 @@ package shop.cazait.global.common.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
-import shop.cazait.global.common.status.BaseErrorStatus;
+import shop.cazait.global.error.status.ErrorStatus;
 
-import static shop.cazait.global.common.status.BaseErrorStatus.SUCCESS;
+import static shop.cazait.global.error.status.ErrorStatus.SUCCESS;
 
 @Getter
 @JsonPropertyOrder({"result", "message", "data"})
@@ -23,7 +23,7 @@ public class BaseResponse<T> {
         this.data = data;
     }
 
-    public BaseResponse(BaseErrorStatus status) {
+    public BaseResponse(ErrorStatus status) {
         this.result = status.getResult();
         this.message = status.getMessage();
     }
