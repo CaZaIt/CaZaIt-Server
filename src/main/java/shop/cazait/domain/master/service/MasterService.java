@@ -2,9 +2,9 @@ package shop.cazait.domain.master.service;
 
 import static shop.cazait.domain.master.error.MasterErrorStatus.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,23 +41,23 @@ public class MasterService {
 		Master master = dto.toEntity();
 		masterRepository.save(master);
 
-		PostMasterRes postMasterRes = PostMasterRes.ofDto(master);
+		PostMasterRes postMasterRes = PostMasterRes.of(master);
 		return postMasterRes;
 	}
 
 	//마스터 회원 전체 조회
 	@Transactional(readOnly = true)
-	public List<GetMasterRes> getMasters(Long id) {
-		List<Master> findMaster = masterRepository.findAllMasterById(id);
-		List<GetMasterRes> masterRes = findMaster.stream()
-			.map(master -> {
-				return GetMasterRes.builder()
-					.id(master.getId())
-					.email(master.getEmail())
-					.nickname(master.getNickname())
-					.build();
-			}).collect(Collectors.toList());
-		return masterRes;
+	public List<GetMasterRes> getMasterByStatus(BaseStatus status) throws MasterException {
+		List<Master> masterList = masterRepository.findMasterByStatus(status);
+		List<GetMasterRes> masterResList = new ArrayList<>();
+		for (Master master : masterList) {
+			GetMasterRes masterRes = GetMasterRes.of(master);
+			masterResList.add(masterRes);
+		}
+		if (masterResList.isEmpty()) {
+			throw new MasterException(NOT_EXISTS_MASTER);
+		}
+		return masterResList;
 	}
 
 	//마스터 회원 정보

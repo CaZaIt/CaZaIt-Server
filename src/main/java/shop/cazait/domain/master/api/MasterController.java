@@ -1,8 +1,11 @@
 package shop.cazait.domain.master.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.global.common.response.BaseResponse;
+import shop.cazait.global.common.status.BaseStatus;
 
 @RestController
 @RequestMapping("api/Masters")
@@ -31,6 +36,13 @@ public class MasterController {
 		MasterException {
 		PostMasterRes postCreatMasterRes = masterService.registerMaster(dto);
 		return new BaseResponse<>(postCreatMasterRes);
+	}
+
+	@GetMapping("/all")
+	@ApiOperation(value = "마스터 계정 전체 조회", notes = "ACTIVE한 마스터 계정을 조회한다.")
+	public BaseResponse<List<GetMasterRes>> getMasterByStatus() throws MasterException {
+		List<GetMasterRes> masterResList = this.masterService.getMasterByStatus(BaseStatus.ACTIVE);
+		return new BaseResponse<>(masterResList);
 	}
 
 	@DeleteMapping
