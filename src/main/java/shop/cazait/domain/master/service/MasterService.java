@@ -17,6 +17,7 @@ import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
+import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.SHA256;
 
 @Service
@@ -95,8 +96,8 @@ public class MasterService {
 
 		Master master = masterRepository.findMasterById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다. id=" + id));
-
-		masterRepository.delete(master);
+		master.changeMasterStatus(BaseStatus.INACTIVE);
+		masterRepository.save(master);
 	}
 
 }

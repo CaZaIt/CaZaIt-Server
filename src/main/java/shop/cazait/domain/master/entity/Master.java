@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.global.common.entity.BaseEntity;
+import shop.cazait.global.common.status.BaseStatus;
 
 ;
 
@@ -58,5 +59,9 @@ public class Master extends BaseEntity {
 
 	public void changeMasterNickname(String nickname) {
 		this.nickname = nickname;
+	}
+
+	public void changeMasterStatus(BaseStatus status) {
+		super.setStatus(status);
 	}
 }
