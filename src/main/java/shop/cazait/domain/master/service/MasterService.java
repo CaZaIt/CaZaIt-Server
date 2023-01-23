@@ -1,6 +1,6 @@
 package shop.cazait.domain.master.service;
 
-import static shop.cazait.domain.master.error.MasterResStatus.*;
+import static shop.cazait.domain.master.error.MasterErrorStatus.*;
 
 import java.util.List;
 import java.util.Optional;

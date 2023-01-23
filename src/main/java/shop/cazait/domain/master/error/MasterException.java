@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MasterException extends Exception {
-	private MasterResStatus error;  //BaseResoinseStatus 객체에 매핑
+	private MasterErrorStatus error;  //BaseResonseStatus 객체에 매핑
 }
