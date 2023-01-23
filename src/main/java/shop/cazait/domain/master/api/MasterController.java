@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.controller;
+package shop.cazait.domain.master.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
