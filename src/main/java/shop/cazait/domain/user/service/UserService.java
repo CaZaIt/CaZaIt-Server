@@ -83,7 +83,7 @@ public class UserService {
             String jwt = jwtService.createJwt(userIdx);
             return PostLoginRes.of(findUser, jwt);
         }
-        throw new UserException(ErrorStatus.FAILED_TO_LOGIN);
+        throw new UserException(FAILED_TO_LOGIN);
     }
 
     @Transactional(readOnly=true)
