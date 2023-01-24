@@ -18,6 +18,8 @@ import shop.cazait.domain.user.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.Secret;
@@ -46,7 +48,14 @@ public class UserService {
             throw new UserException(EMPTY_NICKNAME);
         }
 
-       
+        if(!userRepository.findByEmail(postUserReq.getEmail()).isEmpty()){
+            throw new UserException(EXIST_EMAIL);
+        }
+
+        if(!userRepository.findByNickname(postUserReq.getNickname()).isEmpty()){
+            throw new UserException(EXIST_NICKNAME);
+        }
+        
         String pwd;
         pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
         PostUserReq EncryptPostUserReq = new PostUserReq(postUserReq.getEmail(), pwd, postUserReq.getNickname());
