@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafe.dto;
+package shop.cazait.domain.cafeimage.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
