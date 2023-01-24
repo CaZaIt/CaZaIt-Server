@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @JsonAutoDetect
 public class PostCafeImageReq {
-    @ApiModelProperty(value = "카페 이미지 링크", example = "dkfsowjhdlv")
+    @ApiModelProperty(value = "카페 이미지 링크", example = "americano.png")
     private String imageUrl;
 
     public PostCafeImageReq() {

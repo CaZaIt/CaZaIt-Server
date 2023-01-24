@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
-import shop.cazait.domain.cafe.entity.CafeImage;
+import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.checklog.entity.CheckLog;
 
 @ApiModel(value = "조회 기록 정보", description = "조회 기록에 대한 정보")
