@@ -55,6 +55,24 @@ public enum ErrorStatus {
     NOT_EXIST_MASTER("FAIL", "없는 마스터 계정입니다."),
 
 
+    /**
+     * User Error
+     */
+    EMPTY_EMAIL("FAIL", "이메일을 입력해주세요."),
+    EMPTY_PASSWORD("FAIL","비밀번호를 입력해주세요"),
+    EMPTY_NICKNAME("FAIL", "닉네임을 입력해주세요."),
+
+    INVALID_EMAIL("FAIL", "이메일 형식을 확인해주세요."),
+    INVALID_PASSWORD("FAIL", "비밀번호 형식을 확인해주세요."),
+
+    EXIST_EMAIL("FAIL","이미 존재하는 이메일입니다."),
+    EXIST_NICKNAME("FAIL","이미 존재하는 닉네임입니다."),
+
+    NOT_EXIST_USER("FAIL", "유저가 존재하지 않습니다."),
+
+    FAILED_TO_LOGIN("FAIL","아이디 또는 비밀번호를 잘못 입력했습니다.");
+
+
     private final String result;
     private final String message;
 
