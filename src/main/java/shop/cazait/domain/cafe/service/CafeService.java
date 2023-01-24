@@ -60,14 +60,9 @@ public class CafeService {
 
     @Transactional(readOnly = true)
     public GetCafeRes getCafeById(Long id) throws BaseException {
-        Optional<Cafe> cafe = cafeRepository.findById(id);
-        if (cafe.isPresent()) {
-            GetCafeRes cafeRes = GetCafeRes.of(cafe.get());
-            return cafeRes;
-        }
-        else {
-            throw new BaseException(ErrorStatus.INVALID_CAFE_ID);
-        }
+        Cafe cafe = cafeRepository.findById(id).orElseThrow(() -> new BaseException(ErrorStatus.INVALID_CAFE_ID));
+        GetCafeRes cafeRes = GetCafeRes.of(cafe);
+        return cafeRes;
     }
 
     @Transactional(readOnly = true)
@@ -85,27 +80,15 @@ public class CafeService {
     }
 
     public void updateCafe(Long id, PostCafeReq cafeReq) throws BaseException {
-        Optional<Cafe> cafe = cafeRepository.findById(id);
-        if (cafe.isPresent()) {
-            Cafe uCafe = cafe.get();
-            uCafe.changeCafeInfo(cafeReq);
-            cafeRepository.save(uCafe);
-        }
-        else {
-            throw new BaseException(ErrorStatus.INVALID_CAFE_ID);
-        }
+        Cafe cafe = cafeRepository.findById(id).orElseThrow(() -> new BaseException(ErrorStatus.INVALID_CAFE_ID));
+        cafe.changeCafeInfo(cafeReq);
+        cafeRepository.save(cafe);
     }
 
     public void deleteCafe(Long id) throws BaseException {
-        Optional<Cafe> cafe = cafeRepository.findById(id);
-        if (cafe.isPresent()) {
-            Cafe uCafe = cafe.get();
-            uCafe.changeCafeStatus(BaseStatus.INACTIVE);
-            cafeRepository.save(uCafe);
-        }
-        else {
-            throw new BaseException(ErrorStatus.INVALID_CAFE_ID);
-        }
+        Cafe cafe = cafeRepository.findById(id).orElseThrow(() -> new BaseException(ErrorStatus.INVALID_CAFE_ID));
+        cafe.changeCafeStatus(BaseStatus.INACTIVE);
+        cafeRepository.save(cafe);
     }
 
 }
