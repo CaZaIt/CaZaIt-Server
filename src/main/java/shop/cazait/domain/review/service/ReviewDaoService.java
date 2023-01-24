@@ -1,6 +1,7 @@
 package shop.cazait.domain.review.service;
 
 
+import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,33 +28,52 @@ public class ReviewDaoService {
     private final ReviewRepository reviewRepository;
 
 
-    public PostReviewRes addReview(PostReviewReq postReviewReq) {
-        Cafe cafe = cafeRepository.getReferenceById(postReviewReq.getCafeId());
-        User user = userRepository.getReferenceById(postReviewReq.getUserId());
+    public PostReviewRes addReview(PostReviewReq postReviewReq) throws EntityNotFoundException {
+        Cafe cafe = getCafeReference(postReviewReq.getCafeId());
+        User user = getUserReference(postReviewReq.getUserId());
 
-        Review review = postReviewReq.toEntity(cafe, user);
+        Review newReview = postReviewReq.toEntity(cafe, user);
+        reviewRepository.save(newReview);
 
-        reviewRepository.save(review);
-
-        return PostReviewRes.of(review);
+        return PostReviewRes.of(newReview);
     }
 
+    private Cafe getCafeReference(Long id) {
+        try {
+            Cafe cafe = cafeRepository.getReferenceById(id);
 
-    public PatchReviewRes updateReview(PatchReviewReq patchReviewReq) {
-        Review review = reviewRepository.findById(patchReviewReq.getReviewId()).get()
-                .update(patchReviewReq);
-
-        reviewRepository.save(review);
-
-        return PatchReviewRes.of(review);
+            return cafe;
+        } catch (EntityNotFoundException ex) {  // 해당 엔티티가 존재하지 않을 시 EntityNotFoundException 발생
+            throw ex;
+        }
     }
 
-    public DelReviewRes deleteReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId).get();
-        DelReviewRes delReviewRes = DelReviewRes.of(review);
+    private User getUserReference(Long id) {
+        try {
+            User user = userRepository.getReferenceById(id);
+
+            return user;
+        } catch (EntityNotFoundException ex) {
+            throw ex;
+        }
+    }
+
+    public PatchReviewRes updateReview(PatchReviewReq patchReviewReq) throws EntityNotFoundException {
+        Review review = reviewRepository.findById(patchReviewReq.getReviewId())
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        Review updatedReview = review.update(patchReviewReq);
+        reviewRepository.save(updatedReview);   // 이미 트랜잭션이 동작 중일 때 저장하려고 한다면 OptimisticLockingFailureException 예외 발생
+
+        return PatchReviewRes.of(updatedReview);
+    }
+
+    public DelReviewRes deleteReview(Long reviewId) throws EntityNotFoundException {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException());
 
         reviewRepository.delete(review);
 
-        return delReviewRes;
+        return DelReviewRes.of(review);
     }
 }
