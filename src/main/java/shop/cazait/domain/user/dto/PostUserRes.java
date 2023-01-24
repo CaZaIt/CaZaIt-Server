@@ -13,10 +13,11 @@ import shop.cazait.domain.user.entity.User;
 public class PostUserRes {
     @ApiModelProperty(value = "회원 id", example = "1")
     private Long id;
-    @ApiModelProperty(value = "비밀번호", example = "12345#!@#")
-    private String password;
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     private String email;
+    @ApiModelProperty(value = "비밀번호", example = "12345#!@#")
+    private String password;
+
     @ApiModelProperty(value = "닉네임", example = "토마스")
     private String nickname;
 
@@ -36,8 +37,8 @@ public class PostUserRes {
         return PostUserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .nickname(user.getNickname())
                 .password(user.getPassword())
+                .nickname(user.getNickname())
                 .jwtToken(jwtToken)
                 .build();
     }
