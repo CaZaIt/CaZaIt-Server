@@ -55,7 +55,7 @@ public class UserService {
         if(!userRepository.findByNickname(postUserReq.getNickname()).isEmpty()){
             throw new UserException(EXIST_NICKNAME);
         }
-        
+
         String pwd;
         pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
         PostUserReq EncryptPostUserReq = new PostUserReq(postUserReq.getEmail(), pwd, postUserReq.getNickname());
@@ -68,6 +68,11 @@ public class UserService {
 
     public PostLoginRes logIn(PostLoginReq postLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+
+        if(userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()){
+            throw new UserException(FAILED_TO_LOGIN);
+        }
+
         User user = postLoginReq.toEntity();
         User findUser = userRepository.findByEmail(user.getEmail()).get();
         String password;
