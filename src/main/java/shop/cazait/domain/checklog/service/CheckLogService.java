@@ -1,6 +1,6 @@
 package shop.cazait.domain.checklog.service;
 
-import static shop.cazait.domain.cafe.error.CafeErrorStatus.*;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
@@ -8,13 +8,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.error.CafeException;
+import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.checklog.dto.GetCheckLogRes;
 import shop.cazait.domain.checklog.dto.PostCheckLogRes;
 import shop.cazait.domain.checklog.entity.CheckLog;
 import shop.cazait.domain.checklog.repository.CheckLogRepository;
 import shop.cazait.domain.user.entity.User;
+import shop.cazait.domain.user.exception.UserException;
+import shop.cazait.domain.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +41,7 @@ public class CheckLogService {
     /**
      * 최근 본 카페 등록
      */
-    public PostCheckLogRes addVisitLog(Long userId, Long cafeId) throws CafeException {
+    public PostCheckLogRes addVisitLog(Long userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -53,11 +55,11 @@ public class CheckLogService {
 
     }
 
-    private User getUser(Long userId) {
+    private User getUser(Long userId) throws UserException {
         try {
             return userRepository.getReferenceById(userId);
         } catch (EntityNotFoundException exception) {
-            throw new UserException();
+            throw new UserException(NOT_EXIST_USER);
         }
     }
 
@@ -65,7 +67,7 @@ public class CheckLogService {
         try {
             return cafeRepository.getReferenceById(cafeId);
         } catch (EntityNotFoundException exception) {
-            throw new CafeException(NON_EXIST_CAFE);
+            throw new CafeException(NOT_EXIST_CAFE);
         }
     }
 

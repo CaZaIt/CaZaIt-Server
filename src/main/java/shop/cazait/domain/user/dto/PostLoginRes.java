@@ -14,13 +14,21 @@ public class PostLoginRes {
     private Long id;
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     private String email;
+    @ApiModelProperty(value="jwt token")
+    private String jwtToken;
 
+    @Builder
+    public PostLoginRes(Long id, String email, String jwtToken) {
+        this.id = id;
+        this.email = email;
+        this.jwtToken = jwtToken;
+    }
 
-    public static PostLoginRes of(User user){
-        return PostLoginRes
-                .builder()
+    public static PostLoginRes of(User user, String jwtToken){
+        return PostLoginRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .jwtToken(jwtToken)
                 .build();
     }
 }

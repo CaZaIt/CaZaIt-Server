@@ -16,7 +16,8 @@ import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.repository.ReviewRepository;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.repository.UserRepository;
-
+import shop.cazait.global.common.response.FailResponse;
+import shop.cazait.global.error.status.ErrorStatus;
 
 
 @Service

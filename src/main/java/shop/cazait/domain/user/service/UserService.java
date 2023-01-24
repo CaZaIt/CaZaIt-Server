@@ -1,16 +1,29 @@
 package shop.cazait.domain.user.service;
 
+import static shop.cazait.global.error.status.ErrorStatus.EMPTY_EMAIL;
+
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.entity.User;
+import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
+import shop.cazait.global.config.encrypt.AES128;
+import shop.cazait.global.config.encrypt.JwtService;
+import shop.cazait.global.config.encrypt.Secret;
+import shop.cazait.global.error.status.ErrorStatus;
 
 
 @Service
@@ -18,22 +31,42 @@ import java.util.List;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
+    public PostUserRes createUser(PostUserReq postUserReq)
+            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        String pwd;
 
-    public PostUserRes createUser(PostUserReq postUserReq){
-        User user = postUserReq.toEntity();
-        userRepository.save(user);
-        return PostUserRes.of(user);
-    }
-
-    public PostLoginRes logIn(PostLoginReq postLoginReq) {
-        User user = postLoginReq.toEntity();
-        User findUser = userRepository.findByEmail(user.getEmail());
-        if (findUser.getPassword().equals(user.getPassword())) {
-            return PostLoginRes.of(findUser);
+        if (userRepository.findByEmail(postUserReq.getEmail()).isEmpty()) {
+            throw new UserException(EMPTY_EMAIL);
         }
-        return new PostLoginRes(404L, "fail");
+
+        pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
+
+
+        PostUserReq EncryptPostUserReq = new PostUserReq(postUserReq.getEmail(), pwd, postUserReq.getNickname());
+        User user = EncryptPostUserReq.toEntity();
+        Long userIdx = user.getId();
+        String jwt = jwtService.createJwt(userIdx);
+        userRepository.save(user);
+        return PostUserRes.of(user,jwt);
     }
+
+    public PostLoginRes logIn(PostLoginReq postLoginReq)
+            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = postLoginReq.toEntity();
+        User findUser = userRepository.findByEmail(user.getEmail()).get();
+        String password;
+        password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
+        Long userIdx;
+        if (password.equals(user.getPassword())) {
+            userIdx = findUser.getId();
+            String jwt = jwtService.createJwt(userIdx);
+            return PostLoginRes.of(findUser, jwt);
+        }
+        throw new UserException(ErrorStatus.FAILED_TO_LOGIN);
+    }
+
     @Transactional(readOnly=true)
     public List<GetUserRes> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
@@ -46,13 +79,13 @@ public class UserService {
     }
     @Transactional(readOnly = true)
     public GetUserRes getUserByEmail(String email){
-        User findUser = userRepository.findByEmail(email);
+        User findUser = userRepository.findByEmail(email).get();
         return GetUserRes.of(findUser);
     }
 
     public PatchUserRes modifyUser(String email, PatchUserReq patchUserReq){
         User modifyUser = patchUserReq.toEntity();
-        User existUser = userRepository.findByEmail(email);
+        User existUser = userRepository.findByEmail(email).get();
 
         existUser = User.builder()
                 .id(existUser.getId())
@@ -65,7 +98,7 @@ public class UserService {
     }
 
     public DeleteUserRes deleteUser(String email){
-        User deleteUser = userRepository.findByEmail(email);
+        User deleteUser = userRepository.findByEmail(email).get();
         userRepository.delete(deleteUser);
         return DeleteUserRes.of(deleteUser);
     }

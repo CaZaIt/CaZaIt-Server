@@ -11,6 +11,4 @@ public interface CafeMenuRepository extends JpaRepository<CafeMenu, Long> {
 
     Optional<List<CafeMenu>> findAllByCafeId(Long cafeId);
 
-    Optional<CafeMenu> findByMenuAndCafe(Long cafeMenuId,Long cafeId);
-
 }

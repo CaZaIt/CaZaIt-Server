@@ -1,13 +1,12 @@
-package shop.cazait.domain.favorites.exception;
+package shop.cazait.domain.user.exception;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import shop.cazait.global.error.status.ErrorStatus;
 
-@Getter
 @AllArgsConstructor
-public class FavoritesException extends RuntimeException {
-
+@Getter
+public class UserException extends Exception{
     private ErrorStatus error;
-
 }

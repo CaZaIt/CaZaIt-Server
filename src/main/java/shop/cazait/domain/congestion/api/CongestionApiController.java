@@ -1,6 +1,6 @@
 package shop.cazait.domain.congestion.api;
 
-import static shop.cazait.domain.congestion.exception.CongestionErrorStatus.CONGESTION_STATUS_EMPTY;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,7 +16,7 @@ import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.service.CongestionService;
-import shop.cazait.global.common.response.BaseResponse;
+import shop.cazait.global.common.response.SuccessResponse;
 
 @Api(tags = "혼잡도 API")
 @RestController
@@ -32,7 +32,7 @@ public class CongestionApiController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @PostMapping("/{masterId}/{cafeId}")
-    public BaseResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
+    public SuccessResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
                                                          @PathVariable(name = "cafeId") Long cafeId,
                                                          @RequestBody(required = true) PostCongestionReq postCongestionReq)
             throws CongestionException {
@@ -43,8 +43,8 @@ public class CongestionApiController {
             throw new CongestionException(CONGESTION_STATUS_EMPTY);
         }
 
-        PostCongestionRes postCongestionRes = congestionService.addAndUpdateCongestion(cafeId, postCongestionReq);
-        return new BaseResponse<>(postCongestionRes);
+        PostCongestionRes result = congestionService.addAndUpdateCongestion(cafeId, postCongestionReq);
+        return new SuccessResponse<>(result);
 
     }
 

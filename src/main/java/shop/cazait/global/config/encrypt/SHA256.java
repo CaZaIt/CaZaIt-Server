@@ -2,7 +2,7 @@ package shop.cazait.global.config.encrypt;
 
 import java.security.MessageDigest;
 
-public class SHA256 {
+public class    SHA256 {
     public SHA256() {
     }
 

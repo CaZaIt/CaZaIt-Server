@@ -24,8 +24,7 @@ import shop.cazait.domain.review.dto.PostReviewReq;
 import shop.cazait.domain.review.dto.PostReviewRes;
 import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
-import shop.cazait.global.common.response.BaseResponse;
-
+import shop.cazait.global.common.response.SuccessResponse;
 
 
 @RestController
@@ -42,43 +41,43 @@ public class ReviewApiController {
             @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest")
     })
     @GetMapping("/{cafeId}")
-    public BaseResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
-                                                  @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
+    public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
+                                                     @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
         GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy);
 
-        return new BaseResponse<>(getReviewsRes);
+        return new SuccessResponse<>(getReviewsRes);
     }
 
     @ApiOperation(value = "리뷰 하나 조회", notes = "리뷰 ID를 받아 해당 리뷰 조회")
     @ApiImplicitParam(name = "reviewId", value = "리뷰 ID")
     @GetMapping("/{reviewId}")
-    public BaseResponse<GetReviewRes> getReview(@PathVariable Long reviewId) {
+    public SuccessResponse<GetReviewRes> getReview(@PathVariable Long reviewId) {
         GetReviewRes getReviewRes = reviewProvideService.getReview(reviewId);
 
-        return new BaseResponse<>(getReviewRes);
+        return new SuccessResponse<>(getReviewRes);
     }
 
     @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
     @PostMapping("/cafes/{cafeId}")
-    public BaseResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq) {
+    public SuccessResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq) {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 
-        return new BaseResponse<>(postReviewRes);
+        return new SuccessResponse<>(postReviewRes);
     }
 
     @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
     @PatchMapping("/{reviewId}")
-    public BaseResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
+    public SuccessResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
 
-        return new BaseResponse<>(patchReviewRes);
+        return new SuccessResponse<>(patchReviewRes);
     }
 
     @ApiOperation(value = "리뷰 삭제", notes = "리뷰 ID를 받아 해당 리뷰 삭제")
     @DeleteMapping("/{reviewId}")
-    public BaseResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) {
+    public SuccessResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) {
         DelReviewRes delReviewRes = reviewDaoService.deleteReview(reviewId);
 
-        return new BaseResponse<>(delReviewRes);
+        return new SuccessResponse<>(delReviewRes);
     }
 }

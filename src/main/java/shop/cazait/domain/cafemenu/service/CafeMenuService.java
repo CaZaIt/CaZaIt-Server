@@ -1,7 +1,6 @@
 package shop.cazait.domain.cafemenu.service;
 
-import static shop.cazait.domain.cafe.error.CafeErrorStatus.NON_EXIST_CAFE;
-import static shop.cazait.domain.cafemenu.exception.CafeMenuErrorStatus.INVALID_MENU;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_PRICE;
@@ -12,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.error.CafeException;
+import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
@@ -61,7 +60,7 @@ public class CafeMenuService {
         try {
             return cafeRepository.getReferenceById(cafeId);    
         } catch (EntityNotFoundException exception) {
-            throw new CafeException(NON_EXIST_CAFE);
+            throw new CafeException(NOT_EXIST_CAFE);
         }
         
     }

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import shop.cazait.domain.cafe.error.CafeException;
+import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
-import shop.cazait.global.common.response.BaseResponse;
+import shop.cazait.global.common.response.SuccessResponse;
 
 @Api(tags = "카페 메뉴 API")
 @RestController
@@ -39,7 +39,7 @@ public class CafeMenuApiController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @PostMapping("/cafe/{cafeId}")
-    public BaseResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
+    public SuccessResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
                                                             @RequestBody List<PostCafeMenuReq> postCafeMenuReq)
             throws CafeException {
 
@@ -48,7 +48,7 @@ public class CafeMenuApiController {
         // 이미지 확인
 
         List<PostCafeMenuRes> result = cafeMenuService.registerMenu(cafeId, postCafeMenuReq);
-        return new BaseResponse<>(result);
+        return new SuccessResponse<>(result);
 
     }
 
@@ -60,10 +60,10 @@ public class CafeMenuApiController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @GetMapping("/cafe/{cafeId}")
-    public BaseResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
+    public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
 
         List<GetCafeMenuRes> result = cafeMenuService.getMenu(cafeId);
-        return new BaseResponse<>(result);
+        return new SuccessResponse<>(result);
 
     }
 
@@ -75,11 +75,11 @@ public class CafeMenuApiController {
             @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID"),
     })
     @PatchMapping("/{menuId}/cafe/{cafeId}")
-    public BaseResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
+    public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
                                                      @RequestBody PatchCafeMenuReq patchCafeMenuReq) {
 
         PatchCafeMenuRes result = cafeMenuService.updateMenu(menuId, patchCafeMenuReq);
-        return new BaseResponse<>(result);
+        return new SuccessResponse<>(result);
 
     }
 
@@ -91,10 +91,10 @@ public class CafeMenuApiController {
             @ApiImplicitParam(name = "menuId", value = "메뉴 ID")
     })
     @DeleteMapping("/{menuId}")
-    public BaseResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
+    public SuccessResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
 
         String result = cafeMenuService.deleteMenu(menuId);
-        return new BaseResponse<>(result);
+        return new SuccessResponse<>(result);
 
     }
 

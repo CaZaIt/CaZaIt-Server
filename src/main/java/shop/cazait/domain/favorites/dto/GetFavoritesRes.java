@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
-import shop.cazait.domain.cafe.entity.CafeImage;
+import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.favorites.entity.Favorites;
 
 @ApiModel(value = "즐겨찾기 한 카페 정보", description = "즐겨찾기로 등록한 모든 카페에 대한 정보")
