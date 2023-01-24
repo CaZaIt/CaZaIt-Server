@@ -1,6 +1,7 @@
 package shop.cazait.domain.congestion.service;
 
-import static shop.cazait.domain.congestion.entity.FirstAccessStatus.*;
+import static shop.cazait.domain.congestion.exception.CongestionErrorStatus.INVALID_CONGESTION_STATUS;
+import static shop.cazait.global.common.constant.Constant.CONGESTION_NOT_EXIST;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.entity.Congestion;
+import shop.cazait.domain.congestion.entity.CongestionStatus;
+import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.repository.CongestionRepository;
 
 @Service
@@ -18,43 +21,49 @@ public class CongestionService {
     private final CafeRepository cafeRepository;
     private final CongestionRepository congestionRepository;
 
+    /**
+     * 혼잡도 등록 및 수정
+     */
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
-        Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
         Congestion newCongestion = null;
+        Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
+        CongestionStatus congestionStatus = getCongestionStatus(postCongestionReq.getCongestionStatus());
 
-        if (findCongestion == null) {
-            newCongestion = addCongestion(cafeId, postCongestionReq);
+        if (findCongestion == CONGESTION_NOT_EXIST) {
+            newCongestion = addCongestion(cafeId, congestionStatus);
         }
 
-        if (findCongestion != null) {
-            newCongestion = updateCongestion(findCongestion, cafeId, postCongestionReq);
+        if (findCongestion != CONGESTION_NOT_EXIST) {
+            newCongestion = updateCongestion(findCongestion, congestionStatus);
         }
 
-        return PostCongestionRes.builder()
-                .congestionId(newCongestion.getId())
-                .cafeId(newCongestion.getCafe().getId())
-                .congestionStatus(newCongestion.getCongestionStatus())
-                .build();
+        return PostCongestionRes.of(newCongestion);
 
     }
 
-    public Congestion addCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
+    private CongestionStatus getCongestionStatus(String congestionStatus) {
 
-        Congestion congestion = Congestion.builder()
-                .cafe(cafeRepository.findById(cafeId))
-                .congestionStatus(postCongestionReq.getCongestionStatus())
-                .build();
+        try {
+            return CongestionStatus.valueOf(congestionStatus);
+        } catch (IllegalArgumentException ex) {
+            throw new CongestionException(INVALID_CONGESTION_STATUS);
+        }
 
+    }
+
+    private Congestion addCongestion(Long cafeId, CongestionStatus congestionStatus) {
+
+        Congestion congestion = PostCongestionReq.toEntity(cafeRepository.findById(cafeId), congestionStatus);
         Congestion addCongestion =  congestionRepository.save(congestion);
 
         return addCongestion;
 
     }
 
-    public Congestion updateCongestion(Congestion findCongestion, Long cafeId, PostCongestionReq postCongestionReq) {
+    private Congestion updateCongestion(Congestion findCongestion, CongestionStatus congestionStatus) {
 
-        findCongestion.changeCongestionStatus(postCongestionReq.getCongestionStatus());
+        findCongestion.changeCongestionStatus(congestionStatus);
         Congestion updateCongestion = congestionRepository.save(findCongestion);
 
         return updateCongestion;

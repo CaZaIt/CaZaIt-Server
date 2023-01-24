@@ -2,6 +2,7 @@ package shop.cazait.domain.master.entity;
 
 import javax.persistence.*;;
 import lombok.*;
+import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.global.common.entity.BaseEntity;
 
 @Entity
@@ -22,11 +23,27 @@ public class Master extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Builder
-    public Master(String email, String password, String nickname){
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cafe_id")
+    private Cafe cafe;
 
+    @Builder
+    public Master(String email, String password, String nickname, Cafe cafe){
+        this.email =email;
+        this.password=password;
+        this.nickname=nickname;
+        this.cafe=cafe;
+    }
+
+    public void changeMasterEmail(String email) {
+        this.email = email;
+    }
+
+    public void changeMasterPassword(String password) {
+        this.password = password;
+    }
+
+    public void changeMasterNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
