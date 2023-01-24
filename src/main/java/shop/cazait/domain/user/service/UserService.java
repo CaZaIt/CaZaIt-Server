@@ -36,8 +36,8 @@ public class UserService {
     public PostUserRes createUser(PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         String pwd;
-
-        if (userRepository.findByEmail(postUserReq.getEmail()).isEmpty()) {
+        
+        if(postUserReq.getEmail().isEmpty()){
             throw new UserException(EMPTY_EMAIL);
         }
 
