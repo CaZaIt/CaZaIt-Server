@@ -1,7 +1,5 @@
 package shop.cazait.domain.user.service;
 
-import static shop.cazait.global.error.status.ErrorStatus.EMPTY_EMAIL;
-
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -25,6 +23,8 @@ import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.Secret;
 import shop.cazait.global.error.status.ErrorStatus;
 
+import static shop.cazait.global.error.status.ErrorStatus.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -35,15 +35,20 @@ public class UserService {
 
     public PostUserRes createUser(PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        String pwd;
-        
+
         if(postUserReq.getEmail().isEmpty()){
             throw new UserException(EMPTY_EMAIL);
         }
+        if(postUserReq.getPassword().isEmpty()){
+            throw new UserException(EMPTY_PASSWORD);
+        }
+        if(postUserReq.getNickname().isEmpty()){
+            throw new UserException(EMPTY_NICKNAME);
+        }
 
+       
+        String pwd;
         pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
-
-
         PostUserReq EncryptPostUserReq = new PostUserReq(postUserReq.getEmail(), pwd, postUserReq.getNickname());
         User user = EncryptPostUserReq.toEntity();
         Long userIdx = user.getId();
