@@ -21,7 +21,7 @@ public class CafeImageController {
     @ApiOperation(value = "카페 이미지 등록", notes = "등록된 카페의 이미지를 등록한다.")
     public BaseResponse<String> addCafeImage(@PathVariable Long cafeId, @RequestBody PostCafeImageReq cafeImageReq) throws BaseException {
         try {
-            this.cafeImageService.addCafeImage(cafeId, cafeImageReq);
+            cafeImageService.addCafeImage(cafeId, cafeImageReq);
             return new BaseResponse<>("카페 이미지 등록 완료");
         } catch (BaseException e) {
             throw new BaseException(e.getError());
@@ -32,7 +32,7 @@ public class CafeImageController {
     @ApiOperation(value = "카페 이미지 삭제", notes = "카페 이미지를 삭제한다.")
     public BaseResponse<String> deleteCafeImage(@PathVariable Long cafeImageId) throws BaseException {
         try {
-            this.cafeImageService.deleteCafeImage(cafeImageId);
+            cafeImageService.deleteCafeImage(cafeImageId);
             return new BaseResponse<>("카페 이미지 삭제 완료");
         } catch (BaseException e) {
             throw new BaseException(e.getError());
