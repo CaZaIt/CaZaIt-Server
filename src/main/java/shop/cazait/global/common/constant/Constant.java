@@ -7,6 +7,8 @@ public class Constant {
     /**
      * All
      */
+    public static final String SUCCESS = "SUCCESS";
+    public static final String SUCCESS_MESSAGE = "요청을 성공했습니다.";
     public static final String NOT_EXIST = null;
 
     /**

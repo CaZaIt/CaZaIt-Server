@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.cafeimage.dto.PostCafeImageReq;
 import shop.cazait.domain.cafeimage.service.CafeImageService;
-import shop.cazait.global.common.response.BaseResponse;
-import shop.cazait.global.error.exception.BaseException;
+import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.domain.cafeimage.exception.CafeImageException;
 
 @Api
 @RestController

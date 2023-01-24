@@ -1,6 +1,6 @@
 package shop.cazait.domain.master.service;
 
-import static shop.cazait.domain.master.error.MasterErrorStatus.*;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +23,12 @@ import shop.cazait.global.config.encrypt.SHA256;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MasterService {
 
 	private final MasterRepository masterRepository;
 
 	//회원가입
-	@Transactional
 	public PostMasterRes registerMaster(PostMasterReq dto) throws MasterException {
 
 		//이메일 확인
@@ -56,13 +56,12 @@ public class MasterService {
 			masterResList.add(masterRes);
 		}
 		if (masterResList.isEmpty()) {
-			throw new MasterException(NOT_EXISTS_MASTER);
+			throw new MasterException(NOT_EXIST_MASTER);
 		}
 		return masterResList;
 	}
 
 	//마스터 회원 정보
-	@Transactional
 	public PutMasterRes updateMaster(Long id, PutMasterReq putMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		if (putMasterReq.getEmail() != null) {
@@ -86,12 +85,11 @@ public class MasterService {
 	}
 
 	// 회원 탈퇴하기
-	@Transactional
 	public void removeMaster(int id) throws MasterException {
 		Optional<Master> masterEntity = masterRepository.findMasterById(id);
 
 		if (masterRepository.findMasterById(id).isEmpty()) {
-			throw new MasterException(NOT_EXISTS_MASTER);
+			throw new MasterException(NOT_EXIST_MASTER);
 		}
 
 		if (masterEntity.get().getStatus().toString().equals("INACTIVE")) {
@@ -99,7 +97,7 @@ public class MasterService {
 		}
 
 		Master master = masterRepository.findMasterById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다. id=" + id));
+			.orElseThrow(() -> new MasterException(NOT_EXIST_USER));
 		master.changeMasterStatus(BaseStatus.INACTIVE);
 		masterRepository.save(master);
 	}

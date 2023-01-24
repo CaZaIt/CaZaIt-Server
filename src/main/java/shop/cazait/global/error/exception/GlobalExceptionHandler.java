@@ -10,18 +10,18 @@ import shop.cazait.global.common.response.BaseResponse;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({ BaseException.class })
-    protected BaseResponse handleBaseException(BaseException exception) {
-        return new BaseResponse(exception.getError());
+    protected FailResponse handleBaseException(BaseException exception) {
+        return new FailResponse(exception.getError());
     }
 
     @ExceptionHandler({ FavoritesException.class })
-    protected BaseResponse handleFavoritesException(FavoritesException exception) {
-        return new BaseResponse(exception.getError());
+    protected FailResponse handleFavoritesException(FavoritesException exception) {
+        return new FailResponse(exception.getError());
     }
 
     @ExceptionHandler({ CongestionException.class })
-    protected BaseResponse handleCongestionException(CongestionException exception) {
-        return new BaseResponse(exception.getError());
+    protected FailResponse handleCongestionException(CongestionException exception) {
+        return new FailResponse(exception.getError());
     }
     
 }

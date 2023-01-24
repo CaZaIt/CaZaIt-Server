@@ -10,7 +10,6 @@ import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 import shop.cazait.global.common.status.BaseStatus;
-import shop.cazait.global.error.exception.BaseException;
 import shop.cazait.global.error.status.ErrorStatus;
 
 import java.util.ArrayList;

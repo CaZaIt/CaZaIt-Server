@@ -1,6 +1,6 @@
 package shop.cazait.domain.favorites.service;
 
-import static shop.cazait.domain.favorites.exception.FavoritesErrorStatus.*;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import java.util.List;
 import javax.persistence.EntityNotFoundException;
@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.error.CafeErrorStatus;
-import shop.cazait.domain.cafe.error.CafeException;
+import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.favorites.dto.GetFavoritesRes;
 import shop.cazait.domain.favorites.dto.PostFavoritesRes;
@@ -17,6 +16,8 @@ import shop.cazait.domain.favorites.entity.Favorites;
 import shop.cazait.domain.favorites.exception.FavoritesException;
 import shop.cazait.domain.favorites.repository.FavoritesRepository;
 import shop.cazait.domain.user.entity.User;
+import shop.cazait.domain.user.exception.UserException;
+import shop.cazait.domain.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 추가
      */
-    public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException {
+    public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -51,7 +52,7 @@ public class FavoritesService {
         try{
             return userRepository.getReferenceById(userId);
         } catch (EntityNotFoundException exception) {
-            throw new UserException(UserErrorStauts.NON_EXIST_USER);
+            throw new UserException(NOT_EXIST_CAFE);
         }
 
     }
@@ -61,7 +62,7 @@ public class FavoritesService {
         try {
             return cafeRepository.getReferenceById(cafeId);
         } catch (EntityNotFoundException exception) {
-            throw new CafeException(CafeErrorStatus.NON_EXIST_CAFE);
+            throw new CafeException(NOT_EXIST_CAFE);
         }
 
     }

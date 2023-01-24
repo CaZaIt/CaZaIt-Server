@@ -46,13 +46,13 @@ public class UserService {
     }
     @Transactional(readOnly = true)
     public GetUserRes getUserByEmail(String email){
-        User findUser = userRepository.findByEmail(email);
+        User findUser = userRepository.findByEmail(email).get();
         return GetUserRes.of(findUser);
     }
 
     public PatchUserRes modifyUser(String email, PatchUserReq patchUserReq){
         User modifyUser = patchUserReq.toEntity();
-        User existUser = userRepository.findByEmail(email);
+        User existUser = userRepository.findByEmail(email).get();
 
         existUser = User.builder()
                 .id(existUser.getId())
@@ -65,7 +65,7 @@ public class UserService {
     }
 
     public DeleteUserRes deleteUser(String email){
-        User deleteUser = userRepository.findByEmail(email);
+        User deleteUser = userRepository.findByEmail(email).get();
         userRepository.delete(deleteUser);
         return DeleteUserRes.of(deleteUser);
     }
