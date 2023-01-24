@@ -54,6 +54,10 @@ public enum ErrorStatus {
     ALREADY_INACTIVE_MASTER("FAIL", "이미 탈퇴한 계정입니다"),
     NOT_EXIST_MASTER("FAIL", "없는 마스터 계정입니다."),
 
+    /**
+     * Review Error
+     */
+    INVALID_REVIEW_ID("FAIL", "유효하지 않은 리뷰 ID입니다."),
 
     /**
      * User Error
