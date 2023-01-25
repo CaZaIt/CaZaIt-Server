@@ -102,12 +102,12 @@ public class UserService {
         return GetUserRes.of(findUser);
     }
 
-    public PatchUserRes modifyUser(String email, PatchUserReq patchUserReq){
+    public PatchUserRes modifyUser(Long userIdx,PatchUserReq patchUserReq){
         User modifyUser = patchUserReq.toEntity();
-        User existUser = userRepository.findByEmail(email).get();
+        User existUser = userRepository.findById(userIdx).get();
 
         existUser = User.builder()
-                .id(existUser.getId())
+                .id(userIdx)
                 .email(modifyUser.getEmail())
                 .password(modifyUser.getPassword())
                 .nickname(modifyUser.getNickname())

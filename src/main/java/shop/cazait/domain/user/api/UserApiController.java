@@ -17,6 +17,11 @@ import shop.cazait.domain.user.service.UserService;
 
 import java.util.List;
 import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.JwtService;
+import shop.cazait.global.error.exception.BaseException;
+import shop.cazait.global.error.status.ErrorStatus;
+
+import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 
 @Api
 @RestController
@@ -24,6 +29,7 @@ import shop.cazait.global.common.response.SuccessResponse;
 @RequestMapping("/api/users")
 public class UserApiController {
     private final UserService userService;
+    private final JwtService jwtService;
     @ApiOperation(value = "회원 가입", notes = "User 정보를 추가하여 회원가입을 진행")
     @PostMapping("/sign-up")
     public SuccessResponse<PostUserRes> createUser (@RequestBody PostUserReq postUserReq)
@@ -59,11 +65,16 @@ public class UserApiController {
     }
 
 
-    @PatchMapping("/{email}")
+    @PatchMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
-    @ApiImplicitParam(name="email", value = "회원의 email")
-    public SuccessResponse<PatchUserRes> modifyUser(@PathVariable("email") String email,@RequestBody PatchUserReq patchUserReq){
-        PatchUserRes patchUserRes = userService.modifyUser(email, patchUserReq);
+    public SuccessResponse<PatchUserRes> modifyUser(@PathVariable("userIdx") Long userIdx,@RequestBody PatchUserReq patchUserReq) throws BaseException, UserException {
+        Long userIdxByJwt = jwtService.getUserIdx();
+        System.out.println("userIdxByJwt = " + userIdxByJwt);
+
+        if(userIdx != userIdxByJwt){
+            throw new UserException(INVALID_JWT);
+        }
+        PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq);
         return new SuccessResponse<>(patchUserRes);
     }
 
