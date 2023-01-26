@@ -81,7 +81,16 @@ public class UserService {
         if (password.equals(user.getPassword())) {
             userIdx = findUser.getId();
             String jwt = jwtService.createJwt(userIdx);
-            return PostLoginRes.of(findUser, jwt);
+            String refreshToken = jwtService.createRefreshToken();
+            User loginUser = User.builder()
+                    .id(findUser.getId())
+                    .email(findUser.getEmail())
+                    .password(findUser.getPassword())
+                    .nickname(findUser.getEmail())
+                    .refreshToken(refreshToken)
+                    .build();
+            userRepository.save(loginUser);
+            return PostLoginRes.of(findUser, jwt, refreshToken);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
