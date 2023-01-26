@@ -29,9 +29,6 @@ public class CheckLogApiController {
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<GetCheckLogRes>> getVisitLog(@PathVariable(name = "userId") Long userId) {
 
-        // User ID가 null 인지 확인
-        // JWT에서 받아온 User ID와 같은지 확인
-
         List<GetCheckLogRes> result = cafeVisitService.getVisitLog(userId);
         return new SuccessResponse<>(result);
 

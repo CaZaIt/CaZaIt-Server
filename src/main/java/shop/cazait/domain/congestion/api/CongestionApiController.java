@@ -32,14 +32,12 @@ public class CongestionApiController {
             @ApiImplicitParam(name = "masterId", value = "마스터 ID"),
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
-    @PostMapping("/{masterId}/{cafeId}")
+    @PostMapping("/master/{masterId}/cafe/{cafeId}")
     public SuccessResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
                                                             @PathVariable(name = "cafeId") Long cafeId,
                                                             @RequestBody @Valid PostCongestionReq postCongestionReq)
             throws CongestionException {
 
-        // masterId 유효 확인
-        // cafeId NULL 확인
         if (postCongestionReq.getCongestionStatus().isBlank()) {
             throw new CongestionException(CONGESTION_STATUS_EMPTY);
         }
