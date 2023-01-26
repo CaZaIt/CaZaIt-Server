@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.patch.PutMasterReq;
 import shop.cazait.domain.master.dto.patch.PutMasterRes;
+import shop.cazait.domain.master.dto.post.PostMasterLogInReq;
+import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.entity.Master;
@@ -20,6 +22,7 @@ import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.SHA256;
+import shop.cazait.global.error.status.ErrorStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +47,18 @@ public class MasterService {
 
 		PostMasterRes postMasterRes = PostMasterRes.of(master);
 		return postMasterRes;
+	}
+
+	//마스터 회원 로그인
+	public PostMasterLogInRes LoginMaster(PostMasterLogInReq dto) throws MasterException {
+		Master master = dto.toEntity();
+		Master findMaster = masterRepository.findMasterByEmail(master.getEmail()).get();
+		String password;
+		password = SHA256.encrypt(master.getPassword());
+		if (password.equals(findMaster.getPassword())) {
+			return PostMasterLogInRes.of(master);
+		}
+		throw new MasterException(ErrorStatus.FAILED_TO_LOGIN);
 	}
 
 	//마스터 회원 전체 조회

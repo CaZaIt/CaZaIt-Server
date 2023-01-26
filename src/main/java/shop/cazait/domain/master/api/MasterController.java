@@ -17,6 +17,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.patch.PutMasterReq;
+import shop.cazait.domain.master.dto.post.PostMasterLogInReq;
+import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.error.MasterException;
@@ -38,6 +40,14 @@ public class MasterController {
 		MasterException {
 		PostMasterRes postCreateMasterRes = masterService.registerMaster(dto);
 		return new SuccessResponse<>(postCreateMasterRes);
+	}
+
+	@PostMapping("/log-in")
+	@ApiOperation(value = "회원 로그인", notes = "이메일과 패스워드를 통해 로그인을 진행")
+	public SuccessResponse<PostMasterLogInRes> logIn(@RequestBody PostMasterLogInReq postMasterLogInReq)
+		throws MasterException {
+		PostMasterLogInRes postMasterLogInRes = masterService.LoginMaster(postMasterLogInReq);
+		return new SuccessResponse<>(postMasterLogInRes);
 	}
 
 	@GetMapping("/all")
