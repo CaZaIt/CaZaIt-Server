@@ -21,12 +21,8 @@ public class CheckLogApiController {
 
     private final CheckLogService cafeVisitService;
 
-    /**
-     * 최근에 조회 기록 조회
-     */
-    @ApiOperation(
-            value = "조회 기록 가져오기", notes = "사용자의 ID를 통해 조회 기록을 가져온다."
-    )
+
+    @ApiOperation(value = "조회 기록 가져오기", notes = "사용자의 ID를 통해 조회 기록을 가져온다.")
     @ApiImplicitParam(
             name = "userId", value = "사용자 ID"
     )
