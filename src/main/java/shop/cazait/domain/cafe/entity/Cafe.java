@@ -52,10 +52,6 @@ public class Cafe extends BaseEntity {
         this.latitude = latitude;
     }
 
-    public void initCafeCongestion(Congestion congestion) {
-        this.congestion = congestion;
-    }
-
     public void changeCafeInfo(PostCafeReq postCafeReq) {
         this.name = postCafeReq.getName();
         this.location = postCafeReq.getLocation();
