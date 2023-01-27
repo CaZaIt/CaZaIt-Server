@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 
-@ApiModel(value = "PostCafeImageReq / 카페 이미지 정보", description = "카페 이미지 등록 시 필요한 dto")
+@ApiModel(value = "카페 이미지 Request", description = "카페 이미지 등록 시 필요한 정보")
 @Getter
 @JsonAutoDetect
 public class PostCafeImageReq {
