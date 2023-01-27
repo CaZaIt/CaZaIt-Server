@@ -68,7 +68,7 @@ public class CafeMenuApiController {
     })
     @PatchMapping("/{menuId}/cafe/{cafeId}")
     public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
-                                                        @RequestBody PatchCafeMenuReq patchCafeMenuReq) {
+                                                        @RequestBody @Valid PatchCafeMenuReq patchCafeMenuReq) {
 
         PatchCafeMenuRes result = cafeMenuService.updateMenu(menuId, patchCafeMenuReq);
         return new SuccessResponse<>(result);
