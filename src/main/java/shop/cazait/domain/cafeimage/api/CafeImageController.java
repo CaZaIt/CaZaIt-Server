@@ -10,7 +10,7 @@ import shop.cazait.domain.cafeimage.service.CafeImageService;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
 
-@Api
+@Api(tags = "카페 이미지 API")
 @RestController
 @RequestMapping("/api/cafes/images")
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class CafeImageController {
     private final CafeImageService cafeImageService;
 
     @PostMapping("/add/{cafeId}")
-    @ApiOperation(value = "카페 이미지 등록", notes = "등록된 카페의 이미지를 등록한다.")
+    @ApiOperation(value = "카페 이미지 등록", notes = "특정 ID를 갖는 카페의 이미지를 등록한다.")
     public SuccessResponse<String> addCafeImage(@PathVariable Long cafeId, @RequestBody PostCafeImageReq cafeImageReq) throws CafeException {
         try {
             cafeImageService.addCafeImage(cafeId, cafeImageReq);
@@ -30,7 +30,7 @@ public class CafeImageController {
     }
 
     @DeleteMapping("delete/{cafeImageId}")
-    @ApiOperation(value = "카페 이미지 삭제", notes = "카페 이미지를 삭제한다.")
+    @ApiOperation(value = "카페 이미지 삭제", notes = "특정 ID의 카페 이미지를 삭제한다.")
     public SuccessResponse<String> deleteCafeImage(@PathVariable Long cafeImageId) throws CafeImageException {
         try {
             cafeImageService.deleteCafeImage(cafeImageId);
