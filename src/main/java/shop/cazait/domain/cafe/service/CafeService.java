@@ -25,20 +25,11 @@ public class CafeService {
 
     public void addCafe(PostCafeReq cafeReq) {
         Cafe cafe = Cafe.builder()
-                .congestion(cafeReq.getCongestion())
                 .name(cafeReq.getName())
                 .location(cafeReq.getLocation())
                 .longitude(cafeReq.getLongitude())
                 .latitude(cafeReq.getLatitude())
                 .build();
-
-        if (cafeReq.getCongestion() == null) {
-            Congestion tmp = Congestion.builder()
-                    .cafe(cafe)
-                    .congestionStatus(CongestionStatus.FREE)
-                    .build();
-            cafe.initCafeCongestion(tmp);
-        }
 
         cafeRepository.save(cafe);
     }
@@ -66,7 +57,7 @@ public class CafeService {
 
     @Transactional(readOnly = true)
     public List<GetCafeRes> getCafeByName(String name) throws CafeException {
-        List<Cafe> cafeList = cafeRepository.findByName(name);
+        List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.INVALID_CAFE_NAME);
         }
