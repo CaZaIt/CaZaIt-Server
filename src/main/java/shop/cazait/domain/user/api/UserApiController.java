@@ -9,8 +9,6 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +22,6 @@ import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
-import shop.cazait.global.error.status.ErrorStatus;
-
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 
 @Api
 @RestController
@@ -75,7 +70,9 @@ public class UserApiController {
     @PatchMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
     public SuccessResponse<PatchUserRes> modifyUser(
-            @PathVariable("userIdx") Long userIdx, @RequestBody PatchUserReq patchUserReq,@RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws BaseException, UserException {
+            @PathVariable("userIdx") Long userIdx,
+            @RequestBody PatchUserReq patchUserReq,
+            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
         PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
         return new SuccessResponse<>(patchUserRes);
     }
