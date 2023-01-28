@@ -25,7 +25,7 @@ public class PostLoginRes {
         this.id = id;
         this.email = email;
         this.jwtToken = jwtToken;
-        this.refreshToken = refreshToken; 
+        this.refreshToken = refreshToken;
     }
 
     public static PostLoginRes of(User user, String jwtToken, String refreshToken){
