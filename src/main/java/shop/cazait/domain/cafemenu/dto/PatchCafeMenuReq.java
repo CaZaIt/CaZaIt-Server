@@ -14,6 +14,9 @@ public class PatchCafeMenuReq {
     @ApiModelProperty(value = "이름", example = "아이스 아메리카노 (미수정 : null)")
     private String name;
 
+    @ApiModelProperty(value = "설명", example = "맛있는 아메리카노 (미수정 : null)")
+    private String description;
+
     @ApiModelProperty(value = "가격", example = "4500 (미수정 : null)")
     private Integer price;
 

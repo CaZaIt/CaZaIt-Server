@@ -1,7 +1,7 @@
 package shop.cazait.domain.congestion.service;
 
 import static shop.cazait.global.error.status.ErrorStatus.*;
-import static shop.cazait.global.common.constant.Constant.CONGESTION_NOT_EXIST;
+import static shop.cazait.global.common.constant.Constant.NOT_EXIST_CONGESTION;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,11 +34,11 @@ public class CongestionService {
 
         CongestionStatus congestionStatus = getCongestionStatus(postCongestionReq.getCongestionStatus());
 
-        if (findCongestion == CONGESTION_NOT_EXIST) {
+        if (findCongestion == NOT_EXIST_CONGESTION) {
             newCongestion = addCongestion(findCafe, congestionStatus);
         }
 
-        if (findCongestion != CONGESTION_NOT_EXIST) {
+        if (findCongestion != NOT_EXIST_CONGESTION) {
             newCongestion = updateCongestion(findCongestion, congestionStatus);
 
         }
