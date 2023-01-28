@@ -86,5 +86,12 @@ public class UserApiController {
         DeleteUserRes deleteUserRes = userService.deleteUser(email);
         return new SuccessResponse<>(deleteUserRes);
     }
-
+    @NoAuth
+    @PostMapping(value = "/refresh")
+    public SuccessResponse<PostLoginRes>refreshToken(
+            @RequestHeader(value="X-ACCESS-TOKEN") String token,
+            @RequestHeader(value="REFRESH-TOKEN") String refreshToken ) throws UserException, BaseException {
+        PostLoginRes postLoginRes = userService.issueAccessToken(token, refreshToken);
+        return new SuccessResponse<>(postLoginRes);
+    }
 }
