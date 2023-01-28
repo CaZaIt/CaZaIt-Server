@@ -25,8 +25,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         if(jwtService.isValidAccessToken(accessToken))
             return true;
-        else
+        else{
+            response.setHeader("X-ACCESS-TOKEN", accessToken);
+            response.setHeader("msg", "Check the tokens.");
             return false;
+        }
     }
 
     private boolean checkAnnotation(Object handler,Class cls){
