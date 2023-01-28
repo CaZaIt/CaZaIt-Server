@@ -2,6 +2,7 @@ package shop.cazait.domain.user.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -69,6 +70,8 @@ public class UserApiController {
 
     @PatchMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
+    @ApiImplicitParams({@ApiImplicitParam (name="userIdx",value = "사용자 userId"),
+                        @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")})
     public SuccessResponse<PatchUserRes> modifyUser(
             @PathVariable("userIdx") Long userIdx,
             @RequestBody PatchUserReq patchUserReq,
@@ -87,10 +90,13 @@ public class UserApiController {
     }
     @NoAuth
     @PostMapping(value = "/refresh")
+    @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
+    @ApiImplicitParams({@ApiImplicitParam(name="accessToken", value = "액세스 토큰"),
+                        @ApiImplicitParam(name="refreshToken", value = "리프레시 토큰")})
     public SuccessResponse<PostLoginRes>refreshToken(
-            @RequestHeader(value="X-ACCESS-TOKEN") String token,
+            @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken ) throws UserException, BaseException {
-        PostLoginRes postLoginRes = userService.issueAccessToken(token, refreshToken);
+        PostLoginRes postLoginRes = userService.issueAccessToken(accessToken, refreshToken);
         return new SuccessResponse<>(postLoginRes);
     }
 }
