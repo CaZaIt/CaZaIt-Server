@@ -22,8 +22,7 @@ public class GetUserRes {
 
 
     public static GetUserRes of(User user){
-        return GetUserRes
-                .builder()
+        return GetUserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())

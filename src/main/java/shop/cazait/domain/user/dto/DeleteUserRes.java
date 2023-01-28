@@ -22,8 +22,7 @@ public class DeleteUserRes {
 
 
     public static DeleteUserRes of(User user){
-        return DeleteUserRes
-                .builder()
+        return DeleteUserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
