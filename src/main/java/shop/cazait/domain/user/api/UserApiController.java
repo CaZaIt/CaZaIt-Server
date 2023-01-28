@@ -9,7 +9,11 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.exception.UserException;
@@ -18,6 +22,7 @@ import shop.cazait.domain.user.service.UserService;
 import java.util.List;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
+import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
 import shop.cazait.global.error.status.ErrorStatus;
 
@@ -26,10 +31,12 @@ import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 @Api
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/users")
 public class UserApiController {
     private final UserService userService;
     private final JwtService jwtService;
+    @NoAuth
     @ApiOperation(value = "회원 가입", notes = "User 정보를 추가하여 회원가입을 진행")
     @PostMapping("/sign-up")
     public SuccessResponse<PostUserRes> createUser (@RequestBody PostUserReq postUserReq)
@@ -38,7 +45,7 @@ public class UserApiController {
         return new SuccessResponse<>(postUserRes);
     }
 
-
+    @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
     public SuccessResponse<PostLoginRes> logIn (@RequestBody PostLoginReq postLoginReq)
@@ -47,7 +54,7 @@ public class UserApiController {
         return new SuccessResponse<>(postLoginRes);
     }
 
-
+    @NoAuth
     @GetMapping("/all")
     @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
     public SuccessResponse<List<GetUserRes>> getUsers(){
@@ -55,7 +62,7 @@ public class UserApiController {
         return new SuccessResponse<>(allGetUserRes);
     }
 
-
+    @NoAuth
     @GetMapping("/{email}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam(name="email", value = "회원의 email")
@@ -67,18 +74,13 @@ public class UserApiController {
 
     @PatchMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
-    public SuccessResponse<PatchUserRes> modifyUser(@PathVariable("userIdx") Long userIdx,@RequestBody PatchUserReq patchUserReq) throws BaseException, UserException {
-        Long userIdxByJwt = jwtService.getUserIdx();
-        System.out.println("userIdxByJwt = " + userIdxByJwt);
-
-        if(userIdx != userIdxByJwt){
-            throw new UserException(INVALID_JWT);
-        }
-        PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq);
+    public SuccessResponse<PatchUserRes> modifyUser(
+            @PathVariable("userIdx") Long userIdx, @RequestBody PatchUserReq patchUserReq,@RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws BaseException, UserException {
+        PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
         return new SuccessResponse<>(patchUserRes);
     }
 
-    
+    @NoAuth
     @DeleteMapping("/{email}")
     @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
     @ApiImplicitParam(name="email", value = "회원의 email")
