@@ -43,18 +43,6 @@ public class ReviewProvideService {
                 .collect(Collectors.toList());
     }
 
-    private double getAverageScore(List<Review> reviews) {
-        if (reviews.size() == 0) {  // 리뷰가 없는 경우 평점을 0점으로 처리
-            return 0.0;
-        }
-
-        double averageScore = reviews.stream()
-                .mapToDouble(Review::getScore)
-                .sum() / reviews.size();
-
-        return averageScore;
-    }
-
     public GetReviewRes getReview(Long reviewId) throws EntityNotFoundException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new EntityNotFoundException());
