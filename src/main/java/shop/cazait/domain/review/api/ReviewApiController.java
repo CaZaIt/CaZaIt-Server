@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.review.dto.DelReviewRes;
 import shop.cazait.domain.review.dto.GetReviewRes;
-import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.dto.PatchReviewReq;
 import shop.cazait.domain.review.dto.PatchReviewRes;
 import shop.cazait.domain.review.dto.PostReviewReq;
@@ -40,13 +40,21 @@ public class ReviewApiController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
             @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest")
     })
-    @GetMapping("/{cafeId}")
-    public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
-                                                     @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
-        GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy);
+    @GetMapping("/{cafeId}/all")
+    public SuccessResponse<List<GetReviewRes>> getReviews(@PathVariable Long cafeId,
+                                                          @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
+        List<GetReviewRes> getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy);
 
         return new SuccessResponse<>(getReviewsRes);
     }
+
+    @GetMapping("/{cafeId}/score")
+    public SuccessResponse<Double> getAverageScore(@PathVariable Long cafeId) {
+        Double averageScore = reviewProvideService.getAverageScore(cafeId);
+
+        return new SuccessResponse<>(averageScore);
+    }
+
 
     @ApiOperation(value = "리뷰 하나 조회", notes = "리뷰 ID를 받아 해당 리뷰 조회")
     @ApiImplicitParam(name = "reviewId", value = "리뷰 ID")
