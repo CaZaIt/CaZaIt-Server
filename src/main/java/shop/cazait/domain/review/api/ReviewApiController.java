@@ -66,7 +66,7 @@ public class ReviewApiController {
     }
 
     @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
-    @PostMapping("/cafes/{cafeId}")
+    @PostMapping("/post/{cafeId}")
     public SuccessResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq) {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 
@@ -74,7 +74,7 @@ public class ReviewApiController {
     }
 
     @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
-    @PatchMapping("/{reviewId}")
+    @PatchMapping("/edit/{reviewId}")
     public SuccessResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
 
