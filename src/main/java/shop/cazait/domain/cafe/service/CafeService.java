@@ -61,6 +61,7 @@ public class CafeService {
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.INVALID_CAFE_NAME);
         }
+        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<GetCafeRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
             GetCafeRes cafeRes = GetCafeRes.of(cafe);
