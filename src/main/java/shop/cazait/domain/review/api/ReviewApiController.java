@@ -35,7 +35,7 @@ public class ReviewApiController {
     private final ReviewDaoService reviewDaoService;
     private final ReviewProvideService reviewProvideService;
 
-    @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 및 평점을 반환")
+    @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 반환")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
             @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest")
@@ -48,6 +48,8 @@ public class ReviewApiController {
         return new SuccessResponse<>(getReviewsRes);
     }
 
+    @ApiOperation(value = "카페 평점 조회", notes = "카페 ID를 받아 해당 카페의 평점 반환")
+    @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     @GetMapping("/{cafeId}/score")
     public SuccessResponse<Double> getAverageScore(@PathVariable Long cafeId) {
         Double averageScore = reviewProvideService.getAverageScore(cafeId);
