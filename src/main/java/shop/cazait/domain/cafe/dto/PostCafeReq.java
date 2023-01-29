@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @ApiModel(value = "카페 정보 등록 및 수정 Request", description = "카페 등록 및 수정 시 필요한 정보")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCafeReq {
 
     @ApiModelProperty(value = "이름", example = "롬곡")
