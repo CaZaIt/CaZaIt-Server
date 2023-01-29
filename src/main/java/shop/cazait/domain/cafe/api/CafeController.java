@@ -45,9 +45,8 @@ public class CafeController {
     @ApiOperation(value = "카페 ID 조회", notes = "특정 ID의 카페를 조회한다.")
     @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     public SuccessResponse<GetCafeRes> getCafeById(@PathVariable Long cafeId) throws CafeException {
-        GetCafeRes cafeRes = null;
         try {
-            cafeRes = cafeService.getCafeById(cafeId);
+            GetCafeRes cafeRes = cafeService.getCafeById(cafeId);
             return new SuccessResponse<>(cafeRes);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -57,9 +56,8 @@ public class CafeController {
     @GetMapping("/name/{cafeName}")
     @ApiOperation(value = "카페 이름 조회", notes = "특정 이름의 카페를 조회한다.")
     public SuccessResponse<List<GetCafeRes>> getCafeByName(@PathVariable String cafeName) throws CafeException {
-        List<GetCafeRes> cafeResList = null;
         try {
-            cafeResList = cafeService.getCafeByName(cafeName);
+            List<GetCafeRes> cafeResList = cafeService.getCafeByName(cafeName);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
