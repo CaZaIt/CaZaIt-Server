@@ -32,7 +32,7 @@ public enum SortType {
         try {
             return map.get(value);
         } catch (NullPointerException nullPointerException) {
-            return null;
+            return SortType.NEWEST;
         }
     }
 }

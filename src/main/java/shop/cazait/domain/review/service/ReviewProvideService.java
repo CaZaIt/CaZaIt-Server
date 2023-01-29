@@ -33,9 +33,6 @@ public class ReviewProvideService {
 
     public List<GetReviewRes> getReviews(Long cafeId, String sortBy) {
         SortType sortType = SortType.of(sortBy);
-        if (sortType == null) {
-            sortType = SortType.NEWEST;
-        }
 
         List<Review> reviews = reviewRepository.findAllByCafeId(
                 cafeId,
