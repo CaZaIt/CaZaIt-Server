@@ -1,5 +1,7 @@
 package shop.cazait.global.error.exception;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.domain.cafe.exception.CafeException;
@@ -9,6 +11,7 @@ import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.response.FailResponse;
+import shop.cazait.global.common.response.ValidResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -47,4 +50,25 @@ public class GlobalExceptionHandler {
     protected FailResponse handleUserException(UserException exception) {
         return new FailResponse(exception.getError());
     }
+
+    @ExceptionHandler({ ValidException.class })
+    protected ValidResponse handleValidException(ValidException exception) {
+
+        BindingResult bindingResult = exception.getBindingResult();
+        StringBuilder description = new StringBuilder();
+
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            description.append("[");
+            description.append(fieldError.getField());
+            description.append("](은)는");
+            description.append(fieldError.getDefaultMessage());
+            description.append(" 입력된 값: [");
+            description.append(fieldError.getRejectedValue());
+            description.append("]\n");
+        }
+
+        return new ValidResponse(exception.getError(), description);
+
+    }
+
 }
