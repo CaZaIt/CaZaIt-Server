@@ -5,7 +5,7 @@ import lombok.Getter;
 import shop.cazait.global.error.status.ErrorStatus;
 
 @Getter
-@JsonPropertyOrder({"result", "message", "data"})
+@JsonPropertyOrder({"result", "message", "errorField"})
 public class ValidResponse<T> {
 
     private String result;
