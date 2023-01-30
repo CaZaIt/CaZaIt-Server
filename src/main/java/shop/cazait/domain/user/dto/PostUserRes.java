@@ -21,25 +21,20 @@ public class PostUserRes {
     @ApiModelProperty(value = "닉네임", example = "토마스")
     private String nickname;
 
-    @ApiModelProperty(value="jwt token")
-    private String jwtToken;
-
     @Builder
-    public PostUserRes(Long id, String email, String password, String nickname, String jwtToken) {
+    public PostUserRes(Long id, String email, String password, String nickname) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.jwtToken = jwtToken;
     }
 
-    public static PostUserRes of(User user, String jwtToken) {
+    public static PostUserRes of(User user) {
         return PostUserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .nickname(user.getNickname())
-                .jwtToken(jwtToken)
                 .build();
     }
 

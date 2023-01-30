@@ -61,9 +61,7 @@ public class UserService {
         PostUserReq EncryptPostUserReq = new PostUserReq(postUserReq.getEmail(), pwd, postUserReq.getNickname());
         User user = EncryptPostUserReq.toEntity();
         userRepository.save(user);
-        Long userIdx = user.getId();
-        String jwt = jwtService.createJwt(userIdx);
-        return PostUserRes.of(user,jwt);
+        return PostUserRes.of(user);
     }
 
     public PostLoginRes logIn(PostLoginReq postLoginReq)
