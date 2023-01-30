@@ -12,7 +12,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ public class UserApiController {
     @GetMapping("/{email}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam(name="email", value = "회원의 email")
-    public SuccessResponse<GetUserRes> getUser(@PathVariable("email") @Email String email) throws UserException {
+    public SuccessResponse<GetUserRes> getUser(@PathVariable("email") @Email @NotBlank String email) throws UserException {
         GetUserRes emailGetUserRes = userService.getUserByEmail(email);
         return new SuccessResponse<>(emailGetUserRes);
     }
@@ -75,9 +75,9 @@ public class UserApiController {
     @ApiImplicitParams({@ApiImplicitParam (name="userIdx",value = "사용자 userId"),
                         @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")})
     public SuccessResponse<PatchUserRes> modifyUser(
-            @NotNull @PathVariable("userIdx") Long userIdx,
+            @NotBlank @PathVariable("userIdx") Long userIdx,
             @Valid @RequestBody PatchUserReq patchUserReq,
-            @NotNull @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
+            @NotBlank @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
         PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
         return new SuccessResponse<>(patchUserRes);
     }
@@ -87,7 +87,7 @@ public class UserApiController {
     @ApiImplicitParams({@ApiImplicitParam (name="userIdx",value = "사용자 userId"),
             @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")})
     public SuccessResponse<DeleteUserRes> deleteUser(
-            @NotNull @PathVariable("userIdx") Long userIdx) {
+            @NotBlank @PathVariable("userIdx") Long userIdx) {
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(deleteUserRes);
     }
@@ -98,8 +98,8 @@ public class UserApiController {
     @ApiImplicitParams({@ApiImplicitParam(name="accessToken", value = "액세스 토큰"),
                         @ApiImplicitParam(name="refreshToken", value = "리프레시 토큰")})
     public SuccessResponse<PostLoginRes>refreshToken(
-            @NotNull @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
-            @NotNull@RequestHeader(value="REFRESH-TOKEN") String refreshToken ) throws UserException, BaseException {
+            @NotBlank @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
+            @NotBlank @RequestHeader(value="REFRESH-TOKEN") String refreshToken ) throws UserException, BaseException {
         PostLoginRes postLoginRes = userService.issueAccessToken(accessToken, refreshToken);
         return new SuccessResponse<>(postLoginRes);
     }

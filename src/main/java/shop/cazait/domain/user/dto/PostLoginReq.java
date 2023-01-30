@@ -8,9 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
+
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -18,10 +17,10 @@ import javax.validation.constraints.Pattern;
 public class PostLoginReq {
 
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
-    @NotNull
+    @NotBlank
     private String email;
     @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
-    @NotNull
+    @NotBlank
     private String password;
 
     @Builder
