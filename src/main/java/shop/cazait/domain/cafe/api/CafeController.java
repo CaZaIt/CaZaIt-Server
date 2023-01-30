@@ -12,9 +12,10 @@ import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@Api
+@Api(tags = "카페 정보 API")
 @RestController
 @RequestMapping("/api/cafes")
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class CafeController {
 
     @PostMapping("/add")
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
-    public SuccessResponse<String> addCafe(@RequestBody PostCafeReq cafeReq) {
+    public SuccessResponse<String> addCafe(@RequestBody @Valid PostCafeReq cafeReq) {
         cafeService.addCafe(cafeReq);
         return new SuccessResponse<>("카페 등록 완료");
     }
@@ -44,9 +45,8 @@ public class CafeController {
     @ApiOperation(value = "카페 ID 조회", notes = "특정 ID의 카페를 조회한다.")
     @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     public SuccessResponse<GetCafeRes> getCafeById(@PathVariable Long cafeId) throws CafeException {
-        GetCafeRes cafeRes = null;
         try {
-            cafeRes = cafeService.getCafeById(cafeId);
+            GetCafeRes cafeRes = cafeService.getCafeById(cafeId);
             return new SuccessResponse<>(cafeRes);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -56,9 +56,8 @@ public class CafeController {
     @GetMapping("/name/{cafeName}")
     @ApiOperation(value = "카페 이름 조회", notes = "특정 이름의 카페를 조회한다.")
     public SuccessResponse<List<GetCafeRes>> getCafeByName(@PathVariable String cafeName) throws CafeException {
-        List<GetCafeRes> cafeResList = null;
         try {
-            cafeResList = cafeService.getCafeByName(cafeName);
+            List<GetCafeRes> cafeResList = cafeService.getCafeByName(cafeName);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -67,7 +66,7 @@ public class CafeController {
 
     @PostMapping("/update/{cafeId}")
     @ApiOperation(value = "카페 정보 수정", notes = "특정 ID의 카페 정보를 수정한다.")
-    public SuccessResponse<String> updateCafe(@PathVariable Long cafeId, @RequestBody PostCafeReq cafeReq)
+    public SuccessResponse<String> updateCafe(@PathVariable Long cafeId, @RequestBody @Valid PostCafeReq cafeReq)
             throws CafeException {
         try {
             cafeService.updateCafe(cafeId, cafeReq);
