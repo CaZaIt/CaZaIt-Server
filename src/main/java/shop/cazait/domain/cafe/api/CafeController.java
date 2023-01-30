@@ -25,6 +25,7 @@ public class CafeController {
 
     private final CafeService cafeService;
 
+
     @PostMapping("/add")
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
     public SuccessResponse<String> addCafe(@RequestBody @Valid PostCafeReq cafeReq) {
