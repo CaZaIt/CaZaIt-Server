@@ -17,8 +17,6 @@ import javax.validation.constraints.Pattern;
 @Getter
 @ApiModel(value = "PostUserReq/유저정보",description = "회원 가입시 필요한 dto")
 public class PostUserReq {
-    @ApiModelProperty(value = "회원 id", example = "1")
-    private Long id;
 
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     @Email(message = "이메일 형식을 지키세요.")
@@ -38,7 +36,6 @@ public class PostUserReq {
         this.password = password;
         this.nickname = nickname;
     }
-
 
     public User toEntity(){
         return User.builder()
