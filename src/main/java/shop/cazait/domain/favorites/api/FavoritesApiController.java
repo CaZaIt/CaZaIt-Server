@@ -27,14 +27,14 @@ public class FavoritesApiController {
 
     private final FavoritesService favoritesService;
 
-    @ApiOperation(value = "즐겨찾기 등록", notes = "사용자 ID와 카페 ID를 받아 즐겨찾기 등록")
+    @ApiOperation(value = "즐겨찾기 등록", notes = "사용자 ID와 카페 ID를 받아 즐겨찾기를 등록한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "사용자 ID"),
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @PostMapping("/user/{userId}/cafe/{cafeId}")
     public SuccessResponse<PostFavoritesRes> addFavorites(@PathVariable(name = "userId") Long userId,
-                                                           @PathVariable(name = "cafeId") Long cafeId)
+                                                          @PathVariable(name = "cafeId") Long cafeId)
             throws CafeException, UserException {
 
         PostFavoritesRes result  = favoritesService.addFavorites(userId, cafeId);
@@ -43,7 +43,7 @@ public class FavoritesApiController {
 
     }
 
-    @ApiOperation(value = "즐겨찾기 조회", notes = "사용자 ID를 받아 모든 즐겨찾기 조회")
+    @ApiOperation(value = "즐겨찾기 조회", notes = "사용자 ID를 받아 모든 즐겨찾기를 조회한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "사용자 ID")
     })
@@ -55,7 +55,7 @@ public class FavoritesApiController {
 
     }
 
-    @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID를 받아 삭제")
+    @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID를 받아 즐겨찾기를 삭제한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "favoritesId", value = "즐겨찾기 ID")
     })

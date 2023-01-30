@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "등록할 메뉴", description = "등록을 완료한 메뉴 정보")
+@ApiModel(value = "등록 메뉴  Response", description = "등록을 완료한 메뉴 정보")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class PostCafeMenuRes {
 
