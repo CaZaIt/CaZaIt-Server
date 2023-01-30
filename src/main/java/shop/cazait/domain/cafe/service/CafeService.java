@@ -31,6 +31,13 @@ public class CafeService {
                 .latitude(cafeReq.getLatitude())
                 .build();
 
+        // todo: CongestionStatus default값(ex.None)으로 수정
+        Congestion tmp = Congestion.builder()
+                .cafe(cafe)
+                .congestionStatus(CongestionStatus.FREE)
+                .build();
+        cafe.initCafeCongestion(tmp);
+
         cafeRepository.save(cafe);
     }
 

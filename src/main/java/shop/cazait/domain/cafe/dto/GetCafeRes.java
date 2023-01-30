@@ -23,13 +23,13 @@ public class GetCafeRes {
     private String name;
     @JsonProperty
     @ApiModelProperty(value = "위치", example = "서울시 중구")
-    private String location;
+    private String address;
     @JsonProperty
     @ApiModelProperty(value = "경도", example = "127.543215")
-    private double longitude;
+    private String longitude;
     @JsonProperty
     @ApiModelProperty(value = "위도", example = "36.987561")
-    private double latitude;
+    private String latitude;
 
     public static GetCafeRes of(Cafe cafe) {
         Congestion congestion = cafe.getCongestion();
@@ -43,9 +43,9 @@ public class GetCafeRes {
                 .cafeId(cafe.getId())
                 .congestionId(congestion.getId())
                 .name(cafe.getName())
-                .location(cafe.getLocation())
-                .longitude(cafe.getLongitude())
-                .latitude(cafe.getLatitude())
+                .address(cafe.getAddress())
+                .longitude(cafe.getCoordinate().getLongitude())
+                .latitude(cafe.getCoordinate().getLatitude())
                 .build();
     }
 
