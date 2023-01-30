@@ -11,7 +11,6 @@ import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.response.FailResponse;
-import shop.cazait.global.common.response.ValidResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -52,22 +51,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ ValidException.class })
-    protected ValidResponse handleValidException(ValidException exception) {
+    protected FailResponse handleValidException(ValidException exception) {
 
-        BindingResult bindingResult = exception.getBindingResult();
-        StringBuilder description = new StringBuilder();
-
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            description.append("[");
-            description.append(fieldError.getField());
-            description.append("](은)는");
-            description.append(fieldError.getDefaultMessage());
-            description.append(" 입력된 값: [");
-            description.append(fieldError.getRejectedValue());
-            description.append("]\n");
-        }
-
-        return new ValidResponse(exception.getError(), description);
+        return new FailResponse(exception.getError(), exception.getDescription().toString());
 
     }
 
