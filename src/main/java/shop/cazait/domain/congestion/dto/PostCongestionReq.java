@@ -8,12 +8,12 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
-@ApiModel(value = "혼잡도 등록 및 수정", description = "등록 및 수정할 혼잡도 정보")
+@ApiModel(value = "혼잡도 등록(수정) Request", description = "등록 및 수정할 혼잡도 정보")
 @Data
 @NoArgsConstructor
 public class PostCongestionReq {
 
-    @ApiModelProperty(value = "혼잡도 상태", required = true, example = "free")
+    @ApiModelProperty(value = "혼잡도 상태", required = true, example = "FREE")
     private String congestionStatus;
 
     public static Congestion toEntity(Cafe cafe, CongestionStatus congestionStatus) {

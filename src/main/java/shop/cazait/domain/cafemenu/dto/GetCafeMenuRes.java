@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "카페 메뉴 조회", description = "카페의 모든 메뉴에 대한 정보")
+@ApiModel(value = "메뉴 조회  Response", description = "카페의 모든 메뉴에 대한 정보")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class GetCafeMenuRes {
 

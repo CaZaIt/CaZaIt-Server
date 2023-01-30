@@ -6,10 +6,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.congestion.dto.PostCongestionReq;
@@ -33,8 +33,8 @@ public class CongestionApiController {
     })
     @PostMapping("/{masterId}/{cafeId}")
     public SuccessResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
-                                                         @PathVariable(name = "cafeId") Long cafeId,
-                                                         @RequestBody(required = true) PostCongestionReq postCongestionReq)
+                                                            @PathVariable(name = "cafeId") Long cafeId,
+                                                            @RequestBody PostCongestionReq postCongestionReq)
             throws CongestionException {
 
         // masterId 유효 확인

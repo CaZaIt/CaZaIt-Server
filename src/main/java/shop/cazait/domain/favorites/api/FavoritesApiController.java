@@ -34,7 +34,7 @@ public class FavoritesApiController {
     })
     @PostMapping("/user/{userId}/cafe/{cafeId}")
     public SuccessResponse<PostFavoritesRes> addFavorites(@PathVariable(name = "userId") Long userId,
-                                                           @PathVariable(name = "cafeId") Long cafeId)
+                                                          @PathVariable(name = "cafeId") Long cafeId)
             throws CafeException, UserException {
 
         PostFavoritesRes result  = favoritesService.addFavorites(userId, cafeId);

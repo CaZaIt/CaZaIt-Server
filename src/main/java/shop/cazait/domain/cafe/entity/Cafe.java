@@ -67,4 +67,8 @@ public class Cafe extends BaseEntity {
         super.setStatus(status);
     }
 
+    public void changeCongestion(Congestion congestion) {
+        this.congestion = congestion;
+    }
+
 }

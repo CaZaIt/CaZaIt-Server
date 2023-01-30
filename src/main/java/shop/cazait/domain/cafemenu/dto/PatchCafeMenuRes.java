@@ -4,9 +4,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "카페 메뉴 수정", description = "수정한 메뉴에 대한 정보")
+@ApiModel(value = "메뉴 수정 Response", description = "수정한 메뉴에 대한 정보")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class PatchCafeMenuRes {
 

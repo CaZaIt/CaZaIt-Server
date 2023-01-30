@@ -4,9 +4,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.checklog.entity.CheckLog;
 
-@ApiModel(value = "등록한 조회 기록", description = "등록한 조회 기록 정보")
+@ApiModel(value = "등록한 조회 기록 Response", description = "등록한 조회 기록 정보")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class PostCheckLogRes {
 

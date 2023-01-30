@@ -40,7 +40,7 @@ public class CafeMenuApiController {
     })
     @PostMapping("/cafe/{cafeId}")
     public SuccessResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
-                                                            @RequestBody List<PostCafeMenuReq> postCafeMenuReq)
+                                                               @RequestBody List<PostCafeMenuReq> postCafeMenuReq)
             throws CafeException {
 
         // 이름 확인
@@ -76,7 +76,7 @@ public class CafeMenuApiController {
     })
     @PatchMapping("/{menuId}/cafe/{cafeId}")
     public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
-                                                     @RequestBody PatchCafeMenuReq patchCafeMenuReq) {
+                                                        @RequestBody PatchCafeMenuReq patchCafeMenuReq) {
 
         PatchCafeMenuRes result = cafeMenuService.updateMenu(menuId, patchCafeMenuReq);
         return new SuccessResponse<>(result);
