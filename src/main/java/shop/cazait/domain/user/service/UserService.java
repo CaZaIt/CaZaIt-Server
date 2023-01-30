@@ -106,7 +106,10 @@ public class UserService {
         return userResList;
     }
     @Transactional(readOnly = true)
-    public GetUserRes getUserByEmail(String email){
+    public GetUserRes getUserByEmail (String email) throws UserException {
+        if(userRepository.findByEmail(email).isEmpty()){
+            throw new UserException(NOT_EXIST_USER);
+        }
         User findUser = userRepository.findByEmail(email).get();
         return GetUserRes.of(findUser);
     }
@@ -126,8 +129,8 @@ public class UserService {
         return PatchUserRes.of(existUser);
     }
 
-    public DeleteUserRes deleteUser(String email){
-        User deleteUser = userRepository.findByEmail(email).get();
+    public DeleteUserRes deleteUser(Long userIdx){
+        User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
         return DeleteUserRes.of(deleteUser);
     }
