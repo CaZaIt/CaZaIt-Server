@@ -13,7 +13,7 @@ import shop.cazait.domain.user.entity.User;
 public class GetUserRes {
     @ApiModelProperty(value = "회원 id", example = "1")
     private Long id;
-    @ApiModelProperty(value = "비밀번호", example = "12345#!@#")
+    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
     private String password;
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     private String email;

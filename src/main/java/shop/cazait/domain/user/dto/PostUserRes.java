@@ -15,7 +15,7 @@ public class PostUserRes {
     private Long id;
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     private String email;
-    @ApiModelProperty(value = "비밀번호", example = "12345#!@#")
+    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
     private String password;
 
     @ApiModelProperty(value = "닉네임", example = "토마스")
