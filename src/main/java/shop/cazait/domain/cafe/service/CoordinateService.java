@@ -12,7 +12,8 @@ import shop.cazait.domain.cafe.dto.CoordinateVO;
 @Service
 public class CoordinateService {
 
-    private String API_KEY = "3537aa85353d26f92022e7c3b311e2a6";
+    @Value("${api_key}")
+    private String apiKey;
     private String baseUrl = "https://dapi.kakao.com";
     private String uri = "/v2/local/search/address.json";
 
@@ -29,7 +30,7 @@ public class CoordinateService {
                         .queryParam("query", address)
                         .build()
                 )
-                .header("Authorization", "KakaoAK " + API_KEY)
+                .header("Authorization", "KakaoAK " + apiKey)
                 .exchangeToMono(response -> {
                     return response.bodyToMono(String.class);
                 }).block();
