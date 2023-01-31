@@ -13,6 +13,7 @@ public class CoordinateService {
     private String API_KEY;
     private String baseUrl = "https://dapi.kakao.com";
     private String uri = "/v2/local/search/address.json";
+
     public CoordinateVO getCoordinateFromAddress(String address) {
 
         CoordinateVO coordinateVO = WebClient.builder()

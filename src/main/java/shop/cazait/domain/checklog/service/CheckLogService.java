@@ -41,7 +41,7 @@ public class CheckLogService {
     /**
      * 최근 본 카페 등록
      */
-    public PostCheckLogRes addVisitLog(Long userId, Long cafeId) throws CafeException, UserException {
+    public String addVisitLog(Long userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -51,8 +51,7 @@ public class CheckLogService {
                 .cafe(cafe)
                 .build());
 
-        return PostCheckLogRes.of(visitLog);
-
+        return "방문 기록 등록 완료.";
     }
 
     private User getUser(Long userId) throws UserException {
