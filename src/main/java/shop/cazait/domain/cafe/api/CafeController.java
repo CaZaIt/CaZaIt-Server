@@ -1,17 +1,16 @@
 package shop.cazait.domain.cafe.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import shop.cazait.domain.cafe.dto.CoordinateVO;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
-import shop.cazait.domain.cafe.service.CoordinateService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
@@ -27,10 +26,9 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-
     @PostMapping("/add")
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
-    public SuccessResponse<String> addCafe(@RequestBody @Valid PostCafeReq cafeReq) {
+    public SuccessResponse<String> addCafe(@RequestBody @Valid PostCafeReq cafeReq) throws JsonProcessingException {
         cafeService.addCafe(cafeReq);
         return new SuccessResponse<>("카페 등록 완료");
     }
@@ -73,13 +71,14 @@ public class CafeController {
     @PostMapping("/update/{cafeId}")
     @ApiOperation(value = "카페 정보 수정", notes = "특정 ID의 카페 정보를 수정한다.")
     public SuccessResponse<String> updateCafe(@PathVariable Long cafeId, @RequestBody @Valid PostCafeReq cafeReq)
-            throws CafeException {
+            throws CafeException, JsonProcessingException {
         try {
             cafeService.updateCafe(cafeId, cafeReq);
             return new SuccessResponse<>("카페 수정 완료");
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
+
     }
 
     @PostMapping("/delete/{cafeId}")
