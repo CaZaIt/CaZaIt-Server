@@ -46,7 +46,7 @@ public class CafeService {
                 .build();
 
         Cafe cafe = Cafe.builder()
-                .name(cafeReq.getName())    
+                .name(cafeReq.getName())
                 .address(cafeReq.getAddress())
                 .coordinate(coordinate)
                 .build();
