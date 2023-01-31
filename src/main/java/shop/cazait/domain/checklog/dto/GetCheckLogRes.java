@@ -39,7 +39,7 @@ public class GetCheckLogRes {
                         .cafeVisitId(visitLog.getId())
                         .cafeId(visitLog.getCafe().getId())
                         .name(visitLog.getCafe().getName())
-                        .address(visitLog.getCafe().getLocation())
+                        .address(visitLog.getCafe().getAddress())
                         .congestion(visitLog.getCafe().getCongestion().getCongestionStatus().getValue())
                         .imageUrl(visitLog.getCafe().getCafeImage().stream()
                                 .map(CafeImage::getImageUrl)
