@@ -1,6 +1,9 @@
 package shop.cazait.domain.cafe.service;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,14 +12,16 @@ import shop.cazait.domain.cafe.dto.CoordinateVO;
 @Service
 public class CoordinateService {
 
-    @Value("${rest_api_key}")
-    private String API_KEY;
+    private String API_KEY = "3537aa85353d26f92022e7c3b311e2a6";
     private String baseUrl = "https://dapi.kakao.com";
     private String uri = "/v2/local/search/address.json";
 
-    public CoordinateVO getCoordinateFromAddress(String address) {
+    public CoordinateVO getCoordinateFromAddress(String address) throws JsonProcessingException {
 
-        CoordinateVO coordinateVO = WebClient.builder()
+        ObjectMapper mapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        String jsonString = WebClient.builder()
                 .baseUrl(baseUrl)
                 .build()
                 .get()
@@ -25,11 +30,13 @@ public class CoordinateService {
                         .build()
                 )
                 .header("Authorization", "KakaoAK " + API_KEY)
-                .retrieve()
-                .bodyToMono(CoordinateVO.class)
-                .block();
+                .exchangeToMono(response -> {
+                    return response.bodyToMono(String.class);
+                }).block();
 
+        CoordinateVO coordinateVO  = mapper.readValue(jsonString, CoordinateVO.class);
         return coordinateVO;
 
     }
+
 }
