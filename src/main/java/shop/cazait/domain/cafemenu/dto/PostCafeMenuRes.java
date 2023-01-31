@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "등록 메뉴  Response", description = "등록을 완료한 메뉴 정보")
+@ApiModel(value = "등록 메뉴 Response", description = "등록을 완료한 메뉴 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class PostCafeMenuRes {
@@ -19,6 +19,9 @@ public class PostCafeMenuRes {
 
     @ApiModelProperty(value = "이름", example = "아메리카노")
     private String name;
+
+    @ApiModelProperty(value = "설명", example = "맛있는 아메리카노")
+    private String description;
 
     @ApiModelProperty(value = "가격", example = "3000")
     private int price;
@@ -32,6 +35,7 @@ public class PostCafeMenuRes {
                 .map(menu -> PostCafeMenuRes.builder()
                         .menuId(menu.getId())
                         .name(menu.getName())
+                        .description(menu.getDescription())
                         .price(menu.getPrice())
                         .imageUrl(menu.getImageUrl())
                         .build())

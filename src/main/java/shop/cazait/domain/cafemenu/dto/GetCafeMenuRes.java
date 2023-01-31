@@ -21,6 +21,9 @@ public class GetCafeMenuRes {
     @ApiModelProperty(value = "이름", example = "아이스 아메리카노")
     private String name;
 
+    @ApiModelProperty(value = "설명", example = "맛있는 아메리카노")
+    private String description;
+
     @ApiModelProperty(value = "가격", example = "4500")
     private int price;
 
@@ -32,6 +35,7 @@ public class GetCafeMenuRes {
                 .map(menu -> GetCafeMenuRes.builder()
                         .cafeMenuId(menu.getId())
                         .name(menu.getName())
+                        .description(menu.getDescription())
                         .price(menu.getPrice())
                         .imageUrl(menu.getImageUrl())
                         .build()).
