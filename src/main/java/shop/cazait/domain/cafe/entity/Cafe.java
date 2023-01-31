@@ -2,6 +2,7 @@ package shop.cazait.domain.cafe.entity;
 
 import javax.persistence.*;
 import lombok.*;
+import shop.cazait.domain.cafe.dto.CoordinateVO;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.master.entity.Master;
@@ -31,32 +32,31 @@ public class Cafe extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private String location;
+    private String address;
 
-    @Column(nullable = false)
-    private double longitude;
-
-    @Column(nullable = false)
-    private double latitude;
+    @Embedded
+    private Coordinate coordinate;
 
     @OneToMany(mappedBy = "cafe")
     private List<CafeImage> cafeImage;
 
     @Builder
-    protected Cafe(Congestion congestion, Master master, String name, String location, double longitude, double latitude) {
+    protected Cafe(Congestion congestion, Master master, String name, String address, Coordinate coordinate) {
         this.congestion = congestion;
         this.master = master;
         this.name = name;
-        this.location = location;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.address = address;
+        this.coordinate = coordinate;
     }
 
-    public void changeCafeInfo(PostCafeReq postCafeReq) {
+    public void initCafeCongestion(Congestion congestion) {
+        this.congestion = congestion;
+    }
+
+    public void changeCafeInfo(PostCafeReq postCafeReq, Coordinate coordinate) {
         this.name = postCafeReq.getName();
-        this.location = postCafeReq.getLocation();
-        this.longitude = postCafeReq.getLongitude();
-        this.latitude = postCafeReq.getLatitude();
+        this.address = postCafeReq.getAddress();
+        this.coordinate = coordinate;
     }
 
     public void changeCafeStatus(BaseStatus status) {

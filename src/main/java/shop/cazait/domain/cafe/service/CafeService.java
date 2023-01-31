@@ -3,9 +3,11 @@ package shop.cazait.domain.cafe.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.cafe.dto.CoordinateVO;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.entity.Coordinate;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.congestion.entity.Congestion;
@@ -21,15 +23,29 @@ import java.util.List;
 @Transactional
 public class CafeService {
 
+    private final CoordinateService coordinateService;
     private final CafeRepository cafeRepository;
 
     public void addCafe(PostCafeReq cafeReq) {
+
+        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
+        Coordinate coordinate = Coordinate.builder()
+                .longitude(coordinateVO.getDocuments().getX())
+                .latitude(coordinateVO.getDocuments().getY())
+                .build();
+
         Cafe cafe = Cafe.builder()
                 .name(cafeReq.getName())
-                .location(cafeReq.getLocation())
-                .longitude(cafeReq.getLongitude())
-                .latitude(cafeReq.getLatitude())
+                .address(cafeReq.getAddress())
+                .coordinate(coordinate)
                 .build();
+
+        // todo: CongestionStatus default값(ex.None)으로 수정
+        Congestion tmp = Congestion.builder()
+                .cafe(cafe)
+                .congestionStatus(CongestionStatus.FREE)
+                .build();
+        cafe.initCafeCongestion(tmp);
 
         cafeRepository.save(cafe);
     }
@@ -71,8 +87,14 @@ public class CafeService {
     }
 
     public void updateCafe(Long id, PostCafeReq cafeReq) throws CafeException {
+        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
+        Coordinate coordinate = Coordinate.builder()
+                .longitude(coordinateVO.getDocuments().getX())
+                .latitude(coordinateVO.getDocuments().getY())
+                .build();
+
         Cafe cafe = cafeRepository.findById(id).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
-        cafe.changeCafeInfo(cafeReq);
+        cafe.changeCafeInfo(cafeReq, coordinate);
         cafeRepository.save(cafe);
     }
 

@@ -5,10 +5,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import shop.cazait.domain.cafe.dto.CoordinateVO;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
+import shop.cazait.domain.cafe.service.CoordinateService;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
 
@@ -22,6 +24,7 @@ import java.util.List;
 public class CafeController {
 
     private final CafeService cafeService;
+
 
     @PostMapping("/add")
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
