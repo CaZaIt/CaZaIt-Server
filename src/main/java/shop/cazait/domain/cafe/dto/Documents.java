@@ -14,10 +14,10 @@ public class Documents {
     private String addressName;
 
     @JsonProperty("x")
-    private String longitude; // longitude
+    private String longitude;
 
     @JsonProperty("y")
-    private String latitude; // latitude
+    private String latitude;
 
 
 }
