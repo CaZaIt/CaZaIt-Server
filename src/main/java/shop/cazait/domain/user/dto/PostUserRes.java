@@ -13,32 +13,28 @@ import shop.cazait.domain.user.entity.User;
 public class PostUserRes {
     @ApiModelProperty(value = "회원 id", example = "1")
     private Long id;
-    @ApiModelProperty(value = "비밀번호", example = "12345#!@#")
-    private String password;
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     private String email;
+    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
+    private String password;
+
     @ApiModelProperty(value = "닉네임", example = "토마스")
     private String nickname;
 
-    @ApiModelProperty(value="jwt token")
-    private String jwtToken;
-
     @Builder
-    public PostUserRes(Long id, String email, String password, String nickname, String jwtToken) {
+    public PostUserRes(Long id, String email, String password, String nickname) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.jwtToken = jwtToken;
     }
 
-    public static PostUserRes of(User user, String jwtToken) {
+    public static PostUserRes of(User user) {
         return PostUserRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .nickname(user.getNickname())
                 .password(user.getPassword())
-                .jwtToken(jwtToken)
+                .nickname(user.getNickname())
                 .build();
     }
 

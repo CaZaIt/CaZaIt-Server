@@ -3,7 +3,10 @@ Server:
 
 Spring:
   profiles:
-    default: local
+    active: local
+
+  config:
+    import: application-aws.yml
 
   application:
     name: cazait

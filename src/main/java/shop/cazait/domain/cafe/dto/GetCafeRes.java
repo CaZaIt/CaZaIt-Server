@@ -6,8 +6,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.congestion.entity.Congestion;
+import shop.cazait.domain.congestion.entity.CongestionStatus;
 
-@ApiModel(value = "GetCafeRes / 카페 정보", description = "카페 조회 시 필요한 dto")
+@ApiModel(value = "카페 정보 조회 Response", description = "카페 조회 시 얻을 수 있는 정보")
 @Builder(access = AccessLevel.PRIVATE)
 public class GetCafeRes {
     @JsonProperty
@@ -30,9 +32,16 @@ public class GetCafeRes {
     private double latitude;
 
     public static GetCafeRes of(Cafe cafe) {
+        Congestion congestion = cafe.getCongestion();
+        if (congestion == null) {
+            congestion = Congestion.builder()
+                    .cafe(cafe)
+                    .congestionStatus(CongestionStatus.FREE)
+                    .build();
+        }
         return GetCafeRes.builder()
                 .cafeId(cafe.getId())
-                .congestionId(cafe.getCongestion().getId())
+                .congestionId(congestion.getId())
                 .name(cafe.getName())
                 .location(cafe.getLocation())
                 .longitude(cafe.getLongitude())

@@ -9,6 +9,6 @@ import java.util.List;
 public interface CafeRepository extends JpaRepository <Cafe, Long> {
 
     List<Cafe> findByStatus(BaseStatus status);
-    List<Cafe> findByName(String name);
+    List<Cafe> findByNameContainingIgnoreCase(String name);
 
 }
