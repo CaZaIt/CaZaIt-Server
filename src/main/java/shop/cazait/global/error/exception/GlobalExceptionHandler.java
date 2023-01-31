@@ -1,5 +1,7 @@
 package shop.cazait.global.error.exception;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.domain.cafe.exception.CafeException;
@@ -47,4 +49,12 @@ public class GlobalExceptionHandler {
     protected FailResponse handleUserException(UserException exception) {
         return new FailResponse(exception.getError());
     }
+
+    @ExceptionHandler({ ValidException.class })
+    protected FailResponse handleValidException(ValidException exception) {
+
+        return new FailResponse(exception.getError(), exception.getDescription().toString());
+
+    }
+
 }
