@@ -27,7 +27,7 @@ import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
 
-@Api
+@Api(tags = "유저 정보 API")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
