@@ -169,5 +169,8 @@ $RECYCLE.BIN/
 # CheckSums
 /.gradle/**/checksums/
 
+# YML File
+*.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,java
 
