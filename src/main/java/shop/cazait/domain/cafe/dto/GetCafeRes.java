@@ -9,7 +9,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
-@ApiModel(value = "카페 정보 조회 Response", description = "카페 조회 시 얻을 수 있는 정보")
+@ApiModel(value = "특정 카페 정보 조회 Response", description = "카페 조회 시 얻을 수 있는 정보")
 @Builder(access = AccessLevel.PRIVATE)
 public class GetCafeRes {
     @JsonProperty
@@ -30,15 +30,11 @@ public class GetCafeRes {
     @JsonProperty
     @ApiModelProperty(value = "위도", example = "36.987561")
     private String latitude;
+    @JsonProperty
+    @ApiModelProperty(value = "방문 기록 등록 여부", example = "36.987561")
+    private String logResult;
 
-    public static GetCafeRes of(Cafe cafe) {
-        Congestion congestion = cafe.getCongestion();
-        if (congestion == null) {
-            congestion = Congestion.builder()
-                    .cafe(cafe)
-                    .congestionStatus(CongestionStatus.FREE)
-                    .build();
-        }
+    public static GetCafeRes of(Cafe cafe, String logResult) {
         return GetCafeRes.builder()
                 .cafeId(cafe.getId())
                 .congestionStatus(cafe.getCongestion().getCongestionStatus())
