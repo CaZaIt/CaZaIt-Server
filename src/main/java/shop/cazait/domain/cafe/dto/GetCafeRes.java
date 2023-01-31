@@ -17,7 +17,7 @@ public class GetCafeRes {
     private Long cafeId;
     @JsonProperty
     @ApiModelProperty(value = "혼잡도 ID", example = "1")
-    private Long congestionId;
+    private CongestionStatus congestionStatus;
     @JsonProperty
     @ApiModelProperty(value = "이름", example = "롬곡")
     private String name;
@@ -41,7 +41,7 @@ public class GetCafeRes {
         }
         return GetCafeRes.builder()
                 .cafeId(cafe.getId())
-                .congestionId(congestion.getId())
+                .congestionStatus(cafe.getCongestion().getCongestionStatus())
                 .name(cafe.getName())
                 .address(cafe.getAddress())
                 .longitude(cafe.getCoordinate().getLongitude())
