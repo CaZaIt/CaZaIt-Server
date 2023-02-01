@@ -17,18 +17,23 @@ public class PostLoginRes {
     @ApiModelProperty(value="jwt token")
     private String jwtToken;
 
+    @ApiModelProperty(value="refresh token")
+    private String refreshToken;
+
     @Builder
-    public PostLoginRes(Long id, String email, String jwtToken) {
+    public PostLoginRes(Long id, String email, String jwtToken, String refreshToken) {
         this.id = id;
         this.email = email;
         this.jwtToken = jwtToken;
+        this.refreshToken = refreshToken;
     }
 
-    public static PostLoginRes of(User user, String jwtToken){
+    public static PostLoginRes of(User user, String jwtToken, String refreshToken){
         return PostLoginRes.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .jwtToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }

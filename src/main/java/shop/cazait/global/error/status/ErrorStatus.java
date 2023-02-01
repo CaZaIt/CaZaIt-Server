@@ -13,6 +13,7 @@ public enum ErrorStatus {
      */
     EMPTY_JWT("FAIL","JWT를 입력해주세요."),
     INVALID_JWT("FAIL", "유효하지 않은 JWT입니다."),
+    INVALID_REQUEST("FAIL", "유효하지 않은 Request입니다."),
 
     /**
      * 제목 양식 : Entity Error

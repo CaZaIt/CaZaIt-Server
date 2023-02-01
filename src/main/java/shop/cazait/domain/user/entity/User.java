@@ -25,12 +25,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = true)
+    private String refreshToken;
+
     @Builder
-    public User(Long id, String email, String password, String nickname) {
+    public User(Long id, String email, String password, String nickname, String refreshToken) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.refreshToken = refreshToken;
     }
 }
 

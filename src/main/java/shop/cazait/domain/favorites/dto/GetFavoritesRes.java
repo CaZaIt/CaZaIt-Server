@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.favorites.entity.Favorites;
 
-@ApiModel(value = "즐겨찾기 한 카페 정보", description = "즐겨찾기로 등록한 모든 카페에 대한 정보")
+@ApiModel(value = "즐겨찾기 Response", description = "즐겨찾기로 등록한 모든 카페에 대한 정보")
+@Getter
 @Builder(access = AccessLevel.PROTECTED)
 public class GetFavoritesRes {
 
@@ -20,8 +22,12 @@ public class GetFavoritesRes {
     private Long cafeId;
     @ApiModelProperty(value = "카페 이름", example = "롬곡")
     private String name;
+    @ApiModelProperty(value = "카페 주소", example = "서울시 광진구")
+    private String address;
+    @ApiModelProperty(value = "혼잡도", example = "free")
+    private String congestion;
     @ApiModelProperty(value = "카페 이미지", example = "image.png")
-    private List<String> imageUrl = new ArrayList<>();
+    private List<String> imageUrl;
 
     public static List<GetFavoritesRes> of(List<Favorites> findFavorites) {
         return findFavorites.stream()
@@ -30,6 +36,8 @@ public class GetFavoritesRes {
                             .favoritesId(favorites.getId())
                             .cafeId(favorites.getCafe().getId())
                             .name(favorites.getCafe().getName())
+                            .address(favorites.getCafe().getAddress())
+                            .congestion(favorites.getCafe().getCongestion().getCongestionStatus().getValue())
                             .imageUrl(favorites.getCafe().getCafeImage().stream()
                                     .map(CafeImage::getImageUrl)
                                     .collect(Collectors.toList()))

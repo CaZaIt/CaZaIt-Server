@@ -8,16 +8,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
 
+import javax.validation.constraints.*;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ApiModel(value = "PostUserReq/유저정보",description = "회원 가입시 필요한 dto")
 public class PostUserReq {
-    @ApiModelProperty(value = "회원 id", example = "1")
-    private Long id;
+
     @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
+    @Email(message = "이메일 형식을 지키세요.")
+    @NotBlank
     private String email;
-    @ApiModelProperty(value = "비밀번호", example = "12345#!@#")
+
+    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
+    @NotBlank
     private String password;
+
+    @NotBlank(message="닉네임을 입력하세요.")
     @ApiModelProperty(value = "닉네임", example = "토마스")
     private String nickname;
 
@@ -27,7 +35,6 @@ public class PostUserReq {
         this.password = password;
         this.nickname = nickname;
     }
-
 
     public User toEntity(){
         return User.builder()

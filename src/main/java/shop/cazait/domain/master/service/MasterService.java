@@ -2,24 +2,36 @@ package shop.cazait.domain.master.service;
 
 import static shop.cazait.global.error.status.ErrorStatus.*;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
-import shop.cazait.domain.master.dto.patch.PutMasterReq;
-import shop.cazait.domain.master.dto.patch.PutMasterRes;
+import shop.cazait.domain.master.dto.patch.PatchMasterReq;
+import shop.cazait.domain.master.dto.patch.PatchMasterRes;
+import shop.cazait.domain.master.dto.post.PostMasterLogInReq;
+import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
+import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.global.common.status.BaseStatus;
-import shop.cazait.global.config.encrypt.SHA256;
+import shop.cazait.global.config.encrypt.AES128;
+import shop.cazait.global.config.encrypt.JwtService;
+import shop.cazait.global.config.encrypt.Secret;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +39,18 @@ import shop.cazait.global.config.encrypt.SHA256;
 public class MasterService {
 
 	private final MasterRepository masterRepository;
+	private final JwtService jwtService;
+	private final UserRepository userRepository;
 
 	//회원가입
-	public PostMasterRes registerMaster(PostMasterReq dto) throws MasterException {
+	public PostMasterRes registerMaster(PostMasterReq dto) throws
+		MasterException,
+		InvalidAlgorithmParameterException,
+		NoSuchPaddingException,
+		IllegalBlockSizeException,
+		NoSuchAlgorithmException,
+		BadPaddingException,
+		InvalidKeyException {
 
 		//이메일 확인
 		if (!masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
@@ -37,13 +58,48 @@ public class MasterService {
 		}
 
 		//패스워드 암호화
-		dto.setPassword(SHA256.encrypt(dto.getPassword()));
-
-		Master master = dto.toEntity();
+		String password;
+		password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(dto.getPassword());
+		PostMasterReq EncryptPostMasterReq = new PostMasterReq(dto.getEmail(), password, dto.getNickname());
+		Master master = EncryptPostMasterReq.toEntity();
 		masterRepository.save(master);
-
 		PostMasterRes postMasterRes = PostMasterRes.of(master);
 		return postMasterRes;
+	}
+
+	//마스터 회원 로그인
+	public PostMasterLogInRes LoginMaster(PostMasterLogInReq dto) throws
+		MasterException,
+		InvalidAlgorithmParameterException,
+		NoSuchPaddingException,
+		IllegalBlockSizeException,
+		NoSuchAlgorithmException,
+		BadPaddingException,
+		InvalidKeyException {
+		if (masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
+			throw new MasterException(FAILED_TO_LOGIN);
+		}
+		Master master = dto.toEntity();
+		Master findMaster = masterRepository.findMasterByEmail(master.getEmail()).get();
+
+		String password;
+		password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
+
+		Long masterIdx;
+		if (password.equals(master.getPassword())) {
+			masterIdx = findMaster.getId();
+			String jwt = jwtService.createJwt(masterIdx);
+			String refreshToken = jwtService.createRefreshToken();
+			Master LoginMaster = Master.builder()
+				.email(findMaster.getEmail())
+				.password(findMaster.getPassword())
+				.nickname(findMaster.getNickname())
+				.refreshToken(refreshToken)
+				.build();
+			masterRepository.save(LoginMaster);
+			return PostMasterLogInRes.of(findMaster, jwt, refreshToken);
+		}
+		throw new MasterException(FAILED_TO_LOGIN);
 	}
 
 	//마스터 회원 전체 조회
@@ -62,7 +118,7 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보
-	public PutMasterRes updateMaster(Long id, PutMasterReq putMasterReq) {
+	public PatchMasterRes updateMaster(Long id, PatchMasterReq putMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		if (putMasterReq.getEmail() != null) {
 			findMaster.changeMasterEmail(putMasterReq.getEmail());
@@ -75,7 +131,7 @@ public class MasterService {
 		}
 
 		Master updateMaster = masterRepository.save(findMaster);
-		return PutMasterRes.builder()
+		return PatchMasterRes.builder()
 			.id(updateMaster.getId())
 			.email(updateMaster.getEmail())
 			.password(updateMaster.getPassword())

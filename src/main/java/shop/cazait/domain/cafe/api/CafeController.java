@@ -1,5 +1,6 @@
 package shop.cazait.domain.cafe.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,7 +25,6 @@ import java.util.List;
 public class CafeController {
 
     private final CafeService cafeService;
-
 
     @PostMapping("/add/master/{masterId}")
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
@@ -90,13 +90,14 @@ public class CafeController {
     })
     public SuccessResponse<String> updateCafe(@PathVariable Long cafeId,
                                               @PathVariable Long masterId,
-                                              @RequestBody @Valid PostCafeReq cafeReq) throws CafeException {
+                                              @RequestBody @Valid PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
         try {
             cafeService.updateCafe(cafeId, masterId, cafeReq);
             return new SuccessResponse<>("카페 수정 완료");
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
+
     }
 
     @PostMapping("/delete/{cafeId}/master/{masterId}")

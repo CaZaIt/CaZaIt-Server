@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "카페 메뉴 조회", description = "카페의 모든 메뉴에 대한 정보")
+@ApiModel(value = "메뉴 조회  Response", description = "카페의 모든 메뉴에 대한 정보")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class GetCafeMenuRes {
 
@@ -18,6 +20,9 @@ public class GetCafeMenuRes {
 
     @ApiModelProperty(value = "이름", example = "아이스 아메리카노")
     private String name;
+
+    @ApiModelProperty(value = "설명", example = "맛있는 아메리카노")
+    private String description;
 
     @ApiModelProperty(value = "가격", example = "4500")
     private int price;
@@ -30,6 +35,7 @@ public class GetCafeMenuRes {
                 .map(menu -> GetCafeMenuRes.builder()
                         .cafeMenuId(menu.getId())
                         .name(menu.getName())
+                        .description(menu.getDescription())
                         .price(menu.getPrice())
                         .imageUrl(menu.getImageUrl())
                         .build()).
