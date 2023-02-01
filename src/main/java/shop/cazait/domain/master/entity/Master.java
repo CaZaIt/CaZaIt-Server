@@ -45,7 +45,7 @@ public class Master extends BaseEntity {
 	private Cafe cafe;
 
 	@Builder
-	public Master(String email, String password, String nickname, String refreshToken Cafe cafe) {
+	public Master(String email, String password, String nickname, String refreshToken, Cafe cafe) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
