@@ -39,21 +39,23 @@ public class GetCheckLogRes {
     @ApiModelProperty(value = "카페 이미지 URL", example = "image.png")
     private List<String> imageUrl;
 
-    public static List<GetCheckLogRes> of(List<CheckLog> visitLogs) {
-        return visitLogs.stream()
-                .map(visitLog -> GetCheckLogRes.builder()
-                        .cafeVisitId(visitLog.getId())
-                        .cafeId(visitLog.getCafe().getId())
-                        .name(visitLog.getCafe().getName())
-                        .address(visitLog.getCafe().getAddress())
-                        .latitude(visitLog.getCafe().getCoordinate().getLatitude())
-                        .longitude(visitLog.getCafe().getCoordinate().getLongitude())
-                        .congestion(visitLog.getCafe().getCongestion().getCongestionStatus().getValue())
-                        .imageUrl(visitLog.getCafe().getCafeImage().stream()
-                                .map(CafeImage::getImageUrl)
-                                .collect(Collectors.toList()))
-                        .build())
-                .collect(Collectors.toList());
+    @ApiModelProperty(value = "관심 카페 여부", example = "true")
+    private boolean isFavorites;
+
+    public static GetCheckLogRes of(CheckLog log, boolean isFavorites) {
+
+        return GetCheckLogRes.builder()
+                .cafeVisitId(log.getId())
+                .cafeId(log.getCafe().getId())
+                .name(log.getCafe().getName())
+                .address(log.getCafe().getAddress())
+                .latitude(log.getCafe().getCoordinate().getLatitude())
+                .longitude(log.getCafe().getCoordinate().getLongitude())
+                .imageUrl(log.getCafe().getCafeImage().stream()
+                        .map(CafeImage::getImageUrl)
+                        .collect(Collectors.toList()))
+                .isFavorites(isFavorites)
+                .build();
     }
 
 }
