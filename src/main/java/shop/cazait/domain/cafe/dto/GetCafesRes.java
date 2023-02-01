@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
 @ApiModel(value = "모든 카페 정보 조회 Response", description = "카페 조회 시 얻을 수 있는 정보")
 @Builder(access = AccessLevel.PRIVATE)
+@Getter
 public class GetCafesRes {
     @JsonProperty
     @ApiModelProperty(value = "카페 ID", example = "1")
@@ -29,8 +31,11 @@ public class GetCafesRes {
     @JsonProperty
     @ApiModelProperty(value = "위도", example = "36.987561")
     private String latitude;
+    @JsonProperty
+    @ApiModelProperty(value = "관심 카페 여부", example = "true")
+    private boolean favorite;
 
-    public static GetCafesRes of(Cafe cafe) {
+    public static GetCafesRes of(Cafe cafe, boolean favorite) {
         return GetCafesRes.builder()
                 .cafeId(cafe.getId())
                 .congestionStatus(cafe.getCongestion().getCongestionStatus())
@@ -38,6 +43,7 @@ public class GetCafesRes {
                 .address(cafe.getAddress())
                 .longitude(cafe.getCoordinate().getLongitude())
                 .latitude(cafe.getCoordinate().getLatitude())
+                .favorite(favorite)
                 .build();
     }
 
