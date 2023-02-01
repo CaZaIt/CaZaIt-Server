@@ -119,7 +119,7 @@ public class CafeService {
         return cafeResList;
     }
 
-    public void updateCafe(Long id, Long masterId, PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
+    public void updateCafe(Long cafeId, Long masterId, PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
 
         CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
         Coordinate coordinate = Coordinate.builder()
