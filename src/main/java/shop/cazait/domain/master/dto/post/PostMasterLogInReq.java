@@ -2,8 +2,10 @@ package shop.cazait.domain.master.dto.post;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.master.entity.Master;
 
+@Getter
 public class PostMasterLogInReq {
 
 	@ApiModelProperty(value = "회원 id", example = "1")

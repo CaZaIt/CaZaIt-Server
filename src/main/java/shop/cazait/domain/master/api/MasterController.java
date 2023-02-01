@@ -1,6 +1,13 @@
 package shop.cazait.domain.master.api;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +44,13 @@ public class MasterController {
 	@PostMapping
 	@ApiOperation(value = "마스터 회원가입", notes = "마스터 사용자의 정보들을 이용해서 회원가입을 진행한다.")
 	public SuccessResponse<PostMasterRes> registerMaster(@Validated @RequestBody PostMasterReq dto) throws
-		MasterException {
+		MasterException,
+		InvalidAlgorithmParameterException,
+		NoSuchPaddingException,
+		IllegalBlockSizeException,
+		NoSuchAlgorithmException,
+		BadPaddingException,
+		InvalidKeyException {
 		PostMasterRes postCreateMasterRes = masterService.registerMaster(dto);
 		return new SuccessResponse<>(postCreateMasterRes);
 	}

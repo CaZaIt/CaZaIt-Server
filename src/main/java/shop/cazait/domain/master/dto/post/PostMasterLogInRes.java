@@ -10,16 +10,26 @@ public class PostMasterLogInRes {
 	@ApiModelProperty(value = "이메일", example = "12345@gmail.com")
 	private String email;
 
+	@ApiModelProperty(value = "jwt token")
+	private String jwtToken;
+
+	@ApiModelProperty(value = "refresh token")
+	private String refreshToken;
+
 	@Builder
-	public PostMasterLogInRes(Long id, String email) {
+	public PostMasterLogInRes(Long id, String email, String jwtToken, String refreshToken) {
 		this.id = id;
 		this.email = email;
+		this.jwtToken = jwtToken;
+		this.refreshToken = refreshToken;
 	}
 
-	public static PostMasterLogInRes of(Master master) {
+	public static PostMasterLogInRes of(Master master, String jwtToken, String refreshToken) {
 		return PostMasterLogInRes.builder()
 			.id(master.getId())
 			.email(master.getEmail())
+			.jwtToken(jwtToken)
+			.refreshToken(refreshToken)
 			.build();
 	}
 
