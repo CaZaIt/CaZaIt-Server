@@ -20,6 +20,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+        String url = request.getRequestURI();
+        if (url.contains("swagger") || url.contains("api-docs") || url.contains("webjars")) {
+            return true;
+        }
+
         boolean check=checkAnnotation(handler, NoAuth.class);
         log.info(String.valueOf(check));
         if(check) return true;
