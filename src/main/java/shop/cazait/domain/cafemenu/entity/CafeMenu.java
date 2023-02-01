@@ -23,28 +23,36 @@ public class CafeMenu {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String description;
+
     @Column(nullable = false)
     private int price;
 
     private String imageUrl;
 
     @Builder
-    public CafeMenu(Cafe cafe, String name, int price, String imageUrl) {
+    public CafeMenu(Cafe cafe, String name, String description, int price, String imageUrl) {
         this.cafe = cafe;
         this.name = name;
+        this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public void changeCafeMenuName(String name) {
+    public void changeName(String name) {
         this.name = name;
     }
 
-    public void changeCafeMenuPrice(int price) {
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void changePrice(int price) {
         this.price = price;
     }
 
-    public void changeCafeMenuImageUrl(String imageUrl) {
+    public void changeImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

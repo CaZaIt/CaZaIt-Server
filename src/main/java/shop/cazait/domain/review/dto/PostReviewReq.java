@@ -5,8 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.user.entity.User;
@@ -15,6 +17,7 @@ import shop.cazait.domain.user.entity.User;
 
 @ApiModel(value = "리뷰 등록 Request DTO", description = "리뷰 등록을 위해 필요한 정보")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostReviewReq {
     @ApiModelProperty(value = "카페 ID", example = "1")
     @NotNull(message = "존재하지 않는 카페입니다.")

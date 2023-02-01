@@ -4,9 +4,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@ApiModel(value = "카페 메뉴 수정", description = "수정한 메뉴에 대한 정보")
+@ApiModel(value = "메뉴 수정 Response", description = "수정한 메뉴에 대한 정보")
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class PatchCafeMenuRes {
 
@@ -15,6 +17,9 @@ public class PatchCafeMenuRes {
 
     @ApiModelProperty(value = "카페 ID", example = "1")
     private Long cafeId;
+
+    @ApiModelProperty(value = "설명", example = "맛있는 아메리카노")
+    private String description;
 
     @ApiModelProperty(value = "이름", example = "아이스 바닐라라떼")
     private String name;
@@ -30,6 +35,7 @@ public class PatchCafeMenuRes {
                 .cafeMenuId(menu.getId())
                 .cafeId(menu.getCafe().getId())
                 .name(menu.getName())
+                .description(menu.getDescription())
                 .price(menu.getPrice())
                 .imageUrl(menu.getImageUrl())
                 .build();

@@ -1,11 +1,12 @@
 package shop.cazait.domain.congestion.service;
 
 import static shop.cazait.global.error.status.ErrorStatus.*;
-import static shop.cazait.global.common.constant.Constant.CONGESTION_NOT_EXIST;
+import static shop.cazait.global.common.constant.Constant.NOT_EXIST_CONGESTION;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
@@ -27,16 +28,19 @@ public class CongestionService {
      */
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
+        Cafe findCafe = cafeRepository.findById(cafeId).get();
+        Congestion findCongestion = findCafe.getCongestion();
         Congestion newCongestion = null;
-        Congestion findCongestion = congestionRepository.findByCafeId(cafeId).orElse(null);
+
         CongestionStatus congestionStatus = getCongestionStatus(postCongestionReq.getCongestionStatus());
 
-        if (findCongestion == CONGESTION_NOT_EXIST) {
-            newCongestion = addCongestion(cafeId, congestionStatus);
+        if (findCongestion == NOT_EXIST_CONGESTION) {
+            newCongestion = addCongestion(findCafe, congestionStatus);
         }
 
-        if (findCongestion != CONGESTION_NOT_EXIST) {
+        if (findCongestion != NOT_EXIST_CONGESTION) {
             newCongestion = updateCongestion(findCongestion, congestionStatus);
+
         }
 
         return PostCongestionRes.of(newCongestion);
@@ -53,10 +57,12 @@ public class CongestionService {
 
     }
 
-    private Congestion addCongestion(Long cafeId, CongestionStatus congestionStatus) {
+    private Congestion addCongestion(Cafe cafe, CongestionStatus congestionStatus) {
 
-        Congestion congestion = PostCongestionReq.toEntity(cafeRepository.findById(cafeId).get(), congestionStatus);
-        Congestion addCongestion =  congestionRepository.save(congestion);
+        Congestion addCongestion = PostCongestionReq.toEntity(cafe, congestionStatus);
+        congestionRepository.save(addCongestion);
+        cafe.changeCongestion(addCongestion);
+        cafeRepository.save(cafe);
 
         return addCongestion;
 
