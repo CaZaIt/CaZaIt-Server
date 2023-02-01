@@ -68,4 +68,8 @@ public class Master extends BaseEntity {
 	public void changeMasterStatus(BaseStatus status) {
 		super.setStatus(status);
 	}
+
+	public void setCafe(Cafe cafe) {
+		this.cafe = cafe;
+	}
 }

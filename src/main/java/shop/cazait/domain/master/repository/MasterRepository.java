@@ -19,4 +19,6 @@ public interface MasterRepository extends JpaRepository<Master, Integer> {
 	List<Master> findAllMasterById(Long id);
 
 	List<Master> findMasterByStatus(BaseStatus status);
+
+    Optional<Master> findById(Long id);
 }

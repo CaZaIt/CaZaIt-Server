@@ -25,6 +25,7 @@ public enum ErrorStatus {
     NOT_EXIST_CAFE("SUCCESS", "카페가 존재하지 않습니다."),
     INVALID_CAFE_ID("FAIL", "유효하지 않은 CAFE ID입니다."),
     INVALID_CAFE_NAME("FAIL", "유효하지 않은 CAFE NAME입니다."),
+    NOT_OPERATE_CAFE("FAIL", "현재 접속한 MASTER 계정이 운영하는 카페가 아닙니다."),
 
     /**
      * Cafe Image Error
