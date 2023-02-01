@@ -51,9 +51,7 @@ public class CheckLogService {
 
     private boolean checkFavorites(CheckLog logs, List<Favorites> favorites) {
         return favorites.stream()
-                .anyMatch(f -> {
-                    return f.getCafe().equals(logs.getCafe());
-                });
+                .anyMatch(f -> f.getCafe().equals(logs.getCafe()));
     }
 
     /**
