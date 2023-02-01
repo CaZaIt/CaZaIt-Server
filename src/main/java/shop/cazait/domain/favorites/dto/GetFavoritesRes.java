@@ -22,8 +22,12 @@ public class GetFavoritesRes {
     private Long cafeId;
     @ApiModelProperty(value = "카페 이름", example = "롬곡")
     private String name;
-    @ApiModelProperty(value = "카페 주소", example = "서울시 광진구")
+    @ApiModelProperty(value = "카페 주소", example = "서울특별시 광진구 군자동 광나루로17길 18")
     private String address;
+    @ApiModelProperty(value = "카페 위도", example = "36.987561")
+    private String latitude;
+    @ApiModelProperty(value = "카페 경도", example = "127.543215")
+    private String longitude;
     @ApiModelProperty(value = "혼잡도", example = "free")
     private String congestion;
     @ApiModelProperty(value = "카페 이미지", example = "image.png")
@@ -37,6 +41,8 @@ public class GetFavoritesRes {
                             .cafeId(favorites.getCafe().getId())
                             .name(favorites.getCafe().getName())
                             .address(favorites.getCafe().getAddress())
+                            .latitude(favorites.getCafe().getCoordinate().getLatitude())
+                            .longitude(favorites.getCafe().getCoordinate().getLongitude())
                             .congestion(favorites.getCafe().getCongestion().getCongestionStatus().getValue())
                             .imageUrl(favorites.getCafe().getCafeImage().stream()
                                     .map(CafeImage::getImageUrl)
