@@ -1,15 +1,15 @@
 package shop.cazait.domain.cafe.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.cafe.dto.CoordinateVO;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.entity.Coordinate;
-import shop.cazait.domain.cafe.entity.SortType;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.checklog.service.CheckLogService;
@@ -31,18 +31,12 @@ public class CafeService {
     private final CafeRepository cafeRepository;
     private final CheckLogService checkLogService;
 
-    public void addCafe(PostCafeReq cafeReq) {
+    public void addCafe(PostCafeReq cafeReq) throws JsonProcessingException {
 
-//        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
-//        Coordinate coordinate = Coordinate.builder()
-//                .longitude(coordinateVO.getDocuments().getX())
-//                .latitude(coordinateVO.getDocuments().getY())
-//                .build();
-
-        // todo: 지우기
+        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
         Coordinate coordinate = Coordinate.builder()
-                .longitude("127.546123")
-                .latitude("35.8489513")
+                .longitude(coordinateVO.getDocuments().get(0).getLongitude())
+                .latitude(coordinateVO.getDocuments().get(0).getLatitude())
                 .build();
 
         Cafe cafe = Cafe.builder()
@@ -99,17 +93,12 @@ public class CafeService {
         return cafeResList;
     }
 
-    public void updateCafe(Long id, PostCafeReq cafeReq) throws CafeException {
-//        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
-//        Coordinate coordinate = Coordinate.builder()
-//                .longitude(coordinateVO.getDocuments().getX())
-//                .latitude(coordinateVO.getDocuments().getY())
-//                .build();
+    public void updateCafe(Long id, PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
 
-        // todo: 지우기
+        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
         Coordinate coordinate = Coordinate.builder()
-                .longitude("125.549813")
-                .latitude("83.54128")
+                .longitude(coordinateVO.getDocuments().get(0).getLongitude())
+                .latitude(coordinateVO.getDocuments().get(0).getLatitude())
                 .build();
 
         Cafe cafe = cafeRepository.findById(id).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));

@@ -36,7 +36,7 @@ public class GetFavoritesRes {
                             .favoritesId(favorites.getId())
                             .cafeId(favorites.getCafe().getId())
                             .name(favorites.getCafe().getName())
-                            .address(favorites.getCafe().getLocation())
+                            .address(favorites.getCafe().getAddress())
                             .congestion(favorites.getCafe().getCongestion().getCongestionStatus().getValue())
                             .imageUrl(favorites.getCafe().getCafeImage().stream()
                                     .map(CafeImage::getImageUrl)

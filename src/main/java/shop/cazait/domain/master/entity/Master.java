@@ -37,15 +37,19 @@ public class Master extends BaseEntity {
 	@Column(nullable = false, unique = true)
 	private String nickname;
 
+	@Column(nullable = true)
+	private String refreshToken;
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id")
 	private Cafe cafe;
 
 	@Builder
-	public Master(String email, String password, String nickname, Cafe cafe) {
+	public Master(String email, String password, String nickname, String refreshToken, Cafe cafe) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
+		this.refreshToken = refreshToken;
 		this.cafe = cafe;
 	}
 
