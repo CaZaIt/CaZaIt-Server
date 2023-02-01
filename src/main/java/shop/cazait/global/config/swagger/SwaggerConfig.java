@@ -69,7 +69,11 @@ public class SwaggerConfig {
                 .contexts
                 .SecurityContext
                 .builder()
-                .securityReferences(defaultAuth()).forPaths(PathSelectors.any()).build();
+                .securityReferences(defaultAuth())
+                .operationSelector(
+                        oc -> oc.requestMappingPattern().matches("path_regex")
+                )
+                .build();
     }
 
     List<SecurityReference> defaultAuth() {
