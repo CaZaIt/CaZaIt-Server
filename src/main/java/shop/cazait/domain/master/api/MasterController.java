@@ -58,7 +58,14 @@ public class MasterController {
 	@PostMapping("/log-in")
 	@ApiOperation(value = "회원 로그인", notes = "이메일과 패스워드를 통해 로그인을 진행")
 	public SuccessResponse<PostMasterLogInRes> logIn(@RequestBody PostMasterLogInReq postMasterLogInReq)
-		throws MasterException {
+		throws
+		MasterException,
+		InvalidAlgorithmParameterException,
+		NoSuchPaddingException,
+		IllegalBlockSizeException,
+		NoSuchAlgorithmException,
+		BadPaddingException,
+		InvalidKeyException {
 		PostMasterLogInRes postMasterLogInRes = masterService.LoginMaster(postMasterLogInReq);
 		return new SuccessResponse<>(postMasterLogInRes);
 	}
