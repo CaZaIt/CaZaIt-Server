@@ -33,7 +33,7 @@ public class CafeController {
             @ApiImplicitParam(name = "cafeReq", value = "등록할 카페 정보")
     })
     public SuccessResponse<String> addCafe(@PathVariable Long masterId,
-                                           @RequestBody @Valid PostCafeReq cafeReq) {
+                                           @RequestBody @Valid PostCafeReq cafeReq) throws JsonProcessingException {
         cafeService.addCafe(masterId, cafeReq);
         return new SuccessResponse<>("카페 등록 완료");
     }
