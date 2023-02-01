@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
-import shop.cazait.domain.master.dto.patch.PutMasterReq;
-import shop.cazait.domain.master.dto.patch.PutMasterRes;
+import shop.cazait.domain.master.dto.patch.PatchMasterReq;
+import shop.cazait.domain.master.dto.patch.PatchMasterRes;
 import shop.cazait.domain.master.dto.post.PostMasterLogInReq;
 import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
@@ -118,7 +118,7 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보
-	public PutMasterRes updateMaster(Long id, PutMasterReq putMasterReq) {
+	public PatchMasterRes updateMaster(Long id, PatchMasterReq putMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		if (putMasterReq.getEmail() != null) {
 			findMaster.changeMasterEmail(putMasterReq.getEmail());
@@ -131,7 +131,7 @@ public class MasterService {
 		}
 
 		Master updateMaster = masterRepository.save(findMaster);
-		return PutMasterRes.builder()
+		return PatchMasterRes.builder()
 			.id(updateMaster.getId())
 			.email(updateMaster.getEmail())
 			.password(updateMaster.getPassword())
