@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -20,6 +21,9 @@ public class PostCafeMenuReq {
     @NotBlank(message = "메뉴 이름을 입력해주세요.")
     private String name;
 
+    @ApiModelProperty(value = "설명", example = "맛있는 아메리카노")
+    private String description;
+
     @ApiModelProperty(value = "가격", example = "4500", required = true)
     @NotBlank(message = "메뉴 가격을 입력해주세요.")
     private Integer price;
@@ -32,6 +36,7 @@ public class PostCafeMenuReq {
                 .map(postCafeMenuReq -> CafeMenu.builder()
                         .cafe(cafe)
                         .name(postCafeMenuReq.getName())
+                        .description(postCafeMenuReq.getDescription())
                         .price(postCafeMenuReq.getPrice())
                         .imageUrl(postCafeMenuReq.getImageUrl())
                         .build()).collect(Collectors.toList());

@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PutMasterRes {
+public class PatchMasterRes {
 
 	@ApiModelProperty(value = "마스터 계정 ID")
 	private Long id;

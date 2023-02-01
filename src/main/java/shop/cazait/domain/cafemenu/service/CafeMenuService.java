@@ -1,5 +1,6 @@
 package shop.cazait.domain.cafemenu.service;
 
+import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_DESCRIPTION;
 import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
@@ -75,15 +76,19 @@ public class CafeMenuService {
                 .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
 
         if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {
-            findMenu.changeCafeMenuName(patchCafeMenuReq.getName());
+            findMenu.changeName(patchCafeMenuReq.getName());
+        }
+
+        if (patchCafeMenuReq.getDescription() != NOT_UPDATE_DESCRIPTION) {
+            findMenu.changeDescription(patchCafeMenuReq.getDescription());
         }
 
         if (patchCafeMenuReq.getPrice() != NOT_UPDATE_PRICE) {
-            findMenu.changeCafeMenuPrice(patchCafeMenuReq.getPrice());
+            findMenu.changePrice(patchCafeMenuReq.getPrice());
         }
 
         if (patchCafeMenuReq.getImageUrl() != NOT_UPDATE_IMAGE) {
-            findMenu.changeCafeMenuImageUrl(patchCafeMenuReq.getImageUrl());
+            findMenu.changeImageUrl(patchCafeMenuReq.getImageUrl());
         }
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findMenu);
