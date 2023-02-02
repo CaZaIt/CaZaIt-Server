@@ -104,9 +104,9 @@ public class UserService {
 
     public PatchUserRes modifyUser(Long userIdx,PatchUserReq patchUserReq, String refreshToken){
         User modifyUser = patchUserReq.toEntity();
-        User existUser = userRepository.findById(userIdx).get();
 
-        existUser = User.builder()
+
+        User existUser = User.builder()
                 .id(userIdx)
                 .email(modifyUser.getEmail())
                 .password(modifyUser.getPassword())
