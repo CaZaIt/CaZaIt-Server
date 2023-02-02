@@ -11,9 +11,8 @@ public enum ErrorStatus {
     /**
      * 공통 Error Code
      */
-    EMPTY_JWT("FAIL","JWT를 입력해주세요."),
-    INVALID_JWT("FAIL", "유효하지 않은 JWT입니다."),
     INVALID_REQUEST("FAIL", "유효하지 않은 Request입니다."),
+
 
     /**
      * 제목 양식 : Entity Error
@@ -64,9 +63,6 @@ public enum ErrorStatus {
     /**
      * User Error
      */
-    EMPTY_EMAIL("FAIL", "이메일을 입력해주세요."),
-    EMPTY_PASSWORD("FAIL","비밀번호를 입력해주세요"),
-    EMPTY_NICKNAME("FAIL", "닉네임을 입력해주세요."),
 
     INVALID_EMAIL("FAIL", "이메일 형식을 확인해주세요."),
     INVALID_PASSWORD("FAIL", "비밀번호 형식을 확인해주세요."),
@@ -76,8 +72,12 @@ public enum ErrorStatus {
 
     NOT_EXIST_USER("FAIL", "유저가 존재하지 않습니다."),
 
-    FAILED_TO_LOGIN("FAIL","아이디 또는 비밀번호를 잘못 입력했습니다.");
+    FAILED_TO_LOGIN("FAIL","아이디 또는 비밀번호를 잘못 입력했습니다."),
 
+    EMPTY_JWT("FAIL","JWT를 입력해주세요."),
+    INVALID_JWT("FAIL", "유효하지 않은 JWT입니다."),
+    NOT_EXPIRED_TOKEN("FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
+    EXPIRED_JWT("FAIL", "만료된 JWT입니다.");
 
     private final String result;
     private final String message;
