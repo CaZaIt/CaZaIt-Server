@@ -1,7 +1,6 @@
 package shop.cazait.domain.user.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,21 +9,20 @@ import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.NotBlank;
 
-
+@Schema(description = "유저 로그인 Response : 로그인시 필요한 유저 정보")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ApiModel(value = "PostLoginReq/로그인 정보",description = "회원 로그인시 필요한 회원 정보 dto")
-public class PostLoginReq {
+public class PostUserLoginReq {
 
-    @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
+    @Schema(description = "이메일", example = "12345@gmail.com")
     @NotBlank
     private String email;
-    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
+    @Schema(description = "비밀번호", example = "abc12345#!")
     @NotBlank
     private String password;
 
     @Builder
-    public PostLoginReq(String email, String password) {
+    public PostUserLoginReq(String email, String password) {
         this.email = email;
         this.password = password;
     }

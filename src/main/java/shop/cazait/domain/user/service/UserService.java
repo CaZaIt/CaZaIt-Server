@@ -38,16 +38,6 @@ public class UserService {
     public PostUserRes createUser(PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-//        if(postUserReq.getEmail().isEmpty()){
-//            throw new UserException(EMPTY_EMAIL);
-//        }
-//        if(postUserReq.getPassword().isEmpty()){
-//            throw new UserException(EMPTY_PASSWORD);
-//        }
-//        if(postUserReq.getNickname().isEmpty()){
-//            throw new UserException(EMPTY_NICKNAME);
-//        }
-
         if(!userRepository.findByEmail(postUserReq.getEmail()).isEmpty()){
             throw new UserException(EXIST_EMAIL);
         }
@@ -64,14 +54,14 @@ public class UserService {
         return PostUserRes.of(user);
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq)
+    public PostUserLoginRes logIn(PostUserLoginReq postUserLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if(userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()){
+        if(userRepository.findByEmail(postUserLoginReq.getEmail()).isEmpty()){
             throw new UserException(FAILED_TO_LOGIN);
         }
 
-        User user = postLoginReq.toEntity();
+        User user = postUserLoginReq.toEntity();
         User findUser = userRepository.findByEmail(user.getEmail()).get();
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
@@ -88,7 +78,7 @@ public class UserService {
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
-            return PostLoginRes.of(findUser, jwt, refreshToken);
+            return PostUserLoginRes.of(findUser, jwt, refreshToken);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
@@ -114,9 +104,9 @@ public class UserService {
 
     public PatchUserRes modifyUser(Long userIdx,PatchUserReq patchUserReq, String refreshToken){
         User modifyUser = patchUserReq.toEntity();
-        User existUser = userRepository.findById(userIdx).get();
 
-        existUser = User.builder()
+
+        User existUser = User.builder()
                 .id(userIdx)
                 .email(modifyUser.getEmail())
                 .password(modifyUser.getPassword())
@@ -133,22 +123,24 @@ public class UserService {
         return DeleteUserRes.of(deleteUser);
     }
 
-    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws BaseException , UserException{
+
+    public PostUserLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
+    
         User user = null;
         Long userIdx = null;
 
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
 
-        if(jwtService.isValidAccessToken(accessToken))
+        if(jwtService.isValidAccessTokenInRefresh(accessToken))
         {
             log.info("아직 accesstoken 유효");
-            throw new UserException(FAILED_TO_LOGIN);
+            throw new UserException(NOT_EXPIRED_TOKEN);
         }
         else
         {
             log.info("Access 토큰 만료됨");
-            if(jwtService.isValidRefreshToken(refreshToken)){     //들어온 Refresh 토큰이 유효한지
+            if(jwtService.isValidRefreshTokenInRefresh(refreshToken)){     //들어온 Refresh 토큰이 유효한지
                 log.info("아직 refreshtoken 유효함");
                 userIdx = jwtService.getUserIdx(accessToken);
                 user = userRepository.findById(userIdx).get();
@@ -162,7 +154,7 @@ public class UserService {
                 }
                 else{
                     log.error("Refresh Token Tampered, not equal from db refreshtoken");
-                    throw new UserException(FAILED_TO_LOGIN);
+                    throw new UserException(INVALID_JWT);
                 }
             }
             else
@@ -174,6 +166,6 @@ public class UserService {
                 refreshToken = jwtService.createRefreshToken();
             }
         }
-        return PostLoginRes.of(user,accessToken,refreshToken);
+        return PostUserLoginRes.of(user,accessToken,refreshToken);
     }
 }

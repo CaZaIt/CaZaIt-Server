@@ -1,23 +1,25 @@
 package shop.cazait.domain.master.dto.patch;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
+@Schema(description = "마스터 수정 Response : 수정한 마스터 계정 정보")
 @Getter
 @Builder
 public class PatchMasterRes {
 
-	@ApiModelProperty(value = "마스터 계정 ID")
+	@Schema(description = "마스터 계정 ID")
 	private Long id;
 
-	@ApiModelProperty(value = "Master 이메일")
+	@Schema(description = "Master 이메일")
 	private String email;
 
-	@ApiModelProperty(value = "Master 패스워드")
+	@Schema(description = "Master 패스워드")
 	private String password;
 
-	@ApiModelProperty(value = "Master 닉네임")
+	@Schema(description = "Master 닉네임")
 	private String nickname;
 
 }

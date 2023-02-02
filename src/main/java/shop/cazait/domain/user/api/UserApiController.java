@@ -13,32 +13,32 @@ import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
-
 import java.util.List;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
 
-@Api
+
+@Api(tags = "유저 API")
+
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/api/users")
 public class UserApiController {
+
     private final UserService userService;
     private final JwtService jwtService;
+
     @NoAuth
     @ApiOperation(value = "회원 가입", notes = "User 정보를 추가하여 회원가입을 진행")
     @PostMapping("/sign-up")
-    public SuccessResponse<PostUserRes> createUser (@Valid @RequestBody PostUserReq postUserReq)
+    public SuccessResponse<PostUserRes> createUser (@RequestBody @Valid PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new SuccessResponse<>(postUserRes);
@@ -47,10 +47,10 @@ public class UserApiController {
     @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
-    public SuccessResponse<PostLoginRes> logIn (@Valid @RequestBody PostLoginReq postLoginReq)
+    public SuccessResponse<PostUserLoginRes> logIn (@RequestBody @Valid PostUserLoginReq postUserLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        PostLoginRes postLoginRes = userService.logIn(postLoginReq);
-        return new SuccessResponse<>(postLoginRes);
+        PostUserLoginRes postUserLoginRes = userService.logIn(postUserLoginReq);
+        return new SuccessResponse<>(postUserLoginRes);
     }
 
     @NoAuth
@@ -65,29 +65,30 @@ public class UserApiController {
     @GetMapping("/{email}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam(name="email", value = "회원의 email")
-    public SuccessResponse<GetUserRes> getUser(@PathVariable("email") @Email @NotBlank String email) throws UserException {
+    public SuccessResponse<GetUserRes> getUser(
+            @PathVariable(name = "email") @Email @NotBlank String email) throws UserException {
         GetUserRes emailGetUserRes = userService.getUserByEmail(email);
         return new SuccessResponse<>(emailGetUserRes);
     }
 
     @PatchMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
-    @ApiImplicitParams({@ApiImplicitParam (name="userIdx",value = "사용자 userId"),
-                        @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")})
+    @ApiImplicitParams({
+            @ApiImplicitParam (name="userIdx",value = "사용자 userId"),
+            @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")}
+    )
     public SuccessResponse<PatchUserRes> modifyUser(
-            @NotBlank @PathVariable("userIdx") Long userIdx,
-            @Valid @RequestBody PatchUserReq patchUserReq,
-            @NotBlank @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
+            @PathVariable(name = "userIdx") @NotBlank Long userIdx,
+            @RequestBody @Valid  PatchUserReq patchUserReq,
+            @RequestHeader(value="REFRESH-TOKEN") @NotBlank String refreshToken) {
         PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
         return new SuccessResponse<>(patchUserRes);
     }
 
     @DeleteMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
-    @ApiImplicitParams({@ApiImplicitParam (name="userIdx",value = "사용자 userId"),
-                        @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")})
-    public SuccessResponse<DeleteUserRes> deleteUser(
-            @NotBlank @PathVariable("userIdx") Long userIdx) {
+    @ApiImplicitParam (name="userIdx",value = "사용자 userId")
+    public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") @NotBlank Long userIdx) {
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(deleteUserRes);
     }
@@ -95,12 +96,10 @@ public class UserApiController {
     @NoAuth
     @PostMapping(value = "/refresh")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
-    @ApiImplicitParams({@ApiImplicitParam(name="accessToken", value = "액세스 토큰"),
-                        @ApiImplicitParam(name="refreshToken", value = "리프레시 토큰")})
-    public SuccessResponse<PostLoginRes>refreshToken(
-            @NotBlank @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
-            @NotBlank @RequestHeader(value="REFRESH-TOKEN") String refreshToken ) throws UserException, BaseException {
-        PostLoginRes postLoginRes = userService.issueAccessToken(accessToken, refreshToken);
-        return new SuccessResponse<>(postLoginRes);
+    public SuccessResponse<PostUserLoginRes>refreshToken(
+            @RequestHeader(value="X-ACCESS-TOKEN") @NotBlank String accessToken,
+            @RequestHeader(value="REFRESH-TOKEN") @NotBlank String refreshToken) throws UserException, BaseException {
+        PostUserLoginRes postUserLoginRes = userService.issueAccessToken(accessToken, refreshToken);
+        return new SuccessResponse<>(postUserLoginRes);
     }
 }

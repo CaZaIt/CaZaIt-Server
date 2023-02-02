@@ -1,5 +1,6 @@
 package shop.cazait.domain.master.api;
 
+import io.swagger.annotations.Api;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -33,8 +34,9 @@ import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
 
+@Api(tags = "마스터 API")
 @RestController
-@RequestMapping("api/Masters")
+@RequestMapping("/api/masters")
 @RequiredArgsConstructor
 public class MasterController {
 
