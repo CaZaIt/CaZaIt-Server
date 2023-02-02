@@ -1,18 +1,18 @@
 package shop.cazait.domain.master.dto.post;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.master.entity.Master;
 
+@Schema(description = "마스터 로그인 Request : 로그인할 마스터 계정 정보")
 @Getter
 public class PostMasterLogInReq {
 
-	@ApiModelProperty(value = "회원 id", example = "1")
-	private Long id;
-	@ApiModelProperty(value = "이메일", example = "Cazait@gmail.com")
+	@Schema(description = "이메일", example = "Cazait@gmail.com")
 	private String email;
-	@ApiModelProperty(value = "비밀번호", example = "abcde!12345")
+
+	@Schema(description = "비밀번호", example = "abcde!12345")
 	private String password;
 
 	@Builder
