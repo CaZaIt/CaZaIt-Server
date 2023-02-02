@@ -65,12 +65,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.S3_ARCHIVE_SECERET_KEY }}
         aws-region: ${{ env.AWS_REGION }}
         
-    - name: Make zip file
-      run: zip -r ./$GITHUB_SHA .
-      shell: bash
-
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 --acl private ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$S3_BUCKET_DIR/$GITHUB_SHA.zip \
+          --source .
+          
     - name: Deploy to AWS EC2 from S3
       run: |
         aws deploy create-deployment \
