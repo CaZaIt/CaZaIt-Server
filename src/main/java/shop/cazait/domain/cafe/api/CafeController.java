@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
@@ -29,13 +30,11 @@ public class CafeController {
 
     @PostMapping("/add/master/{masterId}")
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "masterId", value = "마스터 ID"),
-            @ApiImplicitParam(name = "cafeReq", value = "등록할 카페 정보")
-    })
+    @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     public SuccessResponse<String> addCafe(@PathVariable Long masterId,
-                                           @RequestBody @Valid PostCafeReq cafeReq) throws JsonProcessingException {
-        cafeService.addCafe(masterId, cafeReq);
+                                           @RequestPart(value = "dto") @Valid PostCafeReq postCafeReq,
+                                           @RequestPart(value = "images") List<MultipartFile> imageFiles) throws JsonProcessingException {
+        cafeService.addCafe(masterId, postCafeReq, imageFiles);
         return new SuccessResponse<>("카페 등록 완료");
     }
 
