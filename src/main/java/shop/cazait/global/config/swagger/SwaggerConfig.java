@@ -25,15 +25,15 @@ public class SwaggerConfig {
     @Bean
     public Docket swaggerApi() {
         return new Docket(DocumentationType.OAS_30)
+                .useDefaultResponseMessages(false)
+                .securityContexts(List.of(this.securityContext()))
+                .securitySchemes(List.of(this.apiKey()))
+                .apiInfo(getApiInfo())
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
-                .useDefaultResponseMessages(false)
-                .apiInfo(getApiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("shop.cazait.domain"))
-                .build()
-                .securityContexts(Arrays.asList(securityContext()))
-                .securitySchemes(Arrays.asList(apiKey()));
+                .paths(PathSelectors.ant("/api/**")).build();
     }
 
     private ApiInfo getApiInfo() {
@@ -58,21 +58,9 @@ public class SwaggerConfig {
         return produces;
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("JWT", "X-ACCESS-TOKEN", "header");
-    }
-
     private SecurityContext securityContext() {
-        return springfox
-                .documentation
-                .spi.service
-                .contexts
-                .SecurityContext
-                .builder()
+        return SecurityContext.builder()
                 .securityReferences(defaultAuth())
-                .operationSelector(
-                        oc -> oc.requestMappingPattern().matches("path_regex")
-                )
                 .build();
     }
 
@@ -80,7 +68,11 @@ public class SwaggerConfig {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+        return Arrays.asList(new SecurityReference("X-ACCESS-TOKEN", authorizationScopes));
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("X-ACCESS-TOKEN", "X-ACCESS-TOKEN", "header");
     }
 
 }

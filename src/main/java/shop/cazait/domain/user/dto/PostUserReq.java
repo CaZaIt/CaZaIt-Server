@@ -1,32 +1,30 @@
 package shop.cazait.domain.user.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
-
 import javax.validation.constraints.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Schema(description = "유저 정보 Request : 회원 가입에 필요한 유저 정보")
 @Getter
-@ApiModel(value = "PostUserReq/유저정보",description = "회원 가입시 필요한 dto")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostUserReq {
 
-    @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
     @Email(message = "이메일 형식을 지키세요.")
     @NotBlank
+    @Schema(description = "이메일", example = "12345@gmail.com")
     private String email;
 
-    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
     @NotBlank
+    @Schema(description = "비밀번호", example = "abc12345#!")
     private String password;
 
     @NotBlank(message="닉네임을 입력하세요.")
-    @ApiModelProperty(value = "닉네임", example = "토마스")
+    @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
     @Builder
