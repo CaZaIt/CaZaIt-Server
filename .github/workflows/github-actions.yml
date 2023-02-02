@@ -70,6 +70,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.S3_ARCHIVE_SECERET_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
+    - name: Make zip file
+      run: zip -r ./$GITHUB_SHA.zip .
+      shell: bash
+      
     - name: Upload to AWS S3
       run: aws s3 cp --region ${{ env.AWS_REGION }} ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$S3_BUCKET_DIR/$GITHUB_SHA.zip
 
