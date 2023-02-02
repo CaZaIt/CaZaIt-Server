@@ -1,25 +1,26 @@
 package shop.cazait.domain.user.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
-import javax.validation.constraints.NotBlank;
-
-@Builder(access = AccessLevel.PRIVATE)
+@Schema(description = "유저 삭제 Response : 삭제 완료된 유저 정보")
 @Getter
-@ApiModel(value = "DeleteUserRes/회원 삭제 정보",description = "삭제 완료된 회원 정보 dto")
+@Builder(access = AccessLevel.PRIVATE)
 public class DeleteUserRes {
-    @ApiModelProperty(value = "회원 id", example = "1")
+
+    @Schema(name = "회원 id", example = "1")
     private Long id;
-    @ApiModelProperty(value = "비밀번호", example = "abc12345#!")
-    private String password;
-    @ApiModelProperty(value = "이메일", example = "12345@gmail.com")
+
+    @Schema(name = "이메일", example = "12345@gmail.com")
     private String email;
-    @ApiModelProperty(value = "닉네임", example = "토마스")
+
+    @Schema(name = "비밀번호", example = "abc12345#!")
+    private String password;
+
+    @Schema(name = "닉네임", example = "토마스")
     private String nickname;
 
 
