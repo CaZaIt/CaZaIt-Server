@@ -17,7 +17,7 @@ import static shop.cazait.global.error.status.ErrorStatus.*;
 @Slf4j
 @Service
 public class JwtService {
-    private final long ACCESS_TOKEN_VALID_TIME = 1 * 60 * 1000L;   // 1분
+    private final long ACCESS_TOKEN_VALID_TIME = 30 * 1 * 60 * 1000L;   // 1분
     private final long REFRESH_TOKEN_VALID_TIME = 60 * 60 * 24 * 7 * 1000L;   // 1주
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
