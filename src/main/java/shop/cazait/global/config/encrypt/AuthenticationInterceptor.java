@@ -28,7 +28,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String accessToken = request.getHeader("X-ACCESS-TOKEN");
         log.info("accesstoken in interceptor prehandle: "+accessToken);
 
-        if(jwtService.isValidAccessTokenInterceptor(accessToken))
+        if(jwtService.isValidAccessToken(accessToken))
             return true;
         else{
             return false;

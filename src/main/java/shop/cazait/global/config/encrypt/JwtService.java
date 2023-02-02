@@ -82,7 +82,29 @@ public class JwtService {
         return claims.getBody().get("userIdx", Long.class);
     }
 
-    public boolean isValidAccessToken(String token) {
+    public boolean isValidAccessToken(String token) throws UserException {
+        log.info("isValidAccessToken is : " + token);
+        try {
+            Jws<Claims> accessClaims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
+            log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
+            return true;
+        } catch (ExpiredJwtException exception) {
+            log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
+            throw new UserException(EXPIRED_JWT);
+        } catch (JwtException exception) {
+            log.error("Token Tampered");
+            throw new UserException(INVALID_JWT);
+        } catch (NullPointerException exception) {
+            log.error("Token is null");
+            throw new UserException(EMPTY_JWT);
+        }
+    }
+
+    public boolean isValidAccessTokenInRefresh(String token) throws UserException {
         log.info("isValidAccessToken is : " + token);
         try {
             Jws<Claims> accessClaims = Jwts.parserBuilder()
@@ -97,15 +119,15 @@ public class JwtService {
             return false;
         } catch (JwtException exception) {
             log.error("Token Tampered");
-            return false;
+            throw new UserException(INVALID_JWT);
         } catch (NullPointerException exception) {
             log.error("Token is null");
-            return false;
+            throw new UserException(EMPTY_JWT);
         }
     }
 
-    public boolean isValidRefreshToken(String token) {
-       log.info("isValidRefreshToken: "+token);
+    public boolean isValidRefreshTokenInRefresh(String token) throws UserException {
+        log.info("isValidRefreshToken: "+token);
         try {
             Jws<Claims> accessClaims = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -115,28 +137,8 @@ public class JwtService {
             return true;
         }
         catch (ExpiredJwtException exception) {
-            log.error("Token Expired");
-            return false;
-        }
-        catch (JwtException exception) {
-            log.error("Token Tampered");
-            return false;
-        }
-    }
-
-    public boolean isValidAccessTokenInterceptor(String token) throws UserException {
-        log.info("isValidAccessToken is : " + token);
-        try {
-            Jws<Claims> accessClaims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-            log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
-            log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
-            return true;
-        } catch (ExpiredJwtException exception) {
             log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
-            throw new UserException(EXPIRED_JWT);
+            return false;
         } catch (JwtException exception) {
             log.error("Token Tampered");
             throw new UserException(INVALID_JWT);

@@ -38,16 +38,6 @@ public class UserService {
     public PostUserRes createUser(PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-//        if(postUserReq.getEmail().isEmpty()){
-//            throw new UserException(EMPTY_EMAIL);
-//        }
-//        if(postUserReq.getPassword().isEmpty()){
-//            throw new UserException(EMPTY_PASSWORD);
-//        }
-//        if(postUserReq.getNickname().isEmpty()){
-//            throw new UserException(EMPTY_NICKNAME);
-//        }
-
         if(!userRepository.findByEmail(postUserReq.getEmail()).isEmpty()){
             throw new UserException(EXIST_EMAIL);
         }
@@ -140,7 +130,7 @@ public class UserService {
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
 
-        if(jwtService.isValidAccessToken(accessToken))
+        if(jwtService.isValidAccessTokenInRefresh(accessToken))
         {
             log.info("아직 accesstoken 유효");
             throw new UserException(NOT_EXPIRED_TOKEN);
@@ -148,7 +138,7 @@ public class UserService {
         else
         {
             log.info("Access 토큰 만료됨");
-            if(jwtService.isValidRefreshToken(refreshToken)){     //들어온 Refresh 토큰이 유효한지
+            if(jwtService.isValidRefreshTokenInRefresh(refreshToken)){     //들어온 Refresh 토큰이 유효한지
                 log.info("아직 refreshtoken 유효함");
                 userIdx = jwtService.getUserIdx(accessToken);
                 user = userRepository.findById(userIdx).get();
