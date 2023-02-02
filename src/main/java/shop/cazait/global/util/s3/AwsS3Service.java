@@ -31,13 +31,13 @@ public class AwsS3Service {
      * S3 파일 upload
      * 로직 : convert(로컬에 파일 생성) -> putS3(S3 업로드) -> removeNewFile(생성한 파일 삭제)
      */
-    public String uploadImage(Long cafeId, MultipartFile multipartFile) throws IOException {
+    public String uploadImage(MultipartFile multipartFile) throws IOException {
 
         // 로컬 파일 생성
         File file = convert(multipartFile).orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File로 전환이 실패했습니다."));
 
         // 파일 이름 생성
-        String fileName = directory + "/" + Long.toString(cafeId) + "/" + file.getName() + UUID.randomUUID();
+        String fileName = directory + "/" + file.getName() + UUID.randomUUID();
 
         // S3에 파일 업로드
         String uploadFileName = putS3(file, fileName);

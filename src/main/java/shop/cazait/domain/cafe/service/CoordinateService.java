@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.cazait.domain.cafe.dto.CoordinateVO;
+import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafe.entity.Coordinate;
 
 @Service
 public class CoordinateService {
@@ -17,7 +19,16 @@ public class CoordinateService {
     private String baseUrl = "https://dapi.kakao.com";
     private String uri = "/v2/local/search/address.json";
 
-    public CoordinateVO getCoordinateFromAddress(String address) throws JsonProcessingException {
+    public Coordinate getCoordinate(PostCafeReq cafeReq) throws JsonProcessingException {
+        CoordinateVO coordinateVO = getCoordinateFromAddress(cafeReq.getAddress());
+        Coordinate coordinate = Coordinate.builder()
+                .longitude(coordinateVO.getDocuments().get(0).getLongitude())
+                .latitude(coordinateVO.getDocuments().get(0).getLatitude())
+                .build();
+        return coordinate;
+    }
+
+    private CoordinateVO getCoordinateFromAddress(String address) throws JsonProcessingException {
 
         ObjectMapper mapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -39,5 +50,4 @@ public class CoordinateService {
         return coordinateVO;
 
     }
-
 }
