@@ -31,10 +31,13 @@ public class GetCafesRes {
     @Schema(description = "위도", example = "36.987561")
     private String latitude;
     @JsonProperty
+    @Schema(description = "거리", example = "200m")
+    private int distance;
+    @JsonProperty
     @Schema(description = "관심 카페 여부", example = "true")
     private boolean favorite;
 
-    public static GetCafesRes of(Cafe cafe, boolean favorite) {
+    public static GetCafesRes of(Cafe cafe, int distance, boolean favorite) {
         return GetCafesRes.builder()
                 .cafeId(cafe.getId())
                 .congestionStatus(cafe.getCongestion().getCongestionStatus())
@@ -42,6 +45,7 @@ public class GetCafesRes {
                 .address(cafe.getAddress())
                 .longitude(cafe.getCoordinate().getLongitude())
                 .latitude(cafe.getCoordinate().getLatitude())
+                .distance(distance)
                 .favorite(favorite)
                 .build();
     }
