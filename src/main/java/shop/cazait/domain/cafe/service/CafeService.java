@@ -44,8 +44,7 @@ public class CafeService {
     private final CafeImageRepository cafeImageRepository;
 
     /**
-     * 카페 등록
-     * 좌표와 도로명 주소 받기 -> 카페 생성 -> 초기 혼잡도 등록 -> 이미지 S3 업로드 -> 이미지 객체  -> 마스터 계정에 카페 설정
+     * 카페 등록 좌표와 도로명 주소 받기 -> 카페 생성 -> 초기 혼잡도 등록 -> 이미지 S3 업로드 -> 이미지 객체  -> 마스터 계정에 카페 설정
      */
     public void addCafe(Long masterId, PostCafeReq cafeReq, List<MultipartFile> imageFiles)
             throws JsonProcessingException {
@@ -153,16 +152,14 @@ public class CafeService {
         return getCafesRes;
     }
 
-  public void updateCafe(Long cafeId, Long masterId, PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
+    public void updateCafe(Long cafeId, Long masterId, PostCafeReq cafeReq)
+            throws CafeException, JsonProcessingException {
 
-        CoordinateVO coordinateVO = coordinateService.getCoordinateFromAddress(cafeReq.getAddress());
-        Coordinate coordinate = Coordinate.builder()
-                .longitude(coordinateVO.getDocuments().get(0).getLongitude())
-                .latitude(coordinateVO.getDocuments().get(0).getLatitude())
-                .build();
+        Coordinate coordinate = coordinateService.getCoordinate(cafeReq);
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
-        Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+        Master master = masterRepository.findById(masterId)
+                .orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
             throw new CafeException(ErrorStatus.NOT_OPERATE_CAFE);
         }
@@ -172,7 +169,8 @@ public class CafeService {
 
     public void deleteCafe(Long cafeId, Long masterId) throws CafeException {
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
-        Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+        Master master = masterRepository.findById(masterId)
+                .orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
             throw new CafeException(ErrorStatus.NOT_OPERATE_CAFE);
         }
@@ -191,7 +189,8 @@ public class CafeService {
                     break;
                 }
             }
-            int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(), cafe.getCoordinate().getLongitude(),
+            int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
+                    cafe.getCoordinate().getLongitude(),
                     distanceReq.getLatitude(), distanceReq.getLongitude());
 
             GetCafesRes cafeRes = GetCafesRes.of(cafe, distance, favorite);
@@ -205,8 +204,7 @@ public class CafeService {
         if (sort.equals("distance")) {
             getCafesRes.sort((c1, c2) -> c2.getDistance() - c1.getDistance());
             Collections.reverse(getCafesRes);
-        }
-        else {
+        } else {
             getCafesRes.sort((c1, c2) -> c2.getCongestionStatus().getLevel() - c1.getCongestionStatus().getLevel());
         }
 
@@ -216,4 +214,5 @@ public class CafeService {
         }
         return getCafesRes;
     }
+}
 
