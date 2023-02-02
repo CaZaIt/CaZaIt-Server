@@ -123,4 +123,26 @@ public class JwtService {
             return false;
         }
     }
+
+    public boolean isValidAccessTokenInterceptor(String token) throws UserException {
+        log.info("isValidAccessToken is : " + token);
+        try {
+            Jws<Claims> accessClaims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
+            log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
+            return true;
+        } catch (ExpiredJwtException exception) {
+            log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
+            throw new UserException(EXPIRED_JWT);
+        } catch (JwtException exception) {
+            log.error("Token Tampered");
+            throw new UserException(INVALID_JWT);
+        } catch (NullPointerException exception) {
+            log.error("Token is null");
+            throw new UserException(EMPTY_JWT);
+        }
+    }
 }
