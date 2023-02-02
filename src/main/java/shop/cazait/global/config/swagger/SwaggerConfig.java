@@ -34,7 +34,6 @@ public class SwaggerConfig {
                 .build()
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()));
-
     }
 
     private ApiInfo getApiInfo() {
@@ -49,6 +48,7 @@ public class SwaggerConfig {
         Set<String> consumes = new HashSet<>();
         consumes.add("application/json;charset=UTF-8");
         consumes.add("application/x-www-form-urlencoded");
+        consumes.add("multipart/form-data");
         return consumes;
     }
 
