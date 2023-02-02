@@ -85,9 +85,7 @@ public class UserApiController {
 
     @DeleteMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
-    @ApiImplicitParams({
-            @ApiImplicitParam (name="userIdx",value = "사용자 userId")}
-    )
+    @ApiImplicitParam (name="userIdx",value = "사용자 userId")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") @NotBlank Long userIdx) {
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(deleteUserRes);
