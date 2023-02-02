@@ -71,7 +71,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         
     - name: Make zip file
-      run: zip -r ./$GITHUB_SHA .
+      run: zip -r ./$GITHUB_SHA . -i .
       shell: bash
 
     - name: Upload to S3
