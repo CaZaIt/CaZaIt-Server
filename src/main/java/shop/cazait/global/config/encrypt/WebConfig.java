@@ -11,11 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final JwtService jwtService;
     @Override
     public void addInterceptors(InterceptorRegistry reg){
-        reg.addInterceptor(new AuthenticationInterceptor(jwtService))
-                .addPathPatterns("/**")
-                .excludePathPatterns("/swagger-resources/**",
-                                        "/swagger-ui/**",
-                                        "/v3/api-docs");
+        reg.addInterceptor(new AuthenticationInterceptor(jwtService));
     }
 }
 
