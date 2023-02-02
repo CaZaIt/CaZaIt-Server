@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafe.dto.PostDistanceReq;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
@@ -40,9 +41,14 @@ public class CafeController {
 
     @GetMapping("/all/user/{userId}")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
-    public SuccessResponse<List<GetCafesRes>> getCafeByStatus(@PathVariable Long userId) throws CafeException {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "유저 ID"),
+            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표")
+    })
+    public SuccessResponse<List<GetCafesRes>> getCafeByStatus(@PathVariable Long userId,
+                                                              @RequestBody PostDistanceReq distanceReq) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByStatus(userId);
+            List<GetCafesRes> cafeResList = cafeService.getCafeByStatus(userId, distanceReq);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -69,12 +75,14 @@ public class CafeController {
     @ApiOperation(value = "카페 이름 조회", notes = "특정 이름의 카페를 조회한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeName", value = "카페 이름"),
-            @ApiImplicitParam(name = "userId", value = "유저 ID")
+            @ApiImplicitParam(name = "userId", value = "유저 ID"),
+            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표")
     })
     public SuccessResponse<List<GetCafesRes>> getCafeByName(@PathVariable String cafeName,
-                                                            @PathVariable Long userId) throws CafeException {
+                                                            @PathVariable Long userId,
+                                                            @RequestBody PostDistanceReq distanceReq) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByName(cafeName, userId);
+            List<GetCafesRes> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
