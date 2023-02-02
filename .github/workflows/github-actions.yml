@@ -5,13 +5,19 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: CI/CD
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
   pull_request:
-    branches: [main, dev]
+    branches: [dev]
+    
+env:
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: cazait-deploy-bucket
+  CODE_DEPLOY_APPLICATION_NAME: cazait
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: cazait-deploy-group
     
     
 
@@ -48,5 +54,35 @@ jobs:
       # uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       # with:
       run: ./gradlew clean build --exclude-task test
+
+    
+  deploy:
+    runs-on: ubuntu-22.04
+    
+    needs: build
+    
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.S3_ARCHIVE_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.S3_ARCHIVE_SECERET_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Upload to AWS S3
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+          --source .
+
+    - name: Deploy to AWS EC2 from S3
+      run: |
+        aws deploy create-deployment \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
       
-    - run: ls -al
+    
