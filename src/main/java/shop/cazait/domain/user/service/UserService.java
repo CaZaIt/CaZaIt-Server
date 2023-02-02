@@ -64,14 +64,14 @@ public class UserService {
         return PostUserRes.of(user);
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq)
+    public PostUserLoginRes logIn(PostUserLoginReq postUserLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if(userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()){
+        if(userRepository.findByEmail(postUserLoginReq.getEmail()).isEmpty()){
             throw new UserException(FAILED_TO_LOGIN);
         }
 
-        User user = postLoginReq.toEntity();
+        User user = postUserLoginReq.toEntity();
         User findUser = userRepository.findByEmail(user.getEmail()).get();
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
@@ -88,7 +88,7 @@ public class UserService {
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
-            return PostLoginRes.of(findUser, jwt, refreshToken);
+            return PostUserLoginRes.of(findUser, jwt, refreshToken);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
@@ -133,7 +133,7 @@ public class UserService {
         return DeleteUserRes.of(deleteUser);
     }
 
-    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws BaseException , UserException{
+    public PostUserLoginRes issueAccessToken(String accessToken, String refreshToken) throws BaseException , UserException{
         User user = null;
         Long userIdx = null;
 
@@ -174,6 +174,6 @@ public class UserService {
                 refreshToken = jwtService.createRefreshToken();
             }
         }
-        return PostLoginRes.of(user,accessToken,refreshToken);
+        return PostUserLoginRes.of(user,accessToken,refreshToken);
     }
 }

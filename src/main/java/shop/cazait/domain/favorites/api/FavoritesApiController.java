@@ -44,9 +44,7 @@ public class FavoritesApiController {
     }
 
     @ApiOperation(value = "즐겨찾기 조회", notes = "사용자 ID를 받아 모든 즐겨찾기를 조회한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "사용자 ID")
-    })
+    @ApiImplicitParam(name = "userId", value = "사용자 ID")
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<GetFavoritesRes>> getFavorites(@PathVariable(name = "userId") Long userId) {
 
@@ -56,9 +54,7 @@ public class FavoritesApiController {
     }
 
     @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID를 받아 즐겨찾기를 삭제한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "favoritesId", value = "즐겨찾기 ID")
-    })
+    @ApiImplicitParam(name = "favoritesId", value = "즐겨찾기 ID")
     @DeleteMapping("/{favoritesId}")
     public SuccessResponse<String> deleteFavorites(@PathVariable(name = "favoritesId") Long favoritesId) {
 
