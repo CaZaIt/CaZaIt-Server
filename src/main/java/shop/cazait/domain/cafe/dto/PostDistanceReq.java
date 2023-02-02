@@ -19,6 +19,7 @@ public class PostDistanceReq {
 
     @Schema(description = "정렬 기준", example = "congestion")
     private String sort;
+
     @Schema(description = "제한 거리", example = "500")
     private String limit;
 

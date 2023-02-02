@@ -2,7 +2,6 @@ package shop.cazait.domain.cafe.service;
 
 public class DistanceService {
     // 두 좌표 사이의 거리를 구하는 함수
-    // distance(첫번쨰 좌표의 위도, 첫번째 좌표의 경도, 두번째 좌표의 위도, 두번째 좌표의 경도)
     public static int distance(String lati1, String long1, String lati2, String long2){
         double lat1 = Double.parseDouble(lati1);
         double lon1 = Double.parseDouble(long1);
