@@ -124,7 +124,7 @@ public class UserService {
     }
 
 
-    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
+    public PostUserLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
     
         User user = null;
         Long userIdx = null;
