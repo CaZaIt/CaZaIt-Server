@@ -56,13 +56,7 @@ jobs:
       # with:
       run: ./gradlew clean build --exclude-task test
 
-    
-  deploy:
-    runs-on: ubuntu-22.04
-    
-    needs: build
-    
-    steps:
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -71,7 +65,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         
     - name: Make zip file
-      run: zip -r ./$GITHUB_SHA . -i .
+      run: zip -r ./$GITHUB_SHA .
       shell: bash
 
     - name: Upload to S3
