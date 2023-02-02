@@ -65,6 +65,7 @@ public class MasterService {
 		masterRepository.save(master);
 		PostMasterRes postMasterRes = PostMasterRes.of(master);
 		return postMasterRes;
+
 	}
 
 	//마스터 회원 로그인
