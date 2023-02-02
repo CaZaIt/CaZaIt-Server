@@ -133,7 +133,7 @@ public class UserService {
         return DeleteUserRes.of(deleteUser);
     }
 
-    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws BaseException , UserException{
+    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
         User user = null;
         Long userIdx = null;
 
@@ -143,7 +143,7 @@ public class UserService {
         if(jwtService.isValidAccessToken(accessToken))
         {
             log.info("아직 accesstoken 유효");
-            throw new UserException(FAILED_TO_LOGIN);
+            throw new UserException(NOT_EXPIRED_TOKEN);
         }
         else
         {
@@ -162,7 +162,7 @@ public class UserService {
                 }
                 else{
                     log.error("Refresh Token Tampered, not equal from db refreshtoken");
-                    throw new UserException(FAILED_TO_LOGIN);
+                    throw new UserException(INVALID_JWT);
                 }
             }
             else

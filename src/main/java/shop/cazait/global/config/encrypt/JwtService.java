@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.error.exception.BaseException;
-import static shop.cazait.global.error.status.ErrorStatus.EMPTY_JWT;
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
+
+import static shop.cazait.global.error.status.ErrorStatus.*;
 
 @Slf4j
 @Service
@@ -49,12 +49,12 @@ public class JwtService {
 //        return request.getHeader("X-ACCESS-TOKEN");
 //    }
 
-    public Long getUserIdx(String token) throws BaseException, UserException {
+    public Long getUserIdx(String token) throws UserException {
         log.info("getUseridx token info: "+token);
         // JWT 추출
         //String accessToken = getJwt();
         if (token == null || token.length() == 0) {
-            throw new BaseException(EMPTY_JWT);
+            throw new UserException(EMPTY_JWT);
         }
 
         // JWT parsing
@@ -81,7 +81,6 @@ public class JwtService {
         // userIdx 추출
         return claims.getBody().get("userIdx", Long.class);
     }
-
 
     public boolean isValidAccessToken(String token) {
         log.info("isValidAccessToken is : " + token);

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.error.exception.BaseException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private final JwtService jwtService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws UserException, BaseException {
         boolean check=checkAnnotation(handler, NoAuth.class);
         log.info(String.valueOf(check));
         if(check) return true;
@@ -30,7 +31,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if(jwtService.isValidAccessToken(accessToken))
             return true;
         else{
-            throw new BaseException(INVALID_JWT);
+            throw new UserException(INVALID_JWT);
         }
     }
 
