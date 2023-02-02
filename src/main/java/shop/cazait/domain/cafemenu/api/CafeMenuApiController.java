@@ -36,9 +36,7 @@ public class CafeMenuApiController {
      * 카페 메뉴 등록
      */
     @ApiOperation(value = "카페 메뉴 등록", notes = "카페 ID와 메뉴에 대한 정보를 받아 등록한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
-    })
+    @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     @PostMapping("/cafe/{cafeId}")
     public SuccessResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
                                                                @RequestBody @Valid List<PostCafeMenuReq> postCafeMenuReq)
@@ -50,9 +48,7 @@ public class CafeMenuApiController {
     }
 
     @ApiOperation(value = "카페 메뉴 조회", notes = "카페 ID를 받아 해당 카페에 대한 모든 메뉴를 조회한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
-    })
+    @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     @GetMapping("/cafe/{cafeId}")
     public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
 
@@ -63,9 +59,7 @@ public class CafeMenuApiController {
 
 
     @ApiOperation(value = "카페 메뉴 수정", notes = "카페 ID, 카페 메뉴 ID를 받아 수정한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID"),
-    })
+    @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID")
     @PatchMapping("/{menuId}/cafe/{cafeId}")
     public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
                                                         @RequestBody @Valid PatchCafeMenuReq patchCafeMenuReq) {
@@ -76,9 +70,7 @@ public class CafeMenuApiController {
     }
 
     @ApiOperation(value = "카페 메뉴 삭제", notes = "카페 메뉴 ID를 받아 삭제한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "menuId", value = "메뉴 ID")
-    })
+    @ApiImplicitParam(name = "menuId", value = "메뉴 ID")
     @DeleteMapping("/{menuId}")
     public SuccessResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
 
