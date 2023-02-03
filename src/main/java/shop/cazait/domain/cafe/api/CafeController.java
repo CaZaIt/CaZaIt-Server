@@ -32,8 +32,8 @@ public class CafeController {
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
     @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     public SuccessResponse<String> addCafe(@PathVariable Long masterId,
-                                           @RequestPart(value = "dto") @Valid PostCafeReq postCafeReq,
-                                           @RequestPart(value = "images") List<MultipartFile> imageFiles) throws JsonProcessingException {
+                                           @RequestPart(value = "PostCafeReq") @Valid PostCafeReq postCafeReq,
+                                           @RequestPart(value = "images", required = false) List<MultipartFile> imageFiles) throws JsonProcessingException {
         cafeService.addCafe(masterId, postCafeReq, imageFiles);
         return new SuccessResponse<>("카페 등록 완료");
     }
