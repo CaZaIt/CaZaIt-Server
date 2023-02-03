@@ -3,10 +3,9 @@
 PROJECT_ROOT="/home/ubuntu/app"
 JAR_FILE="$PROJECT_ROOT/cazait-server.jar"
 
-LOG_DIR="$PROJECT_ROOT/logs"
-APP_LOG="$LOG_DIR/application.log"
-ERROR_LOG="$LOG_DIR/error.log"
-DEPLOY_LOG="$LOG_DIR/deploy.log"
+APP_LOG="$PROJECT_ROOT/application.log"
+ERROR_LOG="$PROJECT_ROOT/error.log"
+DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
 
