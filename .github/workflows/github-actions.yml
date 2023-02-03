@@ -59,7 +59,7 @@ jobs:
     - name: Copy Build file and appsec.yml
       run: |
         mkdir deploy
-        cp ./build/libs/*.jar ./deploy/
+        cp ./build/libs/*.jar ./deploy/cazait-server.jar
         cp ./appspec.yml ./deploy/
         cd ./deploy/
         ls -al
