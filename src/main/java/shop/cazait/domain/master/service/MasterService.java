@@ -59,8 +59,7 @@ public class MasterService {
 		}
 
 		//패스워드 암호화
-		String password;
-		password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(dto.getPassword());
+		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(dto.getPassword());
 		PostMasterReq EncryptPostMasterReq = new PostMasterReq(dto.getEmail(), password, dto.getNickname());
 		Master master = EncryptPostMasterReq.toEntity();
 		masterRepository.save(master);
@@ -78,28 +77,25 @@ public class MasterService {
 		NoSuchAlgorithmException,
 		BadPaddingException,
 		InvalidKeyException {
+
 		if (masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
 			throw new MasterException(FAILED_TO_LOGIN);
 		}
+
 		Master master = dto.toEntity();
 		Master findMaster = masterRepository.findMasterByEmail(master.getEmail()).get();
 
-		String password;
-		password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
+		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
 
 		Long masterIdx;
 		if (password.equals(master.getPassword())) {
 			masterIdx = findMaster.getId();
 			String jwt = jwtService.createJwt(masterIdx);
 			String refreshToken = jwtService.createRefreshToken();
-			Master LoginMaster = Master.builder()
-				.id(findMaster.getId())
-				.email(findMaster.getEmail())
-				.password(findMaster.getPassword())
-				.nickname(findMaster.getNickname())
+			findMaster.builder()
 				.refreshToken(refreshToken)
 				.build();
-			masterRepository.save(LoginMaster);
+			masterRepository.save(findMaster);
 			return PostMasterLogInRes.of(findMaster, jwt, refreshToken);
 		}
 		throw new MasterException(FAILED_TO_LOGIN);

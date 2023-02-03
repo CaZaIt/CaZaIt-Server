@@ -10,7 +10,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,11 +44,10 @@ import shop.cazait.global.error.exception.BaseException;
 @RequiredArgsConstructor
 public class MasterController {
 
-	@Autowired
 	private final MasterService masterService;
 
 	@NoAuth
-	@PostMapping
+	@PostMapping("/sign-up")
 	@ApiOperation(value = "마스터 회원가입", notes = "마스터 사용자의 정보들을 이용해서 회원가입을 진행한다.")
 	public SuccessResponse<PostMasterRes> registerMaster(@Validated @RequestBody PostMasterReq dto) throws
 		MasterException,
@@ -79,7 +77,6 @@ public class MasterController {
 		return new SuccessResponse<>(postMasterLogInRes);
 	}
 
-	@NoAuth
 	@GetMapping("/all")
 	@ApiOperation(value = "마스터 계정 전체 조회", notes = "ACTIVE한 마스터 계정을 조회한다.")
 	public SuccessResponse<List<GetMasterRes>> getMasterByStatus() throws MasterException {
@@ -102,7 +99,6 @@ public class MasterController {
 		return new SuccessResponse<>(response);
 	}
 
-	@NoAuth
 	@PostMapping(value = "/refresh")
 	@ApiOperation(value = "토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
 	public SuccessResponse<PostMasterLogInRes> refreshToken(
