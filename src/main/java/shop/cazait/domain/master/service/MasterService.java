@@ -57,8 +57,11 @@ public class MasterService {
 		if (!masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
 			throw new MasterException(DUPLICATE_USER_LOGIN_EMAIL);
 		}
-		
-		Master master = dto.toEntity();
+
+		//패스워드 암호화
+		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(dto.getPassword());
+		PostMasterReq EncryptPostMasterReq = new PostMasterReq(dto.getEmail(), password, dto.getNickname());
+		Master master = EncryptPostMasterReq.toEntity();
 		masterRepository.save(master);
 		PostMasterRes postMasterRes = PostMasterRes.of(master);
 		return postMasterRes;
