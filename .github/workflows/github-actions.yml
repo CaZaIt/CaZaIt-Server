@@ -58,10 +58,10 @@ jobs:
       
     - name: Copy Build file and appsec.yml
       run: |
-        mkdir ./deploy \
-        cp ./build/libs/*.jar ./deploy \
-        cp ./appsec.yml ./deploy \
-        cd ./deploy \
+        mkdir deploy
+        cp ./build/libs/*.jar ./deploy/
+        cp ./appsec.yml ./deploy/
+        cd ./deploy/
         ls -al
 
     - name: Configure AWS credentials
