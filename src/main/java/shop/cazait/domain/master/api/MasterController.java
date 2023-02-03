@@ -1,6 +1,5 @@
 package shop.cazait.domain.master.api;
 
-import io.swagger.annotations.Api;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
@@ -33,6 +33,7 @@ import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
+import shop.cazait.global.config.encrypt.NoAuth;
 
 @Api(tags = "마스터 API")
 @RestController
@@ -43,6 +44,7 @@ public class MasterController {
 	@Autowired
 	private final MasterService masterService;
 
+	@NoAuth
 	@PostMapping
 	@ApiOperation(value = "마스터 회원가입", notes = "마스터 사용자의 정보들을 이용해서 회원가입을 진행한다.")
 	public SuccessResponse<PostMasterRes> registerMaster(@Validated @RequestBody PostMasterReq dto) throws
@@ -57,6 +59,7 @@ public class MasterController {
 		return new SuccessResponse<>(postCreateMasterRes);
 	}
 
+	@NoAuth
 	@PostMapping("/log-in")
 	@ApiOperation(value = "회원 로그인", notes = "이메일과 패스워드를 통해 로그인을 진행")
 	public SuccessResponse<PostMasterLogInRes> logIn(@RequestBody PostMasterLogInReq postMasterLogInReq)
@@ -72,6 +75,7 @@ public class MasterController {
 		return new SuccessResponse<>(postMasterLogInRes);
 	}
 
+	@NoAuth
 	@GetMapping("/all")
 	@ApiOperation(value = "마스터 계정 전체 조회", notes = "ACTIVE한 마스터 계정을 조회한다.")
 	public SuccessResponse<List<GetMasterRes>> getMasterByStatus() throws MasterException {
