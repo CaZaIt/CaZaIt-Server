@@ -60,6 +60,7 @@ jobs:
       run: |
         mkdir deploy
         cp ./build/libs/*.jar ./deploy/cazait-server.jar
+        cp ./scripts/* ./deploy/
         cp ./appspec.yml ./deploy/
         cd ./deploy/
         ls -al
