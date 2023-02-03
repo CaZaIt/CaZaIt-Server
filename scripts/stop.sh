@@ -2,7 +2,8 @@
 
 PROJECT_ROOT="/home/ubuntu/app"
 
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+LOG_DIR = "$PROJECT_ROOT/logs"
+DEPLOY_LOG="$LOG_DIR/deploy.log"
 
 TIME_NOW=$(date +%c)
 
