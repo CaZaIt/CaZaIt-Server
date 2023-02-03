@@ -53,7 +53,7 @@ public class UserApiController {
         return new SuccessResponse<>(postUserLoginRes);
     }
 
-    @NoAuth
+
     @GetMapping("/all")
     @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
     public SuccessResponse<List<GetUserRes>> getUsers(){
@@ -61,7 +61,7 @@ public class UserApiController {
         return new SuccessResponse<>(allGetUserRes);
     }
 
-    @NoAuth
+
     @GetMapping("/{email}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam(name="email", value = "회원의 email")
