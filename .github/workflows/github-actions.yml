@@ -16,7 +16,6 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: cazait-deploy-bucket
-  S3_BUCKET_DIR: dev-snapshots
   CODE_DEPLOY_APPLICATION_NAME: cazait
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: cazait-deploy-group
     
@@ -70,7 +69,7 @@ jobs:
         aws deploy push \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --ignore-hidden-files \
-          --s3-location s3://$S3_BUCKET_NAME/$S3_BUCKET_DIR/$GITHUB_SHA.zip \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
           --source .
           
     - name: Deploy to AWS EC2 from S3
