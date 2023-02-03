@@ -27,7 +27,6 @@ import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
-import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
@@ -40,7 +39,6 @@ public class MasterService {
 
 	private final MasterRepository masterRepository;
 	private final JwtService jwtService;
-	private final UserRepository userRepository;
 
 	//회원가입
 	public PostMasterRes registerMaster(PostMasterReq dto) throws
@@ -92,6 +90,7 @@ public class MasterService {
 			String jwt = jwtService.createJwt(masterIdx);
 			String refreshToken = jwtService.createRefreshToken();
 			Master LoginMaster = Master.builder()
+				.id(findMaster.getId())
 				.email(findMaster.getEmail())
 				.password(findMaster.getPassword())
 				.nickname(findMaster.getNickname())
