@@ -55,8 +55,13 @@ jobs:
       # uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       # with:
       run: ./gradlew clean build --exclude-task test
-
-    - run: ls -al
+      
+    - name: Copy Build file and appsec.yml
+      run: |
+        cp ./build/libs/*.jar ./deploy \
+        cp ./appsec.yml ./deploy \
+        cd ./deploy \
+        ls -al
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -71,7 +76,7 @@ jobs:
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --ignore-hidden-files \
           --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
-          --source .
+          --source ./deploy
           
     - name: Deploy to AWS EC2 from S3
       run: |
