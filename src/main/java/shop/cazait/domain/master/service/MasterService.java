@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
 import shop.cazait.domain.master.dto.patch.PatchMasterRes;
@@ -27,6 +28,7 @@ import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
+import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
@@ -35,6 +37,7 @@ import shop.cazait.global.config.encrypt.Secret;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class MasterService {
 
 	private final MasterRepository masterRepository;
@@ -156,6 +159,48 @@ public class MasterService {
 			.orElseThrow(() -> new MasterException(NOT_EXIST_USER));
 		master.changeMasterStatus(BaseStatus.INACTIVE);
 		masterRepository.save(master);
+	}
+
+	// 토큰 재발급
+	public PostMasterLogInRes issueAccessToken(String accessToken, String refreshToken) throws
+		MasterException,
+		UserException {
+
+		Master master = null;
+		Long masterIdx = null;
+
+		log.info("accessToken = " + accessToken);
+		log.info("refreshToken = " + refreshToken);
+
+		if (jwtService.isValidAccessTokenInRefresh(accessToken)) {
+			log.info("아직 accesstoken 유효");
+			throw new MasterException(NOT_EXPIRED_TOKEN);
+		} else {
+			log.info("Access 토큰 만료됨");
+			if (jwtService.isValidRefreshTokenInRefresh(refreshToken)) {     //들어온 Refresh 토큰이 유효한지
+				log.info("아직 refreshtoken 유효함");
+				masterIdx = jwtService.getUserIdx(accessToken);
+				master = masterRepository.findById(masterIdx).get();
+				String tokenFromDB = master.getRefreshToken();
+				log.info("userIdx from accessToken: " + masterIdx);
+				log.info("refreshToken found by accessToken(userIdx): " + tokenFromDB);
+
+				if (refreshToken.equals(tokenFromDB)) {
+					log.info("Access token 재발급");
+					accessToken = jwtService.createJwt(masterIdx);
+				} else {
+					log.error("Refresh Token Tampered, not equal from db refreshtoken");
+					throw new MasterException(INVALID_JWT);
+				}
+			} else {
+				log.info("refresh token 재발급");
+				masterIdx = jwtService.getUserIdx(accessToken);
+				master = masterRepository.findById(masterIdx).get();
+				accessToken = jwtService.createJwt(masterIdx);
+				refreshToken = jwtService.createRefreshToken();
+			}
+		}
+		return PostMasterLogInRes.of(master, accessToken, refreshToken);
 	}
 
 }

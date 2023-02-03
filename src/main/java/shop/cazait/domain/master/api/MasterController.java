@@ -8,6 +8,7 @@ import java.util.List;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,9 +33,11 @@ import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
+import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.NoAuth;
+import shop.cazait.global.error.exception.BaseException;
 
 @Api(tags = "마스터 API")
 @RestController
@@ -96,6 +100,18 @@ public class MasterController {
 		masterService.removeMaster(id);
 		String response = "회원 탈퇴가 성공하였습니다.";
 		return new SuccessResponse<>(response);
+	}
+
+	@NoAuth
+	@PostMapping(value = "/refresh")
+	@ApiOperation(value = "토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
+	public SuccessResponse<PostMasterLogInRes> refreshToken(
+		@RequestHeader(value = "X-ACCESS-TOKEN") @NotBlank String accessToken,
+		@RequestHeader(value = "REFRESH-TOKEN") @NotBlank String refreshToken) throws
+		MasterException,
+		BaseException, UserException {
+		PostMasterLogInRes postMasterLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
+		return new SuccessResponse<>(postMasterLoginRes);
 	}
 
 }
