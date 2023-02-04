@@ -94,6 +94,14 @@ public class UserApiController {
     }
 
     @NoAuth
+    @PostMapping("/{email}")
+    @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
+    public SuccessResponse<String> checkDuplicateEmail(@PathVariable(name = "email") @Email @NotBlank String email) throws UserException {
+        SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
+        return emailDuplicateSuccessResponse;
+    }
+
+    @NoAuth
     @PostMapping(value = "/refresh")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     public SuccessResponse<PostUserLoginRes>refreshToken(
