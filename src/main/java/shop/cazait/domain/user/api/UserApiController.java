@@ -97,6 +97,7 @@ public class UserApiController {
     @NoAuth
     @PostMapping("email/{email}")
     @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
+    @ApiImplicitParam (name="email",value = "사용자 이메일")
     public SuccessResponse<String> checkDuplicateEmail(@PathVariable(name = "email") @Email String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
@@ -105,6 +106,7 @@ public class UserApiController {
     @NoAuth
     @PostMapping("nickname/{nickname}")
     @ApiOperation(value="닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
+    @ApiImplicitParam (name="nickname",value = "사용자 닉네임")
     public SuccessResponse<String> checkduplicateNickname(@PathVariable(name = "nickname") @NotBlank String nickname) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickname);
         return nicknameDuplicateSuccessResponse;
