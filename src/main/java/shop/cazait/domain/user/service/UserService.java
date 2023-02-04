@@ -74,7 +74,7 @@ public class UserService {
                     .id(findUser.getId())
                     .email(findUser.getEmail())
                     .password(findUser.getPassword())
-                    .nickname(findUser.getEmail())
+                    .nickname(findUser.getNickname())
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
