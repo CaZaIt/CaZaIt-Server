@@ -67,7 +67,7 @@ public class UserApiController {
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam (name="userIdx",value = "사용자 userId")
     public SuccessResponse<GetUserRes> getUser(
-            @PathVariable(name = "userIdx") @NotBlank Long userIdx) throws UserException {
+            @PathVariable(name = "userIdx") Long userIdx) throws UserException {
         GetUserRes userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(userInfoRes);
     }
@@ -79,9 +79,9 @@ public class UserApiController {
             @ApiImplicitParam (name="refreshToken",value = "리프레시 토큰")}
     )
     public SuccessResponse<PatchUserRes> modifyUser(
-            @PathVariable(name = "userIdx") @NotBlank Long userIdx,
+            @PathVariable(name = "userIdx") Long userIdx,
             @RequestBody @Valid  PatchUserReq patchUserReq,
-            @RequestHeader(value="REFRESH-TOKEN") @NotBlank String refreshToken) {
+            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
         PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
         return new SuccessResponse<>(patchUserRes);
     }
@@ -89,7 +89,7 @@ public class UserApiController {
     @DeleteMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
     @ApiImplicitParam (name="userIdx",value = "사용자 userId")
-    public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") @NotBlank Long userIdx) {
+    public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) {
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(deleteUserRes);
     }
@@ -114,8 +114,8 @@ public class UserApiController {
     @PostMapping(value = "/refresh")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     public SuccessResponse<PostUserLoginRes>refreshToken(
-            @RequestHeader(value="X-ACCESS-TOKEN") @NotBlank String accessToken,
-            @RequestHeader(value="REFRESH-TOKEN") @NotBlank String refreshToken) throws UserException, BaseException {
+            @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
+            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException {
         PostUserLoginRes postUserLoginRes = userService.issueAccessToken(accessToken, refreshToken);
         return new SuccessResponse<>(postUserLoginRes);
     }
