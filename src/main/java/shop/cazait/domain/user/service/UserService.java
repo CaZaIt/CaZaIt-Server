@@ -131,6 +131,13 @@ public class UserService {
         return new SuccessResponse("회원가입이 가능합니다.");
     }
 
+    public SuccessResponse<String> checkduplicateNickname(String nickname) throws UserException {
+        if(!userRepository.findByNickname(nickname).isEmpty()){
+            throw new UserException(EXIST_NICKNAME);
+        }
+        return new SuccessResponse("회원가입이 가능합니다.");
+    }
+
 
     public PostUserLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
     
