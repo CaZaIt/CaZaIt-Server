@@ -62,13 +62,13 @@ public class UserApiController {
     }
 
 
-    @GetMapping("/{email}")
+    @GetMapping("/{userIdx}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
-    @ApiImplicitParam(name="email", value = "회원의 email")
+    @ApiImplicitParam (name="userIdx",value = "사용자 userId")
     public SuccessResponse<GetUserRes> getUser(
-            @PathVariable(name = "email") @Email @NotBlank String email) throws UserException {
-        GetUserRes emailGetUserRes = userService.getUserByEmail(email);
-        return new SuccessResponse<>(emailGetUserRes);
+            @PathVariable(name = "userIdx") @NotBlank Long userIdx) throws UserException {
+        GetUserRes userInfoRes = userService.getUserInfo(userIdx);
+        return new SuccessResponse<>(userInfoRes);
     }
 
     @PatchMapping("/{userIdx}")

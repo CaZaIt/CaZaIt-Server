@@ -94,11 +94,11 @@ public class UserService {
         return userResList;
     }
     @Transactional(readOnly = true)
-    public GetUserRes getUserByEmail (String email) throws UserException {
-        if(userRepository.findByEmail(email).isEmpty()){
+    public GetUserRes getUserInfo (Long userIdx) throws UserException {
+        if(userRepository.findById(userIdx).isEmpty()){
             throw new UserException(NOT_EXIST_USER);
         }
-        User findUser = userRepository.findByEmail(email).get();
+        User findUser = userRepository.findById(userIdx).get();
         return GetUserRes.of(findUser);
     }
 
