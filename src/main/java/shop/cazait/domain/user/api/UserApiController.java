@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.exception.UserException;
@@ -26,7 +27,7 @@ import shop.cazait.global.error.exception.BaseException;
 
 
 @Api(tags = "유저 API")
-
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -96,7 +97,7 @@ public class UserApiController {
     @NoAuth
     @PostMapping("email/{email}")
     @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
-    public SuccessResponse<String> checkDuplicateEmail(@PathVariable(name = "email") @Email @NotBlank String email) throws UserException {
+    public SuccessResponse<String> checkDuplicateEmail(@PathVariable(name = "email") @Email String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
     }
