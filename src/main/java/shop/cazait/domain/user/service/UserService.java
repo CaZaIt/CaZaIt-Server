@@ -19,6 +19,7 @@ import shop.cazait.domain.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+import shop.cazait.global.common.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.Secret;
@@ -74,7 +75,7 @@ public class UserService {
                     .id(findUser.getId())
                     .email(findUser.getEmail())
                     .password(findUser.getPassword())
-                    .nickname(findUser.getEmail())
+                    .nickname(findUser.getNickname())
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
@@ -94,11 +95,11 @@ public class UserService {
         return userResList;
     }
     @Transactional(readOnly = true)
-    public GetUserRes getUserByEmail (String email) throws UserException {
-        if(userRepository.findByEmail(email).isEmpty()){
+    public GetUserRes getUserInfo (Long userIdx) throws UserException {
+        if(userRepository.findById(userIdx).isEmpty()){
             throw new UserException(NOT_EXIST_USER);
         }
-        User findUser = userRepository.findByEmail(email).get();
+        User findUser = userRepository.findById(userIdx).get();
         return GetUserRes.of(findUser);
     }
 
@@ -121,6 +122,20 @@ public class UserService {
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
         return DeleteUserRes.of(deleteUser);
+    }
+
+    public SuccessResponse<String> checkduplicateEmail(String email) throws UserException {
+        if(!userRepository.findByEmail(email).isEmpty()){
+            throw new UserException(EXIST_EMAIL);
+        }
+        return new SuccessResponse("회원가입이 가능합니다.");
+    }
+
+    public SuccessResponse<String> checkduplicateNickname(String nickname) throws UserException {
+        if(!userRepository.findByNickname(nickname).isEmpty()){
+            throw new UserException(EXIST_NICKNAME);
+        }
+        return new SuccessResponse("회원가입이 가능합니다.");
     }
 
 
