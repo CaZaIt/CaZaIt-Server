@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -116,13 +120,15 @@ public class CafeService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
-    public List<GetCafesRes> getCafeByStatus(Long userId, PostDistanceReq distanceReq) throws CafeException {
-        List<Cafe> cafeList = cafeRepository.findByStatus(BaseStatus.ACTIVE);
+    public List<GetCafesRes> getCafeByStatus(Long userId, PostDistanceReq distanceReq, Pageable pageable) throws CafeException {
+        List<Cafe> cafeList = cafeRepository.findAll();
+        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.NOT_EXIST_CAFE);
         }
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, distanceReq);
         getCafesRes = sortCafeList(getCafesRes, distanceReq);
+        getCafesRes = pageCafeList(getCafesRes, pageable).getContent();
         return getCafesRes;
     }
 
@@ -141,7 +147,7 @@ public class CafeService {
      * 카페 상세 조회 (카페 이름)
      */
     @Transactional(readOnly = true)
-    public List<GetCafesRes> getCafeByName(String name, Long userId, PostDistanceReq distanceReq) throws CafeException {
+    public List<GetCafesRes> getCafeByName(String name, Long userId, PostDistanceReq distanceReq, Pageable pageable) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.INVALID_CAFE_NAME);
@@ -149,6 +155,7 @@ public class CafeService {
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, distanceReq);
         getCafesRes = sortCafeList(getCafesRes, distanceReq);
+        getCafesRes = pageCafeList(getCafesRes, pageable).getContent();
         return getCafesRes;
     }
 
@@ -213,6 +220,14 @@ public class CafeService {
             getCafesRes.removeIf(cafesRes -> cafesRes.getDistance() > limit);
         }
         return getCafesRes;
+    }
+
+    private Page<GetCafesRes> pageCafeList(List<GetCafesRes> getCafesRes, Pageable pageable) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), getCafesRes.size());
+        Page<GetCafesRes> getCafesResPage = new PageImpl<>(getCafesRes.subList(start, end), pageRequest, getCafesRes.size());
+        return getCafesResPage;
     }
 }
 

@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
@@ -42,12 +44,14 @@ public class CafeController {
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "유저 ID"),
-            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표")
+            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표, 정렬 기준, 제한 거리"),
+            @ApiImplicitParam(name = "pageable", value = "페이징한 페이지 / uri 뒤에 \"?page=0\"를 붙여야한다.")
     })
     public SuccessResponse<List<GetCafesRes>> getCafeByStatus(@PathVariable Long userId,
-                                                              @RequestBody PostDistanceReq distanceReq) throws CafeException {
+                                                              @RequestBody PostDistanceReq distanceReq,
+                                                              @PageableDefault(size = 7) Pageable pageable) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByStatus(userId, distanceReq);
+            List<GetCafesRes> cafeResList = cafeService.getCafeByStatus(userId, distanceReq, pageable);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -75,13 +79,15 @@ public class CafeController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeName", value = "카페 이름"),
             @ApiImplicitParam(name = "userId", value = "유저 ID"),
-            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표")
+            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표"),
+            @ApiImplicitParam(name = "pageable", value = "페이징한 페이지 / uri 뒤에 \"?page=0\"를 붙여야한다.")
     })
     public SuccessResponse<List<GetCafesRes>> getCafeByName(@PathVariable String cafeName,
                                                             @PathVariable Long userId,
-                                                            @RequestBody PostDistanceReq distanceReq) throws CafeException {
+                                                            @RequestBody PostDistanceReq distanceReq,
+                                                            @PageableDefault(size = 7) Pageable pageable) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq);
+            List<GetCafesRes> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq, pageable);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
