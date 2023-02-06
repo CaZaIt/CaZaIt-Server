@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import shop.cazait.domain.coordinate.service.CoordinateService;
-import shop.cazait.domain.s3.Service.AwsS3Service;
+import shop.cazait.global.common.s3.Service.AwsS3Service;
 
 @Service
 @RequiredArgsConstructor
