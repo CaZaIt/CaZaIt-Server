@@ -29,14 +29,14 @@ public class PostCafeMenuReq {
     @Schema(description = "이미지 URL", example = "americano.png (미등록 : null)")
     private String imageUrl;
 
-    public static List<CafeMenu> toEntity(Cafe cafe, List<PostCafeMenuReq> postCafeMenuReqs) {
+    public static List<CafeMenu> toEntity(Cafe cafe, List<PostCafeMenuReq> postCafeMenuReqs, String uploadFileName) {
         return postCafeMenuReqs.stream()
                 .map(postCafeMenuReq -> CafeMenu.builder()
                         .cafe(cafe)
                         .name(postCafeMenuReq.getName())
                         .description(postCafeMenuReq.getDescription())
                         .price(postCafeMenuReq.getPrice())
-                        .imageUrl(postCafeMenuReq.getImageUrl())
+                        .imageUrl(uploadFileName)
                         .build()).collect(Collectors.toList());
     }
 

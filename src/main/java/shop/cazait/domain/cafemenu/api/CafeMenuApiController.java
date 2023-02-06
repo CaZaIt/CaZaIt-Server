@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
@@ -39,10 +42,11 @@ public class CafeMenuApiController {
     @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     @PostMapping("/cafe/{cafeId}")
     public SuccessResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
-                                                               @RequestBody @Valid List<PostCafeMenuReq> postCafeMenuReq)
-            throws CafeException {
+                                                               @RequestPart @Valid List<PostCafeMenuReq> postCafeMenuReq,
+                                                               @RequestPart(required = false) List<MultipartFile> menuImages)
+            throws CafeException, IOException {
 
-        return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq));
+        return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImages));
 
     }
 
@@ -60,9 +64,10 @@ public class CafeMenuApiController {
     @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID")
     @PatchMapping("/{menuId}/cafe/{cafeId}")
     public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
-                                                        @RequestBody @Valid PatchCafeMenuReq patchCafeMenuReq) {
+                                                        @RequestPart @Valid PatchCafeMenuReq patchCafeMenuReq,
+                                                        @RequestPart MultipartFile menuImage) throws IOException {
 
-        return new SuccessResponse<>(cafeMenuService.updateMenu(menuId, patchCafeMenuReq));
+        return new SuccessResponse<>(cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
 
     }
 
