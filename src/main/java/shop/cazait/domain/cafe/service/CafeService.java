@@ -16,6 +16,7 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.entity.Coordinate;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
+import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
 import shop.cazait.domain.checklog.service.CheckLogService;
@@ -112,6 +113,7 @@ public class CafeService {
 
         cafeImages.forEach(cafeImage -> {
             System.out.println("Save Image Url : " + cafeImage.getImageUrl());
+            cafeImageRepository.save(cafeImage);
         });
 
     }
@@ -139,8 +141,9 @@ public class CafeService {
     public GetCafeRes getCafeById(Long userId, Long cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
+        List<GetCafeImageRes> getCafeImageResList = readCafeImageList(cafeId);
         String logResult = checkLogService.addVisitLog(userId, cafeId);    // 최근 본 카페 등록
-        return GetCafeRes.of(cafe, logResult);
+        return GetCafeRes.of(cafe, getCafeImageResList, logResult);
     }
 
     /**
@@ -196,11 +199,13 @@ public class CafeService {
                     break;
                 }
             }
+            List<GetCafeImageRes> getCafeImageResList = readCafeImageList(cafe.getId());
+
             int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                     cafe.getCoordinate().getLongitude(),
                     distanceReq.getLatitude(), distanceReq.getLongitude());
 
-            GetCafesRes cafeRes = GetCafesRes.of(cafe, distance, favorite);
+            GetCafesRes cafeRes = GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
             cafeResList.add(cafeRes);
         }
         return cafeResList;
@@ -220,6 +225,16 @@ public class CafeService {
             getCafesRes.removeIf(cafesRes -> cafesRes.getDistance() > limit);
         }
         return getCafesRes;
+    }
+
+    private List<GetCafeImageRes> readCafeImageList(Long cafeId) {
+        List<CafeImage> cafeImageList = cafeImageRepository.findByCafeId(cafeId);
+        List<GetCafeImageRes> getCafeImageResList = new ArrayList<>();
+        for (CafeImage cafeImage : cafeImageList) {
+            GetCafeImageRes getCafeImageRes = GetCafeImageRes.of(cafeImage);
+            getCafeImageResList.add(getCafeImageRes);
+        }
+        return getCafeImageResList;
     }
 
     private Page<GetCafesRes> pageCafeList(List<GetCafesRes> getCafesRes, Pageable pageable) {
