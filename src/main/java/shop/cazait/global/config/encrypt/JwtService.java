@@ -73,7 +73,7 @@ public class JwtService {
             log.error("Token tampered");
             throw new UserException(INVALID_JWT);
         }
-        catch (NullPointerException exception) {
+        catch (IllegalArgumentException exception) {
             log.error("Token is null");
             throw new UserException(EMPTY_JWT);
         }
@@ -98,7 +98,7 @@ public class JwtService {
         } catch (JwtException exception) {
             log.error("Token Tampered");
             throw new UserException(INVALID_JWT);
-        } catch (NullPointerException exception) {
+        } catch (IllegalArgumentException exception) {
             log.error("Token is null");
             throw new UserException(EMPTY_JWT);
         }
@@ -120,7 +120,7 @@ public class JwtService {
         } catch (JwtException exception) {
             log.error("Token Tampered");
             throw new UserException(INVALID_JWT);
-        } catch (NullPointerException exception) {
+        } catch (IllegalArgumentException exception) {
             log.error("Token is null");
             throw new UserException(EMPTY_JWT);
         }
@@ -142,7 +142,7 @@ public class JwtService {
         } catch (JwtException exception) {
             log.error("Token Tampered");
             throw new UserException(INVALID_JWT);
-        } catch (NullPointerException exception) {
+        } catch (IllegalArgumentException exception) {
             log.error("Token is null");
             throw new UserException(EMPTY_JWT);
         }
