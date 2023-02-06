@@ -1,7 +1,5 @@
 package shop.cazait.domain.congestion.api;
 
-import static shop.cazait.global.error.status.ErrorStatus.*;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,12 +36,7 @@ public class CongestionApiController {
                                                             @RequestBody @Valid PostCongestionReq postCongestionReq)
             throws CongestionException {
 
-        if (postCongestionReq.getCongestionStatus().isBlank()) {
-            throw new CongestionException(CONGESTION_STATUS_EMPTY);
-        }
-
-        PostCongestionRes result = congestionService.addAndUpdateCongestion(cafeId, postCongestionReq);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(congestionService.addAndUpdateCongestion(cafeId, postCongestionReq));
 
     }
 

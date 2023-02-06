@@ -27,8 +27,7 @@ public class CheckLogApiController {
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<GetCheckLogRes>> getVisitLog(@PathVariable(name = "userId") Long userId) {
 
-        List<GetCheckLogRes> result = cafeVisitService.getVisitLog(userId);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(cafeVisitService.getVisitLog(userId));
 
     }
 

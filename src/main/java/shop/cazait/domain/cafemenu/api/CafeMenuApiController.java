@@ -42,8 +42,7 @@ public class CafeMenuApiController {
                                                                @RequestBody @Valid List<PostCafeMenuReq> postCafeMenuReq)
             throws CafeException {
 
-        List<PostCafeMenuRes> result = cafeMenuService.registerMenu(cafeId, postCafeMenuReq);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq));
 
     }
 
@@ -52,8 +51,7 @@ public class CafeMenuApiController {
     @GetMapping("/cafe/{cafeId}")
     public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
 
-        List<GetCafeMenuRes> result = cafeMenuService.getMenu(cafeId);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(cafeMenuService.getMenu(cafeId));
 
     }
 
@@ -64,8 +62,7 @@ public class CafeMenuApiController {
     public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
                                                         @RequestBody @Valid PatchCafeMenuReq patchCafeMenuReq) {
 
-        PatchCafeMenuRes result = cafeMenuService.updateMenu(menuId, patchCafeMenuReq);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(cafeMenuService.updateMenu(menuId, patchCafeMenuReq));
 
     }
 
@@ -74,8 +71,7 @@ public class CafeMenuApiController {
     @DeleteMapping("/{menuId}")
     public SuccessResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
 
-        String result = cafeMenuService.deleteMenu(menuId);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(cafeMenuService.deleteMenu(menuId));
 
     }
 
