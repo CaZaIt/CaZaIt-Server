@@ -19,7 +19,9 @@ cp $PROJECT_ROOT/application-kakao.yml application-kakao.yml
 
 # 환경 변수 설정
 source ~/.bashrc
-echo "S3 ACESS KEY: $S3_ACCESS_KEY"
+echo "S3 ACESS KEY"
+ehco $S3_ACCESS_KEY
+
 
 # jar 파일 실행
 echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
