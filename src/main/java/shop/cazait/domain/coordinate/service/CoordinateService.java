@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafe.service;
+package shop.cazait.domain.coordinate.service;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.cazait.domain.cafe.dto.CoordinateVO;
+import shop.cazait.domain.coordinate.dto.CoordinateVO;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
-import shop.cazait.domain.cafe.entity.Coordinate;
+import shop.cazait.domain.coordinate.entity.Coordinate;
 
 @Service
 public class CoordinateService {

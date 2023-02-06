@@ -25,7 +25,7 @@ import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.exception.CafeMenuException;
 import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
-import shop.cazait.global.util.s3.AwsS3Service;
+import shop.cazait.domain.s3.Service.AwsS3Service;
 
 @Service
 @RequiredArgsConstructor

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.*;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.entity.Coordinate;
+import shop.cazait.domain.coordinate.entity.Coordinate;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
@@ -33,7 +33,8 @@ import shop.cazait.global.error.status.ErrorStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import shop.cazait.global.util.s3.AwsS3Service;
+import shop.cazait.domain.coordinate.service.CoordinateService;
+import shop.cazait.domain.s3.Service.AwsS3Service;
 
 @Service
 @RequiredArgsConstructor
