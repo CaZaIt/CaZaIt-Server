@@ -42,11 +42,7 @@ public class CafeController {
 
     @GetMapping("/all/user/{userId}")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "유저 ID"),
-            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표, 정렬 기준, 제한 거리"),
-            @ApiImplicitParam(name = "pageable", value = "페이징한 페이지 / uri 뒤에 \"?page=0\"를 붙여야한다.")
-    })
+    @ApiImplicitParam(name = "userId", value = "유저 ID")
     public SuccessResponse<List<GetCafesRes>> getCafeByStatus(@PathVariable Long userId,
                                                               @RequestBody PostDistanceReq distanceReq,
                                                               @PageableDefault(size = 7) Pageable pageable) throws CafeException {
@@ -78,9 +74,7 @@ public class CafeController {
     @ApiOperation(value = "카페 이름 조회", notes = "특정 이름의 카페를 조회한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeName", value = "카페 이름"),
-            @ApiImplicitParam(name = "userId", value = "유저 ID"),
-            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표"),
-            @ApiImplicitParam(name = "pageable", value = "페이징한 페이지 / uri 뒤에 \"?page=0\"를 붙여야한다.")
+            @ApiImplicitParam(name = "userId", value = "유저 ID")
     })
     public SuccessResponse<List<GetCafesRes>> getCafeByName(@PathVariable String cafeName,
                                                             @PathVariable Long userId,
@@ -98,8 +92,7 @@ public class CafeController {
     @ApiOperation(value = "카페 정보 수정", notes = "특정 ID의 카페 정보를 수정한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
-            @ApiImplicitParam(name = "masterId", value = "마스터 ID"),
-            @ApiImplicitParam(name = "cafeReq", value = "수정할 카페 정보")
+            @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     })
     public SuccessResponse<String> updateCafe(@PathVariable Long cafeId,
                                               @PathVariable Long masterId,
