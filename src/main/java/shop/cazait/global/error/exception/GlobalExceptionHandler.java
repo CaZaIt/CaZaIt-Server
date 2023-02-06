@@ -1,9 +1,5 @@
 package shop.cazait.global.error.exception;
 
-import java.util.Map;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.domain.cafe.exception.CafeException;
@@ -13,7 +9,7 @@ import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.response.FailResponse;
+import shop.cazait.global.common.dto.response.FailResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

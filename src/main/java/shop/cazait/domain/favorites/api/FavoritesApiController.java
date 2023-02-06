@@ -17,7 +17,7 @@ import shop.cazait.domain.favorites.dto.GetFavoritesRes;
 import shop.cazait.domain.favorites.dto.PostFavoritesRes;
 import shop.cazait.domain.favorites.service.FavoritesService;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 @Api(tags = "즐겨찾기 API")
 @RestController

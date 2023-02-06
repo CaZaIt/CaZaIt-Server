@@ -1,4 +1,4 @@
-package shop.cazait.global.common.response;
+package shop.cazait.global.common.dto.response;
 
 import static shop.cazait.global.common.constant.Constant.SUCCESS;
 import static shop.cazait.global.common.constant.Constant.SUCCESS_MESSAGE;

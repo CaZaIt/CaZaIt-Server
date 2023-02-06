@@ -2,7 +2,6 @@ package shop.cazait.domain.cafemenu.api;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +23,7 @@ import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 @Api(tags = "카페 메뉴 API")
 @RestController

@@ -19,11 +19,10 @@ import shop.cazait.domain.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.Secret;
-import shop.cazait.global.error.exception.BaseException;
 
 import static shop.cazait.global.error.status.ErrorStatus.*;
 

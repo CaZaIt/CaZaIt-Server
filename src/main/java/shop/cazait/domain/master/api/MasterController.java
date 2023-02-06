@@ -33,7 +33,7 @@ import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;

@@ -15,7 +15,7 @@ import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.service.CongestionService;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 @Api(tags = "혼잡도 API")
 @RestController

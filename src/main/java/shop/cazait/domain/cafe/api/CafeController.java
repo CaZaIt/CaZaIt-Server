@@ -17,7 +17,7 @@ import shop.cazait.domain.cafe.dto.PostDistanceReq;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 import javax.validation.Valid;
 import java.util.List;
