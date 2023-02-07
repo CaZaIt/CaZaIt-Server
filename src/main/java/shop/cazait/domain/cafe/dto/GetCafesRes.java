@@ -25,7 +25,7 @@ public class GetCafesRes {
     @Schema(description = "이름", example = "롬곡")
     private String name;
     @JsonProperty
-    @Schema(description = "위치", example = "서울시 중구")
+    @Schema(description = "위치", example = "서울특별시 광진구 군자동 광나루로17길 18")
     private String address;
     @JsonProperty
     @Schema(description = "경도", example = "127.543215")

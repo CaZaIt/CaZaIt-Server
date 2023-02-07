@@ -1,6 +1,9 @@
 package shop.cazait.domain.cafe.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -8,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
@@ -30,14 +34,18 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-    @PostMapping(value = "/add/master/{masterId}", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
     @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     public SuccessResponse<String> addCafe(@PathVariable Long masterId,
-                                           @RequestPart @Valid PostCafeReq postCafeReq,
-                                           @RequestPart(required = false) List<MultipartFile> imageFiles) throws JsonProcessingException {
-        cafeService.addCafe(masterId, postCafeReq, imageFiles);
+                                           @RequestParam String json,
+                                           @RequestPart(value = "cafeImages", required = false) List<MultipartFile> cafeImage) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        PostCafeReq postCafeReq = objectMapper.readValue(json, new TypeReference<>() {});
+        cafeService.addCafe(masterId, postCafeReq, cafeImage);
         return new SuccessResponse<>("카페 등록 완료");
+
     }
 
     @GetMapping("/all/user/{userId}")
