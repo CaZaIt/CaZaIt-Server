@@ -11,9 +11,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
+
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.core.MethodParameter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.user.dto.*;
@@ -24,6 +27,7 @@ import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
+import shop.cazait.global.error.exception.ValidException;
 
 
 @Api(tags = "유저 API")
@@ -67,7 +71,7 @@ public class UserApiController {
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
     @ApiImplicitParam (name="userIdx",value = "사용자 userId")
     public SuccessResponse<GetUserRes> getUser(
-            @PathVariable(name = "userIdx") Long userIdx) throws UserException {
+             @PathVariable(name = "userIdx") Long userIdx) throws UserException {
         GetUserRes userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(userInfoRes);
     }
@@ -95,19 +99,18 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("email/{email}")
+    @PostMapping("/email")
     @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @ApiImplicitParam (name="email",value = "사용자 이메일")
-    public SuccessResponse<String> checkDuplicateEmail(@PathVariable(name = "email") @Email String email) throws UserException {
+    public SuccessResponse<String> checkDuplicateEmail(@RequestHeader(value="email") @Email String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
     }
 
     @NoAuth
-    @PostMapping("nickname/{nickname}")
+    @PostMapping("/nickname")
     @ApiOperation(value="닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    @ApiImplicitParam (name="nickname",value = "사용자 닉네임")
-    public SuccessResponse<String> checkduplicateNickname(@PathVariable(name = "nickname") @NotBlank String nickname) throws UserException {
+    public SuccessResponse<String> checkDuplicateNickname(@RequestHeader(value="nickname") @Size(min = 1) String nickname) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickname);
         return nicknameDuplicateSuccessResponse;
     }
@@ -116,7 +119,7 @@ public class UserApiController {
     @PostMapping(value = "/refresh")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     public SuccessResponse<PostUserLoginRes>refreshToken(
-            @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
+            @RequestHeader (value="X-ACCESS-TOKEN") String accessToken,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException {
         PostUserLoginRes postUserLoginRes = userService.issueAccessToken(accessToken, refreshToken);
         return new SuccessResponse<>(postUserLoginRes);
