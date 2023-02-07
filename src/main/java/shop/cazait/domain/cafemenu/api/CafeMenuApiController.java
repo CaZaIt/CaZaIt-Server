@@ -39,6 +39,7 @@ import shop.cazait.global.common.dto.response.SuccessResponse;
 public class CafeMenuApiController {
 
     private final CafeMenuService cafeMenuService;
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     /**
      * 카페 메뉴 등록
@@ -51,12 +52,8 @@ public class CafeMenuApiController {
                                                          @RequestParam @Valid String menuInfo,
                                                          @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
             throws CafeException, IOException {
-
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
-
         return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImage));
-
     }
 
     @ApiOperation(value = "카페 메뉴 조회", notes = "카페 ID를 받아 해당 카페에 대한 모든 메뉴를 조회한다.")
@@ -75,13 +72,10 @@ public class CafeMenuApiController {
     public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "cafeId") Long menuId,
                                                         @Parameter(description = "수정할 메뉴 정보 : {\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
                                                         @RequestParam @Valid String menuInfo,
-                                                        @Parameter(description = "수정할 메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage) throws IOException {
-
-        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+                                                        @Parameter(description = "수정할 메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
+            throws IOException {
         PatchCafeMenuReq patchCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
-
         return new SuccessResponse<>(cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
-
     }
 
     @ApiOperation(value = "카페 메뉴 삭제", notes = "카페 메뉴 ID를 받아 삭제한다.")
