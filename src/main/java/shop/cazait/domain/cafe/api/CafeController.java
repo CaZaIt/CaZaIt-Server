@@ -51,11 +51,10 @@ public class CafeController {
     @GetMapping("/all/user/{userId}")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
     @ApiImplicitParam(name = "userId", value = "유저 ID")
-    public SuccessResponse<List<GetCafesRes>> getCafeByStatus(@PathVariable Long userId,
-                                                              @RequestBody PostDistanceReq distanceReq,
-                                                              @PageableDefault(size = 7) Pageable pageable) throws CafeException {
+    public SuccessResponse<List<List<GetCafesRes>>> getCafeByStatus(@PathVariable Long userId,
+                                                              @RequestBody PostDistanceReq distanceReq) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByStatus(userId, distanceReq, pageable);
+            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, distanceReq);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -84,12 +83,11 @@ public class CafeController {
             @ApiImplicitParam(name = "cafeName", value = "카페 이름"),
             @ApiImplicitParam(name = "userId", value = "유저 ID")
     })
-    public SuccessResponse<List<GetCafesRes>> getCafeByName(@PathVariable String cafeName,
+    public SuccessResponse<List<List<GetCafesRes>>> getCafeByName(@PathVariable String cafeName,
                                                             @PathVariable Long userId,
-                                                            @RequestBody PostDistanceReq distanceReq,
-                                                            @PageableDefault(size = 7) Pageable pageable) throws CafeException {
+                                                            @RequestBody PostDistanceReq distanceReq) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq, pageable);
+            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
