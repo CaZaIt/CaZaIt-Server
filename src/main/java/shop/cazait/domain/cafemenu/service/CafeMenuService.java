@@ -74,11 +74,11 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    public PatchCafeMenuRes updateMenu(Long cafeMenuId, PatchCafeMenuReq patchCafeMenuReq, MultipartFile menuImage)
+    public PatchCafeMenuRes updateMenu(Long menuId, PatchCafeMenuReq patchCafeMenuReq, MultipartFile menuImage)
             throws IOException {
 
         CafeMenu findMenu = cafeMenuRepository
-                .findById(cafeMenuId)
+                .findById(menuId)
                 .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
 
         if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {

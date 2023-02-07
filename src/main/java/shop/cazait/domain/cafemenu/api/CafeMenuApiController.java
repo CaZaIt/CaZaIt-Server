@@ -69,12 +69,16 @@ public class CafeMenuApiController {
     }
 
 
-    @ApiOperation(value = "카페 메뉴 수정", notes = "카페 ID, 카페 메뉴 ID를 받아 수정한다.")
+    @ApiOperation(value = "카페 메뉴 수정", notes = "카페 메뉴 ID를 받아 수정한다.")
     @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID")
-    @PatchMapping("/{menuId}/cafe/{cafeId}")
-    public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "menuId") Long menuId,
-                                                        @RequestPart @Valid PatchCafeMenuReq patchCafeMenuReq,
-                                                        @RequestPart MultipartFile menuImage) throws IOException {
+    @PatchMapping("/{menuId}")
+    public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "cafeId") Long menuId,
+                                                        @Parameter(description = "수정할 메뉴 정보 : {\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
+                                                        @RequestParam @Valid String menuInfo,
+                                                        @Parameter(description = "수정할 메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        PatchCafeMenuReq patchCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
 
         return new SuccessResponse<>(cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
 
