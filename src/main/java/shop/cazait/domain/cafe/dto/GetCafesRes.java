@@ -19,7 +19,7 @@ public class GetCafesRes {
     @Schema(description = "카페 ID", example = "1")
     private Long cafeId;
     @JsonProperty
-    @Schema(description = "혼잡도 ID", example = "FREE")
+    @Schema(description = "혼잡도 상태", example = "FREE")
     private CongestionStatus congestionStatus;
     @JsonProperty
     @Schema(description = "이름", example = "롬곡")

@@ -11,16 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostDistanceReq {
 
-    @Schema(description = "경도", example = "127.543215")
+    @Schema(description = "유저 경도", example = "127.543215")
     private String longitude;
 
-    @Schema(description = "위도", example = "36.987561")
+    @Schema(description = "유저 위도", example = "36.987561")
     private String latitude;
 
     @Schema(description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)", example = "congestion")
     private String sort;
 
-    @Schema(description = "제한 거리(0일 때는 모든 카페 출력), 해당 거리 내에 있는 카페 전달, 단위는 m(미터)", example = "500")
+    @Schema(description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)", example = "500")
 
     private String limit;
 
