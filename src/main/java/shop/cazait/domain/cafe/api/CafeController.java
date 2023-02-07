@@ -30,7 +30,7 @@ public class CafeController {
 
     private final CafeService cafeService;
 
-    @PostMapping(name = "/add/master/{masterId}", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/add/master/{masterId}", consumes = {"multipart/form-data"})
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
     @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     public SuccessResponse<String> addCafe(@PathVariable Long masterId,
