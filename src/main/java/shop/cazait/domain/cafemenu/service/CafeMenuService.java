@@ -51,27 +51,14 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 등록
      */
-    public List<PostCafeMenuRes> registerMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs, List<MultipartFile> menuImages)
+    public PostCafeMenuRes registerMenu(Long cafeId, PostCafeMenuReq postCafeMenuReq, MultipartFile menuImage)
             throws CafeException, IOException {
 
         Cafe findCafe = getCafe(cafeId);
-        List<CafeMenu> menus = menuImages.stream()
-                .map(menuImage -> {
-                    String uploadFileName = null;
-                    try {
-                        uploadFileName = awsS3Servicel.uploadImage(menuImage);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return PostCafeMenuReq.toEntity(findCafe, postCafeMenuReqs, uploadFileName);
-                }).collect(Collectors.toList())
-                .stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-
-        List<CafeMenu> addMenus = cafeMenuRepository.saveAll(menus);
-
-        return PostCafeMenuRes.of(addMenus);
+        String uploadFileName = awsS3Servicel.uploadImage(menuImage);
+        CafeMenu menu = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReq, uploadFileName);
+        CafeMenu addMenu = cafeMenuRepository.save(menu);
+        return PostCafeMenuRes.of(addMenu);
 
     }
 

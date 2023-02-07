@@ -1,18 +1,25 @@
 package shop.cazait.domain.cafemenu.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,13 +45,17 @@ public class CafeMenuApiController {
      */
     @ApiOperation(value = "카페 메뉴 등록", notes = "카페 ID와 메뉴에 대한 정보를 받아 등록한다.")
     @ApiImplicitParam(name = "cafeId", value = "카페 ID")
-    @PostMapping("/cafe/{cafeId}")
-    public SuccessResponse<List<PostCafeMenuRes>> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
-                                                               @RequestPart @Valid List<PostCafeMenuReq> postCafeMenuReq,
-                                                               @RequestPart(required = false) List<MultipartFile> menuImages)
+    @PostMapping(value ="/cafe/{cafeId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public SuccessResponse<PostCafeMenuRes> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
+                                                         @Parameter(description = "메뉴 정보 : {\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
+                                                         @RequestParam @Valid String menuInfo,
+                                                         @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
             throws CafeException, IOException {
 
-        return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImages));
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
+
+        return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImage));
 
     }
 

@@ -28,18 +28,15 @@ public class PostCafeMenuRes {
     @Schema(description = "이미지 URL", example = "americano.png")
     private String imageUrl;
 
-    public static List<PostCafeMenuRes> of(List<CafeMenu> menus) {
+    public static PostCafeMenuRes of(CafeMenu menu) {
 
-        return menus.stream()
-                .map(menu -> PostCafeMenuRes.builder()
-                        .menuId(menu.getId())
-                        .name(menu.getName())
-                        .description(menu.getDescription())
-                        .price(menu.getPrice())
-                        .imageUrl(menu.getImageUrl())
-                        .build())
-                .collect(Collectors.toList());
-
+        return PostCafeMenuRes.builder()
+                .menuId(menu.getId())
+                .name(menu.getName())
+                .description(menu.getDescription())
+                .price(menu.getPrice())
+                .imageUrl(menu.getImageUrl())
+                .build();
     }
 
 }
