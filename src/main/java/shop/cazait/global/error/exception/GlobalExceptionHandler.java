@@ -1,5 +1,8 @@
 package shop.cazait.global.error.exception;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.domain.cafe.exception.CafeException;
@@ -10,6 +13,7 @@ import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.FailResponse;
+import shop.cazait.global.error.status.ErrorStatus;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -54,10 +58,21 @@ public class GlobalExceptionHandler {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ ValidException.class })
-    protected FailResponse handleValidException(ValidException exception) {
+    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    protected FailResponse handleValidException(MethodArgumentNotValidException exception) {
+        BindingResult bindingResult = exception.getBindingResult();
+        StringBuilder description = new StringBuilder();
 
-        return new FailResponse(exception.getError(), exception.getDescription().toString());
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            description.append("[");
+            description.append(fieldError.getField());
+            description.append("](은)는");
+            description.append(fieldError.getDefaultMessage());
+            description.append(" 입력된 값: [");
+            description.append(fieldError.getRejectedValue());
+            description.append("]\n");
+        }
+        return new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString());
 
     }
 

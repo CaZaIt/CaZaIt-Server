@@ -5,7 +5,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 
 @Schema(description = "카페 정보 등록 및 수정 Request : 카페 등록 및 수정 시 필요한 정보")
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCafeReq {
 
@@ -13,7 +13,7 @@ public class PostCafeReq {
     @NotBlank(message = "카페 이름을 입력해주세요.")
     private String name;
 
-    @Schema(description = "주소", example = "서울시 중구")
+    @Schema(description = "주소", example = "서울특별시 광진구 군자동 광나루로17길 18")
     @NotBlank(message = "카페 위치를 입력해주세요.")
     private String address;
 
