@@ -106,7 +106,8 @@ public class UserApiController {
     @NoAuth
     @PostMapping("/nickname")
     @ApiOperation(value="닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    public SuccessResponse<String> checkDuplicateNickname(@RequestHeader(value="nickname") @Size(min = 1) String nickname) throws UserException {
+    public SuccessResponse<String> checkDuplicateNickname(@RequestBody @Valid PostDuplicateNicknameReq postDuplicateNicknameReq) throws UserException {
+        String nickname = postDuplicateNicknameReq.getNickname();
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickname);
         return nicknameDuplicateSuccessResponse;
     }

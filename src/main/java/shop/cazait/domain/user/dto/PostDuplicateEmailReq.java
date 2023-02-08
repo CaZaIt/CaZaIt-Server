@@ -2,8 +2,10 @@ package shop.cazait.domain.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,4 +18,15 @@ public class PostDuplicateEmailReq {
     @Email
     @NotBlank
     private String email;
+
+    @Builder
+    public PostDuplicateEmailReq(String email) {
+        this.email = email;
+    }
+
+    public User toEntity(){
+        return User.builder()
+                .email(email)
+                .build();
+    }
 }
