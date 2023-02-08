@@ -102,7 +102,8 @@ public class UserApiController {
     @PostMapping("/email")
     @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @ApiImplicitParam (name="email",value = "사용자 이메일")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestHeader(value="email") @Email String email) throws UserException {
+    public SuccessResponse<String> checkDuplicateEmail(@RequestBody @Valid PostDuplicateEmailReq postDuplicateEmailReq) throws UserException {
+        String email = postDuplicateEmailReq.getEmail();
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
     }
