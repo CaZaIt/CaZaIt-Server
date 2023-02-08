@@ -4,16 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.*;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafeimage.service.CafeImageService;
 import shop.cazait.domain.coordinate.entity.Coordinate;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
@@ -45,6 +41,7 @@ public class CafeService {
     private final CheckLogService checkLogService;
     private final CoordinateService coordinateService;
     private final AwsS3Service awsS3Service;
+    private final CafeImageService cafeImageService;
     private final CafeRepository cafeRepository;
     private final MasterRepository masterRepository;
     private final FavoritesRepository favoritesRepository;
@@ -143,7 +140,7 @@ public class CafeService {
     public GetCafeRes getCafeById(Long userId, Long cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
-        List<GetCafeImageRes> getCafeImageResList = readCafeImageList(cafeId);
+        List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafeId);
         String logResult = checkLogService.addVisitLog(userId, cafeId);    // 최근 본 카페 등록
         return GetCafeRes.of(cafe, getCafeImageResList, logResult);
     }
@@ -201,7 +198,7 @@ public class CafeService {
                     break;
                 }
             }
-            List<GetCafeImageRes> getCafeImageResList = readCafeImageList(cafe.getId());
+            List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
 
             int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                     cafe.getCoordinate().getLongitude(),
@@ -226,16 +223,6 @@ public class CafeService {
             getCafesRes.removeIf(cafesRes -> cafesRes.getDistance() > distanceLimit);
         }
         return getCafesRes;
-    }
-
-    private List<GetCafeImageRes> readCafeImageList(Long cafeId) {
-        List<CafeImage> cafeImageList = cafeImageRepository.findByCafeId(cafeId);
-        List<GetCafeImageRes> getCafeImageResList = new ArrayList<>();
-        for (CafeImage cafeImage : cafeImageList) {
-            GetCafeImageRes getCafeImageRes = GetCafeImageRes.of(cafeImage);
-            getCafeImageResList.add(getCafeImageRes);
-        }
-        return getCafeImageResList;
     }
 
     private List<List<GetCafesRes>> pageCafeList(List<GetCafesRes> getCafesRes) {

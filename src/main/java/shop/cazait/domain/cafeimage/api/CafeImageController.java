@@ -1,14 +1,19 @@
 package shop.cazait.domain.cafeimage.api;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.exception.CafeException;
-import shop.cazait.domain.cafeimage.dto.PostCafeImageReq;
 import shop.cazait.domain.cafeimage.service.CafeImageService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
+
+import java.util.List;
 
 @Api(tags = "카페 이미지 API")
 @RestController
@@ -18,22 +23,33 @@ public class CafeImageController {
 
     private final CafeImageService cafeImageService;
 
-    @PostMapping("/add/{cafeId}")
+    @PostMapping("/add/{cafeId}/master/{masterId}")
     @ApiOperation(value = "카페 이미지 등록", notes = "특정 ID를 갖는 카페의 이미지를 등록한다.")
-    public SuccessResponse<String> addCafeImage(@PathVariable Long cafeId, @RequestBody PostCafeImageReq cafeImageReq) throws CafeException {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
+            @ApiImplicitParam(name = "masterId", value = "마스터 ID")
+    })
+    public SuccessResponse<String> addCafeImage(@PathVariable Long cafeId,
+                                                @PathVariable Long masterId,
+                                                @Parameter(description = "카페 이미지") @RequestPart List<MultipartFile> cafeImages) throws CafeException {
         try {
-            cafeImageService.addCafeImage(cafeId, cafeImageReq);
+            cafeImageService.addCafeImage(cafeId, masterId, cafeImages);
             return new SuccessResponse<>("카페 이미지 등록 완료");
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
     }
 
-    @DeleteMapping("delete/{cafeImageId}")
+    @DeleteMapping("delete/{cafeImageId}/master/{masterId}")
     @ApiOperation(value = "카페 이미지 삭제", notes = "특정 ID의 카페 이미지를 삭제한다.")
-    public SuccessResponse<String> deleteCafeImage(@PathVariable Long cafeImageId) throws CafeImageException {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cafeImageId", value = "카페 이미지 ID"),
+            @ApiImplicitParam(name = "masterId", value = "마스터 ID")
+    })
+    public SuccessResponse<String> deleteCafeImage(@PathVariable Long cafeImageId,
+                                                   @PathVariable Long masterId) throws CafeImageException {
         try {
-            cafeImageService.deleteCafeImage(cafeImageId);
+            cafeImageService.deleteCafeImage(cafeImageId, masterId);
             return new SuccessResponse<>("카페 이미지 삭제 완료");
         } catch (CafeImageException e) {
             throw new CafeImageException(e.getError());
