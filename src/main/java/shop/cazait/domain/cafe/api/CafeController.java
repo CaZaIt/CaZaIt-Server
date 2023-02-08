@@ -10,15 +10,12 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
-import shop.cazait.domain.cafe.dto.PostDistanceReq;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
@@ -51,11 +48,21 @@ public class CafeController {
 
     @GetMapping("/all/user/{userId}")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
-    @ApiImplicitParam(name = "userId", value = "유저 ID")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "유저 ID"),
+            @ApiImplicitParam(name = "longitude", value = "유저 경도"),
+            @ApiImplicitParam(name = "latitude", value = "유저 위도"),
+            @ApiImplicitParam(name = "sort", value = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
+            @ApiImplicitParam(name = "limit", value = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
+    })
     public SuccessResponse<List<List<GetCafesRes>>> getCafeByStatus(@PathVariable Long userId,
-                                                                    @RequestBody PostDistanceReq distanceReq) throws CafeException {
+                                                                    @RequestParam String longitude,
+                                                                    @RequestParam String latitude,
+                                                                    @RequestParam String sort,
+                                                                    @RequestParam String limit)
+            throws CafeException {
         try {
-            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, distanceReq);
+            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, longitude, latitude, sort, limit);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -82,13 +89,20 @@ public class CafeController {
     @ApiOperation(value = "카페 이름 조회", notes = "특정 이름의 카페를 조회한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeName", value = "카페 이름"),
-            @ApiImplicitParam(name = "userId", value = "유저 ID")
+            @ApiImplicitParam(name = "userId", value = "유저 ID"),
+            @ApiImplicitParam(name = "longitude", value = "유저 경도"),
+            @ApiImplicitParam(name = "latitude", value = "유저 위도"),
+            @ApiImplicitParam(name = "sort", value = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
+            @ApiImplicitParam(name = "limit", value = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
     public SuccessResponse<List<List<GetCafesRes>>> getCafeByName(@PathVariable String cafeName,
                                                                   @PathVariable Long userId,
-                                                                  @RequestBody PostDistanceReq distanceReq) throws CafeException {
+                                                                  @RequestParam String longitude,
+                                                                  @RequestParam String latitude,
+                                                                  @RequestParam String sort,
+                                                                  @RequestParam String limit) throws CafeException {
         try {
-            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq);
+            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, longitude, latitude, sort, limit);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
