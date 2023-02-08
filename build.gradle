@@ -1,7 +1,14 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'shop'
@@ -14,18 +21,20 @@ repositories {
 
 dependencies {
 
-	// Spring-boot-stater
+	// Spring Boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude module: 'junit'
 	}
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 
 	// S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-	//JWT
+	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
@@ -37,9 +46,12 @@ dependencies {
 	// implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
 	// Database
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.h2database:h2'
+
+	// Querydsl
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -65,4 +77,29 @@ jar {
 
 test {
 	useJUnitPlatform()
+}
+
+/*
+ * Querydsl Setting Information
+ */
+def querydslDir = 'src/main/generated/querydsl'
+
+querydsl {	// JPA 사용 및 경로 설정
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets { // Build시 사용할 sourceSet 추가 설정
+	main.java.srcDir querydslDir
+}
+
+compileQuerydsl {	// Querydsl 컴파일 옵션 설정
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {	// compileClassPath 상속 설정
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
 }

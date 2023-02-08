@@ -1,7 +1,5 @@
 package shop.cazait.domain.congestion.api;
 
-import static shop.cazait.global.error.status.ErrorStatus.*;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -17,7 +15,7 @@ import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.service.CongestionService;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 @Api(tags = "혼잡도 API")
 @RestController
@@ -38,12 +36,7 @@ public class CongestionApiController {
                                                             @RequestBody @Valid PostCongestionReq postCongestionReq)
             throws CongestionException {
 
-        if (postCongestionReq.getCongestionStatus().isBlank()) {
-            throw new CongestionException(CONGESTION_STATUS_EMPTY);
-        }
-
-        PostCongestionRes result = congestionService.addAndUpdateCongestion(cafeId, postCongestionReq);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(congestionService.addAndUpdateCongestion(cafeId, postCongestionReq));
 
     }
 

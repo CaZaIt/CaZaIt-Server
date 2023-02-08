@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Component
-public class P6SpyFormatter extends JdbcEventListener implements MessageFormattingStrategy {
+public class P6SpyFormatterConfig extends JdbcEventListener implements MessageFormattingStrategy {
 
     @Override
     public void onAfterGetConnection(ConnectionInformation connectionInformation, SQLException e) {

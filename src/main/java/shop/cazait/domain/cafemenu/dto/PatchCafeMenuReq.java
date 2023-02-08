@@ -19,7 +19,4 @@ public class PatchCafeMenuReq {
     @Schema(description = "가격", example = "4500 (미수정 : null)")
     private Integer price;
 
-    @Schema(description = "이미지 URL", example = "iceAmericano.png (미수정 : null)")
-    private String imageUrl;
-
 }

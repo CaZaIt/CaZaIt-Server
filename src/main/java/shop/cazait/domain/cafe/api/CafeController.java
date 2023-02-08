@@ -1,13 +1,18 @@
 package shop.cazait.domain.cafe.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
@@ -17,41 +22,40 @@ import shop.cazait.domain.cafe.dto.PostDistanceReq;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags = "카페 정보 API")
+@Api(tags = "카페 API")
 @RestController
 @RequestMapping("/api/cafes")
 @RequiredArgsConstructor
 public class CafeController {
 
     private final CafeService cafeService;
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-    @PostMapping("/add/master/{masterId}")
+    @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
     @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     public SuccessResponse<String> addCafe(@PathVariable Long masterId,
-                                           @RequestPart(value = "PostCafeReq") @Valid PostCafeReq postCafeReq,
-                                           @RequestPart(value = "images", required = false) List<MultipartFile> imageFiles) throws JsonProcessingException {
-        cafeService.addCafe(masterId, postCafeReq, imageFiles);
+                                           @Parameter(description = "카페 정보 : {\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"")
+                                           @RequestParam @Valid String cafeInfo,
+                                           @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> cafeImages)
+            throws JsonProcessingException {
+        PostCafeReq postCafeReq = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
+        cafeService.addCafe(masterId, postCafeReq, cafeImages);
         return new SuccessResponse<>("카페 등록 완료");
     }
 
     @GetMapping("/all/user/{userId}")
     @ApiOperation(value = "카페 전체 조회", notes = "ACTIVE한 카페를 조회한다.")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "유저 ID"),
-            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표, 정렬 기준, 제한 거리"),
-            @ApiImplicitParam(name = "pageable", value = "페이징한 페이지 / uri 뒤에 \"?page=0\"를 붙여야한다.")
-    })
-    public SuccessResponse<List<GetCafesRes>> getCafeByStatus(@PathVariable Long userId,
-                                                              @RequestBody PostDistanceReq distanceReq,
-                                                              @PageableDefault(size = 7) Pageable pageable) throws CafeException {
+    @ApiImplicitParam(name = "userId", value = "유저 ID")
+    public SuccessResponse<List<List<GetCafesRes>>> getCafeByStatus(@PathVariable Long userId,
+                                                                    @RequestBody PostDistanceReq distanceReq) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByStatus(userId, distanceReq, pageable);
+            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, distanceReq);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -78,16 +82,13 @@ public class CafeController {
     @ApiOperation(value = "카페 이름 조회", notes = "특정 이름의 카페를 조회한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeName", value = "카페 이름"),
-            @ApiImplicitParam(name = "userId", value = "유저 ID"),
-            @ApiImplicitParam(name = "distanceReq", value = "유저의 현재 좌표"),
-            @ApiImplicitParam(name = "pageable", value = "페이징한 페이지 / uri 뒤에 \"?page=0\"를 붙여야한다.")
+            @ApiImplicitParam(name = "userId", value = "유저 ID")
     })
-    public SuccessResponse<List<GetCafesRes>> getCafeByName(@PathVariable String cafeName,
-                                                            @PathVariable Long userId,
-                                                            @RequestBody PostDistanceReq distanceReq,
-                                                            @PageableDefault(size = 7) Pageable pageable) throws CafeException {
+    public SuccessResponse<List<List<GetCafesRes>>> getCafeByName(@PathVariable String cafeName,
+                                                                  @PathVariable Long userId,
+                                                                  @RequestBody PostDistanceReq distanceReq) throws CafeException {
         try {
-            List<GetCafesRes> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq, pageable);
+            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, distanceReq);
             return new SuccessResponse<>(cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
@@ -98,8 +99,7 @@ public class CafeController {
     @ApiOperation(value = "카페 정보 수정", notes = "특정 ID의 카페 정보를 수정한다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
-            @ApiImplicitParam(name = "masterId", value = "마스터 ID"),
-            @ApiImplicitParam(name = "cafeReq", value = "수정할 카페 정보")
+            @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     })
     public SuccessResponse<String> updateCafe(@PathVariable Long cafeId,
                                               @PathVariable Long masterId,

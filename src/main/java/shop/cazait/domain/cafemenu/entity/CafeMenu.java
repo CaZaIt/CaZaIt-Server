@@ -23,12 +23,13 @@ public class CafeMenu {
     @Column(nullable = false)
     private String name;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
     private int price;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Builder

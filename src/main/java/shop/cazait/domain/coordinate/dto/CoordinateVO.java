@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafe.dto;
+package shop.cazait.domain.coordinate.dto;
 
 import java.util.ArrayList;
 import java.util.List;

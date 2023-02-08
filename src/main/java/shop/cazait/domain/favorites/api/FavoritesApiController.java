@@ -17,7 +17,7 @@ import shop.cazait.domain.favorites.dto.GetFavoritesRes;
 import shop.cazait.domain.favorites.dto.PostFavoritesRes;
 import shop.cazait.domain.favorites.service.FavoritesService;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 @Api(tags = "즐겨찾기 API")
 @RestController
@@ -36,31 +36,21 @@ public class FavoritesApiController {
     public SuccessResponse<PostFavoritesRes> addFavorites(@PathVariable(name = "userId") Long userId,
                                                           @PathVariable(name = "cafeId") Long cafeId)
             throws CafeException, UserException {
-
-        PostFavoritesRes result  = favoritesService.addFavorites(userId, cafeId);
-
-        return new SuccessResponse<>(result);
-
+        return new SuccessResponse<>(favoritesService.addFavorites(userId, cafeId));
     }
 
     @ApiOperation(value = "즐겨찾기 조회", notes = "사용자 ID를 받아 모든 즐겨찾기를 조회한다.")
     @ApiImplicitParam(name = "userId", value = "사용자 ID")
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<GetFavoritesRes>> getFavorites(@PathVariable(name = "userId") Long userId) {
-
-       List<GetFavoritesRes> result =  favoritesService.getFavorites(userId);
-       return new SuccessResponse<>(result);
-
+       return new SuccessResponse<>(favoritesService.getFavorites(userId));
     }
 
     @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID를 받아 즐겨찾기를 삭제한다.")
     @ApiImplicitParam(name = "favoritesId", value = "즐겨찾기 ID")
-    @DeleteMapping("/{favoritesId}")
+    @DeleteMapping("/delete/{favoritesId}")
     public SuccessResponse<String> deleteFavorites(@PathVariable(name = "favoritesId") Long favoritesId) {
-
-        String result =  favoritesService.deleteFavorites(favoritesId);
-        return new SuccessResponse<>(result);
-
+        return new SuccessResponse<>(favoritesService.deleteFavorites(favoritesId));
     }
 
 }

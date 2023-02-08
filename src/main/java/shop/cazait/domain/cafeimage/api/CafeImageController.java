@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafeimage.dto.PostCafeImageReq;
 import shop.cazait.domain.cafeimage.service.CafeImageService;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
 
 @Api(tags = "카페 이미지 API")

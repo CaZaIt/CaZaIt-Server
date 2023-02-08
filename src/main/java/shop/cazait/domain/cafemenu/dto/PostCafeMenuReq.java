@@ -26,18 +26,14 @@ public class PostCafeMenuReq {
     @NotBlank(message = "메뉴 가격을 입력해주세요.")
     private Integer price;
 
-    @Schema(description = "이미지 URL", example = "americano.png (미등록 : null)")
-    private String imageUrl;
-
-    public static List<CafeMenu> toEntity(Cafe cafe, List<PostCafeMenuReq> postCafeMenuReqs) {
-        return postCafeMenuReqs.stream()
-                .map(postCafeMenuReq -> CafeMenu.builder()
-                        .cafe(cafe)
-                        .name(postCafeMenuReq.getName())
-                        .description(postCafeMenuReq.getDescription())
-                        .price(postCafeMenuReq.getPrice())
-                        .imageUrl(postCafeMenuReq.getImageUrl())
-                        .build()).collect(Collectors.toList());
+    public static CafeMenu toEntity(Cafe cafe, PostCafeMenuReq postCafeMenuReq, String uploadFileName) {
+        return CafeMenu.builder()
+                .cafe(cafe)
+                .name(postCafeMenuReq.getName())
+                .description(postCafeMenuReq.getDescription())
+                .price(postCafeMenuReq.getPrice())
+                .imageUrl(uploadFileName)
+                .build();
     }
 
 }

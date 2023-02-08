@@ -6,11 +6,14 @@ import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_PRICE;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
@@ -22,6 +25,7 @@ import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.exception.CafeMenuException;
 import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
+import shop.cazait.global.common.service.AwsS3Service;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class CafeMenuService {
 
     private final CafeRepository cafeRepository;
     private final CafeMenuRepository cafeMenuRepository;
+    private final AwsS3Service awsS3Servicel;
 
     /**
      * 카페 메뉴 조회
@@ -46,14 +51,14 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 등록
      */
-    public List<PostCafeMenuRes> registerMenu(Long cafeId, List<PostCafeMenuReq> postCafeMenuReqs)
-            throws CafeException {
+    public PostCafeMenuRes registerMenu(Long cafeId, PostCafeMenuReq postCafeMenuReq, MultipartFile menuImage)
+            throws CafeException, IOException {
 
         Cafe findCafe = getCafe(cafeId);
-        List<CafeMenu> menus = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReqs);
-        List<CafeMenu> addMenus = cafeMenuRepository.saveAll(menus);
-
-        return PostCafeMenuRes.of(addMenus);
+        String uploadFileName = awsS3Servicel.uploadImage(menuImage);
+        CafeMenu menu = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReq, uploadFileName);
+        CafeMenu addMenu = cafeMenuRepository.save(menu);
+        return PostCafeMenuRes.of(addMenu);
 
     }
 
@@ -69,10 +74,11 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    public PatchCafeMenuRes updateMenu(Long cafeMenuId, PatchCafeMenuReq patchCafeMenuReq) {
+    public PatchCafeMenuRes updateMenu(Long menuId, PatchCafeMenuReq patchCafeMenuReq, MultipartFile menuImage)
+            throws IOException {
 
         CafeMenu findMenu = cafeMenuRepository
-                .findById(cafeMenuId)
+                .findById(menuId)
                 .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
 
         if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {
@@ -87,8 +93,8 @@ public class CafeMenuService {
             findMenu.changePrice(patchCafeMenuReq.getPrice());
         }
 
-        if (patchCafeMenuReq.getImageUrl() != NOT_UPDATE_IMAGE) {
-            findMenu.changeImageUrl(patchCafeMenuReq.getImageUrl());
+        if (menuImage.getName() != NOT_UPDATE_IMAGE) {
+            findMenu.changeImageUrl(awsS3Servicel.uploadImage(menuImage));
         }
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findMenu);

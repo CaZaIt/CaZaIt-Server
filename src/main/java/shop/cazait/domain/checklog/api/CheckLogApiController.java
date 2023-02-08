@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.checklog.dto.GetCheckLogRes;
 import shop.cazait.domain.checklog.service.CheckLogService;
-import shop.cazait.global.common.response.SuccessResponse;
+import shop.cazait.global.common.dto.response.SuccessResponse;
 
 @Api(tags = "방문 기록 API")
 @RestController
@@ -27,8 +27,7 @@ public class CheckLogApiController {
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<GetCheckLogRes>> getVisitLog(@PathVariable(name = "userId") Long userId) {
 
-        List<GetCheckLogRes> result = cafeVisitService.getVisitLog(userId);
-        return new SuccessResponse<>(result);
+        return new SuccessResponse<>(cafeVisitService.getVisitLog(userId));
 
     }
 

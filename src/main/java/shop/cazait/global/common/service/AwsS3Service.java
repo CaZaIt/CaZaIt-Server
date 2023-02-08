@@ -1,4 +1,4 @@
-package shop.cazait.global.util.s3;
+package shop.cazait.global.common.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

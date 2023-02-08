@@ -13,9 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.*;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafe.entity.Coordinate;
+import shop.cazait.domain.coordinate.entity.Coordinate;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
+import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
 import shop.cazait.domain.checklog.service.CheckLogService;
@@ -32,7 +33,8 @@ import shop.cazait.global.error.status.ErrorStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import shop.cazait.global.util.s3.AwsS3Service;
+import shop.cazait.domain.coordinate.service.CoordinateService;
+import shop.cazait.global.common.service.AwsS3Service;
 
 @Service
 @RequiredArgsConstructor
@@ -112,6 +114,7 @@ public class CafeService {
 
         cafeImages.forEach(cafeImage -> {
             System.out.println("Save Image Url : " + cafeImage.getImageUrl());
+            cafeImageRepository.save(cafeImage);
         });
 
     }
@@ -120,7 +123,7 @@ public class CafeService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
-    public List<GetCafesRes> getCafeByStatus(Long userId, PostDistanceReq distanceReq, Pageable pageable) throws CafeException {
+    public List<List<GetCafesRes>> getCafeByStatus(Long userId, PostDistanceReq distanceReq) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         if (cafeList.size() == 0) {
@@ -128,8 +131,8 @@ public class CafeService {
         }
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, distanceReq);
         getCafesRes = sortCafeList(getCafesRes, distanceReq);
-        getCafesRes = pageCafeList(getCafesRes, pageable).getContent();
-        return getCafesRes;
+        List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
+        return getCafesResList;
     }
 
     /**
@@ -139,15 +142,16 @@ public class CafeService {
     public GetCafeRes getCafeById(Long userId, Long cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
+        List<GetCafeImageRes> getCafeImageResList = readCafeImageList(cafeId);
         String logResult = checkLogService.addVisitLog(userId, cafeId);    // 최근 본 카페 등록
-        return GetCafeRes.of(cafe, logResult);
+        return GetCafeRes.of(cafe, getCafeImageResList, logResult);
     }
 
     /**
      * 카페 상세 조회 (카페 이름)
      */
     @Transactional(readOnly = true)
-    public List<GetCafesRes> getCafeByName(String name, Long userId, PostDistanceReq distanceReq, Pageable pageable) throws CafeException {
+    public List<List<GetCafesRes>> getCafeByName(String name, Long userId, PostDistanceReq distanceReq) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.INVALID_CAFE_NAME);
@@ -155,8 +159,8 @@ public class CafeService {
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, distanceReq);
         getCafesRes = sortCafeList(getCafesRes, distanceReq);
-        getCafesRes = pageCafeList(getCafesRes, pageable).getContent();
-        return getCafesRes;
+        List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
+        return getCafesResList;
     }
 
     public void updateCafe(Long cafeId, Long masterId, PostCafeReq cafeReq)
@@ -196,11 +200,13 @@ public class CafeService {
                     break;
                 }
             }
+            List<GetCafeImageRes> getCafeImageResList = readCafeImageList(cafe.getId());
+
             int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                     cafe.getCoordinate().getLongitude(),
                     distanceReq.getLatitude(), distanceReq.getLongitude());
 
-            GetCafesRes cafeRes = GetCafesRes.of(cafe, distance, favorite);
+            GetCafesRes cafeRes = GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
             cafeResList.add(cafeRes);
         }
         return cafeResList;
@@ -222,12 +228,30 @@ public class CafeService {
         return getCafesRes;
     }
 
-    private Page<GetCafesRes> pageCafeList(List<GetCafesRes> getCafesRes, Pageable pageable) {
-        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), getCafesRes.size());
-        Page<GetCafesRes> getCafesResPage = new PageImpl<>(getCafesRes.subList(start, end), pageRequest, getCafesRes.size());
-        return getCafesResPage;
+    private List<GetCafeImageRes> readCafeImageList(Long cafeId) {
+        List<CafeImage> cafeImageList = cafeImageRepository.findByCafeId(cafeId);
+        List<GetCafeImageRes> getCafeImageResList = new ArrayList<>();
+        for (CafeImage cafeImage : cafeImageList) {
+            GetCafeImageRes getCafeImageRes = GetCafeImageRes.of(cafeImage);
+            getCafeImageResList.add(getCafeImageRes);
+        }
+        return getCafeImageResList;
+    }
+
+    private List<List<GetCafesRes>> pageCafeList(List<GetCafesRes> getCafesRes) {
+        List<List<GetCafesRes>> getCafesResList = new ArrayList<>();
+        int it = Math.min(5, getCafesRes.size() / 7 + 1);
+        for (int i = 0;i < it;i++) {
+            List<GetCafesRes> tmpGetCafesRes = new ArrayList<>();
+            for (int j = 7 * i;j < 7 * (i + 1);j++) {
+                if (getCafesRes.size() == j) {
+                    break;
+                }
+                tmpGetCafesRes.add(getCafesRes.get(j));
+            }
+            getCafesResList.add(tmpGetCafesRes);
+        }
+        return getCafesResList;
     }
 }
 

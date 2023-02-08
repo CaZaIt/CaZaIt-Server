@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafe.entity;
+package shop.cazait.domain.coordinate.entity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

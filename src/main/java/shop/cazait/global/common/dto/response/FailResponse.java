@@ -1,4 +1,4 @@
-package shop.cazait.global.common.response;
+package shop.cazait.global.common.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
