@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.*;
 import shop.cazait.domain.cafe.entity.Cafe;
@@ -123,14 +124,14 @@ public class CafeService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
-    public List<List<GetCafesRes>> getCafeByStatus(Long userId, PostDistanceReq distanceReq) throws CafeException {
+    public List<List<GetCafesRes>> getCafeByStatus(Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.NOT_EXIST_CAFE);
         }
-        List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, distanceReq);
-        getCafesRes = sortCafeList(getCafesRes, distanceReq);
+        List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
+        getCafesRes = sortCafeList(getCafesRes, sort, limit);
         List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
         return getCafesResList;
     }
@@ -151,14 +152,14 @@ public class CafeService {
      * 카페 상세 조회 (카페 이름)
      */
     @Transactional(readOnly = true)
-    public List<List<GetCafesRes>> getCafeByName(String name, Long userId, PostDistanceReq distanceReq) throws CafeException {
+    public List<List<GetCafesRes>> getCafeByName(String name, Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         if (cafeList.size() == 0) {
             throw new CafeException(ErrorStatus.INVALID_CAFE_NAME);
         }
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
-        List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, distanceReq);
-        getCafesRes = sortCafeList(getCafesRes, distanceReq);
+        List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
+        getCafesRes = sortCafeList(getCafesRes, sort, limit);
         List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
         return getCafesResList;
     }
@@ -189,7 +190,7 @@ public class CafeService {
         cafeRepository.save(cafe);
     }
 
-    private List<GetCafesRes> readCafeList(Long userId, List<Cafe> cafeList, PostDistanceReq distanceReq) {
+    private List<GetCafesRes> readCafeList(Long userId, List<Cafe> cafeList, String longitude, String latitude) {
         List<Favorites> favoritesList = favoritesRepository.findAllByUserId(userId).get();
         List<GetCafesRes> cafeResList = new ArrayList<>();
         for (Cafe cafe : cafeList) {
@@ -204,7 +205,7 @@ public class CafeService {
 
             int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                     cafe.getCoordinate().getLongitude(),
-                    distanceReq.getLatitude(), distanceReq.getLongitude());
+                    longitude, latitude);
 
             GetCafesRes cafeRes = GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
             cafeResList.add(cafeRes);
@@ -212,8 +213,7 @@ public class CafeService {
         return cafeResList;
     }
 
-    private List<GetCafesRes> sortCafeList(List<GetCafesRes> getCafesRes, PostDistanceReq distanceReq) {
-        String sort = distanceReq.getSort();
+    private List<GetCafesRes> sortCafeList(List<GetCafesRes> getCafesRes, String sort, String limit) {
         if (sort.equals("distance")) {
             getCafesRes.sort((c1, c2) -> c2.getDistance() - c1.getDistance());
             Collections.reverse(getCafesRes);
@@ -221,9 +221,9 @@ public class CafeService {
             getCafesRes.sort((c1, c2) -> c2.getCongestionStatus().getLevel() - c1.getCongestionStatus().getLevel());
         }
 
-        int limit = Integer.parseInt(distanceReq.getLimit());
-        if (limit != 0) {
-            getCafesRes.removeIf(cafesRes -> cafesRes.getDistance() > limit);
+        int distanceLimit = Integer.parseInt(limit);
+        if (distanceLimit != 0) {
+            getCafesRes.removeIf(cafesRes -> cafesRes.getDistance() > distanceLimit);
         }
         return getCafesRes;
     }
