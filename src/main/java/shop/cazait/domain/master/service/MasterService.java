@@ -115,16 +115,16 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보
-	public PatchMasterRes updateMaster(Long id, PatchMasterReq putMasterReq) {
+	public PatchMasterRes updateMaster(Long id, PatchMasterReq patchMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
-		if (putMasterReq.getEmail() != null) {
-			findMaster.changeMasterEmail(putMasterReq.getEmail());
+		if (patchMasterReq.getEmail() != null) {
+			findMaster.changeMasterEmail(patchMasterReq.getEmail());
 		}
-		if (putMasterReq.getPassword() != null) {
-			findMaster.changeMasterPassword(putMasterReq.getPassword());
+		if (patchMasterReq.getPassword() != null) {
+			findMaster.changeMasterPassword(patchMasterReq.getPassword());
 		}
-		if (putMasterReq.getNickname() != null) {
-			findMaster.changeMasterNickname(putMasterReq.getNickname());
+		if (patchMasterReq.getNickname() != null) {
+			findMaster.changeMasterNickname(patchMasterReq.getNickname());
 		}
 
 		Master updateMaster = masterRepository.save(findMaster);
