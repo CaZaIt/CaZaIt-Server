@@ -1,13 +1,13 @@
-package shop.cazait.domain.cafe.entity;
+package shop.cazait.domain.coordinate.entity;
 
-import static com.querydsl.core.types.PathMetadataFactory.*;
-
-import com.querydsl.core.types.dsl.*;
-
-import com.querydsl.core.types.PathMetadata;
-import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import shop.cazait.domain.coordinate.entity.Coordinate;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.dsl.BeanPath;
+import com.querydsl.core.types.dsl.StringPath;
+
+import javax.annotation.processing.Generated;
+
+import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
 
 /**
@@ -16,7 +16,7 @@ import shop.cazait.domain.coordinate.entity.Coordinate;
 @Generated("com.querydsl.codegen.DefaultEmbeddableSerializer")
 public class QCoordinate extends BeanPath<Coordinate> {
 
-    private static final long serialVersionUID = 611749206L;
+    private static final long serialVersionUID = -339825295L;
 
     public static final QCoordinate coordinate = new QCoordinate("coordinate");
 

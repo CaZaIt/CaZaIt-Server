@@ -1,13 +1,12 @@
 package shop.cazait.domain.cafe.entity;
 
-import static com.querydsl.core.types.PathMetadataFactory.*;
-
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.dsl.*;
 
-import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
+
+import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
 
 /**
@@ -30,7 +29,7 @@ public class QCafe extends EntityPathBase<Cafe> {
 
     public final shop.cazait.domain.congestion.entity.QCongestion congestion;
 
-    public final QCoordinate coordinate;
+    public final shop.cazait.domain.coordinate.entity.QCoordinate coordinate;
 
     //inherited
     public final StringPath createdAt = _super.createdAt;
@@ -66,7 +65,7 @@ public class QCafe extends EntityPathBase<Cafe> {
     public QCafe(Class<? extends Cafe> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.congestion = inits.isInitialized("congestion") ? new shop.cazait.domain.congestion.entity.QCongestion(forProperty("congestion"), inits.get("congestion")) : null;
-        this.coordinate = inits.isInitialized("coordinate") ? new QCoordinate(forProperty("coordinate")) : null;
+        this.coordinate = inits.isInitialized("coordinate") ? new shop.cazait.domain.coordinate.entity.QCoordinate(forProperty("coordinate")) : null;
         this.master = inits.isInitialized("master") ? new shop.cazait.domain.master.entity.QMaster(forProperty("master"), inits.get("master")) : null;
     }
 
