@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
@@ -86,6 +88,9 @@ public class MasterController {
 
 	@PatchMapping("/update/{cafeId}")
 	@ApiOperation(value = "마스터 정보 수정", notes = "특정 ID의 마스터 관련 정보를 수정한다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "masterId", value = "마스터 ID"),
+	})
 	public SuccessResponse<String> updateMaster(@PathVariable Long masterId, @RequestBody PatchMasterReq masterReq) {
 		masterService.updateMaster(masterId, masterReq);
 		return new SuccessResponse<>("카페 수정 완료");
