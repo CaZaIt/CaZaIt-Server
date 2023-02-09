@@ -98,6 +98,9 @@ public class MasterController {
 
 	@DeleteMapping
 	@ApiOperation(value = "마스터 계정 탈퇴(상태  변경)", notes = "특정 ID의 마스터 상태를 INACTIVE로 변경한다.")
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "Id", value = "탈퇴하고자 하는 마스터 ID"),
+	})
 	public SuccessResponse<String> deleteMaster(@Validated @PathVariable Long id) throws MasterException {
 		masterService.removeMaster(id);
 		String response = "회원 탈퇴가 성공하였습니다.";
