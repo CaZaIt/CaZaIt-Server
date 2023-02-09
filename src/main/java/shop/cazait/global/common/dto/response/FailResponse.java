@@ -8,9 +8,10 @@ import shop.cazait.global.error.status.ErrorStatus;
 
 
 @Getter
-@JsonPropertyOrder({"result", "message", "description"})
+@JsonPropertyOrder({"code", "result", "message", "description"})
 public class FailResponse {
 
+    private int code;
     private String result;
     private String message;
 
@@ -18,11 +19,13 @@ public class FailResponse {
     private String description;
 
     public FailResponse(ErrorStatus status) {
+        this.code = status.getCode();
         this.result = status.getResult();
         this.message = status.getMessage();
     }
 
     public FailResponse(ErrorStatus status, String description) {
+        this.code = status.getCode();
         this.result = status.getResult();
         this.message = status.getMessage();
         this.description = description;
