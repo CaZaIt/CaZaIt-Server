@@ -80,10 +80,6 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
-			throw new MasterException(FAILED_TO_LOGIN);
-		}
-
 		Master master = dto.toEntity();
 		Master findMaster = masterRepository.findMasterByEmail(master.getEmail()).get();
 
@@ -119,18 +115,8 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보
-	public PatchMasterRes updateMaster(Long id, PatchMasterReq putMasterReq) {
+	public PatchMasterRes updateMaster(Long id, PatchMasterReq patchMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
-		if (putMasterReq.getEmail() != null) {
-			findMaster.changeMasterEmail(putMasterReq.getEmail());
-		}
-		if (putMasterReq.getPassword() != null) {
-			findMaster.changeMasterPassword(putMasterReq.getPassword());
-		}
-		if (putMasterReq.getNickname() != null) {
-			findMaster.changeMasterNickname(putMasterReq.getNickname());
-		}
-
 		Master updateMaster = masterRepository.save(findMaster);
 		return PatchMasterRes.builder()
 			.id(updateMaster.getId())
@@ -142,7 +128,7 @@ public class MasterService {
 	}
 
 	// 회원 탈퇴하기
-	public void removeMaster(int id) throws MasterException {
+	public void removeMaster(Long id) throws MasterException {
 		Optional<Master> masterEntity = masterRepository.findMasterById(id);
 
 		if (masterRepository.findMasterById(id).isEmpty()) {

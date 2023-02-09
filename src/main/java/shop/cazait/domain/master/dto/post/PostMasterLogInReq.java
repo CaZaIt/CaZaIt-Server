@@ -1,5 +1,7 @@
 package shop.cazait.domain.master.dto.post;
 
+import javax.validation.constraints.NotBlank;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,9 +15,11 @@ import shop.cazait.domain.master.entity.Master;
 public class PostMasterLogInReq {
 
 	@Schema(description = "이메일", example = "master@gmail.com")
+	@NotBlank(message = "Master 이메일을 입력해주세요.")
 	private String email;
 
 	@Schema(description = "비밀번호", example = "abcde!12345")
+	@NotBlank(message = "Master 비밀번호를 입력해주세요.")
 	private String password;
 
 	@Builder
