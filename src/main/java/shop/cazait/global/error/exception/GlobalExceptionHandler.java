@@ -7,13 +7,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
-import shop.cazait.domain.favorites.exception.FavoritesException;
 import shop.cazait.domain.congestion.exception.CongestionException;
+import shop.cazait.domain.favorites.exception.FavoritesException;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.FailResponse;
 import shop.cazait.global.error.status.ErrorStatus;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -66,7 +71,7 @@ public class GlobalExceptionHandler {
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             description.append("[");
             description.append(fieldError.getField());
-            description.append("](은)는");
+            description.append("](은)는 ");
             description.append(fieldError.getDefaultMessage());
             description.append(" 입력된 값: [");
             description.append(fieldError.getRejectedValue());
@@ -75,5 +80,25 @@ public class GlobalExceptionHandler {
         return new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString());
 
     }
+
+    @ExceptionHandler({ ConstraintViolationException.class })
+    protected FailResponse handleValidatedException(ConstraintViolationException exception) {
+        Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
+        StringBuilder description = new StringBuilder();
+
+        constraintViolations.stream()
+                .map(constraintViolation -> {
+                    description
+                            .append(constraintViolation.getMessage())
+                            .append(". 입력된 값: [")
+                            .append(constraintViolation.getInvalidValue())
+                            .append("]");
+                    return description;
+                }).collect(Collectors.toList());
+
+        return new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString());
+
+    }
+
 
 }
