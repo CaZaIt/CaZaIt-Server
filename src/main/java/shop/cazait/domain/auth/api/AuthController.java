@@ -10,11 +10,10 @@ import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
 
-import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
+
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
-import shop.cazait.domain.user.dto.PostUserLoginReq;
-import shop.cazait.domain.user.dto.PostUserLoginRes;
+
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
