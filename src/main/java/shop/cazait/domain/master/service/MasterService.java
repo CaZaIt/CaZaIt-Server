@@ -128,7 +128,7 @@ public class MasterService {
 	}
 
 	// 회원 탈퇴하기
-	public void removeMaster(int id) throws MasterException {
+	public void removeMaster(Long id) throws MasterException {
 		Optional<Master> masterEntity = masterRepository.findMasterById(id);
 
 		if (masterRepository.findMasterById(id).isEmpty()) {
