@@ -80,10 +80,6 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
-			throw new MasterException(FAILED_TO_LOGIN);
-		}
-
 		Master master = dto.toEntity();
 		Master findMaster = masterRepository.findMasterByEmail(master.getEmail()).get();
 
