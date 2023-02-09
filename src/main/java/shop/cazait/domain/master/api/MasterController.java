@@ -28,8 +28,8 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
-import shop.cazait.domain.master.dto.post.PostMasterLogInReq;
-import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
+//import shop.cazait.domain.master.dto.post.PostMasterLogInReq;
+//import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.error.MasterException;
@@ -63,21 +63,21 @@ public class MasterController {
 		return new SuccessResponse<>(postCreateMasterRes);
 	}
 
-	@NoAuth
-	@PostMapping("/log-in")
-	@ApiOperation(value = "회원 로그인", notes = "이메일과 패스워드를 통해 로그인을 진행")
-	public SuccessResponse<PostMasterLogInRes> logIn(@RequestBody PostMasterLogInReq postMasterLogInReq)
-		throws
-		MasterException,
-		InvalidAlgorithmParameterException,
-		NoSuchPaddingException,
-		IllegalBlockSizeException,
-		NoSuchAlgorithmException,
-		BadPaddingException,
-		InvalidKeyException {
-		PostMasterLogInRes postMasterLogInRes = masterService.LoginMaster(postMasterLogInReq);
-		return new SuccessResponse<>(postMasterLogInRes);
-	}
+//	@NoAuth
+//	@PostMapping("/log-in")
+//	@ApiOperation(value = "회원 로그인", notes = "이메일과 패스워드를 통해 로그인을 진행")
+//	public SuccessResponse<PostMasterLogInRes> logIn(@RequestBody PostMasterLogInReq postMasterLogInReq)
+//		throws
+//		MasterException,
+//		InvalidAlgorithmParameterException,
+//		NoSuchPaddingException,
+//		IllegalBlockSizeException,
+//		NoSuchAlgorithmException,
+//		BadPaddingException,
+//		InvalidKeyException {
+//		PostMasterLogInRes postMasterLogInRes = masterService.LoginMaster(postMasterLogInReq);
+//		return new SuccessResponse<>(postMasterLogInRes);
+//	}
 
 	@GetMapping("/all")
 	@ApiOperation(value = "마스터 계정 전체 조회", notes = "ACTIVE한 마스터 계정을 조회한다.")
@@ -107,15 +107,15 @@ public class MasterController {
 		return new SuccessResponse<>(response);
 	}
 
-	@PostMapping(value = "/refresh")
-	@ApiOperation(value = "토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
-	public SuccessResponse<PostMasterLogInRes> refreshToken(
-		@RequestHeader(value = "X-ACCESS-TOKEN") @NotBlank String accessToken,
-		@RequestHeader(value = "REFRESH-TOKEN") @NotBlank String refreshToken) throws
-		MasterException,
-		BaseException, UserException {
-		PostMasterLogInRes postMasterLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
-		return new SuccessResponse<>(postMasterLoginRes);
-	}
+//	@PostMapping(value = "/refresh")
+//	@ApiOperation(value = "토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
+//	public SuccessResponse<PostMasterLogInRes> refreshToken(
+//		@RequestHeader(value = "X-ACCESS-TOKEN") @NotBlank String accessToken,
+//		@RequestHeader(value = "REFRESH-TOKEN") @NotBlank String refreshToken) throws
+//		MasterException,
+//		BaseException, UserException {
+//		PostMasterLogInRes postMasterLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
+//		return new SuccessResponse<>(postMasterLoginRes);
+//	}
 
 }
