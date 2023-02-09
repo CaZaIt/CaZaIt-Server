@@ -4,26 +4,26 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
-import java.util.List;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Api(tags = "유저 API")
 @Validated
@@ -97,8 +97,7 @@ public class UserApiController {
     @PostMapping("/email")
     @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @ApiImplicitParam (name="email",value = "사용자 이메일")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestBody @Valid PostDuplicateEmailReq postDuplicateEmailReq) throws UserException {
-        String email = postDuplicateEmailReq.getEmail();
+    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
     }
@@ -106,9 +105,9 @@ public class UserApiController {
     @NoAuth
     @PostMapping("/nickname")
     @ApiOperation(value="닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    public SuccessResponse<String> checkDuplicateNickname(@RequestBody @Valid PostDuplicateNicknameReq postDuplicateNicknameReq) throws UserException {
-        String nickname = postDuplicateNicknameReq.getNickname();
-        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickname);
+    @ApiImplicitParam (name="nickName",value = "사용자 닉네임")
+    public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {
+        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickName);
         return nicknameDuplicateSuccessResponse;
     }
 
