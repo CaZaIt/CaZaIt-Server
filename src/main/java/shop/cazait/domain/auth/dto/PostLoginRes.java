@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.auth.Role;
-import shop.cazait.domain.master.dto.post.PostMasterLogInRes;
+
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.user.entity.User;
 
