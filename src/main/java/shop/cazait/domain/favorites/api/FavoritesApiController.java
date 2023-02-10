@@ -1,5 +1,7 @@
 package shop.cazait.domain.favorites.api;
 
+import static shop.cazait.global.error.status.SuccessStatus.*;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,6 +20,7 @@ import shop.cazait.domain.favorites.dto.PostFavoritesRes;
 import shop.cazait.domain.favorites.service.FavoritesService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.error.status.SuccessStatus;
 
 @Api(tags = "즐겨찾기 API")
 @RestController
@@ -36,21 +39,29 @@ public class FavoritesApiController {
     public SuccessResponse<PostFavoritesRes> addFavorites(@PathVariable(name = "userId") Long userId,
                                                           @PathVariable(name = "cafeId") Long cafeId)
             throws CafeException, UserException {
-        return new SuccessResponse<>(favoritesService.addFavorites(userId, cafeId));
+        return new SuccessResponse<>(CREATE_FAVORITES, favoritesService.addFavorites(userId, cafeId));
     }
 
     @ApiOperation(value = "즐겨찾기 조회", notes = "사용자 ID를 받아 모든 즐겨찾기를 조회한다.")
     @ApiImplicitParam(name = "userId", value = "사용자 ID")
     @GetMapping("/user/{userId}")
     public SuccessResponse<List<GetFavoritesRes>> getFavorites(@PathVariable(name = "userId") Long userId) {
-       return new SuccessResponse<>(favoritesService.getFavorites(userId));
+
+        List<GetFavoritesRes> result = favoritesService.getFavorites(userId);
+        SuccessStatus resultStatus = SUCCESS;
+
+        if (result == null) {
+            resultStatus = NO_CONTENT_SUCCESS;
+        }
+
+       return new SuccessResponse<>(resultStatus, result);
     }
 
     @ApiOperation(value = "즐겨찾기 삭제", notes = "즐겨찾기 ID를 받아 즐겨찾기를 삭제한다.")
     @ApiImplicitParam(name = "favoritesId", value = "즐겨찾기 ID")
     @DeleteMapping("/delete/{favoritesId}")
     public SuccessResponse<String> deleteFavorites(@PathVariable(name = "favoritesId") Long favoritesId) {
-        return new SuccessResponse<>(favoritesService.deleteFavorites(favoritesId));
+        return new SuccessResponse<>(SUCCESS, favoritesService.deleteFavorites(favoritesId));
     }
 
 }

@@ -1,25 +1,31 @@
 package shop.cazait.domain.cafeimage.api;
 
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.exception.CafeException;
+import shop.cazait.domain.cafeimage.exception.CafeImageException;
 import shop.cazait.domain.cafeimage.service.CafeImageService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
-import shop.cazait.domain.cafeimage.exception.CafeImageException;
-
-import java.util.List;
 
 @Api(tags = "카페 이미지 API")
 @RestController
 @RequestMapping("/api/cafes/images")
 @RequiredArgsConstructor
-public class CafeImageController {
+public class CafeImageController {  // todo: 이미지 컨트롤러는 필요 없을 듯
 
     private final CafeImageService cafeImageService;
 
@@ -34,7 +40,7 @@ public class CafeImageController {
                                                 @Parameter(description = "카페 이미지") @RequestPart List<MultipartFile> cafeImages) throws CafeException {
         try {
             cafeImageService.addCafeImage(cafeId, masterId, cafeImages);
-            return new SuccessResponse<>("카페 이미지 등록 완료");
+            return new SuccessResponse<>(SUCCESS,"카페 이미지 등록 완료");
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -50,7 +56,7 @@ public class CafeImageController {
                                                    @PathVariable Long masterId) throws CafeImageException {
         try {
             cafeImageService.deleteCafeImage(cafeImageId, masterId);
-            return new SuccessResponse<>("카페 이미지 삭제 완료");
+            return new SuccessResponse<>(SUCCESS,"카페 이미지 삭제 완료");
         } catch (CafeImageException e) {
             throw new CafeImageException(e.getError());
         }
