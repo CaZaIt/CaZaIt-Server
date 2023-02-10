@@ -127,11 +127,9 @@ public class JwtService {
 
     public boolean isValidAccessToken(String token) throws UserException {
         log.info("isValidAccessToken is : " + token);
+        Jws<Claims> accessClaims;
         try {
-            Jws<Claims> accessClaims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+            accessClaims = parseJwt(token);
             log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
             log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
             return true;
@@ -149,11 +147,9 @@ public class JwtService {
 
     public boolean isValidAccessTokenInRefresh(String token) throws UserException {
         log.info("isValidAccessToken is : " + token);
+        Jws<Claims> accessClaims;
         try {
-            Jws<Claims> accessClaims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+            accessClaims= parseJwt(token);
             log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
             log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
             return true;
@@ -171,12 +167,10 @@ public class JwtService {
 
     public boolean isValidRefreshTokenInRefresh(String token) throws UserException {
         log.info("isValidRefreshToken: "+token);
+        Jws<Claims> refreshClaims;
         try {
-            Jws<Claims> accessClaims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-            log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
+             refreshClaims = parseJwt(token);
+            log.info("Access expireTime: " + refreshClaims.getBody().getExpiration());
             return true;
         }
         catch (ExpiredJwtException exception) {
