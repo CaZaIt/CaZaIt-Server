@@ -75,12 +75,17 @@ public class ReviewApiController {
         return new SuccessResponse<>(SUCCESS, getReviewRes);
     }
 
-    @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
-    @PostMapping("/post/{cafeId}")
-    public SuccessResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq)
+    @ApiOperation(value = "리뷰 작성", notes = "유저와 카페 ID를 받아 해당 카페의 리뷰 작성")
+    @PostMapping("/user/{userId}/cafe/{cafeId}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "유저 ID"),
+            @ApiImplicitParam(name = "cafeId", value = "카페 ID")
+    })
+    public SuccessResponse<PostReviewRes> addReview(@PathVariable Long userId,
+                                                    @PathVariable Long cafeId,
+                                                    @RequestBody @Valid PostReviewReq postReviewReq)
             throws UserException {
-        PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
-
+        PostReviewRes postReviewRes = reviewDaoService.addReview(userId, cafeId, postReviewReq);
         return new SuccessResponse<>(CREATE_REVIEW, postReviewRes);
     }
 
@@ -88,7 +93,6 @@ public class ReviewApiController {
     @PatchMapping("/edit/{reviewId}")
     public SuccessResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
-
         return new SuccessResponse<>(SUCCESS, patchReviewRes);
     }
 
@@ -96,7 +100,6 @@ public class ReviewApiController {
     @DeleteMapping("/{reviewId}")
     public SuccessResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) {
         DelReviewRes delReviewRes = reviewDaoService.deleteReview(reviewId);
-
         return new SuccessResponse<>(SUCCESS, delReviewRes);
     }
 }
