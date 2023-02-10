@@ -34,7 +34,7 @@ public class JwtService {
         return Jwts.builder()
                 .setHeaderParam("type", "jwt")
                 .claim("userIdx", userIdx)
-                .setIssuedAt(new Date())
+                .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(key)
                 .compact();
