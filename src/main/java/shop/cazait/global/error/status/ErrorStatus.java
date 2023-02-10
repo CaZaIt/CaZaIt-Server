@@ -77,7 +77,8 @@ public enum ErrorStatus {
     EMPTY_JWT("FAIL","JWT를 입력해주세요."),
     INVALID_JWT("FAIL", "유효하지 않은 JWT입니다."),
     NOT_EXPIRED_TOKEN("FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
-    EXPIRED_JWT("FAIL", "만료된 JWT입니다.");
+    EXPIRED_JWT("FAIL", "만료된 JWT입니다."),
+    INVALID_ROLE("FAIL","회원인지 관리자인지를 올바로 입력해주세요");
 
     private final String result;
     private final String message;

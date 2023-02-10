@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.cazait.domain.auth.dto.PostLoginReq;
+import shop.cazait.domain.auth.dto.PostLoginRes;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
@@ -24,6 +26,7 @@ import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.Secret;
 
+import static shop.cazait.domain.auth.Role.USER;
 import static shop.cazait.global.error.status.ErrorStatus.*;
 
 
@@ -54,19 +57,19 @@ public class UserService {
         return PostUserRes.of(user);
     }
 
-    public PostUserLoginRes logIn(PostUserLoginReq postUserLoginReq)
+    public PostLoginRes logIn(PostLoginReq postLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if(userRepository.findByEmail(postUserLoginReq.getEmail()).isEmpty()){
+        if(userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()){
             throw new UserException(FAILED_TO_LOGIN);
         }
 
-        User user = postUserLoginReq.toEntity();
-        User findUser = userRepository.findByEmail(user.getEmail()).get();
+
+        User findUser = userRepository.findByEmail(postLoginReq.getEmail()).get();
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
         Long userIdx;
-        if (password.equals(user.getPassword())) {
+        if (password.equals(postLoginReq.getPassword())) {
             userIdx = findUser.getId();
             String jwt = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
@@ -78,7 +81,7 @@ public class UserService {
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
-            return PostUserLoginRes.of(findUser, jwt, refreshToken);
+            return PostLoginRes.of(findUser, jwt, refreshToken, USER);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
@@ -138,7 +141,7 @@ public class UserService {
     }
 
 
-    public PostUserLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
+    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
     
         User user = null;
         Long userIdx = null;
@@ -180,6 +183,6 @@ public class UserService {
                 refreshToken = jwtService.createRefreshToken();
             }
         }
-        return PostUserLoginRes.of(user,accessToken,refreshToken);
+        return PostLoginRes.of(user,accessToken,refreshToken,USER);
     }
 }

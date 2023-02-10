@@ -44,16 +44,6 @@ public class UserApiController {
         return new SuccessResponse<>(postUserRes);
     }
 
-    @NoAuth
-    @PostMapping("/log-in")
-    @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
-    public SuccessResponse<PostUserLoginRes> logIn (@RequestBody @Valid PostUserLoginReq postUserLoginReq)
-            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        PostUserLoginRes postUserLoginRes = userService.logIn(postUserLoginReq);
-        return new SuccessResponse<>(postUserLoginRes);
-    }
-
-
     @GetMapping("/all")
     @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
     public SuccessResponse<List<GetUserRes>> getUsers(){
@@ -89,6 +79,7 @@ public class UserApiController {
     @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
     @ApiImplicitParam (name="userIdx",value = "사용자 userId")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) {
+
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(deleteUserRes);
     }
@@ -111,13 +102,13 @@ public class UserApiController {
         return nicknameDuplicateSuccessResponse;
     }
 
-    @NoAuth
-    @PostMapping(value = "/refresh")
-    @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
-    public SuccessResponse<PostUserLoginRes>refreshToken(
-            @RequestHeader (value="X-ACCESS-TOKEN") String accessToken,
-            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException {
-        PostUserLoginRes postUserLoginRes = userService.issueAccessToken(accessToken, refreshToken);
-        return new SuccessResponse<>(postUserLoginRes);
-    }
+//    @NoAuth
+//    @PostMapping(value = "/refresh")
+//    @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
+//    public SuccessResponse<PostUserLoginRes>refreshToken(
+//            @RequestHeader (value="X-ACCESS-TOKEN") String accessToken,
+//            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException {
+//        PostUserLoginRes postUserLoginRes = userService.issueAccessToken(accessToken, refreshToken);
+//        return new SuccessResponse<>(postUserLoginRes);
+//    }
 }
