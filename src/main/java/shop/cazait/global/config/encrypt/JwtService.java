@@ -50,7 +50,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String getJwt(){
+    public String getJwtFromHeader(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         return request.getHeader("X-ACCESS-TOKEN");
     }
@@ -66,7 +66,7 @@ public class JwtService {
 
     public Long getUserIdx() throws UserException {
         // JWT 추출
-        String token = getJwt();
+        String token = getJwtFromHeader();
 
 //        if (token == null || token.length() == 0) {
 //            throw new UserException(EMPTY_JWT);
@@ -89,7 +89,6 @@ public class JwtService {
             log.error("Token is null");
             throw new UserException(EMPTY_JWT);
         }
-
         // userIdx 추출
         return claims.getBody().get("userIdx", Long.class);
     }
