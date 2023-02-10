@@ -69,7 +69,7 @@ public class UserService {
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         if(userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()){
-            throw new UserException(FAILED_TO_LOGIN);
+            throw new UserException(NOT_EXIST_USER);
         }
 
 
@@ -113,9 +113,11 @@ public class UserService {
         return GetUserRes.of(findUser);
     }
 
-    public PatchUserRes modifyUser(Long userIdx,PatchUserReq patchUserReq, String refreshToken){
+    public PatchUserRes modifyUser(Long userIdx,PatchUserReq patchUserReq, String refreshToken) throws UserException {
         User modifyUser = patchUserReq.toEntity();
-
+        if(userRepository.findById(userIdx).isEmpty()){
+            throw new UserException(NOT_EXIST_USER);
+        }
 
         User existUser = User.builder()
                 .id(userIdx)
@@ -128,7 +130,10 @@ public class UserService {
         return PatchUserRes.of(existUser);
     }
 
-    public DeleteUserRes deleteUser(Long userIdx){
+    public DeleteUserRes deleteUser(Long userIdx) throws UserException {
+        if(userRepository.findById(userIdx).isEmpty()){
+            throw new UserException(NOT_EXIST_USER);
+        }
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
         return DeleteUserRes.of(deleteUser);
