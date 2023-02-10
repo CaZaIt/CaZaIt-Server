@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.error.exception.BaseException;
 
 import javax.servlet.http.HttpServletRequest;
-
 import static shop.cazait.global.error.status.ErrorStatus.*;
 
 @Slf4j
@@ -64,7 +62,7 @@ public class JwtService {
         if (token == null || token.length() == 0) {
             throw new UserException(EMPTY_JWT);
         }
-        
+
         // JWT parsing
         Jws<Claims> claims;
         try {
