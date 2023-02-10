@@ -40,8 +40,7 @@ public class AuthController {
     private final UserService userService;
 
     private final MasterService masterService;
-
-    private final JwtService jwtService;
+    
     @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
