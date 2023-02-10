@@ -65,7 +65,6 @@ public class AuthController {
     }
 
 
-
     @NoAuth
     @PostMapping(value = "/refresh")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
@@ -76,12 +75,13 @@ public class AuthController {
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
         PostLoginRes postLoginRes = null;
         Role exactRole = Role.of(role);
-        if(exactRole == USER){
+
+        if(exactRole.equals(USER)){
             postLoginRes = userService.issueAccessToken(accessToken, refreshToken);
-        } else if (exactRole == MASTER) {
+        } else if (exactRole.equals(MASTER)) {
             postLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
         }
-
+        
         return new SuccessResponse<>(SUCCESS, postLoginRes);
     }
 }
