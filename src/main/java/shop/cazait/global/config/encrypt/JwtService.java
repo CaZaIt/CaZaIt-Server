@@ -55,6 +55,15 @@ public class JwtService {
         return request.getHeader("X-ACCESS-TOKEN");
     }
 
+    private Jws<Claims> parseJwt (String token) {
+        Jws<Claims> claims;
+        claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
+        return claims;
+    }
+
     public Long getUserIdx() throws UserException {
         // JWT 추출
         String token = getJwt();
@@ -66,10 +75,7 @@ public class JwtService {
         // JWT parsing
         Jws<Claims> claims;
         try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+            claims = parseJwt(token);
         }
         catch (ExpiredJwtException exception) {
             Long userIdx = exception.getClaims().get("userIdx", Long.class);
@@ -100,10 +106,7 @@ public class JwtService {
         // JWT parsing
         Jws<Claims> claims;
         try {
-            claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+            claims = parseJwt(token);
         }
         catch (ExpiredJwtException exception) {
             Long userIdx = exception.getClaims().get("userIdx", Long.class);
