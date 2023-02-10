@@ -1,9 +1,11 @@
 package shop.cazait.domain.favorites.service;
 
-import static shop.cazait.global.error.status.ErrorStatus.*;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_FAVORITES;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
 import java.util.List;
-import javax.persistence.EntityNotFoundException;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,25 +50,23 @@ public class FavoritesService {
     }
 
     private User getUser(Long userId) throws UserException {
-
-        try{
-            return userRepository.getReferenceById(userId);
-        } catch (EntityNotFoundException exception) {
-            throw new UserException(NOT_EXIST_CAFE);
+        try {
+            User user = userRepository.findById(userId).get();
+            return user;
+        } catch (NoSuchElementException ex) {
+            throw new UserException(NOT_EXIST_USER);
         }
 
     }
 
     private Cafe getCafe(Long cafeId) throws CafeException {
-
         try {
-            return cafeRepository.getReferenceById(cafeId);
-        } catch (EntityNotFoundException exception) {
+            Cafe cafe = cafeRepository.findById(cafeId).get();
+            return cafe;
+        } catch (NoSuchElementException ex) {
             throw new CafeException(NOT_EXIST_CAFE);
         }
-
     }
-
 
     /**
      * 즐겨찾기 조회

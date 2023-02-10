@@ -9,7 +9,7 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_MENU;
 
 import java.io.IOException;
 import java.util.List;
-import javax.persistence.EntityNotFoundException;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +55,7 @@ public class CafeMenuService {
             throws CafeException, IOException {
 
         Cafe findCafe = getCafe(cafeId);
+        // todo: image가 없을 떄는 업로드 하지 않도록 수정
         String uploadFileName = awsS3Servicel.uploadImage(menuImage);
         CafeMenu menu = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReq, uploadFileName);
         CafeMenu addMenu = cafeMenuRepository.save(menu);
@@ -64,12 +65,13 @@ public class CafeMenuService {
 
     private Cafe getCafe(Long cafeId) throws CafeException {
         try {
-            return cafeRepository.getReferenceById(cafeId);    
-        } catch (EntityNotFoundException exception) {
+            Cafe cafe = cafeRepository.findById(cafeId).get();
+            return cafe;
+        } catch (NoSuchElementException ex) {
             throw new CafeException(NOT_EXIST_CAFE);
         }
-        
     }
+
 
     /**
      * 카페 메뉴 수정
