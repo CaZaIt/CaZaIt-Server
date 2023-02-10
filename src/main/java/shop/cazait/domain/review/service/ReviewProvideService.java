@@ -1,14 +1,16 @@
 package shop.cazait.domain.review.service;
 
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_REVIEW;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.review.dto.GetReviewRes;
 import shop.cazait.domain.review.entity.Review;
+import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.review.repository.ReviewRepository;
 import shop.cazait.domain.review.requestvalue.SortType;
 
@@ -43,9 +45,9 @@ public class ReviewProvideService {
                 .collect(Collectors.toList());
     }
 
-    public GetReviewRes getReview(Long reviewId) throws EntityNotFoundException {
+    public GetReviewRes getReview(Long reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException());
+                .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 
         return GetReviewRes.of(review);
     }

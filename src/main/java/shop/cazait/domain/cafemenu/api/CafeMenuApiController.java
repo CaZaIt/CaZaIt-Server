@@ -1,5 +1,9 @@
 package shop.cazait.domain.cafemenu.api;
 
+import static shop.cazait.global.error.status.SuccessStatus.CREATE_MENU;
+import static shop.cazait.global.error.status.SuccessStatus.NO_CONTENT_SUCCESS;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -7,7 +11,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
@@ -25,12 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
+import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.error.status.SuccessStatus;
 
 @Api(tags = "카페 메뉴 API")
 @RestController
@@ -53,7 +57,7 @@ public class CafeMenuApiController {
                                                          @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
             throws CafeException, IOException {
         PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
-        return new SuccessResponse<>(cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImage));
+        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImage));
     }
 
     @ApiOperation(value = "카페 메뉴 조회", notes = "카페 ID를 받아 해당 카페에 대한 모든 메뉴를 조회한다.")
@@ -61,10 +65,15 @@ public class CafeMenuApiController {
     @GetMapping("/cafe/{cafeId}")
     public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
 
-        return new SuccessResponse<>(cafeMenuService.getMenu(cafeId));
+        List<GetCafeMenuRes> result = cafeMenuService.getMenu(cafeId);
+        SuccessStatus resultStatus = SUCCESS;
+        if (result == null) {
+            resultStatus = NO_CONTENT_SUCCESS;
+        }
+
+        return new SuccessResponse<>(resultStatus, result);
 
     }
-
 
     @ApiOperation(value = "카페 메뉴 수정", notes = "카페 메뉴 ID를 받아 수정한다.")
     @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID")
@@ -75,7 +84,7 @@ public class CafeMenuApiController {
                                                         @Parameter(description = "수정할 메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
             throws IOException {
         PatchCafeMenuReq patchCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
-        return new SuccessResponse<>(cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
+        return new SuccessResponse<>(SUCCESS, cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
     }
 
     @ApiOperation(value = "카페 메뉴 삭제", notes = "카페 메뉴 ID를 받아 삭제한다.")
@@ -83,7 +92,7 @@ public class CafeMenuApiController {
     @DeleteMapping("/{menuId}")
     public SuccessResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
 
-        return new SuccessResponse<>(cafeMenuService.deleteMenu(menuId));
+        return new SuccessResponse<>(SUCCESS, cafeMenuService.deleteMenu(menuId));
 
     }
 

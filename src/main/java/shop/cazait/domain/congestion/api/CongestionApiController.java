@@ -16,6 +16,7 @@ import shop.cazait.domain.congestion.dto.PostCongestionRes;
 import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.service.CongestionService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.error.status.SuccessStatus;
 
 @Api(tags = "혼잡도 API")
 @RestController
@@ -31,12 +32,13 @@ public class CongestionApiController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     })
     @PostMapping("/master/{masterId}/cafe/{cafeId}")
-    public SuccessResponse<PostCongestionRes> addCongestion(@PathVariable(name = "masterId") Long masterId,
-                                                            @PathVariable(name = "cafeId") Long cafeId,
+    public SuccessResponse<PostCongestionRes> addCongestion(@PathVariable Long masterId,
+                                                            @PathVariable Long cafeId,
                                                             @RequestBody @Valid PostCongestionReq postCongestionReq)
             throws CongestionException {
 
-        return new SuccessResponse<>(congestionService.addAndUpdateCongestion(cafeId, postCongestionReq));
+        return new SuccessResponse<>(
+                SuccessStatus.CREATE_CONGESTION, congestionService.addAndUpdateCongestion(cafeId, postCongestionReq));
 
     }
 

@@ -52,7 +52,7 @@ public class CongestionService {
         try {
             return CongestionStatus.valueOf(congestionStatus);
         } catch (IllegalArgumentException ex) {
-            throw new CongestionException(INVALID_CONGESTION_STATUS);
+            throw new CongestionException(INVALID_CONGESTION);
         }
 
     }

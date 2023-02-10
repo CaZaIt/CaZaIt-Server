@@ -1,5 +1,7 @@
 package shop.cazait.domain.review.api;
 
+import static shop.cazait.global.error.status.SuccessStatus.*;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -24,7 +26,9 @@ import shop.cazait.domain.review.dto.PostReviewReq;
 import shop.cazait.domain.review.dto.PostReviewRes;
 import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
+import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.error.status.SuccessStatus;
 
 
 @RestController
@@ -44,8 +48,12 @@ public class ReviewApiController {
     public SuccessResponse<List<GetReviewRes>> getReviews(@PathVariable Long cafeId,
                                                           @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
         List<GetReviewRes> getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy);
+        SuccessStatus resultStatus = SUCCESS;
 
-        return new SuccessResponse<>(getReviewsRes);
+        if (getReviewsRes == null)
+            resultStatus = NO_CONTENT_SUCCESS;
+
+        return new SuccessResponse<>(resultStatus, getReviewsRes);
     }
 
     @ApiOperation(value = "카페 평점 조회", notes = "카페 ID를 받아 해당 카페의 평점 반환")
@@ -54,7 +62,7 @@ public class ReviewApiController {
     public SuccessResponse<Double> getAverageScore(@PathVariable Long cafeId) {
         Double averageScore = reviewProvideService.getAverageScore(cafeId);
 
-        return new SuccessResponse<>(averageScore);
+        return new SuccessResponse<>(SUCCESS, averageScore);
     }
 
 
@@ -64,15 +72,16 @@ public class ReviewApiController {
     public SuccessResponse<GetReviewRes> getReview(@PathVariable Long reviewId) {
         GetReviewRes getReviewRes = reviewProvideService.getReview(reviewId);
 
-        return new SuccessResponse<>(getReviewRes);
+        return new SuccessResponse<>(SUCCESS, getReviewRes);
     }
 
     @ApiOperation(value = "리뷰 작성", notes = "카페 ID를 받아 해당 카페의 리뷰 작성")
     @PostMapping("/post/{cafeId}")
-    public SuccessResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq) {
+    public SuccessResponse<PostReviewRes> addReview(@RequestBody @Valid PostReviewReq postReviewReq)
+            throws UserException {
         PostReviewRes postReviewRes = reviewDaoService.addReview(postReviewReq);
 
-        return new SuccessResponse<>(postReviewRes);
+        return new SuccessResponse<>(CREATE_REVIEW, postReviewRes);
     }
 
     @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
@@ -80,7 +89,7 @@ public class ReviewApiController {
     public SuccessResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
         PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
 
-        return new SuccessResponse<>(patchReviewRes);
+        return new SuccessResponse<>(SUCCESS, patchReviewRes);
     }
 
     @ApiOperation(value = "리뷰 삭제", notes = "리뷰 ID를 받아 해당 리뷰 삭제")
@@ -88,6 +97,6 @@ public class ReviewApiController {
     public SuccessResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) {
         DelReviewRes delReviewRes = reviewDaoService.deleteReview(reviewId);
 
-        return new SuccessResponse<>(delReviewRes);
+        return new SuccessResponse<>(SUCCESS, delReviewRes);
     }
 }

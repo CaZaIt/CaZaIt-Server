@@ -1,5 +1,8 @@
 package shop.cazait.domain.cafeimage.service;
 
+import static shop.cazait.global.error.status.ErrorStatus.*;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +35,10 @@ public class CafeImageService {
     private final AwsS3Service awsS3Service;
 
     public void addCafeImage(Long cafeId, Long masterId, List<MultipartFile> imageFiles) throws CafeException {
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
-        Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
+        Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
-            throw new CafeException(ErrorStatus.NOT_OPERATE_CAFE);
+            throw new CafeException(NOT_OPERATE_CAFE);
         }
 
         if (imageFiles != null) {
@@ -84,10 +87,10 @@ public class CafeImageService {
     }
 
     public void deleteCafeImage(Long cafeImageId, Long masterId) throws CafeImageException {
-        CafeImage cafeImage = cafeImageRepository.findById(cafeImageId).orElseThrow(() -> new CafeImageException(ErrorStatus.INVALID_CAFE_IMAGE_ID));
-        Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+        CafeImage cafeImage = cafeImageRepository.findById(cafeImageId).orElseThrow(() -> new CafeImageException(ErrorStatus.NOT_EXIST_IMAGE));
+        Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafeImage.getCafe().getId()))) {
-            throw new CafeException(ErrorStatus.NOT_OPERATE_CAFE);
+            throw new CafeException(NOT_OPERATE_CAFE);
         }
         cafeImageRepository.deleteById(cafeImageId);
     }

@@ -1,37 +1,42 @@
 package shop.cazait.domain.cafe.service;
 
+import static shop.cazait.global.error.status.ErrorStatus.INVALID_CAFE_NAME;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_MASTER;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_OPERATE_CAFE;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import shop.cazait.domain.cafe.dto.*;
+import shop.cazait.domain.cafe.dto.GetCafeRes;
+import shop.cazait.domain.cafe.dto.GetCafesRes;
+import shop.cazait.domain.cafe.dto.PostCafeReq;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafeimage.service.CafeImageService;
-import shop.cazait.domain.coordinate.entity.Coordinate;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
+import shop.cazait.domain.cafeimage.service.CafeImageService;
 import shop.cazait.domain.checklog.service.CheckLogService;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
+import shop.cazait.domain.coordinate.entity.Coordinate;
+import shop.cazait.domain.coordinate.service.CoordinateService;
 import shop.cazait.domain.favorites.entity.Favorites;
 import shop.cazait.domain.favorites.repository.FavoritesRepository;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.repository.MasterRepository;
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.global.common.status.BaseStatus;
-import shop.cazait.global.error.status.ErrorStatus;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import shop.cazait.domain.coordinate.service.CoordinateService;
 import shop.cazait.global.common.service.AwsS3Service;
+import shop.cazait.global.common.status.BaseStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +55,7 @@ public class CafeService {
     /**
      * 카페 등록 좌표와 도로명 주소 받기 -> 카페 생성 -> 초기 혼잡도 등록 -> 이미지 S3 업로드 -> 이미지 객체  -> 마스터 계정에 카페 설정
      */
+    // todo: 카페 이미지 서비스에 이미지 업로드 등록 후 사용하기
     public void addCafe(Long masterId, PostCafeReq cafeReq, List<MultipartFile> imageFiles)
             throws JsonProcessingException {
 
@@ -75,7 +81,7 @@ public class CafeService {
         cafeRepository.save(cafe);
 
         Master master = masterRepository.findById(masterId)
-                .orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+                .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         master.setCafe(cafe);
     }
 
@@ -125,7 +131,7 @@ public class CafeService {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         if (cafeList.size() == 0) {
-            throw new CafeException(ErrorStatus.NOT_EXIST_CAFE);
+            throw new CafeException(NOT_EXIST_CAFE);
         }
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
         getCafesRes = sortCafeList(getCafesRes, sort, limit);
@@ -139,7 +145,7 @@ public class CafeService {
     @Transactional(readOnly = true)
     public GetCafeRes getCafeById(Long userId, Long cafeId) throws CafeException, UserException {
 
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafeId);
         String logResult = checkLogService.addVisitLog(userId, cafeId);    // 최근 본 카페 등록
         return GetCafeRes.of(cafe, getCafeImageResList, logResult);
@@ -152,7 +158,7 @@ public class CafeService {
     public List<List<GetCafesRes>> getCafeByName(String name, Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         if (cafeList.size() == 0) {
-            throw new CafeException(ErrorStatus.INVALID_CAFE_NAME);
+            throw new CafeException(INVALID_CAFE_NAME);
         }
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
@@ -166,22 +172,22 @@ public class CafeService {
 
         Coordinate coordinate = coordinateService.getCoordinate(cafeReq);
 
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         Master master = masterRepository.findById(masterId)
-                .orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+                .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
-            throw new CafeException(ErrorStatus.NOT_OPERATE_CAFE);
+            throw new CafeException(NOT_OPERATE_CAFE);
         }
         cafe.changeInfo(cafeReq, coordinate);
         cafeRepository.save(cafe);
     }
 
     public void deleteCafe(Long cafeId, Long masterId) throws CafeException {
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(ErrorStatus.INVALID_CAFE_ID));
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         Master master = masterRepository.findById(masterId)
-                .orElseThrow(() -> new CafeException(ErrorStatus.NOT_EXIST_MASTER));
+                .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
-            throw new CafeException(ErrorStatus.NOT_OPERATE_CAFE);
+            throw new CafeException(NOT_OPERATE_CAFE);
         }
         cafe.changeCafeStatus(BaseStatus.INACTIVE);
         cafeRepository.save(cafe);

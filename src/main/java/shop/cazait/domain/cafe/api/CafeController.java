@@ -1,5 +1,8 @@
 package shop.cazait.domain.cafe.api;
 
+import static shop.cazait.global.error.status.SuccessStatus.CREATE_CAFE;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,9 +12,18 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
@@ -20,9 +32,6 @@ import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Api(tags = "카페 API")
 @RestController
@@ -43,7 +52,7 @@ public class CafeController {
             throws JsonProcessingException {
         PostCafeReq postCafeReq = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
         cafeService.addCafe(masterId, postCafeReq, cafeImages);
-        return new SuccessResponse<>("카페 등록 완료");
+        return new SuccessResponse<>(CREATE_CAFE, "카페 둥록 완료"); // todo: 카페 생성에 대한 Response dto 생성
     }
 
     @GetMapping("/all/user/{userId}")
@@ -63,7 +72,7 @@ public class CafeController {
             throws CafeException {
         try {
             List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, longitude, latitude, sort, limit);
-            return new SuccessResponse<>(cafeResList);
+            return new SuccessResponse<>(SUCCESS ,cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -79,7 +88,7 @@ public class CafeController {
                                                    @PathVariable Long cafeId) throws CafeException, UserException {
         try {
             GetCafeRes cafeRes = cafeService.getCafeById(userId, cafeId);
-            return new SuccessResponse<>(cafeRes);
+            return new SuccessResponse<>(SUCCESS, cafeRes);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -103,7 +112,7 @@ public class CafeController {
                                                                   @RequestParam String limit) throws CafeException {
         try {
             List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, longitude, latitude, sort, limit);
-            return new SuccessResponse<>(cafeResList);
+            return new SuccessResponse<>(SUCCESS, cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -120,7 +129,7 @@ public class CafeController {
                                               @RequestBody @Valid PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
         try {
             cafeService.updateCafe(cafeId, masterId, cafeReq);
-            return new SuccessResponse<>("카페 수정 완료");
+            return new SuccessResponse<>(SUCCESS, "카페 수정 완료");
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -137,7 +146,7 @@ public class CafeController {
                                               @PathVariable Long masterId) throws CafeException {
         try {
             cafeService.deleteCafe(cafeId, masterId);
-            return new SuccessResponse<>("카페 삭제 완료");
+            return new SuccessResponse<>(SUCCESS,"카페 삭제 완료");
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }

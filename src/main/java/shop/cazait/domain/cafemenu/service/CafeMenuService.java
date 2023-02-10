@@ -1,14 +1,14 @@
 package shop.cazait.domain.cafemenu.service;
 
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_DESCRIPTION;
-import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_NAME;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_PRICE;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_MENU;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
+import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.exception.CafeMenuException;
 import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
@@ -79,7 +79,7 @@ public class CafeMenuService {
 
         CafeMenu findMenu = cafeMenuRepository
                 .findById(menuId)
-                .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
+                .orElseThrow(() -> new CafeMenuException(NOT_EXIST_MENU));
 
         if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {
             findMenu.changeName(patchCafeMenuReq.getName());
@@ -110,7 +110,7 @@ public class CafeMenuService {
 
         CafeMenu findMenu = cafeMenuRepository
                 .findById(cafeMenuId)
-                .orElseThrow(() -> new CafeMenuException(INVALID_MENU));
+                .orElseThrow(() -> new CafeMenuException(NOT_EXIST_MENU));
 
         cafeMenuRepository.delete(findMenu);
 
