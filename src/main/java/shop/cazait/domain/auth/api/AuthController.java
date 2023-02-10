@@ -40,18 +40,21 @@ public class AuthController {
     private final UserService userService;
 
     private final MasterService masterService;
-    
+
     @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
-    public SuccessResponse<PostLoginRes> logIn (@RequestBody @Valid PostLoginReq postLoginReq)
+    public SuccessResponse<PostLoginRes> logIn (
+                                                @RequestParam @NotBlank String role,
+                                                @RequestBody @Valid PostLoginReq postLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
         PostLoginRes postLoginRes=null;
-        Role role = postLoginReq.getRole();
-        if(role.equals(USER)){
+        Role exactRole = Role.of(role);
+
+        if(exactRole.equals(USER)){
             postLoginRes = userService.logIn(postLoginReq);
         }
-        else if(role.equals(MASTER)){
+        else if(exactRole.equals(MASTER)){
             postLoginRes = masterService.LoginMaster(postLoginReq);
         }
         return new SuccessResponse<>(postLoginRes);

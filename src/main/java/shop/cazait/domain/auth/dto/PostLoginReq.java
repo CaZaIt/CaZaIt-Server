@@ -9,6 +9,7 @@ import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Schema(description = "유저 로그인 Request : 로그인시 필요한 유저 정보")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,14 +23,10 @@ public class PostLoginReq {
     @NotBlank
     private String password;
 
-    @Schema(description = "유저인지 마스터인지", example = "USER/MASTER")
-    private Role role;
-
     @Builder
-    public PostLoginReq(String email, String password, Role role) {
+    public PostLoginReq(String email, String password) {
         this.email = email;
         this.password = password;
-        this.role = role;
     }
 
     public User toEntity(){
