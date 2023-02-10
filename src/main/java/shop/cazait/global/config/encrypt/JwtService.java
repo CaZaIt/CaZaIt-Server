@@ -68,9 +68,9 @@ public class JwtService {
         // JWT 추출
         String token = getJwt();
 
-        if (token == null || token.length() == 0) {
-            throw new UserException(EMPTY_JWT);
-        }
+//        if (token == null || token.length() == 0) {
+//            throw new UserException(EMPTY_JWT);
+//        }
 
         // JWT parsing
         Jws<Claims> claims;
@@ -97,11 +97,10 @@ public class JwtService {
 
     public Long getUserIdx(String token) throws UserException {
         log.info("getUseridx token info: "+token);
-        // JWT 추출
-        //String accessToken = getJwt();
-        if (token == null || token.length() == 0) {
-            throw new UserException(EMPTY_JWT);
-        }
+
+//        if (token == null || token.length() == 0) {
+//            throw new UserException(EMPTY_JWT);
+//        }
 
         // JWT parsing
         Jws<Claims> claims;
