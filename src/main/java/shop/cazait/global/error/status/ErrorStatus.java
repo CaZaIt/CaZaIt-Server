@@ -9,77 +9,65 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorStatus {
 
     /**
-     * 공통 Error Code
+     *  Error Code
+     *  400 : 잘못된 요청
+     *  401 : JWT에 대한 오류
+     *  403 : 요청한 정보에 대한 권한 없음.
+     *  404 : 존재하지 않는 정보에 대한 요청.
      */
-    INVALID_REQUEST("FAIL", "유효하지 않은 Request입니다."),
+
+    /**
+     * Success Code : 400
+     * Bad Request
+     */
+    INVALID_REQUEST(400, "FAIL", "유효하지 않은 요청입니다."),
+    INVALID_CONGESTION(400, "FAIL", "유효하지 않은 혼잡도 입니다."),
+    FAILED_TO_LOGIN(400, "FAIL", "아이디 또는 비밀번호를 잘못 입력했습니다."),
+    ALREADY_INACTIVE_MASTER(400, "FAIL", "이미 탈퇴한 계정입니다"),
+    NOT_EXPIRED_TOKEN(400 ,"FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
+    EXIST_EMAIL(400,"FAIL","이미 존재하는 이메일입니다."),
+    EXIST_NICKNAME(400,"FAIL","이미 존재하는 닉네임입니다."),
+    INVALID_ROLE(400,"FAIL","유효하지 않은 역할입니다."),
+
+    /**
+     * Success Code : 401
+     * Unauthorized
+     */
+    EMPTY_JWT(401, "FAIL","JWT를 입력해주세요."),
+    INVALID_JWT(401, "FAIL", "유효하지 않은 JWT입니다."),
+    EXPIRED_JWT(401, "FAIL", "만료된 JWT입니다."),
+
+    /**
+     * Success Code : 403
+     * Forbidden
+     */
+    NOT_OPERATE_CAFE(403, "FAIL", "현재 접속한 MASTER 계정이 운영하는 카페가 아닙니다."),
 
 
     /**
-     * 제목 양식 : Entity Error
+     * Success Code : 404
+     * Not Found
      */
+    NOT_EXIST_USER(404,"FAIL", "존재하지 않는 유저입니다."),
+    NOT_EXIST_MASTER(404, "FAIL", "존재하지 않는 마스터입니다."),
+    NOT_EXIST_CAFE(404,"SUCCESS", "존재하지 않는 카페입니다."),
+    NOT_EXIST_MENU(404,"FAIL", "존재하지 않는 메뉴입니다."),
+    NOT_EXIST_FAVORITES(404,"FAIL", "유효하지 않은 즐겨찾기 입니다."),
+    NOT_EXIST_REVIEW(404,"FAIL", "유효하지 않은 리뷰 ID입니다."),
+    NOT_EXIST_IMAGE(404,"FAIL", "유효하지 않은 이미지입니다."),
 
     /**
      * Cafe Error
      */
-    NOT_EXIST_CAFE("SUCCESS", "카페가 존재하지 않습니다."),
-    INVALID_CAFE_ID("FAIL", "유효하지 않은 CAFE ID입니다."),
-    INVALID_CAFE_NAME("FAIL", "유효하지 않은 CAFE NAME입니다."),
-    NOT_OPERATE_CAFE("FAIL", "현재 접속한 MASTER 계정이 운영하는 카페가 아닙니다."),
-
-    /**
-     * Cafe Image Error
-     */
-    INVALID_CAFE_IMAGE_ID("FAIL", "유효하지 않은 CAFE IMAGE ID입니다."),
-
-    /**
-     * Cafe Menu Error
-     */
-    NOT_REGISTER_MENU("FAIL", "메뉴 등록이 필요합니다."),
-    INVALID_MENU("FAIL", "유효하지 않은 메뉴입니다."),
-
-    /**
-     * Congestion Error
-     */
-    CONGESTION_STATUS_EMPTY("FAIL", "혼잡도를 입력해 주세요."),
-    INVALID_CONGESTION_STATUS("FAIL", "유효하지 않은 혼잡도입니다."),
-
-    /**
-     * Favorites Error
-     */
-    INVALID_CAFE_FAVORITES("FAIL", "유효하지 않은 즐겨찾기 입니다."),
+    INVALID_CAFE_NAME(404,"FAIL", "유효하지 않은 CAFE NAME입니다."),
 
     /**
      * Master Error
      */
-    DUPLICATE_USER_LOGIN_EMAIL("FAIL","중복된 마스터 계정의 이메일입니다."),
-    ALREADY_INACTIVE_MASTER("FAIL", "이미 탈퇴한 계정입니다"),
-    NOT_EXIST_MASTER("FAIL", "없는 마스터 계정입니다."),
+    // todo : 중복 이메일 통합하기
+    DUPLICATE_USER_LOGIN_EMAIL(400,"FAIL","중복된 마스터 계정의 이메일입니다.");
 
-    /**
-     * Review Error
-     */
-    INVALID_REVIEW_ID("FAIL", "유효하지 않은 리뷰 ID입니다."),
-
-    /**
-     * User Error
-     */
-
-    INVALID_EMAIL("FAIL", "이메일 형식을 확인해주세요."),
-    INVALID_PASSWORD("FAIL", "비밀번호 형식을 확인해주세요."),
-
-    EXIST_EMAIL("FAIL","이미 존재하는 이메일입니다."),
-    EXIST_NICKNAME("FAIL","이미 존재하는 닉네임입니다."),
-
-    NOT_EXIST_USER("FAIL", "유저가 존재하지 않습니다."),
-
-    FAILED_TO_LOGIN("FAIL","아이디 또는 비밀번호를 잘못 입력했습니다."),
-
-    EMPTY_JWT("FAIL","JWT를 입력해주세요."),
-    INVALID_JWT("FAIL", "유효하지 않은 JWT입니다."),
-    NOT_EXPIRED_TOKEN("FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
-    EXPIRED_JWT("FAIL", "만료된 JWT입니다."),
-    INVALID_ROLE("FAIL","회원인지 관리자인지를 올바로 입력해주세요");
-
+    private final int code;
     private final String result;
     private final String message;
 

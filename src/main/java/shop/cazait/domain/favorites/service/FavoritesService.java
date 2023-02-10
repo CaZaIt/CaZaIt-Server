@@ -87,7 +87,7 @@ public class FavoritesService {
 
         Favorites favorites = favoritesRepository
                 .findById(favoritesId)
-                .orElseThrow(() -> new FavoritesException(INVALID_CAFE_FAVORITES));
+                .orElseThrow(() -> new FavoritesException(NOT_EXIST_FAVORITES));
 
         favoritesRepository.delete(favorites);
 
