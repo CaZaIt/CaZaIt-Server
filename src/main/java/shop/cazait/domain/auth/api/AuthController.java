@@ -1,15 +1,12 @@
 package shop.cazait.domain.auth.api;
 
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
-
 
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
@@ -17,6 +14,7 @@ import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
 
@@ -24,7 +22,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -32,7 +29,7 @@ import java.security.NoSuchAlgorithmException;
 
 import static shop.cazait.domain.auth.Role.MASTER;
 import static shop.cazait.domain.auth.Role.USER;
-import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
+
 
 @Api(tags = "인증 API")
 @RestController
@@ -43,6 +40,8 @@ public class AuthController {
     private final UserService userService;
 
     private final MasterService masterService;
+
+    private final JwtService jwtService;
     @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
@@ -58,6 +57,8 @@ public class AuthController {
         }
         return new SuccessResponse<>(postLoginRes);
     }
+
+
 
     @NoAuth
     @PostMapping(value = "/refresh")
