@@ -1,7 +1,5 @@
 package shop.cazait.domain.review.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,13 +18,6 @@ import shop.cazait.domain.user.entity.User;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostReviewReq {
-    @Schema(description = "카페 ID", example = "1")
-    @NotNull(message = "존재하지 않는 카페입니다.")
-    private Long cafeId;
-
-    @Schema(description = "유저 ID", example = "1")
-    @NotNull(message = "존재하지 않는 유저입니다.")
-    private Long userId;
 
     @Schema(description = "점수", example = "5")
     @NotNull(message = "점수를 입력해주세요.")
@@ -39,9 +30,7 @@ public class PostReviewReq {
 
 
     @Builder
-    public PostReviewReq(Long cafeId, Long userId, Integer score, String content) {
-        this.cafeId = cafeId;
-        this.userId = userId;
+    public PostReviewReq(Integer score, String content) {
         this.score = score;
         this.content = content;
     }

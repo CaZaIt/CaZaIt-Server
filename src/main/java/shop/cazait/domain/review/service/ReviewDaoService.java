@@ -34,9 +34,9 @@ public class ReviewDaoService {
     private final ReviewRepository reviewRepository;
 
 
-    public PostReviewRes addReview(PostReviewReq postReviewReq) throws CafeException, UserException {
-        Cafe cafe = getCafeReference(postReviewReq.getCafeId());
-        User user = getUserReference(postReviewReq.getUserId());
+    public PostReviewRes addReview(Long userId, Long cafeId, PostReviewReq postReviewReq) throws CafeException, UserException {
+        User user = getUserReference(userId);
+        Cafe cafe = getCafeReference(cafeId);
 
         Review newReview = postReviewReq.toEntity(cafe, user);
         reviewRepository.save(newReview);
