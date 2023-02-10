@@ -1,12 +1,15 @@
 package shop.cazait.domain.congestion.service;
 
-import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.common.constant.Constant.NOT_EXIST_CONGESTION;
+import static shop.cazait.global.error.status.ErrorStatus.INVALID_CONGESTION;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.congestion.dto.PostCongestionReq;
 import shop.cazait.domain.congestion.dto.PostCongestionRes;
@@ -28,7 +31,7 @@ public class CongestionService {
      */
     public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
 
-        Cafe findCafe = cafeRepository.findById(cafeId).get();
+        Cafe findCafe = getCafe(cafeId);
         Congestion findCongestion = findCafe.getCongestion();
         Congestion newCongestion = null;
 
@@ -46,6 +49,16 @@ public class CongestionService {
         return PostCongestionRes.of(newCongestion);
 
     }
+
+    private Cafe getCafe(Long cafeId) throws CafeException {
+        try {
+            Cafe cafe = cafeRepository.findById(cafeId).get();
+            return cafe;
+        } catch (NoSuchElementException ex) {
+            throw new CafeException(NOT_EXIST_CAFE);
+        }
+    }
+
 
     private CongestionStatus getCongestionStatus(String congestionStatus) {
 

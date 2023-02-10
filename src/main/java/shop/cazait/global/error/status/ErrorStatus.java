@@ -50,7 +50,7 @@ public enum ErrorStatus {
      */
     NOT_EXIST_USER(404,"FAIL", "존재하지 않는 유저입니다."),
     NOT_EXIST_MASTER(404, "FAIL", "존재하지 않는 마스터입니다."),
-    NOT_EXIST_CAFE(404,"SUCCESS", "존재하지 않는 카페입니다."),
+    NOT_EXIST_CAFE(404,"FAIL", "존재하지 않는 카페입니다."),
     NOT_EXIST_MENU(404,"FAIL", "존재하지 않는 메뉴입니다."),
     NOT_EXIST_FAVORITES(404,"FAIL", "유효하지 않은 즐겨찾기 입니다."),
     NOT_EXIST_REVIEW(404,"FAIL", "유효하지 않은 리뷰 ID입니다."),

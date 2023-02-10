@@ -5,7 +5,7 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_REVIEW;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,18 +46,18 @@ public class ReviewDaoService {
 
     private Cafe getCafeReference(Long id) throws CafeException {
         try {
-            Cafe cafe = cafeRepository.getReferenceById(id);
+            Cafe cafe = cafeRepository.findById(id).get();
             return cafe;
-        } catch (EntityNotFoundException ex) {  // 해당 엔티티가 존재하지 않을 시 EntityNotFoundException 발생
+        } catch (NoSuchElementException ex) {  // 해당 엔티티가 존재하지 않을 시 EntityNotFoundException 발생
             throw new CafeException(NOT_EXIST_CAFE);
         }
     }
 
     private User getUserReference(Long id) throws UserException {
         try {
-            User user = userRepository.getReferenceById(id);
+            User user = userRepository.findById(id).get();
             return user;
-        } catch (EntityNotFoundException ex) {
+        } catch (NoSuchElementException ex) {
             throw new UserException(NOT_EXIST_USER);
         }
     }
