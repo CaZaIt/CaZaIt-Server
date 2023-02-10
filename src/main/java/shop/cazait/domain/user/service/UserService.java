@@ -1,33 +1,41 @@
 package shop.cazait.domain.user.service;
 
+import static shop.cazait.domain.auth.Role.USER;
+import static shop.cazait.global.error.status.ErrorStatus.EXIST_EMAIL;
+import static shop.cazait.global.error.status.ErrorStatus.EXIST_NICKNAME;
+import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
+import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
+import static shop.cazait.global.error.status.ErrorStatus.NOT_EXPIRED_TOKEN;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
-import shop.cazait.domain.user.dto.*;
+import shop.cazait.domain.user.dto.DeleteUserRes;
+import shop.cazait.domain.user.dto.GetUserRes;
+import shop.cazait.domain.user.dto.PatchUserReq;
+import shop.cazait.domain.user.dto.PatchUserRes;
+import shop.cazait.domain.user.dto.PostUserReq;
+import shop.cazait.domain.user.dto.PostUserRes;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.Secret;
-
-import static shop.cazait.domain.auth.Role.USER;
-import static shop.cazait.global.error.status.ErrorStatus.*;
 
 
 @Service
@@ -130,14 +138,14 @@ public class UserService {
         if(!userRepository.findByEmail(email).isEmpty()){
             throw new UserException(EXIST_EMAIL);
         }
-        return new SuccessResponse("회원가입이 가능합니다.");
+        return new SuccessResponse(SUCCESS,"회원가입이 가능합니다.");
     }
 
     public SuccessResponse<String> checkduplicateNickname(String nickname) throws UserException {
         if(!userRepository.findByNickname(nickname).isEmpty()){
             throw new UserException(EXIST_NICKNAME);
         }
-        return new SuccessResponse("회원가입이 가능합니다.");
+        return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");
     }
 
 

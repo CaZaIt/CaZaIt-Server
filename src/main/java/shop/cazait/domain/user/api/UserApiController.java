@@ -1,29 +1,42 @@
 package shop.cazait.domain.user.api;
 
+import static shop.cazait.global.error.status.SuccessStatus.CREATE_USER;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import shop.cazait.domain.user.dto.*;
-import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.domain.user.service.UserService;
-import shop.cazait.global.common.dto.response.SuccessResponse;
-import shop.cazait.global.config.encrypt.JwtService;
-import shop.cazait.global.config.encrypt.NoAuth;
-import shop.cazait.global.error.exception.BaseException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import shop.cazait.domain.user.dto.DeleteUserRes;
+import shop.cazait.domain.user.dto.PatchUserReq;
+import shop.cazait.domain.user.dto.PatchUserRes;
+import shop.cazait.domain.user.dto.PostUserReq;
+import shop.cazait.domain.user.dto.PostUserRes;
+import shop.cazait.domain.user.exception.UserException;
+import shop.cazait.domain.user.service.UserService;
+import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.JwtService;
+import shop.cazait.global.config.encrypt.NoAuth;
 
 @Api(tags = "유저 API")
 @Validated
@@ -41,25 +54,24 @@ public class UserApiController {
     public SuccessResponse<PostUserRes> createUser (@RequestBody @Valid PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         PostUserRes postUserRes = userService.createUser(postUserReq);
-        return new SuccessResponse<>(postUserRes);
+        return new SuccessResponse<>(CREATE_USER, postUserRes);
     }
 
-    @GetMapping("/all")
-    @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
-    public SuccessResponse<List<GetUserRes>> getUsers(){
-        List<GetUserRes> allGetUserRes = userService.getAllUsers();
-        return new SuccessResponse<>(allGetUserRes);
-    }
+//    @GetMapping("/all")
+//    @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
+//    public SuccessResponse<List<GetUserRes>> getUsers(){
+//        List<GetUserRes> allGetUserRes = userService.getAllUsers();
+//        return new SuccessResponse<>(allGetUserRes);
+//    }
 
-
-    @GetMapping("/{userIdx}")
-    @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
-    @ApiImplicitParam (name="userIdx",value = "사용자 userId")
-    public SuccessResponse<GetUserRes> getUser(
-             @PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        GetUserRes userInfoRes = userService.getUserInfo(userIdx);
-        return new SuccessResponse<>(userInfoRes);
-    }
+//    @GetMapping("/{userIdx}")
+//    @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
+//    @ApiImplicitParam (name="userIdx",value = "사용자 userId")
+//    public SuccessResponse<GetUserRes> getUser(
+//             @PathVariable(name = "userIdx") Long userIdx) throws UserException {
+//        GetUserRes userInfoRes = userService.getUserInfo(userIdx);
+//        return new SuccessResponse<>(userInfoRes);
+//    }
 
     @PatchMapping("/{userIdx}")
     @ApiOperation(value="특정한 회원 정보를 수정", notes = "자신의 계정 정보를 수정")
@@ -72,7 +84,7 @@ public class UserApiController {
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) {
         PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
-        return new SuccessResponse<>(patchUserRes);
+        return new SuccessResponse<>(SUCCESS, patchUserRes);
     }
 
     @DeleteMapping("/{userIdx}")
@@ -81,7 +93,7 @@ public class UserApiController {
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) {
 
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
-        return new SuccessResponse<>(deleteUserRes);
+        return new SuccessResponse<>(SUCCESS, deleteUserRes);
     }
 
     @NoAuth
