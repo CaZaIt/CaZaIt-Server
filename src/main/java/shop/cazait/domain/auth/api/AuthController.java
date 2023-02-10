@@ -5,6 +5,7 @@ import static shop.cazait.domain.auth.Role.USER;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -46,9 +47,10 @@ public class AuthController {
     @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
+    @ApiImplicitParam(name="role",value = "유저인지 마스터인지(user/master)")
     public SuccessResponse<PostLoginRes> logIn (
-                                                @RequestParam @NotBlank String role,
-                                                @RequestBody @Valid PostLoginReq postLoginReq)
+            @RequestParam @NotBlank String role,
+            @RequestBody @Valid PostLoginReq postLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
         PostLoginRes postLoginRes=null;
         Role exactRole = Role.of(role);
@@ -67,6 +69,7 @@ public class AuthController {
     @NoAuth
     @PostMapping(value = "/refresh")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
+    @ApiImplicitParam(name="role",value = "유저인지 마스터인지(user/master)")
     public SuccessResponse<PostLoginRes>refreshToken(
             @RequestParam @NotBlank String role,
             @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
