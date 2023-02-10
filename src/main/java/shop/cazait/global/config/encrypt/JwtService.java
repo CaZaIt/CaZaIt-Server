@@ -143,6 +143,26 @@ public class JwtService {
         }
     }
 
+    public boolean isValidRefreshToken(String token) throws UserException {
+        log.info("isValidRefreshToken: "+token);
+        Jws<Claims> refreshClaims;
+        try {
+            refreshClaims = parseJwt(token);
+            log.info("Access expireTime: " + refreshClaims.getBody().getExpiration());
+            return true;
+        }
+        catch (ExpiredJwtException exception) {
+            log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
+            throw new UserException(EXPIRED_JWT);
+        } catch (JwtException exception) {
+            log.error("refreshToken Tampered");
+            throw new UserException(INVALID_JWT);
+        } catch (IllegalArgumentException exception) {
+            log.error("Token is null");
+            throw new UserException(EMPTY_JWT);
+        }
+    }
+
     public boolean isValidAccessTokenInRefresh(String token) throws UserException {
         log.info("isValidAccessToken is : " + token);
         Jws<Claims> accessClaims;
