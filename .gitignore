@@ -1,9 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,intellij,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,intellij,java
 
-# CheckSums
-/.gradle/**/checksums/
-
 # YML File
 *.yml
 
@@ -39,13 +36,13 @@
 .gradle
 build/
 .idea/artifacts
- .idea/compiler.xml
- .idea/jarRepositories.xml
- .idea/modules.xml
- .idea/*.iml
- .idea/modules
- *.iml
- *.ipr
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
 
 # CMake
 cmake-build-*/
