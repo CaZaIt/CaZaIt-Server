@@ -42,7 +42,7 @@ public class ReviewApiController {
     private final ReviewDaoService reviewDaoService;
     private final ReviewProvideService reviewProvideService;
 
-    @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 반환")
+    @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 반환 (성공: 200, 리뷰 없음: 204, 존재하지 않는 카페: 404)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
             @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest"),
@@ -62,7 +62,7 @@ public class ReviewApiController {
         return new SuccessResponse<>(resultStatus, getReviewsRes);
     }
 
-    @ApiOperation(value = "카페 평점 조회", notes = "카페 ID를 받아 해당 카페의 평점 반환")
+    @ApiOperation(value = "카페 평점 조회", notes = "카페 ID를 받아 해당 카페의 평점 반환 (성공: 200, 존재하지 않는 카페: 404)")
     @ApiImplicitParam(name = "cafeId", value = "카페 ID")
     @GetMapping("/{cafeId}/score")
     public SuccessResponse<Double> getAverageScore(@PathVariable Long cafeId) throws CafeException {
@@ -72,7 +72,7 @@ public class ReviewApiController {
     }
 
 
-    @ApiOperation(value = "리뷰 하나 조회", notes = "리뷰 ID를 받아 해당 리뷰 조회")
+    @ApiOperation(value = "리뷰 하나 조회", notes = "리뷰 ID를 받아 해당 리뷰 조회 (성공: 200, 존재하지 않는 리뷰: 404)")
     @ApiImplicitParam(name = "reviewId", value = "리뷰 ID")
     @GetMapping("/{reviewId}")
     public SuccessResponse<GetReviewRes> getReview(@PathVariable Long reviewId) throws ReviewException {
@@ -81,7 +81,7 @@ public class ReviewApiController {
         return new SuccessResponse<>(SUCCESS, getReviewRes);
     }
 
-    @ApiOperation(value = "리뷰 작성", notes = "유저와 카페 ID를 받아 해당 카페의 리뷰 작성")
+    @ApiOperation(value = "리뷰 작성", notes = "유저와 카페 ID를 받아 해당 카페의 리뷰 작성 (성공: 200, 존재하지 않는 유저 및 카페: 404)")
     @PostMapping("/user/{userId}/cafe/{cafeId}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "유저 ID"),
@@ -95,7 +95,7 @@ public class ReviewApiController {
         return new SuccessResponse<>(CREATE_REVIEW, postReviewRes);
     }
 
-    @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
+    @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정 (성공: 200, 존재하지 않는 리뷰: 404)")
     @PatchMapping("/edit/{reviewId}")
     public SuccessResponse<PatchReviewRes> updateReview(@PathVariable Long reviewId,
                                                         @RequestBody @Valid PatchReviewReq patchReviewReq)
@@ -104,7 +104,7 @@ public class ReviewApiController {
         return new SuccessResponse<>(SUCCESS, patchReviewRes);
     }
 
-    @ApiOperation(value = "리뷰 삭제", notes = "리뷰 ID를 받아 해당 리뷰 삭제")
+    @ApiOperation(value = "리뷰 삭제", notes = "리뷰 ID를 받아 해당 리뷰 삭제 (성공: 200, 존재하지 않는 리뷰: 404)")
     @DeleteMapping("/{reviewId}")
     public SuccessResponse<DelReviewRes> deleteReview(@PathVariable Long reviewId) throws ReviewException {
         DelReviewRes delReviewRes = reviewDaoService.deleteReview(reviewId);
