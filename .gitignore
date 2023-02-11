@@ -2,10 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,intellij,java
 
 # exclude File
-!github-actions.yml
-!h2
-!spy.properties
-!org.springframework.boot.autoconfigure.AutoConfiguration.imports
+!.github/workflows/github-actions.yml
 
 # YML File
 *.yml
