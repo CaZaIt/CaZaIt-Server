@@ -1,8 +1,15 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,intellij,java
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,intellij,java
 
+# exclude File
+!github-actions.yml
+!h2
+!spy.properties
+!org.springframework.boot.autoconfigure.AutoConfiguration.imports
+
 # YML File
 *.yml
+
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
