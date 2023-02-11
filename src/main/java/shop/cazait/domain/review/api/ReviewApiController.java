@@ -91,8 +91,9 @@ public class ReviewApiController {
 
     @ApiOperation(value = "리뷰 수정", notes = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정")
     @PatchMapping("/edit/{reviewId}")
-    public SuccessResponse<PatchReviewRes> updateReview(@RequestBody @Valid PatchReviewReq patchReviewReq) {
-        PatchReviewRes patchReviewRes = reviewDaoService.updateReview(patchReviewReq);
+    public SuccessResponse<PatchReviewRes> updateReview(@PathVariable Long reviewId,
+                                                        @RequestBody @Valid PatchReviewReq patchReviewReq) {
+        PatchReviewRes patchReviewRes = reviewDaoService.updateReview(reviewId, patchReviewReq);
         return new SuccessResponse<>(SUCCESS, patchReviewRes);
     }
 

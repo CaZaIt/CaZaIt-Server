@@ -62,8 +62,8 @@ public class ReviewDaoService {
         }
     }
 
-    public PatchReviewRes updateReview(PatchReviewReq patchReviewReq) throws ReviewException {
-        Review review = reviewRepository.findById(patchReviewReq.getReviewId())
+    public PatchReviewRes updateReview(Long reviewId, PatchReviewReq patchReviewReq) throws ReviewException {
+        Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 
         Review updatedReview = review.update(patchReviewReq);
