@@ -37,6 +37,7 @@ resources/*.yml
 .idea/**/gradle.xml
 .idea/**/libraries
 .gradle
+build/
 .idea/artifacts
  .idea/compiler.xml
  .idea/jarRepositories.xml
