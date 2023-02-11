@@ -44,6 +44,7 @@ public class JwtService {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + REFRESH_TOKEN_VALID_TIME);
         return Jwts.builder()
+                .setHeaderParam("type", "jwt")
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(key)
