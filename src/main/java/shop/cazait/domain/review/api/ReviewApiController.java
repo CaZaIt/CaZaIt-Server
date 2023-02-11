@@ -72,7 +72,7 @@ public class ReviewApiController {
     @ApiImplicitParam(name = "reviewId", value = "리뷰 ID")
     @GetMapping("/{reviewId}")
     public SuccessResponse<GetReviewRes> getReview(@PathVariable Long reviewId) {
-        GetReviewRes getReviewRes = reviewProvideService.getReview(reviewId);
+        GetReviewRes getReviewRes = reviewProvideService.getReviewDetail(reviewId);
 
         return new SuccessResponse<>(SUCCESS, getReviewRes);
     }

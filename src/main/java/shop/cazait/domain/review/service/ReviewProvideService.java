@@ -68,7 +68,7 @@ public class ReviewProvideService {
                 .collect(Collectors.toList());
     }
 
-    public GetReviewRes getReview(Long reviewId) throws ReviewException {
+    public GetReviewRes getReviewDetail(Long reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 
