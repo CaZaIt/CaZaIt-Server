@@ -42,7 +42,7 @@ public class UserApiController {
     @NoAuth
     @ApiOperation(value = "회원 가입", notes = "User 정보를 추가하여 회원가입을 진행")
     @PostMapping("/sign-up")
-    public SuccessResponse<PostUserRes> createUser (@RequestBody @Valid PostUserReq postUserReq)
+    public SuccessResponse<PostUserRes> createUser(@RequestBody @Valid PostUserReq postUserReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         PostUserRes postUserRes = userService.createUser(postUserReq);
         return new SuccessResponse<>(CREATE_USER, postUserRes);
@@ -94,12 +94,12 @@ public class UserApiController {
 //    }
 
     @DeleteMapping("/{userIdx}")
-    @ApiOperation(value="특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
-    @ApiImplicitParam (name="userIdx",value = "사용자 userId")
+    @ApiOperation(value = "특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
+    @ApiImplicitParam(name = "userIdx", value = "사용자 userId")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
         Long userIdxFromJwt = jwtService.getUserIdx();
 
-        if(!userIdx.equals(userIdxFromJwt)){
+        if (!userIdx.equals(userIdxFromJwt)) {
             throw new UserException(INVALID_REQUEST);
         }
 
@@ -109,8 +109,8 @@ public class UserApiController {
 
     @NoAuth
     @PostMapping("/email")
-    @ApiOperation(value="이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
-    @ApiImplicitParam (name="email",value = "사용자 이메일")
+    @ApiOperation(value = "이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
+    @ApiImplicitParam(name = "email", value = "사용자 이메일")
     public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
@@ -118,20 +118,12 @@ public class UserApiController {
 
     @NoAuth
     @PostMapping("/nickname")
-    @ApiOperation(value="닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    @ApiImplicitParam (name="nickName",value = "사용자 닉네임")
+    @ApiOperation(value = "닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
+    @ApiImplicitParam(name = "nickName", value = "사용자 닉네임")
     public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {
-        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickName);
+        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickName.trim());
         return nicknameDuplicateSuccessResponse;
     }
-
-//    @NoAuth
-//    @PostMapping(value = "/refresh")
-//    @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
-//    public SuccessResponse<PostUserLoginRes>refreshToken(
-//            @RequestHeader (value="X-ACCESS-TOKEN") String accessToken,
-//            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException {
-//        PostUserLoginRes postUserLoginRes = userService.issueAccessToken(accessToken, refreshToken);
-//        return new SuccessResponse<>(postUserLoginRes);
-//    }
 }
+
+
