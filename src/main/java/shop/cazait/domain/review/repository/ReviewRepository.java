@@ -13,4 +13,5 @@ import shop.cazait.domain.review.entity.Review;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByCafeId(Long cafeId);
     List<Review> findAllByCafeId(Long cafeId, Sort sort);
+    List<Review> findAllByCafeIdAndScore(Long cafeId, Integer score, Sort sort);
 }
