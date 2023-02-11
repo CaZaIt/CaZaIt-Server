@@ -42,12 +42,14 @@ public class ReviewApiController {
     @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 반환")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
-            @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest")
+            @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest"),
+            @ApiImplicitParam(name = "score", value = "리뷰 점수")
     })
     @GetMapping("/{cafeId}/all")
     public SuccessResponse<List<GetReviewRes>> getReviews(@PathVariable Long cafeId,
-                                                          @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy) {
-        List<GetReviewRes> getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy);
+                                                          @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
+                                                          @RequestParam(value = "score", required = false) Integer score) {
+        List<GetReviewRes> getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score);
         SuccessStatus resultStatus = SUCCESS;
 
         if (getReviewsRes == null)
