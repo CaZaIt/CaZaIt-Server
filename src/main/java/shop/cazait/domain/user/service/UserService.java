@@ -59,9 +59,11 @@ public class UserService {
 
         String pwd;
         pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(postUserReq.getPassword());
+
         PostUserReq EncryptPostUserReq = new PostUserReq(postUserReq.getEmail(), pwd, postUserReq.getNickname());
         User user = EncryptPostUserReq.toEntity();
         userRepository.save(user);
+
         return PostUserRes.of(user);
     }
 
@@ -72,15 +74,18 @@ public class UserService {
             throw new UserException(NOT_EXIST_USER);
         }
 
-
         User findUser = userRepository.findByEmail(postLoginReq.getEmail()).get();
+
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
+
         Long userIdx;
         if (password.equals(postLoginReq.getPassword())) {
             userIdx = findUser.getId();
+
             String jwt = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
+
             User loginUser = User.builder()
                     .id(findUser.getId())
                     .email(findUser.getEmail())
@@ -97,13 +102,16 @@ public class UserService {
     @Transactional(readOnly=true)
     public List<GetUserRes> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        List<GetUserRes> userResList = new ArrayList<>();
+        List<GetUserRes> userListsRes = new ArrayList<>();
+
         for (User user : allUsers) {
             GetUserRes of = GetUserRes.of(user);
-            userResList.add(of);
+            userListsRes.add(of);
         }
-        return userResList;
+
+        return userListsRes;
     }
+
     @Transactional(readOnly = true)
     public GetUserRes getUserInfo (Long userIdx) throws UserException {
         if(userRepository.findById(userIdx).isEmpty()){
@@ -134,6 +142,7 @@ public class UserService {
         if(userRepository.findById(userIdx).isEmpty()){
             throw new UserException(NOT_EXIST_USER);
         }
+
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
         return DeleteUserRes.of(deleteUser);
@@ -154,7 +163,7 @@ public class UserService {
     }
 
 
-    public PostLoginRes issueAccessToken(String accessToken,String refreshToken) throws UserException{
+    public PostLoginRes reIssueTokens(String accessToken,String refreshToken) throws UserException{
     
         User user = null;
         Long userIdx = null;
