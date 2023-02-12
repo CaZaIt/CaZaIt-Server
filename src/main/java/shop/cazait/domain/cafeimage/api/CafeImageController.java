@@ -25,7 +25,7 @@ import shop.cazait.global.common.dto.response.SuccessResponse;
 @RestController
 @RequestMapping("/api/cafes/images")
 @RequiredArgsConstructor
-public class CafeImageController {  // todo: 이미지 컨트롤러는 필요 없을 듯
+public class CafeImageController {
 
     private final CafeImageService cafeImageService;
 

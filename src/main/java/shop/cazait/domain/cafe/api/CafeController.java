@@ -1,8 +1,5 @@
 package shop.cazait.domain.cafe.api;
 
-import static shop.cazait.global.error.status.SuccessStatus.CREATE_CAFE;
-import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,22 +13,19 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.dto.GetCafeRes;
 import shop.cazait.domain.cafe.dto.GetCafesRes;
 import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafe.dto.PostCafeRes;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.error.status.SuccessStatus;
+
+import static shop.cazait.global.error.status.SuccessStatus.*;
 
 @Api(tags = "카페 API")
 @RestController
@@ -45,14 +39,14 @@ public class CafeController {
     @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "카페 등록", notes = "master가 카페를 등록한다.")
     @ApiImplicitParam(name = "masterId", value = "마스터 ID")
-    public SuccessResponse<String> addCafe(@PathVariable Long masterId,
-                                           @Parameter(description = "카페 정보 : {\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"")
+    public SuccessResponse<PostCafeRes> addCafe(@PathVariable Long masterId,
+                                                @Parameter(description = "카페 정보 : {\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"")
                                            @RequestParam @Valid String cafeInfo,
-                                           @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> cafeImages)
+                                                @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> cafeImages)
             throws JsonProcessingException {
         PostCafeReq postCafeReq = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
-        cafeService.addCafe(masterId, postCafeReq, cafeImages);
-        return new SuccessResponse<>(CREATE_CAFE, "카페 둥록 완료"); // todo: 카페 생성에 대한 Response dto 생성
+        PostCafeRes postCafeRes = cafeService.addCafe(masterId, postCafeReq, cafeImages);
+        return new SuccessResponse<>(CREATE_CAFE, postCafeRes);
     }
 
     @GetMapping("/all/user/{userId}")
@@ -72,7 +66,11 @@ public class CafeController {
             throws CafeException {
         try {
             List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, longitude, latitude, sort, limit);
-            return new SuccessResponse<>(SUCCESS ,cafeResList);
+            SuccessStatus resultStatus = SUCCESS;
+            if (cafeResList.get(0).isEmpty()) {
+                resultStatus = NO_CONTENT_SUCCESS;
+            }
+            return new SuccessResponse<>(resultStatus ,cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -112,7 +110,11 @@ public class CafeController {
                                                                   @RequestParam String limit) throws CafeException {
         try {
             List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, longitude, latitude, sort, limit);
-            return new SuccessResponse<>(SUCCESS, cafeResList);
+            SuccessStatus resultStatus = SUCCESS;
+            if (cafeResList.get(0).isEmpty()) {
+                resultStatus = NO_CONTENT_SUCCESS;
+            }
+            return new SuccessResponse<>(resultStatus ,cafeResList);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
@@ -124,12 +126,12 @@ public class CafeController {
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
             @ApiImplicitParam(name = "masterId", value = "마스터 ID")
     })
-    public SuccessResponse<String> updateCafe(@PathVariable Long cafeId,
+    public SuccessResponse<PostCafeRes> updateCafe(@PathVariable Long cafeId,
                                               @PathVariable Long masterId,
                                               @RequestBody @Valid PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
         try {
-            cafeService.updateCafe(cafeId, masterId, cafeReq);
-            return new SuccessResponse<>(SUCCESS, "카페 수정 완료");
+            PostCafeRes postCafeRes = cafeService.updateCafe(cafeId, masterId, cafeReq);
+            return new SuccessResponse<>(SUCCESS, postCafeRes);
         } catch (CafeException e) {
             throw new CafeException(e.getError());
         }
