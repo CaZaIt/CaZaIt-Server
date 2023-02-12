@@ -222,10 +222,9 @@ public class UserService {
 //        return PostLoginRes.of(user,accessToken,refreshToken,USER);
 //    }
 
-    public PostLoginRes reIssueTokens(String accessToken,String refreshToken) throws UserException{
+    public PostLoginRes reIssueTokens(String accessToken,String refreshToken, Long userIdx) throws UserException{
 
          User user = null;
-         Long userIdx;
 
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
@@ -243,7 +242,6 @@ public class UserService {
 
                 if(isEqualRefreshTokenFromDB(accessToken, refreshToken)) {
                     log.info("Access token 재발급");
-                    userIdx = jwtService.getUserIdx(accessToken);
                     accessToken = jwtService.createJwt(userIdx);
                     user = userRepository.findById(userIdx).get();
                 }
@@ -252,7 +250,6 @@ public class UserService {
             {
                 if(isEqualRefreshTokenFromDB(accessToken, refreshToken)) {
                     log.info("Access token 재발급");
-                    userIdx = jwtService.getUserIdx(accessToken);
                     accessToken = jwtService.createJwt(userIdx);
 
                     log.info("refresh token 재발급");

@@ -82,7 +82,7 @@ public class AuthController {
         Role exactRole = Role.of(role);
 
         if(exactRole.equals(USER)){
-            postLoginRes = userService.reIssueTokens(accessToken, refreshToken);
+            postLoginRes = userService.reIssueTokens(accessToken, refreshToken, userIdx);
         } else if (exactRole.equals(MASTER)) {
             postLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
         }
