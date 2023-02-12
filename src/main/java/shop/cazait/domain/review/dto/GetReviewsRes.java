@@ -16,10 +16,16 @@ import shop.cazait.global.pagination.ScrollPaginationCollection;
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class GetReviewsRes {
+    @Schema(description = "다음 스크롤이 존재하지 않을 경우 대입할 값")
     private static final Long LAST_CURSOR = -1L;
 
+    @Schema(description = "전체 리뷰 Response : 해당 카페의 전체 리뷰 정보")
     private List<GetReviewRes> reviewResponses;
+
+    @Schema(description = "한 스크롤에 나타낼 최대 데이터 갯수")
     private Long totalElements;
+
+    @Schema(description = "다음에 조회할 리뷰의 ID (다음에 조회할 커서)")
     private Long nextCursor;
 
     public static GetReviewsRes of(ScrollPaginationCollection<Review> reviewScroll, Long totalElements) {
