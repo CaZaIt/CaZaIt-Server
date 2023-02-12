@@ -52,7 +52,7 @@ public class ReviewProvideService {
     }
 
     private GetReviewsRes getReviewsWithNoScore(Long cafeId, Long lastId, PageRequest pageRequest) {
-        Slice<Review> reviewScroll = reviewRepository.findAllByCafeIdAndLastIdLessThan(
+        Slice<Review> reviewScroll = reviewRepository.findAllByCafeIdAndIdLessThan(
                 cafeId,
                 lastId,
                 pageRequest);
@@ -61,7 +61,7 @@ public class ReviewProvideService {
     }
 
     private GetReviewsRes getReviewsWithScore(Long cafeId, Integer score, Long lastId, PageRequest pageRequest) {
-        Slice<Review> reviewScroll = reviewRepository.findAllByCafeIdAndScoreAndLastIdLessThan(
+        Slice<Review> reviewScroll = reviewRepository.findAllByCafeIdAndScoreAndIdLessThan(
                 cafeId,
                 score,
                 lastId,
