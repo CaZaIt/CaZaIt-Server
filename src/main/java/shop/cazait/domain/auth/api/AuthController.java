@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
+import shop.cazait.domain.auth.service.AuthService;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.domain.user.exception.UserException;
@@ -43,6 +44,8 @@ public class AuthController {
 
     private final JwtService jwtService;
 
+    private final AuthService authService;
+
     @NoAuth
     @PostMapping("/log-in")
     @ApiOperation(value = "회원 로그인", notes="이메일과 로그인을 통해 로그인을 진행")
@@ -51,15 +54,9 @@ public class AuthController {
             @RequestParam @NotBlank String role,
             @RequestBody @Valid PostLoginReq postLoginReq)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
-        PostLoginRes postLoginRes=null;
-        Role exactRole = Role.of(role);
 
-        if(exactRole.equals(USER)){
-            postLoginRes = userService.logIn(postLoginReq);
-        }
-        else if(exactRole.equals(MASTER)){
-            postLoginRes = masterService.LoginMaster(postLoginReq);
-        }
+        Role exactRole = Role.of(role);
+        PostLoginRes postLoginRes = authService.logInByRole(exactRole,postLoginReq);
         return new SuccessResponse<>(SUCCESS, postLoginRes);
     }
 
@@ -78,15 +75,8 @@ public class AuthController {
             throw new UserException(INVALID_REQUEST);
         }
 
-        PostLoginRes postLoginRes = null;
         Role exactRole = Role.of(role);
-
-        if(exactRole.equals(USER)){
-            postLoginRes = userService.reIssueTokens(accessToken, refreshToken, userIdx);
-        } else if (exactRole.equals(MASTER)) {
-            postLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
-        }
-
+        PostLoginRes postLoginRes = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken, userIdx);
         return new SuccessResponse<>(SUCCESS, postLoginRes);
     }
 }
