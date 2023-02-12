@@ -1,12 +1,13 @@
 package shop.cazait.domain.review.api;
 
-import static shop.cazait.global.error.status.SuccessStatus.*;
+import static shop.cazait.global.error.status.SuccessStatus.CREATE_REVIEW;
+import static shop.cazait.global.error.status.SuccessStatus.NO_CONTENT_SUCCESS;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,17 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.review.dto.DelReviewRes;
 import shop.cazait.domain.review.dto.GetReviewRes;
+import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.dto.PatchReviewReq;
 import shop.cazait.domain.review.dto.PatchReviewRes;
 import shop.cazait.domain.review.dto.PostReviewReq;
 import shop.cazait.domain.review.dto.PostReviewRes;
-import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.error.status.SuccessStatus;
+
 
 
 @RestController
@@ -46,18 +48,21 @@ public class ReviewApiController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
             @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest"),
-            @ApiImplicitParam(name = "score", value = "리뷰 점수")
+            @ApiImplicitParam(name = "score", value = "리뷰 점수"),
+            @ApiImplicitParam(name = "lastId", value = "마지막으로 조회한 리뷰의 ID")
     })
     @GetMapping("/{cafeId}/all")
-    public SuccessResponse<List<GetReviewRes>> getReviews(@PathVariable Long cafeId,
-                                                          @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
-                                                          @RequestParam(value = "score", required = false) Integer score)
+    public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
+                                                     @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
+                                                     @RequestParam(value = "score", required = false) Integer score,
+                                                     @RequestParam(value = "lastId", defaultValue = "9223372036854775807") Long lastId)
             throws CafeException, ReviewException {
-        List<GetReviewRes> getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score);
+        GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score, lastId);
         SuccessStatus resultStatus = SUCCESS;
 
-        if (getReviewsRes == null)
+        if (getReviewsRes == null) {
             resultStatus = NO_CONTENT_SUCCESS;
+        }
 
         return new SuccessResponse<>(resultStatus, getReviewsRes);
     }
