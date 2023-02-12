@@ -41,6 +41,10 @@ public class CafeImageService {
             throw new CafeException(NOT_OPERATE_CAFE);
         }
 
+        saveCafeImage(cafe, imageFiles);
+    }
+
+    public void saveCafeImage (Cafe cafe, List<MultipartFile> imageFiles) {
         if (imageFiles != null) {
             List<String> imageUrl = getImageUrl(imageFiles);
             saveImageUrl(cafe, imageUrl);

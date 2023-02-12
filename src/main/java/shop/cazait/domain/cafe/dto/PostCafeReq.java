@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import javax.validation.constraints.NotBlank;
 
-@Schema(description = "카페 정보 등록 및 수정 Request : 카페 등록 및 수정 시 필요한 정보")
+@Schema(description = "카페 등록 및 수정 Request : 카페 등록 및 수정 시 필요한 정보")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCafeReq {
