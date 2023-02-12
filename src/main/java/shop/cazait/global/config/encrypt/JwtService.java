@@ -77,16 +77,16 @@ public class JwtService {
     }
 
     //API 실행 시, 전송한 토큰의 user ID로 요청을 진행했는 지 검증하기 위해 토큰의 user ID를 추출하는 함수
-    public Long getUserIdx() throws UserException {
-        // JWT 추출
-        String token = getJwtFromHeader();
-
-        // JWT parsing
-        Jws<Claims> claims = parseTokenWithAllException(token);
-
-        // userIdx 추출
-        return claims.getBody().get("userIdx", Long.class);
-    }
+//    public Long getUserIdx() throws UserException {
+//        // JWT 추출
+//        String token = getJwtFromHeader();
+//
+//        // JWT parsing
+//        Jws<Claims> claims = parseTokenWithAllException(token);
+//
+//        // userIdx 추출
+//        return claims.getBody().get("userIdx", Long.class);
+//    }
 
     //만료, 잘못된 , 없는 토큰 일시 모든 예외처리 발생함수
     public Jws<Claims> parseTokenWithAllException(String token) throws UserException {
