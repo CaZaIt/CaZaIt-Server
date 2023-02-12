@@ -81,7 +81,7 @@ public class UserApiController {
             @PathVariable(name = "userIdx") Long userIdx,
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
-        if(jwtService.isValidRefreshToken(refreshToken)){
+        if(jwtService.isValidToken(refreshToken)){
             String jwtFromHeader = jwtService.getJwtFromHeader();
             Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
 
