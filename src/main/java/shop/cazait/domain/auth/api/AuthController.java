@@ -2,6 +2,7 @@ package shop.cazait.domain.auth.api;
 
 import static shop.cazait.domain.auth.Role.MASTER;
 import static shop.cazait.domain.auth.Role.USER;
+import static shop.cazait.global.error.status.ErrorStatus.INVALID_REQUEST;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.annotations.Api;
@@ -16,12 +17,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
@@ -30,6 +26,7 @@ import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.exception.BaseException;
 
@@ -43,6 +40,8 @@ public class AuthController {
     private final UserService userService;
 
     private final MasterService masterService;
+
+    private final JwtService jwtService;
 
     @NoAuth
     @PostMapping("/log-in")
@@ -66,22 +65,28 @@ public class AuthController {
 
 
     @NoAuth
-    @PostMapping(value = "/refresh")
+    @PostMapping(value = "/refresh/{userIdx}")
     @ApiOperation(value="토큰 재발급", notes = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     @ApiImplicitParam(name="role",value = "유저인지 마스터인지(user/master)")
     public SuccessResponse<PostLoginRes>refreshToken(
+            @PathVariable(name = "userIdx") Long userIdx,
             @RequestParam @NotBlank String role,
             @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
+        Long userIdxFromJwt = jwtService.getUserIdx(accessToken);
+        if (!userIdx.equals(userIdxFromJwt)) {
+            throw new UserException(INVALID_REQUEST);
+        }
+
         PostLoginRes postLoginRes = null;
         Role exactRole = Role.of(role);
 
         if(exactRole.equals(USER)){
-            postLoginRes = userService.issueAccessToken(accessToken, refreshToken);
+            postLoginRes = userService.reIssueTokens(accessToken, refreshToken);
         } else if (exactRole.equals(MASTER)) {
             postLoginRes = masterService.issueAccessToken(accessToken, refreshToken);
         }
-        
+
         return new SuccessResponse<>(SUCCESS, postLoginRes);
     }
 }
