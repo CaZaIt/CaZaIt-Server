@@ -208,7 +208,16 @@ public class JwtService {
             throw new UserException(EMPTY_JWT);
         }
     }
+    public void isValidAccessTokenId(Long userIdxFromController) throws UserException {
+        String jwtFromHeader = getJwtFromHeader();
+        Long userIdxFromJwt= getUserIdx(jwtFromHeader);
+        log.info("userIdxFromJwt: "+userIdxFromJwt);
+        if (!userIdxFromController.equals(userIdxFromJwt)) {
+            throw new UserException(INVALID_REQUEST);
+        }
+    }
 }
+
 
 
 //        return Jwts.builder()
