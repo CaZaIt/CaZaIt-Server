@@ -13,9 +13,6 @@ TIME_NOW=$(date +%c)
 echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 
 # 환경 변수 설정
-source ~/.bashrc
-echo "S3 ACESS KEY: $S3_ACCESS_KEY" >> $DEPLOY_LOG
-
 source /etc/profile
 echo "S3 ACESS KEY: $S3_ACCESS_KEY" >> $DEPLOY_LOG
 
