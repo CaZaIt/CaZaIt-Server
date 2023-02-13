@@ -60,12 +60,7 @@ public class UserApiController {
     @ApiImplicitParam (name="userIdx",value = "사용자 userId")
     public SuccessResponse<GetUserRes> getUser(
              @PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        String jwtFromHeader = jwtService.getJwtFromHeader();
-        Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
-
-        if(!userIdx.equals(userIdxFromJwt)){
-            throw new UserException(INVALID_REQUEST);
-        }
+        jwtService.isValidAccessTokenId(userIdx);
 
         GetUserRes userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
@@ -81,14 +76,7 @@ public class UserApiController {
             @PathVariable(name = "userIdx") Long userIdx,
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
-        if(jwtService.isValidToken(refreshToken)){
-            String jwtFromHeader = jwtService.getJwtFromHeader();
-            Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
-
-            if (!userIdx.equals(userIdxFromJwt)) {
-                throw new UserException(INVALID_REQUEST);
-            }
-        }
+            jwtService.isValidAccessTokenId(userIdx);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
@@ -101,11 +89,12 @@ public class UserApiController {
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
         //Long userIdxFromJwt = jwtService.getUserIdx();
 
-        String jwtFromHeader = jwtService.getJwtFromHeader();
-        Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
-        if (!userIdx.equals(userIdxFromJwt)) {
-            throw new UserException(INVALID_REQUEST);
-        }
+//        String jwtFromHeader = jwtService.getJwtFromHeader();
+//        Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
+//        if (!userIdx.equals(userIdxFromJwt)) {
+//            throw new UserException(INVALID_REQUEST);
+//        }
+        jwtService.isValidAccessTokenId(userIdx);
 
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(SUCCESS, deleteUserRes);

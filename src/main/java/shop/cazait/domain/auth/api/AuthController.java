@@ -70,11 +70,8 @@ public class AuthController {
             @RequestParam @NotBlank String role,
             @RequestHeader(value="X-ACCESS-TOKEN") String accessToken,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
-        Long userIdxFromJwt = jwtService.getUserIdx(accessToken);
-        if (!userIdx.equals(userIdxFromJwt)) {
-            throw new UserException(INVALID_REQUEST);
-        }
 
+        jwtService.isValidAccessTokenId(userIdx);
         Role exactRole = Role.of(role);
         PostLoginRes postLoginRes = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken, userIdx);
         return new SuccessResponse<>(SUCCESS, postLoginRes);
