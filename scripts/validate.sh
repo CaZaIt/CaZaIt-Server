@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DOMAIN="https://cazait.shop/swagger-ui/index.html"
+PROJECT_ROOT="/home/ubuntu/app"
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 for RETRY_COUNT in {1..15}
