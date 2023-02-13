@@ -16,6 +16,9 @@ echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 source ~/.bashrc
 echo "S3 ACESS KEY: $S3_ACCESS_KEY" >> $DEPLOY_LOG
 
+source /etc/profile
+echo "S3 ACESS KEY: $S3_ACCESS_KEY" >> $DEPLOY_LOG
+
 
 # jar 파일 실행
 echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
