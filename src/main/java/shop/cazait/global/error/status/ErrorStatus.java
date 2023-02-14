@@ -55,6 +55,7 @@ public enum ErrorStatus {
     NOT_EXIST_FAVORITES(404,"FAIL", "유효하지 않은 즐겨찾기 입니다."),
     NOT_EXIST_REVIEW(404,"FAIL", "유효하지 않은 리뷰 ID입니다."),
     NOT_EXIST_IMAGE(404,"FAIL", "유효하지 않은 이미지입니다."),
+    PAGE_NOT_FOUND(404,"FAIL","페이지를 찾을 수 없습니다"),
 
     /**
      * Cafe Error
