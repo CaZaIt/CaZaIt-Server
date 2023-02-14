@@ -22,15 +22,15 @@ import static shop.cazait.global.error.status.ErrorStatus.*;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-//    private final long ACCESS_TOKEN_VALID_TIME = 30 * 1 * 60 * 1000L;   // 30분
-//    private final long REFRESH_TOKEN_VALID_TIME = 60 * 60 * 24 * 7 * 1000L;   // 1주
+    private final long ACCESS_TOKEN_VALID_TIME = 30 * 1 * 60 * 1000L;   // 30분
+    private final long REFRESH_TOKEN_VALID_TIME = 60 * 60 * 24 * 7 * 1000L;   // 1주
 
 
     /**
      * 토큰 만료 검증을 위한 테스트 시간
      **/
-    private final long ACCESS_TOKEN_VALID_TIME = 1 * 30 * 1000L;   // 30초
-    private final long REFRESH_TOKEN_VALID_TIME = 1 * 60 * 1000L;   // 일분
+//    private final long ACCESS_TOKEN_VALID_TIME = 1 * 30 * 1000L;   // 30초
+//    private final long REFRESH_TOKEN_VALID_TIME = 1 * 60 * 1000L;   // 일분
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     //토큰을 만들 때 공통적인 요소들을 만드는 함수 //호출 후 compact 작업이 필요하다
@@ -219,10 +219,3 @@ public class JwtService {
 }
 
 
-
-//        return Jwts.builder()
-//                .setHeaderParam("type", "jwt")
-//                .setIssuedAt(now)
-//                .setExpiration(expirationDate)
-//                .signWith(key)
-//                .compact();

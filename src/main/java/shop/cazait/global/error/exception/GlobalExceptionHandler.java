@@ -1,10 +1,13 @@
 package shop.cazait.global.error.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
 import shop.cazait.domain.congestion.exception.CongestionException;
@@ -23,47 +26,48 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({ BaseException.class })
+    
+    @ExceptionHandler({BaseException.class})
     protected FailResponse handleBaseException(BaseException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ CafeException.class })
+    @ExceptionHandler({CafeException.class})
     protected FailResponse handleCongestionException(CafeException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ CafeImageException.class })
+    @ExceptionHandler({CafeImageException.class})
     protected FailResponse handleCongestionException(CafeImageException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ FavoritesException.class })
+    @ExceptionHandler({FavoritesException.class})
     protected FailResponse handleFavoritesException(FavoritesException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ CongestionException.class })
+    @ExceptionHandler({CongestionException.class})
     protected FailResponse handleCongestionException(CongestionException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ MasterException.class })
+    @ExceptionHandler({MasterException.class})
     protected FailResponse handleCongestionException(MasterException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ UserException.class })
+    @ExceptionHandler({UserException.class})
     protected FailResponse handleUserException(UserException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ReviewException.class })
+    @ExceptionHandler({ReviewException.class})
     protected FailResponse handlerReviewException(ReviewException exception) {
         return new FailResponse(exception.getError());
     }
 
-    @ExceptionHandler({ MethodArgumentNotValidException.class })
+    @ExceptionHandler({MethodArgumentNotValidException.class})
     protected FailResponse handleValidException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
         StringBuilder description = new StringBuilder();
@@ -81,7 +85,7 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler({ ConstraintViolationException.class })
+    @ExceptionHandler({ConstraintViolationException.class})
     protected FailResponse handleValidatedException(ConstraintViolationException exception) {
         Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
         StringBuilder description = new StringBuilder();
@@ -100,5 +104,10 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler({NoHandlerFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public FailResponse handleNoHandlerFoundException(NoHandlerFoundException exception) {
+        return new FailResponse(ErrorStatus.PAGE_NOT_FOUND);
+    }
 
 }

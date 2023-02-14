@@ -48,12 +48,12 @@ public class UserApiController {
         return new SuccessResponse<>(CREATE_USER, postUserRes);
     }
 
-    @GetMapping("/all")
-    @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
-    public SuccessResponse<List<GetUserRes>> getUsers(){
-        List<GetUserRes> allGetUserRes = userService.getAllUsers();
-        return new SuccessResponse<>(SUCCESS, allGetUserRes);
-    }
+//    @GetMapping("/all")
+//    @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
+//    public SuccessResponse<List<GetUserRes>> getUsers(){
+//        List<GetUserRes> allGetUserRes = userService.getAllUsers();
+//        return new SuccessResponse<>(SUCCESS, allGetUserRes);
+//    }
 
     @GetMapping("/{userIdx}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
@@ -77,6 +77,7 @@ public class UserApiController {
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
             jwtService.isValidAccessTokenId(userIdx);
+            jwtService.isValidToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
@@ -87,13 +88,6 @@ public class UserApiController {
     @ApiOperation(value = "특정한 회원 정보를 삭제", notes = "자신의 계정 정보를 삭제")
     @ApiImplicitParam(name = "userIdx", value = "사용자 userId")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        //Long userIdxFromJwt = jwtService.getUserIdx();
-
-//        String jwtFromHeader = jwtService.getJwtFromHeader();
-//        Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
-//        if (!userIdx.equals(userIdxFromJwt)) {
-//            throw new UserException(INVALID_REQUEST);
-//        }
         jwtService.isValidAccessTokenId(userIdx);
 
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);

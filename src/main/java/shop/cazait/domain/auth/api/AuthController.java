@@ -1,8 +1,5 @@
 package shop.cazait.domain.auth.api;
 
-import static shop.cazait.domain.auth.Role.MASTER;
-import static shop.cazait.domain.auth.Role.USER;
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_REQUEST;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.annotations.Api;
@@ -37,10 +34,6 @@ import shop.cazait.global.error.exception.BaseException;
 @RequiredArgsConstructor
 @RequestMapping("/api/auths")
 public class AuthController {
-
-    private final UserService userService;
-
-    private final MasterService masterService;
 
     private final JwtService jwtService;
 
