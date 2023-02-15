@@ -75,6 +75,7 @@ public class UserApiController {
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
             jwtService.isValidAccessTokenId(userIdx);
+            jwtService.isValidToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
@@ -85,13 +86,6 @@ public class UserApiController {
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
     @Parameter(name = "userIdx", description = "사용자 userId")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        //Long userIdxFromJwt = jwtService.getUserIdx();
-
-//        String jwtFromHeader = jwtService.getJwtFromHeader();
-//        Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
-//        if (!userIdx.equals(userIdxFromJwt)) {
-//            throw new UserException(INVALID_REQUEST);
-//        }
         jwtService.isValidAccessTokenId(userIdx);
 
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);

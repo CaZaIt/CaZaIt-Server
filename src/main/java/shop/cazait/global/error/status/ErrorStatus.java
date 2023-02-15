@@ -22,7 +22,7 @@ public enum ErrorStatus {
      */
     INVALID_REQUEST(400, "FAIL", "유효하지 않은 요청입니다."),
     INVALID_CONGESTION(400, "FAIL", "유효하지 않은 혼잡도 입니다."),
-    FAILED_TO_LOGIN(400, "FAIL", "아이디 또는 비밀번호를 잘못 입력했습니다."),
+    FAILED_TO_LOGIN(400, "FAIL", "이메일 또는 비밀번호를 잘못 입력했습니다."),
     ALREADY_INACTIVE_MASTER(400, "FAIL", "이미 탈퇴한 계정입니다"),
     NOT_EXPIRED_TOKEN(400 ,"FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
     EXIST_EMAIL(400,"FAIL","이미 존재하는 이메일입니다."),
@@ -55,6 +55,7 @@ public enum ErrorStatus {
     NOT_EXIST_FAVORITES(404,"FAIL", "유효하지 않은 즐겨찾기 입니다."),
     NOT_EXIST_REVIEW(404,"FAIL", "유효하지 않은 리뷰 ID입니다."),
     NOT_EXIST_IMAGE(404,"FAIL", "유효하지 않은 이미지입니다."),
+    PAGE_NOT_FOUND(404,"FAIL","페이지를 찾을 수 없습니다"),
 
     /**
      * Cafe Error
