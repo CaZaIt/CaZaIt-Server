@@ -75,6 +75,7 @@ public class UserApiController {
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
             jwtService.isValidAccessTokenId(userIdx);
+            jwtService.isValidToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
@@ -85,13 +86,6 @@ public class UserApiController {
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
     @Parameter(name = "userIdx", description = "사용자 userId")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        //Long userIdxFromJwt = jwtService.getUserIdx();
-
-//        String jwtFromHeader = jwtService.getJwtFromHeader();
-//        Long userIdxFromJwt = jwtService.getUserIdx(jwtFromHeader);
-//        if (!userIdx.equals(userIdxFromJwt)) {
-//            throw new UserException(INVALID_REQUEST);
-//        }
         jwtService.isValidAccessTokenId(userIdx);
 
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
@@ -99,7 +93,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/email")
+    @GetMapping("/email")
     @Operation(summary = "이메일 중복확인", description = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @Parameter(name = "email", description = "사용자 이메일")
     public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
@@ -108,7 +102,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/nickname")
+    @GetMapping("/nickname")
     @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
     @Parameter(name = "nickName", description = "사용자 닉네임")
     public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {

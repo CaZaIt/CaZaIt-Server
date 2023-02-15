@@ -223,10 +223,3 @@ public class JwtService {
 }
 
 
-
-//        return Jwts.builder()
-//                .setHeaderParam("type", "jwt")
-//                .setIssuedAt(now)
-//                .setExpiration(expirationDate)
-//                .signWith(key)
-//                .compact();
