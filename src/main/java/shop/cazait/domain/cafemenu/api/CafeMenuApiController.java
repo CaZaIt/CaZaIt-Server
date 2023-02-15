@@ -7,10 +7,13 @@ import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 import javax.validation.Valid;
@@ -36,7 +39,7 @@ import shop.cazait.domain.cafemenu.service.CafeMenuService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.error.status.SuccessStatus;
 
-@Api(tags = "카페 메뉴 API")
+@Tag(name = "카페 메뉴 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/menus")
@@ -48,22 +51,37 @@ public class CafeMenuApiController {
     /**
      * 카페 메뉴 등록
      */
-    @ApiOperation(value = "카페 메뉴 등록", notes = "카페 ID와 메뉴에 대한 정보를 받아 등록한다.")
-    @ApiImplicitParam(name = "cafeId", value = "카페 ID")
+    @Operation(summary = "카페 메뉴 등록", description = "카페 ID와 메뉴에 대한 정보를 받아 등록한다.")
+    @Parameter(name = "cafeId", description = "메뉴를 추가할 카페에 대한 id 입력")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "메뉴 등록 성공",
+                    content = @Content(schema = @Schema(implementation = PostCafeMenuRes.class))
+            ),
+            @ApiResponse(responseCode = "400", description = "유효하지 않은 요청"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
+    })
     @PostMapping(value ="/cafe/{cafeId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public SuccessResponse<PostCafeMenuRes> registerMenu(@PathVariable(name = "cafeId") Long cafeId,
-                                                         @Parameter(description = "메뉴 정보 : {\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
-                                                         @RequestParam @Valid String menuInfo,
-                                                         @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
+    public SuccessResponse<PostCafeMenuRes> registerMenu(@PathVariable Long cafeId,
+                                                         @Parameter(name = "메뉴 정보", description = "{\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
+                                                         @RequestParam @Valid String information,
+                                                         @Parameter(name = "메뉴 이미지") @RequestPart(required = false) MultipartFile image)
             throws CafeException, IOException {
-        PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
-        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, postCafeMenuReq, menuImage));
+        PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(information, new TypeReference<>() {});
+        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, postCafeMenuReq, image));
     }
 
-    @ApiOperation(value = "카페 메뉴 조회", notes = "카페 ID를 받아 해당 카페에 대한 모든 메뉴를 조회한다.")
-    @ApiImplicitParam(name = "cafeId", value = "카페 ID")
+    @Operation(summary = "카페 메뉴 조회", description = "카페 ID를 받아 해당 카페에 대한 모든 메뉴를 조회한다.")
+    @Parameter(name = "cafeId", description = "카페 ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "메뉴 조회 완료"),
+            @ApiResponse(responseCode = "204", description = "메뉴 조회 완료(단, 등록된 메뉴 없음)"),
+            @ApiResponse(responseCode = "400", description = "유효하지 않은 요청"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
+    })
     @GetMapping("/cafe/{cafeId}")
-    public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable(name = "cafeId") Long cafeId) {
+    public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable Long cafeId) {
 
         List<GetCafeMenuRes> result = cafeMenuService.getMenu(cafeId);
         SuccessStatus resultStatus = SUCCESS;
@@ -72,13 +90,17 @@ public class CafeMenuApiController {
         }
 
         return new SuccessResponse<>(resultStatus, result);
-
     }
 
-    @ApiOperation(value = "카페 메뉴 수정", notes = "카페 메뉴 ID를 받아 수정한다.")
-    @ApiImplicitParam(name = "menuId", value = "카페 메뉴 ID")
+    @Operation(summary = "카페 메뉴 수정", description = "카페 메뉴 ID를 받아 수정한다.")
+    @Parameter(name = "menuId", description = "카페 메뉴 ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "메뉴 수정 완료"),
+            @ApiResponse(responseCode = "400", description = "유효하지 않은 요청"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
+    })
     @PatchMapping("/{menuId}")
-    public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable(name = "cafeId") Long menuId,
+    public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable Long menuId,
                                                         @Parameter(description = "수정할 메뉴 정보 : {\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
                                                         @RequestParam @Valid String menuInfo,
                                                         @Parameter(description = "수정할 메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
@@ -87,10 +109,15 @@ public class CafeMenuApiController {
         return new SuccessResponse<>(SUCCESS, cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
     }
 
-    @ApiOperation(value = "카페 메뉴 삭제", notes = "카페 메뉴 ID를 받아 삭제한다.")
-    @ApiImplicitParam(name = "menuId", value = "메뉴 ID")
+    @Operation(summary = "카페 메뉴 삭제", description = "카페 메뉴 ID를 받아 삭제한다.")
+    @Parameter(name = "menuId", description = "메뉴 ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "메뉴 삭제 완료"),
+            @ApiResponse(responseCode = "400", description = "유효하지 않은 요청"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 메뉴"),
+    })
     @DeleteMapping("/{menuId}")
-    public SuccessResponse<String> updateMenu(@PathVariable(name = "menuId") Long menuId) {
+    public SuccessResponse<String> updateMenu(@PathVariable Long menuId) {
 
         return new SuccessResponse<>(SUCCESS, cafeMenuService.deleteMenu(menuId));
 
