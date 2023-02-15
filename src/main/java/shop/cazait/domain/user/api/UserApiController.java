@@ -93,7 +93,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/email")
+    @GetMapping("/email")
     @Operation(summary = "이메일 중복확인", description = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @Parameter(name = "email", description = "사용자 이메일")
     public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
@@ -102,7 +102,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/nickname")
+    @GetMapping("/nickname")
     @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
     @Parameter(name = "nickName", description = "사용자 닉네임")
     public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {
