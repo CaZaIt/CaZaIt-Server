@@ -39,8 +39,8 @@ public class CafeController {
     @Operation(summary = "카페 등록", description = "master가 카페를 등록한다.")
     @Parameter(name = "masterId", description = "마스터 ID")
     public SuccessResponse<PostCafeRes> addCafe(@PathVariable Long masterId,
-                                                @Parameter(name = "카페 정보", description = "{\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"}")
-                                           @RequestParam @Valid String cafeInfo,
+                                                @Parameter(description = "카페 정보", example = "{\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"}")
+                                                @RequestParam @Valid String cafeInfo,
                                                 @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> images)
             throws JsonProcessingException {
         PostCafeReq postCafeReq = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
