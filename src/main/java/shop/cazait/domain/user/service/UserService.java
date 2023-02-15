@@ -129,6 +129,7 @@ public class UserService {
             throw new UserException(NOT_EXIST_USER);
         }
 
+        
         User existUser = User.builder()
                 .id(userIdx)
                 .email(modifyUser.getEmail())

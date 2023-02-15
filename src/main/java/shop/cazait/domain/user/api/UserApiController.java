@@ -48,12 +48,12 @@ public class UserApiController {
         return new SuccessResponse<>(CREATE_USER, postUserRes);
     }
 
-//    @GetMapping("/all")
-//    @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
-//    public SuccessResponse<List<GetUserRes>> getUsers(){
-//        List<GetUserRes> allGetUserRes = userService.getAllUsers();
-//        return new SuccessResponse<>(SUCCESS, allGetUserRes);
-//    }
+    @GetMapping("/all")
+    @ApiOperation(value = "모든 회원을 조회",notes = "회원가입된 모든 회원 정보를 조회")
+    public SuccessResponse<List<GetUserRes>> getUsers(){
+        List<GetUserRes> allGetUserRes = userService.getAllUsers();
+        return new SuccessResponse<>(SUCCESS, allGetUserRes);
+    }
 
     @GetMapping("/{userIdx}")
     @ApiOperation(value = "특정 회원 정보를 조회", notes ="자신의 계정 정보를 조회")
@@ -95,16 +95,16 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/email")
+    @GetMapping("/email")
     @ApiOperation(value = "이메일 중복확인", notes = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @ApiImplicitParam(name = "email", value = "사용자 이메일")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
-        SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
+    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email @NotBlank String email) throws UserException {
+        SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email.trim());
         return emailDuplicateSuccessResponse;
     }
 
     @NoAuth
-    @PostMapping("/nickname")
+    @GetMapping("/nickname")
     @ApiOperation(value = "닉네임 중복확인", notes = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
     @ApiImplicitParam(name = "nickName", value = "사용자 닉네임")
     public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {
