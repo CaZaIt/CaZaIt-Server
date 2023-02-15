@@ -108,7 +108,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoHandlerFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public FailResponse handleNoHandlerFoundException(NoHandlerFoundException exception) {
-        return new FailResponse(ErrorStatus.PAGE_NOT_FOUND);
+        System.out.println(exception.toString());
+        return new FailResponse(ErrorStatus.PAGE_NOT_FOUND, "잘못된 형식의 url 요청입니다.");
     }
 
     @ExceptionHandler({MissingServletRequestParameterException.class})
