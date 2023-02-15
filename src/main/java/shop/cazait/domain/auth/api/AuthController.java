@@ -56,7 +56,6 @@ public class AuthController {
     @GetMapping(value = "/refresh/{userIdx}")
     @Operation(summary="토큰 재발급", description = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     @Parameter(name="role", description = "유저인지 마스터인지(user/master)")
-Param(name="role",value = "유저인지 마스터인지(user/master)")
     public SuccessResponse<PostLoginRes>refreshToken(
             @PathVariable(name = "userIdx") Long userIdx,
             @RequestParam @NotBlank String role,

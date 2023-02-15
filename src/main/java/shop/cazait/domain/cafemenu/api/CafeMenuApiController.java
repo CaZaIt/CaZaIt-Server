@@ -64,9 +64,9 @@ public class CafeMenuApiController {
     })
     @PostMapping(value ="/cafe/{cafeId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public SuccessResponse<PostCafeMenuRes> registerMenu(@PathVariable Long cafeId,
-                                                         @Parameter(name = "메뉴 정보", description = "{\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
+                                                         @Parameter(description = "메뉴 정보", example = "{\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
                                                          @RequestParam @Valid String information,
-                                                         @Parameter(name = "메뉴 이미지") @RequestPart(required = false) MultipartFile image)
+                                                         @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile image)
             throws CafeException, IOException {
         PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(information, new TypeReference<>() {});
         return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, postCafeMenuReq, image));
