@@ -47,7 +47,7 @@ public class ReviewApiController {
     @ApiOperation(value = "리뷰 전체 조회", notes = "카페 ID를 받아 해당 카페의 리뷰 목록 반환 (성공: 200, 리뷰 없음: 204, 존재하지 않는 카페: 404)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cafeId", value = "카페 ID"),
-            @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest, oldest, popularity)", defaultValue = "newest"),
+            @ApiImplicitParam(name = "sortBy", value = "정렬 기준(newest(미입력시 기본값), oldest)", defaultValue = "newest"),
             @ApiImplicitParam(name = "score", value = "리뷰 점수"),
             @ApiImplicitParam(name = "lastId", value = "마지막으로 조회한 리뷰의 ID")
     })
