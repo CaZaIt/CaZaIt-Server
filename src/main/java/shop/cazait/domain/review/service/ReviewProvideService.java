@@ -73,7 +73,7 @@ public class ReviewProvideService {
     private GetReviewsRes getReviewsResFromPage(Slice<Review> reviewScroll) {
         List<Review> reviews = reviewScroll.getContent();
 
-        ScrollPaginationCollection<Review> reviewsCursor = ScrollPaginationCollection.of(reviews, 20 + 1);
+        ScrollPaginationCollection<Review> reviewsCursor = ScrollPaginationCollection.of(reviews, 20);
         GetReviewsRes getReviewsRes = GetReviewsRes.of(reviewsCursor, 20L);
 
         if (getReviewsRes.getReviewResponses().isEmpty()) {
