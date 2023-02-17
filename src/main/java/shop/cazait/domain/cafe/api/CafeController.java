@@ -22,6 +22,7 @@ import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.error.status.SuccessStatus;
 
 import static shop.cazait.global.error.status.SuccessStatus.*;
@@ -33,6 +34,7 @@ import static shop.cazait.global.error.status.SuccessStatus.*;
 public class CafeController {
 
     private final CafeService cafeService;
+    private final JwtService jwtService;
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -62,17 +64,14 @@ public class CafeController {
                                                                     @RequestParam String latitude,
                                                                     @RequestParam String sort,
                                                                     @RequestParam String limit)
-            throws CafeException {
-        try {
-            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, longitude, latitude, sort, limit);
-            SuccessStatus resultStatus = SUCCESS;
-            if (cafeResList.get(0).isEmpty()) {
-                resultStatus = NO_CONTENT_SUCCESS;
-            }
-            return new SuccessResponse<>(resultStatus ,cafeResList);
-        } catch (CafeException e) {
-            throw new CafeException(e.getError());
+            throws UserException {
+        jwtService.isValidAccessTokenId(userId);
+        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, longitude, latitude, sort, limit);
+        SuccessStatus resultStatus = SUCCESS;
+        if (cafeResList.get(0).isEmpty()) {
+            resultStatus = NO_CONTENT_SUCCESS;
         }
+        return new SuccessResponse<>(resultStatus ,cafeResList);
     }
 
     @GetMapping("/id/{cafeId}/user/{userId}")
@@ -83,12 +82,9 @@ public class CafeController {
     })
     public SuccessResponse<GetCafeRes> getCafeById(@PathVariable Long userId,
                                                    @PathVariable Long cafeId) throws CafeException, UserException {
-        try {
-            GetCafeRes cafeRes = cafeService.getCafeById(userId, cafeId);
-            return new SuccessResponse<>(SUCCESS, cafeRes);
-        } catch (CafeException e) {
-            throw new CafeException(e.getError());
-        }
+        jwtService.isValidAccessTokenId(userId);
+        GetCafeRes cafeRes = cafeService.getCafeById(userId, cafeId);
+        return new SuccessResponse<>(SUCCESS, cafeRes);
     }
 
     @GetMapping("/name/{cafeName}/user/{userId}")
@@ -106,17 +102,14 @@ public class CafeController {
                                                                   @RequestParam String longitude,
                                                                   @RequestParam String latitude,
                                                                   @RequestParam String sort,
-                                                                  @RequestParam String limit) throws CafeException {
-        try {
-            List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, longitude, latitude, sort, limit);
-            SuccessStatus resultStatus = SUCCESS;
-            if (cafeResList.get(0).isEmpty()) {
-                resultStatus = NO_CONTENT_SUCCESS;
-            }
-            return new SuccessResponse<>(resultStatus ,cafeResList);
-        } catch (CafeException e) {
-            throw new CafeException(e.getError());
+                                                                  @RequestParam String limit) throws CafeException, UserException {
+        jwtService.isValidAccessTokenId(userId);
+        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, longitude, latitude, sort, limit);
+        SuccessStatus resultStatus = SUCCESS;
+        if (cafeResList.get(0).isEmpty()) {
+            resultStatus = NO_CONTENT_SUCCESS;
         }
+        return new SuccessResponse<>(resultStatus ,cafeResList);
     }
 
     @PostMapping("/update/{cafeId}/master/{masterId}")
@@ -126,14 +119,10 @@ public class CafeController {
             @Parameter(name = "masterId", description = "마스터 ID")
     })
     public SuccessResponse<PostCafeRes> updateCafe(@PathVariable Long cafeId,
-                                              @PathVariable Long masterId,
-                                              @RequestBody @Valid PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
-        try {
-            PostCafeRes postCafeRes = cafeService.updateCafe(cafeId, masterId, cafeReq);
-            return new SuccessResponse<>(SUCCESS, postCafeRes);
-        } catch (CafeException e) {
-            throw new CafeException(e.getError());
-        }
+                                                   @PathVariable Long masterId,
+                                                   @RequestBody @Valid PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
+        PostCafeRes postCafeRes = cafeService.updateCafe(cafeId, masterId, cafeReq);
+        return new SuccessResponse<>(SUCCESS, postCafeRes);
 
     }
 
@@ -145,11 +134,7 @@ public class CafeController {
     })
     public SuccessResponse<String> deleteCafe(@PathVariable Long cafeId,
                                               @PathVariable Long masterId) throws CafeException {
-        try {
-            cafeService.deleteCafe(cafeId, masterId);
-            return new SuccessResponse<>(SUCCESS,"카페 삭제 완료");
-        } catch (CafeException e) {
-            throw new CafeException(e.getError());
-        }
+        cafeService.deleteCafe(cafeId, masterId);
+        return new SuccessResponse<>(SUCCESS,"카페 삭제 완료");
     }
 }
