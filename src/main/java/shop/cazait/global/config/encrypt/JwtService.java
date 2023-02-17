@@ -35,8 +35,8 @@ public class JwtService {
 
     //토큰을 만들 때 공통적인 요소들을 만드는 함수 //호출 후 compact 작업이 필요하다
     public JwtBuilder makeCommonTokenSource(Date now, Date expirationDate) {
-        System.out.println("now = " + now);
-        System.out.println("expirationDate = " + expirationDate);
+        System.out.println("Now = " + now);
+        System.out.println("Expiration Date = " + expirationDate);
         return Jwts.builder()
                 .setHeaderParam("type", "jwt")
                 .setIssuedAt(now)
@@ -47,7 +47,7 @@ public class JwtService {
 
     //accessToken 발행 함수
     public String createJwt(Long userIdx) {
-        log.info("created Token userIdx: " + userIdx);
+        log.info("Created token userIdx = " + userIdx);
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME);
 
@@ -67,7 +67,7 @@ public class JwtService {
     //헤더에서의 토큰을 추출하는 함수
     public String getJwtFromHeader() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        return request.getHeader("X-ACCESS-TOKEN");
+        return request.getHeader("Authorization");
     }
 
     //토큰을 파싱하기 위한 함수
@@ -76,7 +76,7 @@ public class JwtService {
         claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token);
+                .parseClaimsJws(token.substring(token.indexOf(" ")).trim());
         return claims;
     }
 
@@ -101,32 +101,36 @@ public class JwtService {
             log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
             throw new UserException(EXPIRED_JWT);
         } catch (JwtException exception) {
-            log.error("refreshToken Tampered");
+            log.error("RefreshToken Tampered.");
             throw new UserException(INVALID_JWT);
         } catch (IllegalArgumentException exception) {
-            log.error("Token is null");
+            log.error("Token is null.");
+            throw new UserException(EMPTY_JWT);
+        } catch ( NullPointerException exception) {
+            log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
         }
+
     }
 
     //1. 만료된 토큰을 파라미터로 받은 후 userID를 반환하는 함수 // 토큰 재발급 시 이용됨
     //2. 만료되지 않더라도 토큰 안에 있는 userID와의 검증을 위해 userID 반환
     public Long getUserIdx(String token) throws UserException {
-        log.info("getUseridx token info: " + token);
+        log.info("getUseridx token info = " + token);
 
         // JWT parsing
         Jws<Claims> claims;
         try {
             claims = parseJwt(token);
-            log.info("Access expireTime: " + claims.getBody().getExpiration());
+            log.info("Access expireTime = " + claims.getBody().getExpiration());
         } catch (ExpiredJwtException exception) {
             Long userIdx = exception.getClaims().get("userIdx", Long.class);
             return userIdx;
         } catch (JwtException exception) {
-            log.error("Token tampered");
+            log.error("Token tampered.");
             throw new UserException(INVALID_JWT);
         } catch (IllegalArgumentException exception) {
-            log.error("Token is null");
+            log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
         }
 
@@ -157,11 +161,11 @@ public class JwtService {
     //2.유저정보 수정단계에서 refreshToken 검증
     //Access userId의 로그에서 숫자가 추출되면 1(accessToken), Null인 경우는 2번(refreshToken)의 경우이다.
     public boolean isValidToken(String token) throws UserException {
-        log.info("isValidAccessToken is : " + token);
+        log.info("isValidAccessToken is = " + token);
 
         Jws<Claims> accessClaims = parseTokenWithAllException(token);
-        log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
-        log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
+        log.info("Access expire time = " + accessClaims.getBody().getExpiration());
+        log.info("Access userId =  " + accessClaims.getBody().get("userIdx", Long.class));
         return true;
     }
 
@@ -171,47 +175,47 @@ public class JwtService {
      **/
     //accesstoken 재발급
     public boolean isValidAccessTokenInRefresh(String token) throws UserException {
-        log.info("isValidAccessToken is : " + token);
+        log.info("isValidAccessToken is = " + token);
         Jws<Claims> accessClaims;
         try {
             accessClaims = parseJwt(token);
-            log.info("Access expireTime: " + accessClaims.getBody().getExpiration());
-            log.info("Access userId: " + accessClaims.getBody().get("userIdx", Long.class));
+            log.info("Access expireTime = " + accessClaims.getBody().getExpiration());
+            log.info("Access userId = " + accessClaims.getBody().get("userIdx", Long.class));
             return true;
         } catch (ExpiredJwtException exception) {
-            log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
+            log.error("Token Expired UserID = " + exception.getClaims().get("userIdx"));
             return false;
         } catch (JwtException exception) {
-            log.error("accessToken Tampered");
+            log.error("accessToken Tampered.");
             throw new UserException(INVALID_JWT);
         } catch (IllegalArgumentException exception) {
-            log.error("Token is null");
+            log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
         }
     }
 
     //refreshToken 재발급
     public boolean isValidRefreshTokenInRefresh(String token) throws UserException {
-        log.info("isValidRefreshToken: " + token);
+        log.info("isValidRefreshToken = " + token);
         Jws<Claims> refreshClaims;
         try {
             refreshClaims = parseJwt(token);
-            log.info("Access expireTime: " + refreshClaims.getBody().getExpiration());
+            log.info("Access expire time = " + refreshClaims.getBody().getExpiration());
             return true;
         } catch (ExpiredJwtException exception) {
             return false;
         } catch (JwtException exception) {
-            log.error("refreshToken Tampered");
+            log.error("refreshToken Tampered.");
             throw new UserException(INVALID_JWT);
         } catch (IllegalArgumentException exception) {
-            log.error("refreshToken is null");
+            log.error("refreshToken is null.");
             throw new UserException(EMPTY_JWT);
         }
     }
     public void isValidAccessTokenId(Long userIdxFromController) throws UserException {
         String jwtFromHeader = getJwtFromHeader();
         Long userIdxFromJwt= getUserIdx(jwtFromHeader);
-        log.info("userIdxFromJwt: "+userIdxFromJwt);
+        log.info("userIdxFromJwt =  "+userIdxFromJwt);
         if (!userIdxFromController.equals(userIdxFromJwt)) {
             throw new UserException(INVALID_REQUEST);
         }
