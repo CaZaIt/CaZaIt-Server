@@ -1,6 +1,5 @@
 package shop.cazait.domain.cafe.service;
 
-import static shop.cazait.global.error.status.SuccessStatus.NO_CONTENT_SUCCESS;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_MASTER;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_OPERATE_CAFE;
@@ -9,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,6 @@ import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
-import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
 import shop.cazait.domain.cafeimage.service.CafeImageService;
 import shop.cazait.domain.checklog.service.CheckLogService;
 import shop.cazait.domain.congestion.entity.Congestion;
@@ -43,12 +43,10 @@ public class CafeService {
 
     private final CheckLogService checkLogService;
     private final CoordinateService coordinateService;
-    private final AwsS3Service awsS3Service;
     private final CafeImageService cafeImageService;
     private final CafeRepository cafeRepository;
     private final MasterRepository masterRepository;
     private final FavoritesRepository favoritesRepository;
-    private final CafeImageRepository cafeImageRepository;
 
     /**
      * 카페 등록 좌표와 도로명 주소 받기 -> 카페 생성 -> 초기 혼잡도 등록 -> 이미지 S3 업로드 -> 이미지 객체  -> 마스터 계정에 카페 설정
@@ -96,7 +94,7 @@ public class CafeService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
-    public List<List<GetCafesRes>> getCafeByStatus(Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
+    public List<List<GetCafesRes>> getCafeByStatus(Long userId, String longitude, String latitude, String sort, String limit) {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<GetCafesRes> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
@@ -161,24 +159,24 @@ public class CafeService {
 
     private List<GetCafesRes> readCafeList(Long userId, List<Cafe> cafeList, String longitude, String latitude) {
         List<Favorites> favoritesList = favoritesRepository.findAllByUserId(userId).get();
-        List<GetCafesRes> cafeResList = new ArrayList<>();
-        for (Cafe cafe : cafeList) {
-            boolean favorite = false;
-            for (Favorites favorites : favoritesList) {
-                if (cafe.getId().equals(favorites.getCafe().getId())) {
-                    favorite = true;
-                    break;
-                }
-            }
-            List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
+        List<GetCafesRes> cafeResList = cafeList.stream()
+                .map(cafe -> {
+                    boolean favorite = false;
+                    for (Favorites favorites : favoritesList) {
+                        if (cafe.getId().equals(favorites.getCafe().getId())) {
+                            favorite = true;
+                            break;
+                        }
+                    }
+                    List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
 
-            int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
-                    cafe.getCoordinate().getLongitude(),
-                    longitude, latitude);
+                    int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
+                            cafe.getCoordinate().getLongitude(),
+                            longitude, latitude);
 
-            GetCafesRes cafeRes = GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
-            cafeResList.add(cafeRes);
-        }
+                    return GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
+                })
+                .collect(Collectors.toList());
         return cafeResList;
     }
 

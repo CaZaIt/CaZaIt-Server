@@ -38,12 +38,8 @@ public class CafeImageController {
     public SuccessResponse<String> addCafeImage(@PathVariable Long cafeId,
                                                 @PathVariable Long masterId,
                                                 @Parameter(description = "카페 이미지") @RequestPart List<MultipartFile> cafeImages) throws CafeException {
-        try {
-            cafeImageService.addCafeImage(cafeId, masterId, cafeImages);
-            return new SuccessResponse<>(SUCCESS,"카페 이미지 등록 완료");
-        } catch (CafeException e) {
-            throw new CafeException(e.getError());
-        }
+        cafeImageService.addCafeImage(cafeId, masterId, cafeImages);
+        return new SuccessResponse<>(SUCCESS,"카페 이미지 등록 완료");
     }
 
     @DeleteMapping("delete/{cafeImageId}/master/{masterId}")
@@ -54,11 +50,7 @@ public class CafeImageController {
     })
     public SuccessResponse<String> deleteCafeImage(@PathVariable Long cafeImageId,
                                                    @PathVariable Long masterId) throws CafeImageException {
-        try {
-            cafeImageService.deleteCafeImage(cafeImageId, masterId);
-            return new SuccessResponse<>(SUCCESS,"카페 이미지 삭제 완료");
-        } catch (CafeImageException e) {
-            throw new CafeImageException(e.getError());
-        }
+        cafeImageService.deleteCafeImage(cafeImageId, masterId);
+        return new SuccessResponse<>(SUCCESS,"카페 이미지 삭제 완료");
     }
 }
