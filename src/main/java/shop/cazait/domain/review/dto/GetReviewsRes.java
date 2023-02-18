@@ -22,22 +22,24 @@ public class GetReviewsRes {
     @Schema(description = "전체 리뷰 Response : 해당 카페의 전체 리뷰 정보")
     private List<GetReviewRes> reviewResponses;
 
-    @Schema(description = "한 스크롤에 나타낼 최대 데이터 갯수")
-    private Long totalElements;
+    @Schema(description = "한 페이지의 리뷰 개수")
+    private Integer totalElements;
 
     @Schema(description = "다음에 조회할 리뷰의 ID (다음에 조회할 커서)")
     private Long nextCursor;
 
-    public static GetReviewsRes of(ScrollPaginationCollection<Review> reviewScroll, Long totalElements) {
+    public static GetReviewsRes of(ScrollPaginationCollection<Review> reviewScroll) {
+        List<Review> reviews = reviewScroll.getCurrentScrollItems();
+
         if (reviewScroll.isLastScroll()) {
-            return getNextScroll(reviewScroll.getCurrentScrollItems(), totalElements, LAST_CURSOR);
+            return getNextScroll(reviews, reviews.size(), LAST_CURSOR);
         }
 
-        return getNextScroll(reviewScroll.getCurrentScrollItems(), totalElements,
+        return getNextScroll(reviews, reviews.size(),
                 reviewScroll.getNextCursor().getId());
     }
 
-    private static GetReviewsRes getNextScroll(List<Review> reviews, Long totalElements, Long nextCursor) {
+    private static GetReviewsRes getNextScroll(List<Review> reviews, Integer totalElements, Long nextCursor) {
         return GetReviewsRes.builder()
                 .reviewResponses(reviews.stream()
                         .map(review -> GetReviewRes.of(review))
