@@ -3,17 +3,16 @@ package shop.cazait.domain.review.service;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_REVIEW;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.review.dto.GetReviewRes;
+import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.review.repository.ReviewRepository;
 import shop.cazait.domain.review.requestvalue.SortType;
+import shop.cazait.global.pagination.ScrollPaginationCollection;
 
 
 
@@ -21,6 +20,7 @@ import shop.cazait.domain.review.requestvalue.SortType;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReviewProvideService {
+    static final int COUNT_PER_SCROLL = 20;
     private final ReviewRepository reviewRepository;
 
     public Double getAverageScore(Long cafeId) {
@@ -34,39 +34,28 @@ public class ReviewProvideService {
         return Math.round(averageScore * 100) / 100.0;
     }
 
-    public List<GetReviewRes> getReviews(Long cafeId, String sortBy, Integer score) {
+    public GetReviewsRes getReviews(Long cafeId, String sortBy, Integer score, Long lastId) {
         SortType sortType = SortType.of(sortBy);
+        List<Review> reviews = null;
 
-        // 특정 점수 조회가 아닐 때 (전체 조회)
-        if (score == null) {
-            return getReviewsWithNoScore(cafeId, sortType);
+        // ToDo: HashMap<SortType, Function>으로 함수 매핑시키기
+        if (sortType == SortType.NEWEST) {
+            if (lastId == null) {
+                lastId = 0L;
+            }
+            reviews = reviewRepository.findNewestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
+        } else if (sortType == sortType.OLDEST) {
+            if (lastId == null) {
+                lastId = Long.MAX_VALUE;
+            }
+            reviews = reviewRepository.findOldestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
         }
 
-        reviewRepository.findAll();
-        return getReviewsWithScore(cafeId, score, sortType);
+        ScrollPaginationCollection<Review> reviewScroll = ScrollPaginationCollection.of(reviews, COUNT_PER_SCROLL);
 
+        return GetReviewsRes.of(reviewScroll);
     }
 
-    private List<GetReviewRes> getReviewsWithNoScore(Long cafeId, SortType sortType) {
-        List<Review> reviews = reviewRepository.findAllByCafeId(
-                cafeId,
-                Sort.by(sortType.getDirection(), sortType.getProperty()));
-
-        return reviews.stream()
-                .map(review -> GetReviewRes.of(review))
-                .collect(Collectors.toList());
-    }
-
-    private List<GetReviewRes> getReviewsWithScore(Long cafeId, Integer score, SortType sortType) {
-        List<Review> reviewsWithScore = reviewRepository.findAllByCafeIdAndScore(
-                cafeId,
-                score,
-                Sort.by(sortType.getDirection(), sortType.getProperty()));
-
-        return reviewsWithScore.stream()
-                .map(review -> GetReviewRes.of(review))
-                .collect(Collectors.toList());
-    }
 
     public GetReviewRes getReviewDetail(Long reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)

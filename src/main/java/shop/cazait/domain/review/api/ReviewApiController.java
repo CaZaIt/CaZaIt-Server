@@ -1,6 +1,8 @@
 package shop.cazait.domain.review.api;
 
-import static shop.cazait.global.error.status.SuccessStatus.*;
+import static shop.cazait.global.error.status.SuccessStatus.CREATE_REVIEW;
+import static shop.cazait.global.error.status.SuccessStatus.NO_CONTENT_SUCCESS;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.review.dto.DelReviewRes;
 import shop.cazait.domain.review.dto.GetReviewRes;
+import shop.cazait.domain.review.dto.GetReviewsRes;
 import shop.cazait.domain.review.dto.PatchReviewReq;
 import shop.cazait.domain.review.dto.PatchReviewRes;
 import shop.cazait.domain.review.dto.PostReviewReq;
@@ -31,6 +34,7 @@ import shop.cazait.domain.review.service.ReviewProvideService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.error.status.SuccessStatus;
+
 
 
 @RestController
@@ -52,11 +56,12 @@ public class ReviewApiController {
                                                           @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
                                                           @RequestParam(value = "score", required = false) Integer score)
             throws CafeException, ReviewException {
-        List<GetReviewRes> getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score);
+        GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score, lastId);
         SuccessStatus resultStatus = SUCCESS;
 
-        if (getReviewsRes == null)
+        if (getReviewsRes == null) {
             resultStatus = NO_CONTENT_SUCCESS;
+        }
 
         return new SuccessResponse<>(resultStatus, getReviewsRes);
     }
