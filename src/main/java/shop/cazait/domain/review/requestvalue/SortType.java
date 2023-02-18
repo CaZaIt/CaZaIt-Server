@@ -11,8 +11,8 @@ import org.springframework.data.domain.Sort;
 @Getter
 @AllArgsConstructor
 public enum SortType {
-    NEWEST("newest", "createdAt", Sort.Direction.DESC),
-    OLDEST("oldest", "createdAt", Sort.Direction.ASC);
+    NEWEST("newest", "id", Sort.Direction.DESC),
+    OLDEST("oldest", "id", Sort.Direction.ASC);
 
     private final String value;
     private final String property;  // Sort.by()로 생성 시, column명이 아닌 엔티티의 property명이 기준임
