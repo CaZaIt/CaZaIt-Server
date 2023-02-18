@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,9 +51,10 @@ public class ReviewApiController {
             @Parameter(name = "sortBy", description = "정렬 기준(newest, oldest, popularity)", example = "newest"),
             @Parameter(name = "score", description = "리뷰 점수")
     })
-    public SuccessResponse<List<GetReviewRes>> getReviews(@PathVariable Long cafeId,
-                                                          @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
-                                                          @RequestParam(value = "score", required = false) Integer score)
+    public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
+                                                     @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
+                                                     @RequestParam(value = "score", required = false) Integer score,
+                                                     @RequestParam(value = "lastId", required = false) Long lastId)
             throws CafeException, ReviewException {
         GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score, lastId);
         SuccessStatus resultStatus = SUCCESS;
