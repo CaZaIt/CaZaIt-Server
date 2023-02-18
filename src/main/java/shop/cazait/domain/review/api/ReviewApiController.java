@@ -49,7 +49,8 @@ public class ReviewApiController {
     @Parameters({
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "sortBy", description = "정렬 기준(newest, oldest, popularity)", example = "newest"),
-            @Parameter(name = "score", description = "리뷰 점수")
+            @Parameter(name = "score", description = "리뷰 점수"),
+            @Parameter(name = "lastId", description = "마지막으로 조회한 리뷰의 ID")
     })
     public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
                                                      @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
