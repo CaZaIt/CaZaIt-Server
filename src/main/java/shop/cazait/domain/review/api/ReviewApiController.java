@@ -55,7 +55,7 @@ public class ReviewApiController {
     public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
                                                      @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
                                                      @RequestParam(value = "score", required = false) Integer score,
-                                                     @RequestParam(value = "lastId", defaultValue = "9223372036854775807") Long lastId)
+                                                     @RequestParam(value = "lastId", required = false) Long lastId)
             throws CafeException, ReviewException {
         GetReviewsRes getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score, lastId);
         SuccessStatus resultStatus = SUCCESS;
