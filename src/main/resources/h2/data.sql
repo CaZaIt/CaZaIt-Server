@@ -165,38 +165,131 @@ values (19, 1);
 insert into favorites (cafe_id, user_id)
 values (20, 1);
 
+
 insert into review (cafe_id, user_id, score, content)
-values (1, 1, 5, "굿");
+values (1, 1, 5, '굿');
 insert into review (cafe_id, user_id, score, content)
-values (1, 2, 4, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (1, 3, 1, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (1, 4, 3, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (1, 5, 2, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (1, 6, 3, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (1, 7, 2, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 1, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 4, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 5, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 2, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 3, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 3, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 2, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 4, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 5, "");
+values (1, 1, 5, 'ㅇ');
 insert into review (cafe_id, user_id, score, content)
-values (2, 2, 1, "");
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㄴ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 1, 5, 'ㅇ');
+insert into review (cafe_id, user_id, score, content)
+values (1, 2, 4, '');
+insert into review (cafe_id, user_id, score, content)
+values (1, 3, 1, '굳');
+insert into review (cafe_id, user_id, score, content)
+values (1, 4, 3, '');
+insert into review (cafe_id, user_id, score, content)
+values (1, 5, 2, '');
+insert into review (cafe_id, user_id, score, content)
+values (1, 6, 3, '');
+insert into review (cafe_id, user_id, score, content)
+values (1, 7, 2, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 4, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 5, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 2, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 3, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 3, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 2, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 4, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 5, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+insert into review (cafe_id, user_id, score, content)
+values (2, 2, 1, '');
+
+
 
