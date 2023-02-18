@@ -25,10 +25,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         log.info(String.valueOf(check));
         if(check) return true;
 
-        String accessToken = request.getHeader("X-ACCESS-TOKEN");
-        log.info("accesstoken in interceptor prehandle: "+accessToken);
+        String accessToken = request.getHeader("Authorization");
+        log.info("AccessToken in interceptor prehandle = "+accessToken);
 
-        if(jwtService.isValidAccessToken(accessToken))
+        if(jwtService.isValidToken(accessToken))
             return true;
         else{
             return false;
@@ -38,7 +38,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private boolean checkAnnotation(Object handler,Class cls){
 
         HandlerMethod handlerMethod=(HandlerMethod) handler;
-        log.info("NoAuth : "+handlerMethod.getMethodAnnotation(cls));
+        log.info("NoAuth = "+handlerMethod.getMethodAnnotation(cls));
         if(handlerMethod.getMethodAnnotation(cls)!=null){ //해당 어노테이션이 존재하면 true.
             return true;
         }
