@@ -21,7 +21,8 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
     public List<Review> findNewestPageByCafeId(Long cafeId, Integer score, Long lastId, int size) {
         List<Review> reviews = jpaQueryFactory.selectFrom(review)
                 .where(scoreExist(score),
-                        review.id.gt(lastId))
+                        review.id.gt(lastId),
+                        review.cafe.id.eq(cafeId))
                 .orderBy(review.id.asc())
                 .limit(size + 1)
                 .fetch();
@@ -33,7 +34,8 @@ public class ReviewRepositoryImpl implements CustomReviewRepository {
     public List<Review> findOldestPageByCafeId(Long cafeId, Integer score, Long lastId, int size) {
         List<Review> reviews = jpaQueryFactory.selectFrom(review)
                 .where(scoreExist(score),
-                        review.id.lt(lastId))
+                        review.id.lt(lastId),
+                        review.cafe.id.eq(cafeId))
                 .orderBy(review.id.desc())
                 .limit(size + 1)
                 .fetch();
