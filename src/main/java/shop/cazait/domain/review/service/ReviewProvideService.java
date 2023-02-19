@@ -38,17 +38,23 @@ public class ReviewProvideService {
         SortType sortType = SortType.of(sortBy);
         List<Review> reviews = null;
 
+        if (reviewRepository.findByCafeId(cafeId) == null) {
+            return null;
+        }
+
         // ToDo: HashMap<SortType, Function>으로 함수 매핑시키기
-        if (sortType == SortType.NEWEST) {
-            if (lastId == null) {
-                lastId = 0L;
+        {
+            if (sortType == SortType.NEWEST) {
+                if (lastId == null) {
+                    lastId = 0L;
+                }
+                reviews = reviewRepository.findNewestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
+            } else if (sortType == sortType.OLDEST) {
+                if (lastId == null) {
+                    lastId = Long.MAX_VALUE;
+                }
+                reviews = reviewRepository.findOldestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
             }
-            reviews = reviewRepository.findNewestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
-        } else if (sortType == sortType.OLDEST) {
-            if (lastId == null) {
-                lastId = Long.MAX_VALUE;
-            }
-            reviews = reviewRepository.findOldestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
         }
 
         ScrollPaginationCollection<Review> reviewScroll = ScrollPaginationCollection.of(reviews, COUNT_PER_SCROLL);
