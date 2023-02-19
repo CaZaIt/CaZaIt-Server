@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_ROOT="/home/ubuntu/app"
-JAR_FILE="$PROJECT_ROOT/cazait.jar"
+JAR_FILE="$PROJECT_ROOT/cazait-server.jar"
 
 APP_LOG="$PROJECT_ROOT/application.log"
 ERROR_LOG="$PROJECT_ROOT/error.log"
