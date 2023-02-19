@@ -38,7 +38,7 @@ public class ReviewProvideService {
         SortType sortType = SortType.of(sortBy);
         List<Review> reviews = null;
 
-        if (reviewRepository.findByCafeId(cafeId) == null) {
+        if (reviewRepository.findTopByCafeId(cafeId) == null) {
             return null;
         }
 
