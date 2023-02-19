@@ -48,9 +48,9 @@ public class ReviewApiController {
     @Operation(summary = "리뷰 전체 조회", description = "카페 ID를 받아 해당 카페의 리뷰 목록 반환 (성공: 200, 리뷰 없음: 204, 존재하지 않는 카페: 404)")
     @Parameters({
             @Parameter(name = "cafeId", description = "카페 ID"),
-            @Parameter(name = "sortBy", description = "정렬 기준(newest, oldest, popularity)", example = "newest"),
+            @Parameter(name = "sortBy", description = "정렬 기준(newest, oldest)", example = "newest"),
             @Parameter(name = "score", description = "리뷰 점수"),
-            @Parameter(name = "lastId", description = "마지막으로 조회한 리뷰의 ID")
+            @Parameter(name = "lastId", description = "마지막으로 조회한 리뷰의 ID(미입력시 최초값 자동 설정)")
     })
     public SuccessResponse<GetReviewsRes> getReviews(@PathVariable Long cafeId,
                                                      @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
