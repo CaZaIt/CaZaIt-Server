@@ -36,6 +36,7 @@ import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
+import shop.cazait.global.common.dto.response.FailResponse;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.error.status.SuccessStatus;
 
@@ -59,8 +60,16 @@ public class CafeMenuApiController {
                     description = "메뉴 등록 성공",
                     content = @Content(schema = @Schema(implementation = PostCafeMenuRes.class))
             ),
-            @ApiResponse(responseCode = "400", description = "유효하지 않은 요청"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "유효하지 않은 요청",
+                    content = @Content(schema = @Schema(implementation = FailResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "존재하지 않는 카페",
+                    content = @Content(schema = @Schema(implementation = FailResponse.class))
+            ),
     })
     @PostMapping(value ="/cafe/{cafeId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public SuccessResponse<PostCafeMenuRes> registerMenu(@PathVariable Long cafeId,
