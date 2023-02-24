@@ -16,7 +16,7 @@ cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
 # 환경 변수 설정
 source /etc/profile
 echo "S3 ACESS KEY: $S3_ACCESS_KEY" >> $DEPLOY_LOG
-echo "S3 SECERET KEY: $S3_SECERET_KEY" >> $DEPLOY_LOG
+echo "S3 SECRET KEY: $S3_SECRET_KEY" >> $DEPLOY_LOG
 
 
 # jar 파일 실행
