@@ -65,7 +65,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.S3_ARCHIVE_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.S3_ARCHIVE_SECERET_KEY }}
+        aws-secret-access-key: ${{ secrets.S3_ARCHIVE_SECRET_KEY }}
         aws-region: ${{ env.AWS_REGION }}
         
     - name: Upload to S3
