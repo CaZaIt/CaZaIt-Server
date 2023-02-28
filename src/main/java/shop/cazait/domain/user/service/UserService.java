@@ -225,7 +225,7 @@ public class UserService {
 
     public PostLoginRes reIssueTokens(String accessToken,String refreshToken, Long userIdx) throws UserException{
 
-         User user = null;
+        User user = null;
 
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);

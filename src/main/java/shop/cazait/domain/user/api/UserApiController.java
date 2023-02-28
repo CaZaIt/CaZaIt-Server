@@ -75,7 +75,7 @@ public class UserApiController {
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
             jwtService.isValidAccessTokenId(userIdx);
-            jwtService.isValidToken(refreshToken);
+            jwtService.isValidRefreshToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
@@ -96,7 +96,7 @@ public class UserApiController {
     @GetMapping("/email")
     @Operation(summary = "이메일 중복확인", description = "회원가입 전 이미 존재하는 이메일인지 중복확인")
     @Parameter(name = "email", description = "사용자 이메일")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
+    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email @NotBlank  String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
     }
