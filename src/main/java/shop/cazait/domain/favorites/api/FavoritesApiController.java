@@ -58,10 +58,13 @@ public class FavoritesApiController {
     }
 
     @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 ID를 받아 즐겨찾기를 삭제한다.")
-    @Parameter(name = "favoritesId", description = "즐겨찾기 ID")
-    @DeleteMapping("/delete/{favoritesId}")
-    public SuccessResponse<String> deleteFavorites(@PathVariable(name = "favoritesId") Long favoritesId) {
-        return new SuccessResponse<>(SUCCESS, favoritesService.deleteFavorites(favoritesId));
+    @Parameters({
+            @Parameter(name= "userId", description = "즐겨찾기 ID"),
+            @Parameter(name= "cafeId", description = "즐겨찾기 ID")
+    })
+    @DeleteMapping("/delete/{userId}/{cafeId}")
+    public SuccessResponse<String> deleteFavorites(@PathVariable Long userId, @PathVariable Long cafeId) {
+        return new SuccessResponse<>(SUCCESS, favoritesService.deleteFavorites(userId, cafeId));
     }
 
 }
