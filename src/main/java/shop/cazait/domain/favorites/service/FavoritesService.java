@@ -83,10 +83,10 @@ public class FavoritesService {
     /**
      * 즐겨찾기 삭제
      */
-    public String deleteFavorites(Long favoritesId) {
+    public String deleteFavorites(Long userId, Long cafeId) {
 
         Favorites favorites = favoritesRepository
-                .findById(favoritesId)
+                .findAllByUserIdAndCafeId(userId, cafeId)
                 .orElseThrow(() -> new FavoritesException(NOT_EXIST_FAVORITES));
 
         favoritesRepository.delete(favorites);
