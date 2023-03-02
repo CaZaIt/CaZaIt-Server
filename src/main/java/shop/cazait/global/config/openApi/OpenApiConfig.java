@@ -9,6 +9,11 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.Arrays;
+
+import org.springdoc.core.GroupedOpenApi;
+import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,17 +31,12 @@ public class OpenApiConfig {
         localServer.setDescription("local");
         localServer.setUrl("http://localhost:8082");
 
-        SecurityScheme securityScheme = new SecurityScheme()
-                .type(Type.HTTP).scheme("bearer").bearerFormat("JWT");
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList("Authorization");
-
         return new OpenAPI()
-                .components(new Components().addSecuritySchemes("Authorization", securityScheme))
-                .security(Arrays.asList(securityRequirement))
                 .info(getInfo())
                 .servers(Arrays.asList(devServer, localServer));
 
     }
+
 
     private Info getInfo() {
         return new Info()
@@ -44,5 +44,35 @@ public class OpenApiConfig {
                 .description("CaZaIt API DOCS");
     }
 
+    @Bean
+    public GroupedOpenApi SecurityGroupOpenApi() {
+        return GroupedOpenApi
+                .builder()
+                .group("토큰 인증 필요한 API")
+                .pathsToExclude("/api/auths/**","/api/users/sign-up","/api/masters/sign-up")
+                .addOpenApiCustomiser(buildSecurityOpenApi())
+                .build();
+}
 
+    @Bean
+    public GroupedOpenApi NonSecurityGroupOpenApi() {
+        return GroupedOpenApi
+                .builder()
+                .group("토큰 인증 불필요한 API")
+                .pathsToMatch("/api/auths/**","/api/users/sign-up","/api/masters/sign-up")
+                .build();
+    }
+
+    public OpenApiCustomiser buildSecurityOpenApi() {
+        SecurityScheme securityScheme = new SecurityScheme()
+                .name("Authorization")
+                .type(SecurityScheme.Type.HTTP)
+                .in(SecurityScheme.In.HEADER)
+                .bearerFormat("JWT")
+                .scheme("bearer");
+
+        return OpenApi -> OpenApi
+                .addSecurityItem(new SecurityRequirement().addList("Authorization"))
+                .getComponents().addSecuritySchemes("Authorization", securityScheme);
+    }
 }

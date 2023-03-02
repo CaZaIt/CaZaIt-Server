@@ -55,7 +55,7 @@ public class UserApiController {
 
     @GetMapping("/{userIdx}")
     @Operation(summary = "특정 회원 정보를 조회", description ="자신의 계정 정보를 조회")
-    @Parameter (name="userIdx", description = "사용자 userId")
+    @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
     public SuccessResponse<GetUserRes> getUser(
              @PathVariable(name = "userIdx") Long userIdx) throws UserException {
         jwtService.isValidAccessTokenId(userIdx);
@@ -67,15 +67,15 @@ public class UserApiController {
     @PatchMapping("/{userIdx}")
     @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
     @Parameters({
-            @Parameter (name="userIdx", description = "사용자 userId"),
-            @Parameter (name="refreshToken", description = "리프레시 토큰")}
+            @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1"),
+            @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
     )
     public SuccessResponse<PatchUserRes> modifyUser(
             @PathVariable(name = "userIdx") Long userIdx,
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
             jwtService.isValidAccessTokenId(userIdx);
-            jwtService.isValidToken(refreshToken);
+            jwtService.isValidRefreshToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
@@ -84,7 +84,7 @@ public class UserApiController {
 
     @DeleteMapping("/{userIdx}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
-    @Parameter(name = "userIdx", description = "사용자 userId")
+    @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
         jwtService.isValidAccessTokenId(userIdx);
 
@@ -95,8 +95,8 @@ public class UserApiController {
     @NoAuth
     @GetMapping("/email")
     @Operation(summary = "이메일 중복확인", description = "회원가입 전 이미 존재하는 이메일인지 중복확인")
-    @Parameter(name = "email", description = "사용자 이메일")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email String email) throws UserException {
+    @Parameter(name = "email", description = "사용자 이메일", example = "cazait1234@gmail.com")
+    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email @NotBlank  String email) throws UserException {
         SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
         return emailDuplicateSuccessResponse;
     }
@@ -104,7 +104,7 @@ public class UserApiController {
     @NoAuth
     @GetMapping("/nickname")
     @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    @Parameter(name = "nickName", description = "사용자 닉네임")
+    @Parameter(name = "nickName", description = "사용자 닉네임",example = "토마스")
     public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickName.trim());
         return nicknameDuplicateSuccessResponse;
