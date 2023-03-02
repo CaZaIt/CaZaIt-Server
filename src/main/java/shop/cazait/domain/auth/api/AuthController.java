@@ -4,11 +4,8 @@ import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -51,7 +48,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/log-in")
     @Operation(summary = "회원 로그인", description = "이메일과 로그인을 통해 로그인을 진행")
-    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)")
+    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example ="master")
     public SuccessResponse<PostLoginRes> logIn(
             @RequestParam @NotBlank String role,
             @RequestBody @Valid PostLoginReq postLoginReq)
@@ -66,7 +63,12 @@ public class AuthController {
     @NoAuth
     @GetMapping(value = "/refresh/{userIdx}")
     @Operation(summary = "토큰 재발급", description = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
-    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)")
+    @Parameters({
+            @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example = "user"),
+            @Parameter(name = "Authorization", description = "발급 받은 accesstoken"),
+            @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken"),
+            @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1"),
+    })
     public SuccessResponse<PostLoginRes> refreshToken(
             @PathVariable(name = "userIdx") Long userIdx,
             @RequestParam @NotBlank String role,
