@@ -36,9 +36,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     }
 
     private boolean checkAnnotation(Object handler,Class cls){
-
+        System.out.println("handler = " + handler);
         HandlerMethod handlerMethod=(HandlerMethod) handler;
-        log.info("NoAuth = "+handlerMethod.getMethodAnnotation(cls));
+        System.out.println("handlerMethod = " + handlerMethod);
+        System.out.println("handlerMethod.getMethodAnnotation(cls) = " + handlerMethod.getMethodAnnotation(cls));
         if(handlerMethod.getMethodAnnotation(cls)!=null){ //해당 어노테이션이 존재하면 true.
             return true;
         }
