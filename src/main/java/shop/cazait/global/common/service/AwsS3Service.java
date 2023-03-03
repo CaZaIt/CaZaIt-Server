@@ -51,8 +51,11 @@ public class AwsS3Service {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
 
+//        String pathName = System.getProperty("user.dir") + "/" + file.getOriginalFilename();
+        log.info(file.getOriginalFilename());
         File convertFile = new File(file.getOriginalFilename());
 
+        log.info(convertFile.getAbsolutePath());
         if (convertFile.createNewFile()) {
 
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
@@ -69,16 +72,16 @@ public class AwsS3Service {
 
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
-        log.info("File Upload : " + fileName);
+        log.info("업로드한 파일 이름 : " + fileName);
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
     private void removeNewFile(File targetFile) {
         if (targetFile.delete()) {
-            log.info("File delete success");
+            log.info("업로드를 위해 생성한 파일 삭제 성공");
             return;
         }
-        log.info("File delete fail");
+        log.info("업로드를 위해 생성한 파일 삭제 실패");
     }
 
 
