@@ -51,8 +51,8 @@ public class AwsS3Service {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
 
-//        String pathName = System.getProperty("user.dir") + "/" + file.getOriginalFilename();
-        log.info(file.getOriginalFilename());
+        String pathName = System.getProperty("user.dir");
+        log.info(pathName + "/" + file.getOriginalFilename());
         File convertFile = new File(file.getOriginalFilename());
 
         log.info(convertFile.getAbsolutePath());
