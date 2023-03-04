@@ -1,6 +1,6 @@
 package shop.cazait.domain.master.service;
 
-import static shop.cazait.domain.auth.Role.MASTER;
+import static shop.cazait.domain.auth.Role.*;
 import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -19,19 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
 import shop.cazait.domain.master.dto.patch.PatchMasterRes;
-
 import shop.cazait.domain.master.dto.post.PostMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterRes;
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
-import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.AES128;
@@ -95,15 +92,15 @@ public class MasterService {
 			String refreshToken = jwtService.createRefreshToken();
 
 			findMaster = Master.builder()
-					.id(masterIdx)
-					.email(findMaster.getEmail())
-					.password(findMaster.getPassword())
-					.nickname(findMaster.getNickname())
-					.refreshToken(refreshToken)
-					.build();
-//			findMaster.builder()
-//							.refreshToken(refreshToken)
-//					        .build();
+				.id(masterIdx)
+				.email(findMaster.getEmail())
+				.password(findMaster.getPassword())
+				.nickname(findMaster.getNickname())
+				.refreshToken(refreshToken)
+				.build();
+			//			findMaster.builder()
+			//							.refreshToken(refreshToken)
+			//					        .build();
 			masterRepository.save(findMaster);
 			return PostLoginRes.of(findMaster, jwt, refreshToken, MASTER);
 		}
@@ -125,7 +122,7 @@ public class MasterService {
 		return masterResList;
 	}
 
-	//마스터 회원 정보
+	//마스터 회원 정보 업데이트
 	public PatchMasterRes updateMaster(Long id, PatchMasterReq patchMasterReq) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		Master updateMaster = masterRepository.save(findMaster);
