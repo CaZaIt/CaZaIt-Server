@@ -58,7 +58,11 @@ public class MasterService {
 
 		//이메일 확인
 		if (!masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
-			throw new MasterException(DUPLICATE_USER_LOGIN_EMAIL);
+			throw new MasterException(EXIST_EMAIL);
+		}
+		//닉네임 중복확인
+		if (!masterRepository.findMasterByNickname(dto.getNickname()).isEmpty()) {
+			throw new MasterException(EXIST_NICKNAME);
 		}
 
 		// 마스터 엔티티 생성
