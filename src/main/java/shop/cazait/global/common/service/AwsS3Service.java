@@ -1,6 +1,10 @@
 package shop.cazait.global.common.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
@@ -8,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +24,32 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class AwsS3Service {
 
-    private final AmazonS3Client amazonS3Client;
+    private AmazonS3 s3Client;
+
+    @Value("${cloud.aws.credentials.access-key}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secret-key}")
+    private String secretKey;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @Value("${cloud.aws.s3.dir}")
     private String directory;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @PostConstruct
+    public void setS3Client() {
+        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(this.region)
+                .build();
+    }
 
     /**
      * S3 파일 upload
@@ -71,9 +95,9 @@ public class AwsS3Service {
     }
 
     private String putS3(File uploadFile, String fileName) {
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         log.info("업로드한 파일 이름 : " + fileName);
-        return amazonS3Client.getUrl(bucket, fileName).toString();
+        return s3Client.getUrl(bucket, fileName).toString();
     }
 
     private void removeNewFile(File targetFile) {
