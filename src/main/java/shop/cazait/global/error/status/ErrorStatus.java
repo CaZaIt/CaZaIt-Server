@@ -28,6 +28,7 @@ public enum ErrorStatus {
     EXIST_EMAIL(400,"FAIL","이미 존재하는 이메일입니다."),
     EXIST_NICKNAME(400,"FAIL","이미 존재하는 닉네임입니다."),
     INVALID_ROLE(400,"FAIL","유효하지 않은 역할입니다."),
+    FAIL_UPLOAD_IMAGE(400, "FAIL", "이미지 업로드를 실패했습니다."),
 
     /**
      * Success Code : 401
@@ -52,9 +53,9 @@ public enum ErrorStatus {
     NOT_EXIST_MASTER(404, "FAIL", "존재하지 않는 마스터입니다."),
     NOT_EXIST_CAFE(404,"FAIL", "존재하지 않는 카페입니다."),
     NOT_EXIST_MENU(404,"FAIL", "존재하지 않는 메뉴입니다."),
-    NOT_EXIST_FAVORITES(404,"FAIL", "유효하지 않은 즐겨찾기 입니다."),
-    NOT_EXIST_REVIEW(404,"FAIL", "유효하지 않은 리뷰 ID입니다."),
-    NOT_EXIST_IMAGE(404,"FAIL", "유효하지 않은 이미지입니다."),
+    NOT_EXIST_FAVORITES(404,"FAIL", "존재하지 않는 즐겨찾기 입니다."),
+    NOT_EXIST_REVIEW(404,"FAIL", "존재하지 않는 리뷰 ID입니다."),
+    NOT_EXIST_IMAGE(404,"FAIL", "존재하지 않는 이미지입니다."),
     PAGE_NOT_FOUND(404,"FAIL","페이지를 찾을 수 없습니다"),
 
     /**
