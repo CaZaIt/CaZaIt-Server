@@ -3,6 +3,7 @@ package shop.cazait.global.common.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import shop.cazait.domain.cafe.exception.CafeException;
+import shop.cazait.global.error.status.ErrorStatus;
 
 @Slf4j
 @Service
@@ -72,12 +75,13 @@ public class AwsS3Service {
     }
 
     private String putS3(File uploadFile, String fileName) {
-
         try {
             log.info("Putting object " + fileName  +" into bucket "+ bucket);
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (AmazonS3Exception e) {
             log.info(e.getMessage());
+            log.info(e.getRawResponseContent());
+            throw new CafeException(ErrorStatus.FAIL_UPLOAD_IMAGE);
         }
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
