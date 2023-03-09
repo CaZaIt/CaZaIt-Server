@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.validation.Valid;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +36,7 @@ import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 
 @Tag(name = "마스터 API")
+@Validated
 @RestController
 @RequestMapping("/api/masters")
 @RequiredArgsConstructor
@@ -63,10 +65,11 @@ public class MasterController {
 	@Parameters({
 		@Parameter(name = "masterId", description = "마스터 ID"),
 	})
-	public SuccessResponse<String> updateMaster(@PathVariable(name = "masterId") Long masterId,
-		@RequestBody PatchMasterReq masterReq) throws UserException {
+	public SuccessResponse<String> updateMaster(
+		@PathVariable(name = "masterId") Long masterId,
+		@RequestBody @Valid PatchMasterReq patchMasterReq) throws UserException {
 		jwtService.isValidAccessTokenId(masterId);
-		masterService.updateMaster(masterId, masterReq);
+		masterService.updateMaster(masterId, patchMasterReq);
 		return new SuccessResponse<>(SUCCESS, "카페 수정 완료");
 	}
 
