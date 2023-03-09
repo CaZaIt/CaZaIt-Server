@@ -2,10 +2,6 @@ package shop.cazait.domain.master.api;
 
 import static shop.cazait.global.error.status.SuccessStatus.*;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
 import shop.cazait.domain.master.dto.post.PostMasterReq;
@@ -58,7 +58,7 @@ public class MasterController {
 		return new SuccessResponse<>(CREATE_MASTER, postCreateMasterRes);
 	}
 
-	@PatchMapping("/update/{cafeId}")
+	@PatchMapping("/update/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
 	@Parameters({
 		@Parameter(name = "masterId", description = "마스터 ID"),
