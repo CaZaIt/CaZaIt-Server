@@ -22,9 +22,10 @@ public class WebConfig implements WebMvcConfigurer {
                         "/configuration/security",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
-                        "/webjars/**"
-                )
-                .addPathPatterns("/rest-api-root/**");
+                        "/webjars/**", 
+                        "/error/**"
+                );
+    //addPathPatterns("/rest-api-root/**");
     }
 
 }
