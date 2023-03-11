@@ -154,8 +154,9 @@ public class UserService {
         return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");
     }
 
-    public SuccessResponse<String> checkduplicateNickname(String nickname) throws UserException {
-        if (!userRepository.findByNickname(nickname).isEmpty()) {
+    public SuccessResponse<String> checkduplicateNickname(PostCheckDuplicateNicknameReq postCheckDuplicateNicknameReq) throws UserException {
+        String nickname = postCheckDuplicateNicknameReq.getNickname();
+        if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
             throw new UserException(EXIST_NICKNAME);
         }
         return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");

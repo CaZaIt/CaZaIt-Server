@@ -96,11 +96,10 @@ public class UserApiController {
     }
 
     @NoAuth
-    @GetMapping("/nickname")
+    @PostMapping ("/nickname")
     @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    @Parameter(name = "nickName", description = "사용자 닉네임",example = "토마스")
-    public SuccessResponse<String> checkDuplicateNickname(@RequestParam @NotBlank String nickName) throws UserException {
-        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(nickName.trim());
+    public SuccessResponse<String> checkDuplicateNickname(@RequestBody @Valid PostCheckDuplicateNicknameReq postCheckDuplicateNicknameReq) throws UserException {
+        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(postCheckDuplicateNicknameReq);
         return nicknameDuplicateSuccessResponse;
     }
 }
