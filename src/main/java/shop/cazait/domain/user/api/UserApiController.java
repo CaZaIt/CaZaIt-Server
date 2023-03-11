@@ -88,11 +88,10 @@ public class UserApiController {
     }
 
     @NoAuth
-    @GetMapping("/email")
+    @PostMapping ("/email")
     @Operation(summary = "이메일 중복확인", description = "회원가입 전 이미 존재하는 이메일인지 중복확인")
-    @Parameter(name = "email", description = "사용자 이메일", example = "cazait1234@gmail.com")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestParam @Email @NotBlank  String email) throws UserException {
-        SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(email);
+    public SuccessResponse<String> checkDuplicateEmail(@RequestBody @Valid PostCheckDuplicateEmailReq postCheckDuplicateEmailReq) throws UserException {
+        SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(postCheckDuplicateEmailReq);
         return emailDuplicateSuccessResponse;
     }
 
