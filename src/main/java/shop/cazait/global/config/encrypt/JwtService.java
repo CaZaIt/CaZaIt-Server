@@ -112,10 +112,7 @@ public class JwtService {
         } catch (JwtException exception) {
             log.error("RefreshToken Tampered.");
             throw new UserException(INVALID_JWT);
-        } catch (IllegalArgumentException exception) {
-            log.error("Token is null.");
-            throw new UserException(EMPTY_JWT);
-        } catch ( NullPointerException exception) {
+        } catch (NullPointerException exception) {
             log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
         }
@@ -135,11 +132,7 @@ public class JwtService {
         } catch (IllegalArgumentException exception) {
             log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
-        } catch ( NullPointerException exception) {
-            log.error("Token is null.");
-            throw new UserException(EMPTY_JWT);
         }
-
     }
 
     //1. 만료된 토큰을 파라미터로 받은 후 userID를 반환하는 함수 // 토큰 재발급 시 이용됨
@@ -158,7 +151,7 @@ public class JwtService {
         } catch (JwtException exception) {
             log.error("Token tampered.");
             throw new UserException(INVALID_JWT);
-        } catch (IllegalArgumentException exception) {
+        } catch (NullPointerException exception) {
             log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
         }
@@ -226,7 +219,7 @@ public class JwtService {
         } catch (JwtException exception) {
             log.error("accessToken Tampered.");
             throw new UserException(INVALID_JWT);
-        } catch (IllegalArgumentException exception) {
+        } catch (NullPointerException exception) {
             log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
         }
@@ -250,12 +243,15 @@ public class JwtService {
             throw new UserException(EMPTY_JWT);
         }
     }
-    public void isValidAccessTokenId(Long userIdxFromController) throws UserException {
+    public boolean isValidAccessTokenId(Long userIdxFromController) throws UserException {
         String jwtFromHeader = getJwtFromHeader();
         Long userIdxFromJwt= getUserIdx(jwtFromHeader);
         log.info("userIdxFromJwt =  "+userIdxFromJwt);
         if (!userIdxFromController.equals(userIdxFromJwt)) {
             throw new UserException(INVALID_REQUEST);
+        }
+        else{
+            return true;
         }
     }
 }
