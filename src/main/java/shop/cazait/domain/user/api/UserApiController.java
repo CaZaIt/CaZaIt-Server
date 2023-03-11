@@ -58,8 +58,6 @@ public class UserApiController {
     @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
     public SuccessResponse<GetUserRes> getUser(
              @PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        jwtService.isValidAccessTokenId(userIdx);
-
         GetUserRes userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
@@ -74,7 +72,6 @@ public class UserApiController {
             @PathVariable(name = "userIdx") Long userIdx,
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
-            jwtService.isValidAccessTokenId(userIdx);
             jwtService.isValidRefreshToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
@@ -86,8 +83,6 @@ public class UserApiController {
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
     @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
     public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
-        jwtService.isValidAccessTokenId(userIdx);
-
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(SUCCESS, deleteUserRes);
     }
