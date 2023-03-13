@@ -30,6 +30,7 @@ public class AwsS3Service {
     @Value("${cloud.aws.s3.dir}")
     private String directory;
 
+
     /**
      * S3 파일 upload
      * 로직 : convert(로컬에 파일 생성) -> putS3(S3 업로드) -> removeNewFile(생성한 파일 삭제)
@@ -73,9 +74,6 @@ public class AwsS3Service {
     private String putS3(File uploadFile, String fileName) {
         try {
             log.info("Putting object " + fileName  +" into bucket "+ bucket);
-//            AWSCredentialsProvider requestCredentialsProvider = request.getRequestCredentialsProvider();
-//            log.info(requestCredentialsProvider.getCredentials().getAWSAccessKeyId());
-//            log.info(requestCredentialsProvider.getCredentials().getAWSSecretKey());
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (AmazonS3Exception e) {
             log.info(e.getMessage());

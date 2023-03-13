@@ -59,7 +59,7 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 불필요한 API")
-                .pathsToMatch("/api/auths/**","/api/users/sign-up","/api/masters/sign-up")
+                .pathsToMatch("/api/auths/**","/api/users/sign-up","/api/masters/sign-up", "/api/s3/**")
                 .build();
     }
 
