@@ -56,11 +56,8 @@ public class AwsS3Service {
 
     private Optional<File> convert(MultipartFile file) throws IOException {
 
-        String path = "/home/ubuntu/app/";
-        log.info(path + file.getOriginalFilename());
-        File convertFile = new File(path + file.getOriginalFilename());
+        File convertFile = new File(file.getOriginalFilename());
 
-        log.info(convertFile.getAbsolutePath());
         if (convertFile.createNewFile()) {
 
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
@@ -79,9 +76,9 @@ public class AwsS3Service {
         try {
             log.info("Putting object " + fileName  +" into bucket "+ bucket);
             PutObjectRequest request = new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
-            AWSCredentialsProvider requestCredentialsProvider = request.getRequestCredentialsProvider();
-            log.info(requestCredentialsProvider.getCredentials().getAWSAccessKeyId());
-            log.info(requestCredentialsProvider.getCredentials().getAWSSecretKey());
+//            AWSCredentialsProvider requestCredentialsProvider = request.getRequestCredentialsProvider();
+//            log.info(requestCredentialsProvider.getCredentials().getAWSAccessKeyId());
+//            log.info(requestCredentialsProvider.getCredentials().getAWSSecretKey());
 
             amazonS3Client.putObject(request);
         } catch (AmazonS3Exception e) {
