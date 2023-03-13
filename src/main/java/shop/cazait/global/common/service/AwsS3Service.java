@@ -1,10 +1,8 @@
 package shop.cazait.global.common.service;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -75,12 +73,10 @@ public class AwsS3Service {
     private String putS3(File uploadFile, String fileName) {
         try {
             log.info("Putting object " + fileName  +" into bucket "+ bucket);
-            PutObjectRequest request = new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead);
 //            AWSCredentialsProvider requestCredentialsProvider = request.getRequestCredentialsProvider();
 //            log.info(requestCredentialsProvider.getCredentials().getAWSAccessKeyId());
 //            log.info(requestCredentialsProvider.getCredentials().getAWSSecretKey());
-
-            amazonS3Client.putObject(request);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (AmazonS3Exception e) {
             log.info(e.getMessage());
             log.info(e.getRawResponseContent());
