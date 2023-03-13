@@ -24,12 +24,10 @@ public class AwsS3Config {
     @Bean
     public AmazonS3Client amazonS3Client() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-        ClientConfiguration clientConfiguration = new ClientConfiguration();
-        clientConfiguration.setSignerOverride("AWSS3V4SignerType");
-        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
+        return (AmazonS3Client) AmazonS3ClientBuilder
+                .standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .withClientConfiguration(clientConfiguration)
                 .build();
     }
 
