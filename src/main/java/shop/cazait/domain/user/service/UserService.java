@@ -25,12 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.auth.dto.PostLoginReq;
 import shop.cazait.domain.auth.dto.PostLoginRes;
-import shop.cazait.domain.user.dto.DeleteUserRes;
-import shop.cazait.domain.user.dto.GetUserRes;
-import shop.cazait.domain.user.dto.PatchUserReq;
-import shop.cazait.domain.user.dto.PatchUserRes;
-import shop.cazait.domain.user.dto.PostUserReq;
-import shop.cazait.domain.user.dto.PostUserRes;
+import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
@@ -151,15 +146,17 @@ public class UserService {
         return DeleteUserRes.of(deleteUser);
     }
 
-    public SuccessResponse<String> checkduplicateEmail(String email) throws UserException {
+    public SuccessResponse<String> checkduplicateEmail(PostCheckDuplicateEmailReq postCheckDuplicateEmailReq) throws UserException {
+        String email = postCheckDuplicateEmailReq.getEmail();
         if (!userRepository.findByEmail(email).isEmpty()) {
             throw new UserException(EXIST_EMAIL);
         }
         return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");
     }
 
-    public SuccessResponse<String> checkduplicateNickname(String nickname) throws UserException {
-        if (!userRepository.findByNickname(nickname).isEmpty()) {
+    public SuccessResponse<String> checkduplicateNickname(PostCheckDuplicateNicknameReq postCheckDuplicateNicknameReq) throws UserException {
+        String nickname = postCheckDuplicateNicknameReq.getNickname();
+        if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
             throw new UserException(EXIST_NICKNAME);
         }
         return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");

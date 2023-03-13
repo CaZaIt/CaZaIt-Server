@@ -3,11 +3,13 @@ package shop.cazait.global.error.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
@@ -104,18 +106,4 @@ public class GlobalExceptionHandler {
         return new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString());
 
     }
-
-    @ExceptionHandler({NoHandlerFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public FailResponse handleNoHandlerFoundException(NoHandlerFoundException exception) {
-        System.out.println(exception.toString());
-        return new FailResponse(ErrorStatus.PAGE_NOT_FOUND, "잘못된 형식의 url 요청입니다.");
-    }
-
-    @ExceptionHandler({MissingServletRequestParameterException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public FailResponse handleNoHandlerFoundException(MissingServletRequestParameterException exception) {
-        return new FailResponse(ErrorStatus.PAGE_NOT_FOUND, exception.getMessage());
-    }
-
 }

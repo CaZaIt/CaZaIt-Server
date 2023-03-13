@@ -49,7 +49,7 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 필요한 API")
-                .pathsToExclude("/api/auths/**","/api/users/sign-up","/api/masters/sign-up")
+                .pathsToExclude("/api/auths/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname")
                 .addOpenApiCustomiser(buildSecurityOpenApi())
                 .build();
 }
@@ -59,7 +59,7 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 불필요한 API")
-                .pathsToMatch("/api/auths/**","/api/users/sign-up","/api/masters/sign-up", "/api/s3/**")
+                .pathsToMatch("/api/auths/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname", "/api/s3/**")
                 .build();
     }
 
@@ -76,3 +76,4 @@ public class OpenApiConfig {
                 .getComponents().addSecuritySchemes("Authorization", securityScheme);
     }
 }
+
