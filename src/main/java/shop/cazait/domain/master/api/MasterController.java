@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,24 +61,24 @@ public class MasterController {
 		return new SuccessResponse<>(CREATE_MASTER, postCreateMasterRes);
 	}
 
-	@PatchMapping("/update/{masterId}")
+	@PatchMapping("/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
 	@Parameters({
-		@Parameter(name = "masterId", description = "마스터 ID"),
-	})
+		@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호", example = "1"),
+		@Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
+	)
 	public SuccessResponse<String> updateMaster(
 		@PathVariable(name = "masterId") Long masterId,
-		@RequestBody @Valid PatchMasterReq patchMasterReq) throws UserException {
+		@RequestBody @Valid PatchMasterReq patchMasterReq,
+		@RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException {
 		jwtService.isValidAccessTokenId(masterId);
 		masterService.updateMaster(masterId, patchMasterReq);
-		return new SuccessResponse<>(SUCCESS, "카페 수정 완료");
+		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");
 	}
 
-	@DeleteMapping
-	@Operation(summary = "마스터 계정 탈퇴(상태  변경)", description = "특정 ID의 마스터 상태를 INACTIVE로 변경한다.")
-	@Parameters({
-		@Parameter(name = "Id", description = "탈퇴하고자 하는 마스터 ID"),
-	})
+	@DeleteMapping("/{id}")
+	@Operation(summary = "마스터 계정 탈퇴", description = "특정 ID의 마스터 계정을 삭제한다.")
+	@Parameter(name = "masterId", description = "탈퇴하고자 하는 마스터 ID 번호", example = "1")
 	public SuccessResponse<String> deleteMaster(@Validated @PathVariable Long id) throws MasterException {
 		masterService.removeMaster(id);
 		String response = "회원 탈퇴가 성공하였습니다.";

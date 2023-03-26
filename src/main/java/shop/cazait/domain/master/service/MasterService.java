@@ -8,7 +8,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -145,20 +144,13 @@ public class MasterService {
 
 	// 회원 탈퇴하기
 	public void removeMaster(Long id) throws MasterException {
-		Optional<Master> masterEntity = masterRepository.findMasterById(id);
+		Master master = masterRepository.findMasterById(id).get();
 
 		if (masterRepository.findMasterById(id).isEmpty()) {
 			throw new MasterException(NOT_EXIST_MASTER);
 		}
 
-		if (masterEntity.get().getStatus().toString().equals("INACTIVE")) {
-			throw new MasterException(ALREADY_INACTIVE_MASTER);
-		}
-
-		Master master = masterRepository.findMasterById(id)
-			.orElseThrow(() -> new MasterException(NOT_EXIST_USER));
-		master.changeMasterStatus(BaseStatus.INACTIVE);
-		masterRepository.save(master);
+		masterRepository.delete(master);
 	}
 
 	// 토큰 재발급
