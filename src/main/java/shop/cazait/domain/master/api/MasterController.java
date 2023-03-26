@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
@@ -61,13 +63,17 @@ public class MasterController {
 
 	@PatchMapping("/update/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
-	@Parameter(name = "masterId", description = "마스터 ID")
+	@Parameters({
+		@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호", example = "1"),
+		@Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
+	)
 	public SuccessResponse<String> updateMaster(
 		@PathVariable(name = "masterId") Long masterId,
-		@RequestBody @Valid PatchMasterReq patchMasterReq) throws UserException {
+		@RequestBody @Valid PatchMasterReq patchMasterReq,
+		@RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException {
 		jwtService.isValidAccessTokenId(masterId);
 		masterService.updateMaster(masterId, patchMasterReq);
-		return new SuccessResponse<>(SUCCESS, "카페 수정 완료");
+		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");
 	}
 
 	@DeleteMapping("/{id}")
