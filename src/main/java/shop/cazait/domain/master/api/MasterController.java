@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
@@ -62,9 +61,7 @@ public class MasterController {
 
 	@PatchMapping("/update/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
-	@Parameters({
-		@Parameter(name = "masterId", description = "마스터 ID"),
-	})
+	@Parameter(name = "masterId", description = "마스터 ID")
 	public SuccessResponse<String> updateMaster(
 		@PathVariable(name = "masterId") Long masterId,
 		@RequestBody @Valid PatchMasterReq patchMasterReq) throws UserException {
@@ -73,11 +70,9 @@ public class MasterController {
 		return new SuccessResponse<>(SUCCESS, "카페 수정 완료");
 	}
 
-	@DeleteMapping
-	@Operation(summary = "마스터 계정 탈퇴(상태  변경)", description = "특정 ID의 마스터 상태를 INACTIVE로 변경한다.")
-	@Parameters({
-		@Parameter(name = "Id", description = "탈퇴하고자 하는 마스터 ID"),
-	})
+	@DeleteMapping("/{id}")
+	@Operation(summary = "마스터 계정 탈퇴", description = "특정 ID의 마스터 계정을 삭제한다.")
+	@Parameter(name = "masterId", description = "탈퇴하고자 하는 마스터 ID 번호", example = "1")
 	public SuccessResponse<String> deleteMaster(@Validated @PathVariable Long id) throws MasterException {
 		masterService.removeMaster(id);
 		String response = "회원 탈퇴가 성공하였습니다.";
