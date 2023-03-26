@@ -61,7 +61,7 @@ public class MasterController {
 		return new SuccessResponse<>(CREATE_MASTER, postCreateMasterRes);
 	}
 
-	@PatchMapping("/update/{masterId}")
+	@PatchMapping("/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
 	@Parameters({
 		@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호", example = "1"),
