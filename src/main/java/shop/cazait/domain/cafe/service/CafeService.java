@@ -94,6 +94,16 @@ public class CafeService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
+    public List<List<GetCafesRes>> getCafeByStatusNoAuth(String longitude, String latitude, String sort, String limit) {
+        List<Cafe> cafeList = cafeRepository.findAll();
+        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        List<GetCafesRes> getCafesRes = readCafeList(cafeList, longitude, latitude);
+        getCafesRes = sortCafeList(getCafesRes, sort, limit);
+        List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
+        return getCafesResList;
+    }
+
+    @Transactional(readOnly = true)
     public List<List<GetCafesRes>> getCafeByStatus(Long userId, String longitude, String latitude, String sort, String limit) {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
