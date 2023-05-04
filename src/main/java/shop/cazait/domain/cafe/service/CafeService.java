@@ -138,6 +138,16 @@ public class CafeService {
      * 카페 상세 조회 (카페 이름)
      */
     @Transactional(readOnly = true)
+    public List<List<GetCafesRes>> getCafeByNameNoAuth(String name, String longitude, String latitude, String sort, String limit) throws CafeException {
+        List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
+        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        List<GetCafesRes> getCafesRes = readCafeList(cafeList, longitude, latitude);
+        getCafesRes = sortCafeList(getCafesRes, sort, limit);
+        List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
+        return getCafesResList;
+    }
+
+    @Transactional(readOnly = true)
     public List<List<GetCafesRes>> getCafeByName(String name, Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);

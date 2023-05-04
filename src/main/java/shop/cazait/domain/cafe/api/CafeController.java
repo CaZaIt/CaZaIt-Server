@@ -117,6 +117,29 @@ public class CafeController {
         return new SuccessResponse<>(SUCCESS, cafeRes);
     }
 
+    @NoAuth
+    @GetMapping("/name/{cafeName}")
+    @Operation(summary = "카페 이름 조회(토큰 필요 X)", description = "특정 이름의 카페를 조회한다.")
+    @Parameters({
+            @Parameter(name = "cafeName", description = "카페 이름"),
+            @Parameter(name = "longitude", description = "유저 경도"),
+            @Parameter(name = "latitude", description = "유저 위도"),
+            @Parameter(name = "sort", description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
+            @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
+    })
+    public SuccessResponse<List<List<GetCafesRes>>> getCafeByNameNoAuth(@PathVariable String cafeName,
+                                                                        @RequestParam String longitude,
+                                                                        @RequestParam String latitude,
+                                                                        @RequestParam String sort,
+                                                                        @RequestParam String limit) throws CafeException {
+        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByNameNoAuth(cafeName, longitude, latitude, sort, limit);
+        SuccessStatus resultStatus = SUCCESS;
+        if (cafeResList.get(0).isEmpty()) {
+            resultStatus = NO_CONTENT_SUCCESS;
+        }
+        return new SuccessResponse<>(resultStatus ,cafeResList);
+    }
+
     @GetMapping("/name/{cafeName}/user/{userId}")
     @Operation(summary = "카페 이름 조회", description = "특정 이름의 카페를 조회한다.")
     @Parameters({
