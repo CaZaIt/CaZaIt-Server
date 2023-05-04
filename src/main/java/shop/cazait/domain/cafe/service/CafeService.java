@@ -94,6 +94,16 @@ public class CafeService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
+    public List<List<GetCafesRes>> getCafeByStatusNoAuth(String longitude, String latitude, String sort, String limit) {
+        List<Cafe> cafeList = cafeRepository.findAll();
+        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        List<GetCafesRes> getCafesRes = readCafeList(cafeList, longitude, latitude);
+        getCafesRes = sortCafeList(getCafesRes, sort, limit);
+        List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
+        return getCafesResList;
+    }
+
+    @Transactional(readOnly = true)
     public List<List<GetCafesRes>> getCafeByStatus(Long userId, String longitude, String latitude, String sort, String limit) {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
@@ -107,6 +117,15 @@ public class CafeService {
      * 카페 상세 조회 (카페 id)
      */
     @Transactional(readOnly = true)
+    public GetCafeRes getCafeByIdNoAuth(Long cafeId) throws CafeException {
+
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
+        List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafeId);
+        String logResult = "";    // 최근 본 카페 등록
+        return GetCafeRes.of(cafe, getCafeImageResList, logResult);
+    }
+
+    @Transactional(readOnly = true)
     public GetCafeRes getCafeById(Long userId, Long cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
@@ -118,6 +137,16 @@ public class CafeService {
     /**
      * 카페 상세 조회 (카페 이름)
      */
+    @Transactional(readOnly = true)
+    public List<List<GetCafesRes>> getCafeByNameNoAuth(String name, String longitude, String latitude, String sort, String limit) throws CafeException {
+        List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
+        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        List<GetCafesRes> getCafesRes = readCafeList(cafeList, longitude, latitude);
+        getCafesRes = sortCafeList(getCafesRes, sort, limit);
+        List<List<GetCafesRes>> getCafesResList = pageCafeList(getCafesRes);
+        return getCafesResList;
+    }
+
     @Transactional(readOnly = true)
     public List<List<GetCafesRes>> getCafeByName(String name, Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
@@ -155,6 +184,22 @@ public class CafeService {
         }
         cafe.changeCafeStatus(BaseStatus.INACTIVE);
         cafeRepository.save(cafe);
+    }
+
+    private List<GetCafesRes> readCafeList(List<Cafe> cafeList, String longitude, String latitude) {
+        List<GetCafesRes> cafeResList = cafeList.stream()
+                .map(cafe -> {
+                    boolean favorite = false;
+                    List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
+
+                    int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
+                            cafe.getCoordinate().getLongitude(),
+                            longitude, latitude);
+
+                    return GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
+                })
+                .collect(Collectors.toList());
+        return cafeResList;
     }
 
     private List<GetCafesRes> readCafeList(Long userId, List<Cafe> cafeList, String longitude, String latitude) {
