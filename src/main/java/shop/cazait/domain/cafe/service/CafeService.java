@@ -186,6 +186,22 @@ public class CafeService {
         cafeRepository.save(cafe);
     }
 
+    private List<GetCafesRes> readCafeList(List<Cafe> cafeList, String longitude, String latitude) {
+        List<GetCafesRes> cafeResList = cafeList.stream()
+                .map(cafe -> {
+                    boolean favorite = false;
+                    List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
+
+                    int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
+                            cafe.getCoordinate().getLongitude(),
+                            longitude, latitude);
+
+                    return GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
+                })
+                .collect(Collectors.toList());
+        return cafeResList;
+    }
+
     private List<GetCafesRes> readCafeList(Long userId, List<Cafe> cafeList, String longitude, String latitude) {
         List<Favorites> favoritesList = favoritesRepository.findAllByUserId(userId).get();
         List<GetCafesRes> cafeResList = cafeList.stream()
