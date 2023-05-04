@@ -117,6 +117,15 @@ public class CafeService {
      * 카페 상세 조회 (카페 id)
      */
     @Transactional(readOnly = true)
+    public GetCafeRes getCafeByIdNoAuth(Long cafeId) throws CafeException {
+
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
+        List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafeId);
+        String logResult = "";    // 최근 본 카페 등록
+        return GetCafeRes.of(cafe, getCafeImageResList, logResult);
+    }
+
+    @Transactional(readOnly = true)
     public GetCafeRes getCafeById(Long userId, Long cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));

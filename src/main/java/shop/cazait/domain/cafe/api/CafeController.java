@@ -95,6 +95,15 @@ public class CafeController {
         return new SuccessResponse<>(resultStatus ,cafeResList);
     }
 
+    @NoAuth
+    @GetMapping("/id/{cafeId}")
+    @Operation(summary = "카페 ID 조회(토큰 필요 X)", description = "특정 ID의 카페를 조회한다.")
+    @Parameter(name = "cafeId", description = "카페 ID")
+    public SuccessResponse<GetCafeRes> getCafeByIdNoAuth(@PathVariable Long cafeId) throws CafeException {
+        GetCafeRes cafeRes = cafeService.getCafeByIdNoAuth(cafeId);
+        return new SuccessResponse<>(SUCCESS, cafeRes);
+    }
+
     @GetMapping("/id/{cafeId}/user/{userId}")
     @Operation(summary = "카페 ID 조회", description = "특정 ID의 카페를 조회한다.")
     @Parameters({
