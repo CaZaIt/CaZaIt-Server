@@ -23,6 +23,7 @@ import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
+import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.status.SuccessStatus;
 
 import static shop.cazait.global.error.status.SuccessStatus.*;
@@ -72,7 +73,7 @@ public class CafeController {
     }
 
     @GetMapping("/all/user/{userId}")
-    @Operation(summary = "카페 전체 조회", description = "ACTIVE한 카페를 조회한다.")
+    @Operation(summary = "카페 전체 조회(토큰 필요 O)", description = "ACTIVE한 카페를 조회한다.")
     @Parameters({
             @Parameter(name = "userId", description = "유저 ID"),
             @Parameter(name = "longitude", description = "유저 경도"),
@@ -105,7 +106,7 @@ public class CafeController {
     }
 
     @GetMapping("/id/{cafeId}/user/{userId}")
-    @Operation(summary = "카페 ID 조회", description = "특정 ID의 카페를 조회한다.")
+    @Operation(summary = "카페 ID 조회(토큰 필요 O)", description = "특정 ID의 카페를 조회한다.")
     @Parameters({
             @Parameter(name = "userId", description = "유저 ID"),
             @Parameter(name = "cafeId", description = "카페 ID")
@@ -141,7 +142,7 @@ public class CafeController {
     }
 
     @GetMapping("/name/{cafeName}/user/{userId}")
-    @Operation(summary = "카페 이름 조회", description = "특정 이름의 카페를 조회한다.")
+    @Operation(summary = "카페 이름 조회(토큰 필요 O)", description = "특정 이름의 카페를 조회한다.")
     @Parameters({
             @Parameter(name = "cafeName", description = "카페 이름"),
             @Parameter(name = "userId", description = "유저 ID"),
