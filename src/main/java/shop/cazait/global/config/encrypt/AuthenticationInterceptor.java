@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 
@@ -41,24 +42,31 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String accessToken = request.getHeader("Authorization");
         log.info("AccessToken in interceptor prehandle = "+accessToken);
 
-        if(jwtService.isValidToken(accessToken)){
-            return true;
+//        if(jwtService.isValidToken(accessToken)){
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
+        final Map<String, String> pathVariables = (Map<String, String>) request
+                .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        System.out.println("pathVariables = " + pathVariables);
+
+        Optional<String> masterId = Optional.ofNullable(pathVariables.get("masterId"));
+        Optional<String> userId = Optional.ofNullable(pathVariables.get("userId"));
+
+        if(jwtService.isValidToken(accessToken)) {
+            if (!masterId.isEmpty()) {
+                jwtService.isValidAccessTokenId(Long.valueOf(masterId.get()));
+            }
+            if (!userId.isEmpty()) {
+                jwtService.isValidAccessTokenId(Long.valueOf(userId.get()));
+            }
         }
         else {
             return false;
         }
-//        final Map<String, String> pathVariables = (Map<String, String>) request
-//                .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-//        Long userIdx = Long.valueOf(pathVariables.get("userIdx"));
-//
-//                if(jwtService.isValidToken(accessToken)){
-//            if(jwtService.isValidAccessTokenId(userIdx)) {
-//                return true;
-//            }
-//            return false;
-//        }
-//        return false;
-
+        return true;
     }
 
 
