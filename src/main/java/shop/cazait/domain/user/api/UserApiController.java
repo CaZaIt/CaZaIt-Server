@@ -53,36 +53,36 @@ public class UserApiController {
         return new SuccessResponse<>(SUCCESS, allGetUserRes);
     }
 
-    @GetMapping("/{userIdx}")
+    @GetMapping("/{userId}")
     @Operation(summary = "특정 회원 정보를 조회", description ="자신의 계정 정보를 조회")
     @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
     public SuccessResponse<GetUserRes> getUser(
-             @PathVariable(name = "userIdx") Long userIdx) throws UserException {
+             @PathVariable(name = "userId") Long userIdx) throws UserException {
         GetUserRes userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
 
-    @PatchMapping("/{userIdx}")
+    @PatchMapping("/{userId}")
     @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
     @Parameters({
             @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1"),
             @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
     )
     public SuccessResponse<PatchUserRes> modifyUser(
-            @PathVariable(name = "userIdx") Long userIdx,
+            @PathVariable(name = "userId") Long userIdx,
             @RequestBody @Valid  PatchUserReq patchUserReq,
             @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
-            jwtService.isValidRefreshToken(refreshToken);
+            //jwtService.isValidRefreshToken(refreshToken);
 
             PatchUserRes patchUserRes = userService.modifyUser(userIdx, patchUserReq, refreshToken);
             return new SuccessResponse<>(SUCCESS, patchUserRes);
 
     }
 
-    @DeleteMapping("/{userIdx}")
+    @DeleteMapping("/{userId}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
-    @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
-    public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userIdx") Long userIdx) throws UserException {
+    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호",example="1")
+    public SuccessResponse<DeleteUserRes> deleteUser(@PathVariable(name = "userId") Long userIdx) throws UserException {
         DeleteUserRes deleteUserRes = userService.deleteUser(userIdx);
         return new SuccessResponse<>(SUCCESS, deleteUserRes);
     }

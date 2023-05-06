@@ -68,7 +68,7 @@ public class UserService {
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         if (userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
+            throw new UserException(FAILED_TO_LOGIN);
         }
 
         User findUser = userRepository.findByEmail(postLoginReq.getEmail()).get();
