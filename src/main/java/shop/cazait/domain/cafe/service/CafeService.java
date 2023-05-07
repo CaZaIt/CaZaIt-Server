@@ -194,7 +194,7 @@ public class CafeService {
 
                     int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                             cafe.getCoordinate().getLongitude(),
-                            longitude, latitude);
+                            latitude, longitude);
 
                     return GetCafesRes.of(cafe, getCafeImageResList, distance, favorite);
                 })
