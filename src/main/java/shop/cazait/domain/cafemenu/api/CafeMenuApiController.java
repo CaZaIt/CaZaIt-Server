@@ -37,6 +37,7 @@ import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
 import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.status.SuccessStatus;
 
 @Tag(name = "카페 메뉴 API")
@@ -72,6 +73,7 @@ public class CafeMenuApiController {
         return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, postCafeMenuReq, image));
     }
 
+    @NoAuth
     @Operation(summary = "카페 메뉴 조회", description = "카페 ID를 받아 해당 카페에 대한 모든 메뉴를 조회한다.")
     @Parameter(name = "cafeId", description = "카페 ID")
     @ApiResponses({
