@@ -54,13 +54,16 @@ public class CafeMenuService {
     public PostCafeMenuRes registerMenu(Long cafeId, PostCafeMenuReq postCafeMenuReq, MultipartFile menuImage)
             throws CafeException, IOException {
 
+        String uploadFileName = null;
         Cafe findCafe = getCafe(cafeId);
-        // todo: image가 없을 떄는 업로드 하지 않도록 수정
-        String uploadFileName = awsS3Servicel.uploadImage(menuImage);
+
+        if (menuImage != null) {
+            uploadFileName = awsS3Servicel.uploadImage(menuImage);
+        }
+
         CafeMenu menu = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReq, uploadFileName);
         CafeMenu addMenu = cafeMenuRepository.save(menu);
         return PostCafeMenuRes.of(addMenu);
-
     }
 
     private Cafe getCafe(Long cafeId) throws CafeException {
