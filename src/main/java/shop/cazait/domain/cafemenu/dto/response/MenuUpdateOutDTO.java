@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.dto;
+package shop.cazait.domain.cafemenu.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -6,10 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
-@Schema(description = "메뉴 수정 Response : 수정한 메뉴에 대한 정보")
+@Schema(name = "메뉴 수정 Response ", description = "수정한 메뉴에 대한 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PatchCafeMenuRes {
+public class MenuUpdateOutDTO {
 
     @Schema(description = "메뉴 ID", example = "1")
     private Long cafeMenuId;
@@ -29,8 +29,8 @@ public class PatchCafeMenuRes {
     @Schema(description = "이미지 URL", example = "iceVanillaLatte.png")
     private String imageUrl;
 
-    public static PatchCafeMenuRes of(CafeMenu menu) {
-        return PatchCafeMenuRes.builder()
+    public static MenuUpdateOutDTO of(CafeMenu menu) {
+        return MenuUpdateOutDTO.builder()
                 .cafeMenuId(menu.getId())
                 .cafeId(menu.getCafe().getId())
                 .name(menu.getName())

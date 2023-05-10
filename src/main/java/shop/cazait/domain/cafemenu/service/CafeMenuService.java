@@ -17,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.request.MenuUpdateInDTO;
+import shop.cazait.domain.cafemenu.dto.response.MenuListOutDTO;
+import shop.cazait.domain.cafemenu.dto.response.MenuUpdateOutDTO;
+import shop.cazait.domain.cafemenu.dto.request.MenuCreateInDTO;
+import shop.cazait.domain.cafemenu.dto.response.MenuCreateOutDTO;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.exception.CafeMenuException;
 import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
@@ -40,10 +40,10 @@ public class CafeMenuService {
      * 카페 메뉴 조회
      */
     @Transactional(readOnly = true)
-    public List<GetCafeMenuRes> getMenu(Long cafeId) {
+    public List<MenuListOutDTO> getMenu(Long cafeId) {
 
         List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId).orElse(null);
-        return GetCafeMenuRes.of(findMenus);
+        return MenuListOutDTO.of(findMenus);
 
     }
 
@@ -51,7 +51,7 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 등록
      */
-    public PostCafeMenuRes registerMenu(Long cafeId, PostCafeMenuReq postCafeMenuReq, MultipartFile menuImage)
+    public MenuCreateOutDTO registerMenu(Long cafeId, MenuCreateInDTO menuCreateInDTO, MultipartFile menuImage)
             throws CafeException, IOException {
 
         String uploadFileName = null;
@@ -61,9 +61,9 @@ public class CafeMenuService {
             uploadFileName = awsS3Servicel.uploadImage(menuImage);
         }
 
-        CafeMenu menu = PostCafeMenuReq.toEntity(findCafe, postCafeMenuReq, uploadFileName);
+        CafeMenu menu = MenuCreateInDTO.toEntity(findCafe, menuCreateInDTO, uploadFileName);
         CafeMenu addMenu = cafeMenuRepository.save(menu);
-        return PostCafeMenuRes.of(addMenu);
+        return MenuCreateOutDTO.of(addMenu);
     }
 
     private Cafe getCafe(Long cafeId) throws CafeException {
@@ -79,23 +79,23 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 수정
      */
-    public PatchCafeMenuRes updateMenu(Long menuId, PatchCafeMenuReq patchCafeMenuReq, MultipartFile menuImage)
+    public MenuUpdateOutDTO updateMenu(Long menuId, MenuUpdateInDTO menuUpdateInDTO, MultipartFile menuImage)
             throws IOException {
 
         CafeMenu findMenu = cafeMenuRepository
                 .findById(menuId)
                 .orElseThrow(() -> new CafeMenuException(NOT_EXIST_MENU));
 
-        if (patchCafeMenuReq.getName() != NOT_UPDATE_NAME) {
-            findMenu.changeName(patchCafeMenuReq.getName());
+        if (menuUpdateInDTO.getName() != NOT_UPDATE_NAME) {
+            findMenu.changeName(menuUpdateInDTO.getName());
         }
 
-        if (patchCafeMenuReq.getDescription() != NOT_UPDATE_DESCRIPTION) {
-            findMenu.changeDescription(patchCafeMenuReq.getDescription());
+        if (menuUpdateInDTO.getDescription() != NOT_UPDATE_DESCRIPTION) {
+            findMenu.changeDescription(menuUpdateInDTO.getDescription());
         }
 
-        if (patchCafeMenuReq.getPrice() != NOT_UPDATE_PRICE) {
-            findMenu.changePrice(patchCafeMenuReq.getPrice());
+        if (menuUpdateInDTO.getPrice() != NOT_UPDATE_PRICE) {
+            findMenu.changePrice(menuUpdateInDTO.getPrice());
         }
 
         if (menuImage.getName() != NOT_UPDATE_IMAGE) {
@@ -104,7 +104,7 @@ public class CafeMenuService {
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findMenu);
 
-        return PatchCafeMenuRes.of(updateCafeMenu);
+        return MenuUpdateOutDTO.of(updateCafeMenu);
 
     }
 
