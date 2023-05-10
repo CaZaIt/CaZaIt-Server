@@ -1,4 +1,4 @@
-package shop.cazait.domain.favorites.dto;
+package shop.cazait.domain.favorites.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -9,10 +9,10 @@ import lombok.Getter;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.favorites.entity.Favorites;
 
-@Schema(description = "즐겨찾기 Response : 즐겨찾기로 등록한 모든 카페에 대한 정보")
+@Schema(name = "즐겨찾기 Response", description = "즐겨찾기로 등록한 모든 카페에 대한 정보")
 @Getter
 @Builder(access = AccessLevel.PROTECTED)
-public class GetFavoritesRes {
+public class FavoritesListOutDTO {
 
     @Schema(description = "즐겨찾기 ID", example = "1")
     private Long favoritesId;
@@ -38,10 +38,10 @@ public class GetFavoritesRes {
     @Schema(description = "카페 이미지", example = "image.png")
     private List<String> imageUrl;
 
-    public static List<GetFavoritesRes> of(List<Favorites> findFavorites) {
+    public static List<FavoritesListOutDTO> of(List<Favorites> findFavorites) {
         return findFavorites.stream()
                 .map(favorites -> {
-                    return GetFavoritesRes.builder()
+                    return FavoritesListOutDTO.builder()
                             .favoritesId(favorites.getId())
                             .cafeId(favorites.getCafe().getId())
                             .name(favorites.getCafe().getName())
