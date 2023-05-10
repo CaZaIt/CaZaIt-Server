@@ -1,4 +1,4 @@
-package shop.cazait.domain.coordinate.dto;
+package shop.cazait.domain.coordinate.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
