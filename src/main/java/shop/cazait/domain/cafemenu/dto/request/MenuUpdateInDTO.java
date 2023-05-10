@@ -1,14 +1,14 @@
-package shop.cazait.domain.cafemenu.dto;
+package shop.cazait.domain.cafemenu.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "메뉴 수정 Request : 수정할 메뉴에 대한 정보")
+@Schema(name = "메뉴 수정 Request", description = "수정할 메뉴에 대한 정보")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PatchCafeMenuReq {
+public class MenuUpdateInDTO {
 
     @Schema(description = "이름", example = "아이스 아메리카노 (미수정 : null)")
     private String name;

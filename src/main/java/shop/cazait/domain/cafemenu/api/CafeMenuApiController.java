@@ -30,11 +30,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.exception.CafeException;
-import shop.cazait.domain.cafemenu.dto.GetCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.PatchCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PatchCafeMenuRes;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuReq;
-import shop.cazait.domain.cafemenu.dto.PostCafeMenuRes;
+import shop.cazait.domain.cafemenu.dto.request.MenuUpdateInDTO;
+import shop.cazait.domain.cafemenu.dto.response.MenuListOutDTO;
+import shop.cazait.domain.cafemenu.dto.response.MenuUpdateOutDTO;
+import shop.cazait.domain.cafemenu.dto.request.MenuCreateInDTO;
+import shop.cazait.domain.cafemenu.dto.response.MenuCreateOutDTO;
 import shop.cazait.domain.cafemenu.service.CafeMenuService;
 import shop.cazait.global.common.dto.response.FailResponse;
 import shop.cazait.global.common.dto.response.SuccessResponse;
@@ -59,7 +59,7 @@ public class CafeMenuApiController {
             @ApiResponse(
                     responseCode = "201",
                     description = "메뉴 등록 성공",
-                    content = @Content(schema = @Schema(implementation = PostCafeMenuRes.class))
+                    content = @Content(schema = @Schema(implementation = MenuCreateOutDTO.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -73,13 +73,13 @@ public class CafeMenuApiController {
             ),
     })
     @PostMapping(value ="/cafe/{cafeId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public SuccessResponse<PostCafeMenuRes> registerMenu(@PathVariable Long cafeId,
-                                                         @Parameter(description = "메뉴 정보", example = "{\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
+    public SuccessResponse<MenuCreateOutDTO> registerMenu(@PathVariable Long cafeId,
+                                                          @Parameter(description = "메뉴 정보", example = "{\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
                                                          @RequestParam @Valid String information,
-                                                         @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile image)
+                                                          @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile image)
             throws CafeException, IOException {
-        PostCafeMenuReq postCafeMenuReq = objectMapper.readValue(information, new TypeReference<>() {});
-        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, postCafeMenuReq, image));
+        MenuCreateInDTO menuCreateInDTO = objectMapper.readValue(information, new TypeReference<>() {});
+        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, menuCreateInDTO, image));
     }
 
     @NoAuth
@@ -92,9 +92,9 @@ public class CafeMenuApiController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
     })
     @GetMapping("/cafe/{cafeId}")
-    public SuccessResponse<List<GetCafeMenuRes>> getMenu(@PathVariable Long cafeId) {
+    public SuccessResponse<List<MenuListOutDTO>> getMenu(@PathVariable Long cafeId) {
 
-        List<GetCafeMenuRes> result = cafeMenuService.getMenu(cafeId);
+        List<MenuListOutDTO> result = cafeMenuService.getMenu(cafeId);
         SuccessStatus resultStatus = SUCCESS;
         if (result == null) {
             resultStatus = NO_CONTENT_SUCCESS;
@@ -111,13 +111,13 @@ public class CafeMenuApiController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
     })
     @PatchMapping("/{menuId}")
-    public SuccessResponse<PatchCafeMenuRes> updateMenu(@PathVariable Long menuId,
+    public SuccessResponse<MenuUpdateOutDTO> updateMenu(@PathVariable Long menuId,
                                                         @Parameter(description = "수정할 메뉴 정보 : {\"name\": \"아메리카노\", \"description\": \"맛있어!\", \"price\": 4500}")
                                                         @RequestParam @Valid String menuInfo,
                                                         @Parameter(description = "수정할 메뉴 이미지") @RequestPart(required = false) MultipartFile menuImage)
             throws IOException {
-        PatchCafeMenuReq patchCafeMenuReq = objectMapper.readValue(menuInfo, new TypeReference<>() {});
-        return new SuccessResponse<>(SUCCESS, cafeMenuService.updateMenu(menuId, patchCafeMenuReq, menuImage));
+        MenuUpdateInDTO menuUpdateInDTO = objectMapper.readValue(menuInfo, new TypeReference<>() {});
+        return new SuccessResponse<>(SUCCESS, cafeMenuService.updateMenu(menuId, menuUpdateInDTO, menuImage));
     }
 
     @Operation(summary = "카페 메뉴 삭제", description = "카페 메뉴 ID를 받아 삭제한다.")
