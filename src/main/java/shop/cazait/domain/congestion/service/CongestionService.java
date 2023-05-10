@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.congestion.dto.PostCongestionReq;
-import shop.cazait.domain.congestion.dto.PostCongestionRes;
+import shop.cazait.domain.congestion.dto.request.CongestionUpdateInDTO;
+import shop.cazait.domain.congestion.dto.response.CongestionUpdateOutDTO;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 import shop.cazait.domain.congestion.exception.CongestionException;
@@ -29,13 +29,13 @@ public class CongestionService {
     /**
      * 혼잡도 등록 및 수정
      */
-    public PostCongestionRes addAndUpdateCongestion(Long cafeId, PostCongestionReq postCongestionReq) {
+    public CongestionUpdateOutDTO addAndUpdateCongestion(Long cafeId, CongestionUpdateInDTO congestionUpdateInDTO) {
 
         Cafe findCafe = getCafe(cafeId);
         Congestion findCongestion = findCafe.getCongestion();
         Congestion newCongestion = null;
 
-        CongestionStatus congestionStatus = getCongestionStatus(postCongestionReq.getCongestionStatus());
+        CongestionStatus congestionStatus = getCongestionStatus(congestionUpdateInDTO.getCongestionStatus());
 
         if (findCongestion == NOT_EXIST_CONGESTION) {
             newCongestion = addCongestion(findCafe, congestionStatus);
@@ -46,7 +46,7 @@ public class CongestionService {
 
         }
 
-        return PostCongestionRes.of(newCongestion);
+        return CongestionUpdateOutDTO.of(newCongestion);
 
     }
 
@@ -72,7 +72,7 @@ public class CongestionService {
 
     private Congestion addCongestion(Cafe cafe, CongestionStatus congestionStatus) {
 
-        Congestion addCongestion = PostCongestionReq.toEntity(cafe, congestionStatus);
+        Congestion addCongestion = CongestionUpdateInDTO.toEntity(cafe, congestionStatus);
         congestionRepository.save(addCongestion);
         cafe.changeCongestion(addCongestion);
         cafeRepository.save(cafe);
