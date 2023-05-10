@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import shop.cazait.domain.s3.dto.GetPreSignedUrlRes;
+import shop.cazait.domain.s3.dto.response.PreSignedUrlCreateOutDTO;
 
 @Slf4j
 @Service
@@ -26,7 +26,7 @@ public class S3Service {
     /**
      * Pre-Signed Url 생성
      */
-    public GetPreSignedUrlRes createPreSignedUrl(String directory) {
+    public PreSignedUrlCreateOutDTO createPreSignedUrl(String directory) {
 
         String objectKey = directory + "/" + UUID.randomUUID().toString();
         log.info(objectKey);
@@ -47,7 +47,7 @@ public class S3Service {
         URL preSignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
         log.info("Pre-Signed URL : " + preSignedUrl.toString());
-        return GetPreSignedUrlRes.of(objectKey, preSignedUrl.toString());
+        return PreSignedUrlCreateOutDTO.of(objectKey, preSignedUrl.toString());
 
     }
 
