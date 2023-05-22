@@ -7,6 +7,7 @@ import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
 import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXPIRED_TOKEN;
+import static shop.cazait.global.error.status.SuccessStatus.SIGNUP_AVAILABLE;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -151,7 +152,7 @@ public class UserService {
         if (!userRepository.findByEmail(email).isEmpty()) {
             throw new UserException(EXIST_EMAIL);
         }
-        return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");
+        return new SuccessResponse(SIGNUP_AVAILABLE, email);
     }
 
     public SuccessResponse<String> checkduplicateNickname(PostCheckDuplicateNicknameReq postCheckDuplicateNicknameReq) throws UserException {
@@ -159,7 +160,7 @@ public class UserService {
         if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
             throw new UserException(EXIST_NICKNAME);
         }
-        return new SuccessResponse(SUCCESS, "회원가입이 가능합니다.");
+        return new SuccessResponse(SIGNUP_AVAILABLE, nickname);
     }
 
 
