@@ -20,6 +20,7 @@ public enum SuccessStatus {
      * OK
      */
     SUCCESS(200,"SUCCESS","요청이 완료 되었습니다."),
+    SIGNUP_AVAILABLE(200,"SUCCESS","회원가입이 가능합니다"),
 
     /**
      * Success Code : 201
