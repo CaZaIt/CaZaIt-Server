@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class GetCafesRes {
     private String latitude;
     @JsonProperty
     @Schema(description = "이미지 url")
-    private List<GetCafeImageRes> getCafeImageRes;
+    private List<String> cafeImages;
     @JsonProperty
     @Schema(description = "거리", example = "200m")
     private int distance;
@@ -43,7 +42,7 @@ public class GetCafesRes {
     @Schema(description = "관심 카페 여부", example = "true")
     private boolean favorite;
 
-    public static GetCafesRes of(Cafe cafe, List<GetCafeImageRes> getCafeImageRes, int distance, boolean favorite) {
+    public static GetCafesRes of(Cafe cafe, List<String> cafeImages, int distance, boolean favorite) {
         return GetCafesRes.builder()
                 .cafeId(cafe.getId())
                 .congestionStatus(cafe.getCongestion().getCongestionStatus())
@@ -51,7 +50,7 @@ public class GetCafesRes {
                 .address(cafe.getAddress())
                 .longitude(cafe.getCoordinate().getLongitude())
                 .latitude(cafe.getCoordinate().getLatitude())
-                .getCafeImageRes(getCafeImageRes)
+                .cafeImages(cafeImages)
                 .distance(distance)
                 .favorite(favorite)
                 .build();
