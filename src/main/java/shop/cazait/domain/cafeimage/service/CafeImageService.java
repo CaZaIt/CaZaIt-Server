@@ -90,6 +90,15 @@ public class CafeImageService {
         return getCafeImageResList;
     }
 
+    public List<String> readCafeImageOnlyList(Long cafeId) {
+        List<CafeImage> cafeImageList = cafeImageRepository.findByCafeId(cafeId);
+        List<String> getCafeImageResList = new ArrayList<>();
+        for (CafeImage cafeImage : cafeImageList) {
+            getCafeImageResList.add(cafeImage.getImageUrl());
+        }
+        return getCafeImageResList;
+    }
+
     public void deleteCafeImage(Long cafeImageId, Long masterId) throws CafeImageException {
         CafeImage cafeImage = cafeImageRepository.findById(cafeImageId).orElseThrow(() -> new CafeImageException(ErrorStatus.NOT_EXIST_IMAGE));
         Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));

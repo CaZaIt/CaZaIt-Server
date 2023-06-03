@@ -190,7 +190,7 @@ public class CafeService {
         List<GetCafesRes> cafeResList = cafeList.stream()
                 .map(cafe -> {
                     boolean favorite = false;
-                    List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
+                    List<String> getCafeImageResList = cafeImageService.readCafeImageOnlyList(cafe.getId());
 
                     int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                             cafe.getCoordinate().getLongitude(),
@@ -213,7 +213,7 @@ public class CafeService {
                             break;
                         }
                     }
-                    List<GetCafeImageRes> getCafeImageResList = cafeImageService.readCafeImageList(cafe.getId());
+                    List<String> getCafeImageResList = cafeImageService.readCafeImageOnlyList(cafe.getId());
 
                     int distance = DistanceService.distance(cafe.getCoordinate().getLatitude(),
                             cafe.getCoordinate().getLongitude(),
