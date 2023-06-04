@@ -22,6 +22,7 @@ public class PostMasterRes {
 
 	static public PostMasterRes of(Master master) {
 		return PostMasterRes.builder()
+			.id(master.getId())
 			.email(master.getEmail())
 			.nickname(master.getNickname())
 			.build();

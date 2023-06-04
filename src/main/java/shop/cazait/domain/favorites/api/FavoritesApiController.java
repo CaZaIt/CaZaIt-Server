@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.cafe.exception.CafeException;
-import shop.cazait.domain.favorites.dto.GetFavoritesRes;
-import shop.cazait.domain.favorites.dto.PostFavoritesRes;
+import shop.cazait.domain.favorites.dto.response.FavoritesListOutDTO;
+import shop.cazait.domain.favorites.dto.response.FavoritesCreateOutDTO;
 import shop.cazait.domain.favorites.service.FavoritesService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
@@ -36,8 +36,8 @@ public class FavoritesApiController {
             @Parameter(name = "userId", description = "즐겨찾기를 등록할 유저 ID"),
             @Parameter(name = "cafeId", description = "즐겨찾기로 등록할 카페 ID")
     })
-    public SuccessResponse<PostFavoritesRes> addFavorites(@PathVariable Long userId,
-                                                          @PathVariable Long cafeId)
+    public SuccessResponse<FavoritesCreateOutDTO> addFavorites(@PathVariable Long userId,
+                                                               @PathVariable Long cafeId)
             throws CafeException, UserException {
         return new SuccessResponse<>(CREATE_FAVORITES, favoritesService.addFavorites(userId, cafeId));
     }
@@ -45,9 +45,9 @@ public class FavoritesApiController {
     @GetMapping("/user/{userId}")
     @Operation(summary = "즐겨찾기 조회", description = "유저 ID를 받아 모든 즐겨찾기를 조회한다.")
     @Parameter(name = "userId", description = "즐겨찾기를 조회할 유저 ID")
-    public SuccessResponse<List<GetFavoritesRes>> getFavorites(@PathVariable Long userId) {
+    public SuccessResponse<List<FavoritesListOutDTO>> getFavorites(@PathVariable Long userId) {
 
-        List<GetFavoritesRes> result = favoritesService.getFavorites(userId);
+        List<FavoritesListOutDTO> result = favoritesService.getFavorites(userId);
         SuccessStatus resultStatus = SUCCESS;
 
         if (result == null) {
@@ -58,10 +58,13 @@ public class FavoritesApiController {
     }
 
     @Operation(summary = "즐겨찾기 삭제", description = "즐겨찾기 ID를 받아 즐겨찾기를 삭제한다.")
-    @Parameter(name = "favoritesId", description = "즐겨찾기 ID")
-    @DeleteMapping("/delete/{favoritesId}")
-    public SuccessResponse<String> deleteFavorites(@PathVariable(name = "favoritesId") Long favoritesId) {
-        return new SuccessResponse<>(SUCCESS, favoritesService.deleteFavorites(favoritesId));
+    @Parameters({
+            @Parameter(name= "userId", description = "유저 ID"),
+            @Parameter(name= "cafeId", description = "카페 ID")
+    })
+    @DeleteMapping("/delete/{userId}/{cafeId}")
+    public SuccessResponse<String> deleteFavorites(@PathVariable Long userId, @PathVariable Long cafeId) {
+        return new SuccessResponse<>(SUCCESS, favoritesService.deleteFavorites(userId, cafeId));
     }
 
 }

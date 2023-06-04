@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.favorites.dto.GetFavoritesRes;
-import shop.cazait.domain.favorites.dto.PostFavoritesRes;
+import shop.cazait.domain.favorites.dto.response.FavoritesListOutDTO;
+import shop.cazait.domain.favorites.dto.response.FavoritesCreateOutDTO;
 import shop.cazait.domain.favorites.entity.Favorites;
 import shop.cazait.domain.favorites.exception.FavoritesException;
 import shop.cazait.domain.favorites.repository.FavoritesRepository;
@@ -33,7 +33,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 추가
      */
-    public PostFavoritesRes addFavorites(Long userId, Long cafeId) throws CafeException, UserException {
+    public FavoritesCreateOutDTO addFavorites(Long userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -45,7 +45,7 @@ public class FavoritesService {
 
         Long favoritesId = favoritesRepository.save(favorites).getId();
 
-        return PostFavoritesRes.of(favoritesId);
+        return FavoritesCreateOutDTO.of(favoritesId);
 
     }
 
@@ -72,21 +72,21 @@ public class FavoritesService {
      * 즐겨찾기 조회
      */
     @Transactional(readOnly = true)
-    public List<GetFavoritesRes> getFavorites(Long userId) {
+    public List<FavoritesListOutDTO> getFavorites(Long userId) {
 
         List<Favorites> favorites = favoritesRepository.findAllByUserId(userId).orElse(null);
 
-        return GetFavoritesRes.of(favorites);
+        return FavoritesListOutDTO.of(favorites);
 
     }
 
     /**
      * 즐겨찾기 삭제
      */
-    public String deleteFavorites(Long favoritesId) {
+    public String deleteFavorites(Long userId, Long cafeId) {
 
         Favorites favorites = favoritesRepository
-                .findById(favoritesId)
+                .findAllByUserIdAndCafeId(userId, cafeId)
                 .orElseThrow(() -> new FavoritesException(NOT_EXIST_FAVORITES));
 
         favoritesRepository.delete(favorites);
