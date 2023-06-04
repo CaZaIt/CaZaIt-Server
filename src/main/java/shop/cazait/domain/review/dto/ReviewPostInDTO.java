@@ -17,7 +17,7 @@ import shop.cazait.domain.user.entity.User;
 @Schema(description = "리뷰 등록 Request : 리뷰 등록을 위해 필요한 정보")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostReviewReq {
+public class ReviewPostInDTO {
 
     @Schema(description = "점수", example = "5")
     @NotNull(message = "점수를 입력해주세요.")
@@ -30,7 +30,7 @@ public class PostReviewReq {
 
 
     @Builder
-    public PostReviewReq(Integer score, String content) {
+    public ReviewPostInDTO(Integer score, String content) {
         this.score = score;
         this.content = content;
     }

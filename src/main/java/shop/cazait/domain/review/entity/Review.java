@@ -1,15 +1,23 @@
 package shop.cazait.domain.review.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.review.dto.PatchReviewReq;
+import shop.cazait.domain.review.dto.ReviewUpdateInDTO;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.global.common.entity.BaseEntity;
 
-import javax.persistence.*;
+
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,7 +37,7 @@ public class Review extends BaseEntity {
 
     @Column(nullable = false)
     private Integer score;
-    
+
     private String content;
 
 
@@ -41,7 +49,7 @@ public class Review extends BaseEntity {
         this.content = content;
     }
 
-    public Review update(PatchReviewReq patchReviewReq) {
+    public Review update(ReviewUpdateInDTO patchReviewReq) {
         this.score = patchReviewReq.getScore();
         this.content = patchReviewReq.getContent();
 

@@ -15,12 +15,12 @@ import shop.cazait.global.pagination.ScrollPaginationCollection;
 @Schema(description = "리뷰 전체 조회 Response : 해당 카페의 리뷰 한 페이지 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class GetReviewsRes {
+public class ReviewsGetOutDTO {
     @Schema(description = "다음 스크롤이 존재하지 않을 경우 대입할 값")
     private static final Long LAST_CURSOR = -1L;
 
     @Schema(description = "전체 리뷰 Response : 해당 카페의 전체 리뷰 정보")
-    private List<GetReviewRes> reviewResponses;
+    private List<ReviewGetOutDTO> reviewResponses;
 
     @Schema(description = "한 페이지의 리뷰 개수")
     private Integer totalElements;
@@ -28,7 +28,7 @@ public class GetReviewsRes {
     @Schema(description = "다음에 조회할 리뷰의 ID (다음에 조회할 커서)")
     private Long nextCursor;
 
-    public static GetReviewsRes of(ScrollPaginationCollection<Review> reviewScroll) {
+    public static ReviewsGetOutDTO of(ScrollPaginationCollection<Review> reviewScroll) {
         List<Review> reviews = reviewScroll.getCurrentScrollItems();
 
         if (reviewScroll.isLastScroll()) {
@@ -39,10 +39,10 @@ public class GetReviewsRes {
                 reviewScroll.getNextCursor().getId());
     }
 
-    private static GetReviewsRes getNextScroll(List<Review> reviews, Integer totalElements, Long nextCursor) {
-        return GetReviewsRes.builder()
+    private static ReviewsGetOutDTO getNextScroll(List<Review> reviews, Integer totalElements, Long nextCursor) {
+        return ReviewsGetOutDTO.builder()
                 .reviewResponses(reviews.stream()
-                        .map(review -> GetReviewRes.of(review))
+                        .map(review -> ReviewGetOutDTO.of(review))
                         .collect(Collectors.toList()))
                 .totalElements(totalElements)
                 .nextCursor(nextCursor)
