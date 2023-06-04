@@ -6,8 +6,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.cazait.domain.review.dto.GetReviewRes;
-import shop.cazait.domain.review.dto.GetReviewsRes;
+import shop.cazait.domain.review.dto.ReviewGetOutDTO;
+import shop.cazait.domain.review.dto.ReviewsGetOutDTO;
 import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.review.repository.ReviewRepository;
@@ -34,7 +34,7 @@ public class ReviewProvideService {
         return Math.round(averageScore * 100) / 100.0;
     }
 
-    public GetReviewsRes getReviews(Long cafeId, String sortBy, Integer score, Long lastId) {
+    public ReviewsGetOutDTO getReviews(Long cafeId, String sortBy, Integer score, Long lastId) {
         SortType sortType = SortType.of(sortBy);
         List<Review> reviews = null;
 
@@ -59,14 +59,14 @@ public class ReviewProvideService {
 
         ScrollPaginationCollection<Review> reviewScroll = ScrollPaginationCollection.of(reviews, COUNT_PER_SCROLL);
 
-        return GetReviewsRes.of(reviewScroll);
+        return ReviewsGetOutDTO.of(reviewScroll);
     }
 
 
-    public GetReviewRes getReviewDetail(Long reviewId) throws ReviewException {
+    public ReviewGetOutDTO getReviewDetail(Long reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 
-        return GetReviewRes.of(review);
+        return ReviewGetOutDTO.of(review);
     }
 }

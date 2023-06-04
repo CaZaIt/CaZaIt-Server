@@ -9,10 +9,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+
 @Schema(description = "리뷰 수정 Request DTO : 리뷰 수정을 위해 필요한 정보")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PatchReviewReq {
+public class ReviewUpdateInDTO {
     @Schema(description = "점수", example = "4")
     @NotNull(message = "점수를 입력해주세요.")
     @Min(value = 1, message = "점수는 1점 이상이여야합니다.")
@@ -23,7 +25,7 @@ public class PatchReviewReq {
     private String content;
 
     @Builder
-    public PatchReviewReq(Integer score, String content) {
+    public ReviewUpdateInDTO(Integer score, String content) {
         this.score = score;
         this.content = content;
     }
