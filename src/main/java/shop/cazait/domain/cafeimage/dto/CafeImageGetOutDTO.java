@@ -10,7 +10,7 @@ import shop.cazait.domain.cafeimage.entity.CafeImage;
 @Schema(description = "카페 이미지 조회 Response : 카페 이미지 정보")
 @Builder(access = AccessLevel.PRIVATE)
 @Getter
-public class GetCafeImageRes {
+public class CafeImageGetOutDTO {
     @JsonProperty
     @Schema(description = "카페 이미지 ID", example = "1")
     private Long cafeImageId;
@@ -18,8 +18,8 @@ public class GetCafeImageRes {
     @Schema(description = "카페 이미지 url", example = "https://cazait-bucket.s3.ap-northeast-2.amazonaws.com/cafe-image/abcdefghijklmnopqrstuvwxyz")
     private String imageUrl;
 
-    public static GetCafeImageRes of(CafeImage cafeImage) {
-        return GetCafeImageRes.builder()
+    public static CafeImageGetOutDTO of(CafeImage cafeImage) {
+        return CafeImageGetOutDTO.builder()
                 .cafeImageId(cafeImage.getId())
                 .imageUrl(cafeImage.getImageUrl())
                 .build();

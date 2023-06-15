@@ -2,7 +2,7 @@ package shop.cazait.domain.cafe.entity;
 
 import javax.persistence.*;
 import lombok.*;
-import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.coordinate.entity.Coordinate;
 import shop.cazait.domain.master.entity.Master;
@@ -57,9 +57,9 @@ public class Cafe extends BaseEntity {
         this.congestion = congestion;
     }
 
-    public void changeInfo(PostCafeReq postCafeReq, Coordinate coordinate) {
-        this.name = postCafeReq.getName();
-        this.address = postCafeReq.getAddress();
+    public void changeInfo(CafeCreateInDTO cafeCreateInDTO, Coordinate coordinate) {
+        this.name = cafeCreateInDTO.getName();
+        this.address = cafeCreateInDTO.getAddress();
         this.coordinate = coordinate;
     }
 
