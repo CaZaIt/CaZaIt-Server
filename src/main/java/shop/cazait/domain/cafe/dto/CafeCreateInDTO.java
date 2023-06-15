@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "카페 등록 및 수정 Request : 카페 등록 및 수정 시 필요한 정보")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostCafeReq {
+public class CafeCreateInDTO {
 
     @Schema(description = "이름", example = "롬곡")
     @NotBlank(message = "카페 이름을 입력해주세요.")
@@ -18,7 +18,7 @@ public class PostCafeReq {
     private String address;
 
     @Builder
-    public PostCafeReq(String name, String address) {
+    public CafeCreateInDTO(String name, String address) {
         this.name = name;
         this.address = address;
     }

@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
 import java.util.List;
 
-@Schema(description = "특정 카페 정보 조회 Response : 카페 조회 시 얻을 수 있는 정보")
+@Schema(description = "모든 카페 정보 조회 Response : 카페 조회 시 얻을 수 있는 정보")
 @Builder(access = AccessLevel.PRIVATE)
-public class GetCafeRes {
+@Getter
+public class CafeListOutDTO {
     @JsonProperty
     @Schema(description = "카페 ID", example = "1")
     private Long cafeId;
@@ -33,20 +34,25 @@ public class GetCafeRes {
     private String latitude;
     @JsonProperty
     @Schema(description = "이미지 url")
-    private List<GetCafeImageRes> getCafeImageRes;
+    private List<String> cafeImages;
     @JsonProperty
-    @Schema(description = "방문 기록 등록 여부", example = "36.987561")
-    private String logResult;
+    @Schema(description = "거리", example = "200m")
+    private int distance;
+    @JsonProperty
+    @Schema(description = "관심 카페 여부", example = "true")
+    private boolean favorite;
 
-    public static GetCafeRes of(Cafe cafe, List<GetCafeImageRes> getCafeImageRes, String logResult) {
-        return GetCafeRes.builder()
+    public static CafeListOutDTO of(Cafe cafe, List<String> cafeImages, int distance, boolean favorite) {
+        return CafeListOutDTO.builder()
                 .cafeId(cafe.getId())
                 .congestionStatus(cafe.getCongestion().getCongestionStatus())
                 .name(cafe.getName())
                 .address(cafe.getAddress())
                 .longitude(cafe.getCoordinate().getLongitude())
                 .latitude(cafe.getCoordinate().getLatitude())
-                .getCafeImageRes(getCafeImageRes)
+                .cafeImages(cafeImages)
+                .distance(distance)
+                .favorite(favorite)
                 .build();
     }
 
