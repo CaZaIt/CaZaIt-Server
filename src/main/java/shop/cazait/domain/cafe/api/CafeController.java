@@ -14,10 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import shop.cazait.domain.cafe.dto.GetCafeRes;
-import shop.cazait.domain.cafe.dto.GetCafesRes;
-import shop.cazait.domain.cafe.dto.PostCafeReq;
-import shop.cazait.domain.cafe.dto.PostCafeRes;
+import shop.cazait.domain.cafe.dto.CafeGetOutDTO;
+import shop.cazait.domain.cafe.dto.CafeListOutDTO;
+import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
+import shop.cazait.domain.cafe.dto.CafeUpdateOutDTO;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
@@ -41,14 +41,14 @@ public class CafeController {
     @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "카페 등록", description = "master가 카페를 등록한다.")
     @Parameter(name = "masterId", description = "마스터 ID")
-    public SuccessResponse<PostCafeRes> addCafe(@PathVariable Long masterId,
-                                                @Parameter(description = "카페 정보", example = "{\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"}")
+    public SuccessResponse<CafeUpdateOutDTO> createCafe(@PathVariable Long masterId,
+                                                     @Parameter(description = "카페 정보", example = "{\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"}")
                                                 @RequestParam @Valid String cafeInfo,
-                                                @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> images)
+                                                     @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> images)
             throws JsonProcessingException {
-        PostCafeReq postCafeReq = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
-        PostCafeRes postCafeRes = cafeService.addCafe(masterId, postCafeReq, images);
-        return new SuccessResponse<>(CREATE_CAFE, postCafeRes);
+        CafeCreateInDTO cafeCreateInDTO = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
+        CafeUpdateOutDTO cafeUpdateOutDTO = cafeService.createCafe(masterId, cafeCreateInDTO, images);
+        return new SuccessResponse<>(CREATE_CAFE, cafeUpdateOutDTO);
     }
 
     @NoAuth
@@ -60,11 +60,11 @@ public class CafeController {
             @Parameter(name = "sort", description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
             @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
-    public SuccessResponse<List<List<GetCafesRes>>> getCafeByStatusNoAuth(@RequestParam String longitude,
-                                                                           @RequestParam String latitude,
-                                                                           @RequestParam String sort,
-                                                                           @RequestParam String limit) {
-        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatusNoAuth(longitude, latitude, sort, limit);
+    public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByStatusNoAuth(@RequestParam String longitude,
+                                                                             @RequestParam String latitude,
+                                                                             @RequestParam String sort,
+                                                                             @RequestParam String limit) {
+        List<List<CafeListOutDTO>> cafeResList = cafeService.findCafesByStatusNoAuth(longitude, latitude, sort, limit);
         SuccessStatus resultStatus = SUCCESS;
         if (cafeResList.get(0).isEmpty()) {
             resultStatus = NO_CONTENT_SUCCESS;
@@ -81,14 +81,14 @@ public class CafeController {
             @Parameter(name = "sort", description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
             @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
-    public SuccessResponse<List<List<GetCafesRes>>> getCafeByStatus(@PathVariable Long userId,
-                                                                    @RequestParam String longitude,
-                                                                    @RequestParam String latitude,
-                                                                    @RequestParam String sort,
-                                                                    @RequestParam String limit)
+    public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByStatus(@PathVariable Long userId,
+                                                                       @RequestParam String longitude,
+                                                                       @RequestParam String latitude,
+                                                                       @RequestParam String sort,
+                                                                       @RequestParam String limit)
             throws UserException {
         jwtService.isValidAccessTokenId(userId);
-        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByStatus(userId, longitude, latitude, sort, limit);
+        List<List<CafeListOutDTO>> cafeResList = cafeService.findCafesByStatus(userId, longitude, latitude, sort, limit);
         SuccessStatus resultStatus = SUCCESS;
         if (cafeResList.get(0).isEmpty()) {
             resultStatus = NO_CONTENT_SUCCESS;
@@ -100,8 +100,8 @@ public class CafeController {
     @GetMapping("/id/{cafeId}")
     @Operation(summary = "카페 ID 조회(토큰 필요 X)", description = "특정 ID의 카페를 조회한다.")
     @Parameter(name = "cafeId", description = "카페 ID")
-    public SuccessResponse<GetCafeRes> getCafeByIdNoAuth(@PathVariable Long cafeId) throws CafeException {
-        GetCafeRes cafeRes = cafeService.getCafeByIdNoAuth(cafeId);
+    public SuccessResponse<CafeGetOutDTO> getCafeNoAuth(@PathVariable Long cafeId) throws CafeException {
+        CafeGetOutDTO cafeRes = cafeService.getCafeNoAuth(cafeId);
         return new SuccessResponse<>(SUCCESS, cafeRes);
     }
 
@@ -111,10 +111,10 @@ public class CafeController {
             @Parameter(name = "userId", description = "유저 ID"),
             @Parameter(name = "cafeId", description = "카페 ID")
     })
-    public SuccessResponse<GetCafeRes> getCafeById(@PathVariable Long userId,
-                                                   @PathVariable Long cafeId) throws CafeException, UserException {
+    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable Long userId,
+                                                      @PathVariable Long cafeId) throws CafeException, UserException {
         jwtService.isValidAccessTokenId(userId);
-        GetCafeRes cafeRes = cafeService.getCafeById(userId, cafeId);
+        CafeGetOutDTO cafeRes = cafeService.getCafe(userId, cafeId);
         return new SuccessResponse<>(SUCCESS, cafeRes);
     }
 
@@ -128,12 +128,12 @@ public class CafeController {
             @Parameter(name = "sort", description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
             @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
-    public SuccessResponse<List<List<GetCafesRes>>> getCafeByNameNoAuth(@PathVariable String cafeName,
-                                                                        @RequestParam String longitude,
-                                                                        @RequestParam String latitude,
-                                                                        @RequestParam String sort,
-                                                                        @RequestParam String limit) throws CafeException {
-        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByNameNoAuth(cafeName, longitude, latitude, sort, limit);
+    public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByNameNoAuth(@PathVariable String cafeName,
+                                                                           @RequestParam String longitude,
+                                                                           @RequestParam String latitude,
+                                                                           @RequestParam String sort,
+                                                                           @RequestParam String limit) throws CafeException {
+        List<List<CafeListOutDTO>> cafeResList = cafeService.findCafesByNameNoAuth(cafeName, longitude, latitude, sort, limit);
         SuccessStatus resultStatus = SUCCESS;
         if (cafeResList.get(0).isEmpty()) {
             resultStatus = NO_CONTENT_SUCCESS;
@@ -151,14 +151,14 @@ public class CafeController {
             @Parameter(name = "sort", description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
             @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
-    public SuccessResponse<List<List<GetCafesRes>>> getCafeByName(@PathVariable String cafeName,
-                                                                  @PathVariable Long userId,
-                                                                  @RequestParam String longitude,
-                                                                  @RequestParam String latitude,
-                                                                  @RequestParam String sort,
-                                                                  @RequestParam String limit) throws CafeException, UserException {
+    public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByName(@PathVariable String cafeName,
+                                                                     @PathVariable Long userId,
+                                                                     @RequestParam String longitude,
+                                                                     @RequestParam String latitude,
+                                                                     @RequestParam String sort,
+                                                                     @RequestParam String limit) throws CafeException, UserException {
         jwtService.isValidAccessTokenId(userId);
-        List<List<GetCafesRes>> cafeResList = cafeService.getCafeByName(cafeName, userId, longitude, latitude, sort, limit);
+        List<List<CafeListOutDTO>> cafeResList = cafeService.findCafesByName(cafeName, userId, longitude, latitude, sort, limit);
         SuccessStatus resultStatus = SUCCESS;
         if (cafeResList.get(0).isEmpty()) {
             resultStatus = NO_CONTENT_SUCCESS;
@@ -172,11 +172,11 @@ public class CafeController {
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "masterId", description = "마스터 ID")
     })
-    public SuccessResponse<PostCafeRes> updateCafe(@PathVariable Long cafeId,
-                                                   @PathVariable Long masterId,
-                                                   @RequestBody @Valid PostCafeReq cafeReq) throws CafeException, JsonProcessingException {
-        PostCafeRes postCafeRes = cafeService.updateCafe(cafeId, masterId, cafeReq);
-        return new SuccessResponse<>(SUCCESS, postCafeRes);
+    public SuccessResponse<CafeUpdateOutDTO> updateCafe(@PathVariable Long cafeId,
+                                                        @PathVariable Long masterId,
+                                                        @RequestBody @Valid CafeCreateInDTO cafeReq) throws CafeException, JsonProcessingException {
+        CafeUpdateOutDTO cafeUpdateOutDTO = cafeService.updateCafe(cafeId, masterId, cafeReq);
+        return new SuccessResponse<>(SUCCESS, cafeUpdateOutDTO);
 
     }
 
