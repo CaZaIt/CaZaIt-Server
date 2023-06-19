@@ -51,7 +51,7 @@ public class CafeMenuService {
     /**
      * 카페 메뉴 등록
      */
-    public MenuCreateOutDTO registerMenu(Long cafeId, MenuCreateInDTO menuCreateInDTO, MultipartFile menuImage)
+    public MenuCreateOutDTO createMenu(Long cafeId, MenuCreateInDTO menuCreateInDTO, MultipartFile menuImage)
             throws CafeException, IOException {
 
         String uploadFileName = null;

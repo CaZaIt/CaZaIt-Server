@@ -79,7 +79,7 @@ public class CafeMenuApiController {
                                                           @Parameter(description = "메뉴 이미지") @RequestPart(required = false) MultipartFile image)
             throws CafeException, IOException {
         MenuCreateInDTO menuCreateInDTO = objectMapper.readValue(information, new TypeReference<>() {});
-        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.registerMenu(cafeId, menuCreateInDTO, image));
+        return new SuccessResponse<>(CREATE_MENU, cafeMenuService.createMenu(cafeId, menuCreateInDTO, image));
     }
 
     @NoAuth
