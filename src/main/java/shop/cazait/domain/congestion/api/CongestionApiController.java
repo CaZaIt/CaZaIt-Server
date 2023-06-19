@@ -15,7 +15,6 @@ import shop.cazait.domain.congestion.dto.request.CongestionUpdateInDTO;
 import shop.cazait.domain.congestion.dto.response.CongestionUpdateOutDTO;
 import shop.cazait.domain.congestion.exception.CongestionException;
 import shop.cazait.domain.congestion.service.CongestionService;
-import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.error.status.SuccessStatus;
@@ -41,7 +40,7 @@ public class CongestionApiController {
             throws CongestionException {
 
         return new SuccessResponse<>(
-                SuccessStatus.CREATE_CONGESTION, congestionService.addAndUpdateCongestion(cafeId, congestionUpdateInDTO));
+                SuccessStatus.CREATE_CONGESTION, congestionService.createOrUpdateCongestion(cafeId, congestionUpdateInDTO));
 
     }
 
