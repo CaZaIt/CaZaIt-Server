@@ -1,10 +1,10 @@
 package shop.cazait.domain.congestion.service;
 
-import static shop.cazait.global.common.constant.Constant.NOT_EXIST_CONGESTION;
 import static shop.cazait.global.error.status.ErrorStatus.INVALID_CONGESTION;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class CongestionService {
     /**
      * 혼잡도 등록 및 수정
      */
-    public CongestionUpdateOutDTO addAndUpdateCongestion(Long cafeId, CongestionUpdateInDTO congestionUpdateInDTO) {
+    public CongestionUpdateOutDTO createOrUpdateCongestion(Long cafeId, CongestionUpdateInDTO congestionUpdateInDTO) {
 
         Cafe findCafe = getCafe(cafeId);
         Congestion findCongestion = findCafe.getCongestion();
@@ -37,13 +37,10 @@ public class CongestionService {
 
         CongestionStatus congestionStatus = getCongestionStatus(congestionUpdateInDTO.getCongestionStatus());
 
-        if (findCongestion == NOT_EXIST_CONGESTION) {
+        if (Objects.isNull(findCongestion)) {
             newCongestion = addCongestion(findCafe, congestionStatus);
-        }
-
-        if (findCongestion != NOT_EXIST_CONGESTION) {
+        } else {
             newCongestion = updateCongestion(findCongestion, congestionStatus);
-
         }
 
         return CongestionUpdateOutDTO.of(newCongestion);
