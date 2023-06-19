@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 public enum CongestionStatus {
 
     // 미등록, 종료, 여유, 보통, 혼잡, 매우 혼잡
-    NONE("none", 0),
-    CLOSE("close", -1),
-    FREE("free", 4),
-    NORMAL("normal", 3),
-    CROWDED("crowded", 2),
-    VERY_CROWDED("very_crowded", 1);
+    NONE("NONE", 0),
+    CLOSE("CLOSE", -1),
+    FREE("FREE", 4),
+    NORMAL("NORMAL", 3),
+    CROWDED("CROWDED", 2),
+    VERY_CROWDED("VERY_CROWDED", 1);
 
     private final String value;
     private final int level;
