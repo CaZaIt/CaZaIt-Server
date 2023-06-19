@@ -54,7 +54,7 @@ public class CafeService {
             throws JsonProcessingException {
 
         // 좌표와 도로명 주소 받기
-        Coordinate coordinate = coordinateService.getCoordinate(cafeReq);
+        Coordinate coordinate = coordinateService.createCoordinate(cafeReq);
 
         // 카페 생성
         Cafe cafe = Cafe.builder()
@@ -159,7 +159,7 @@ public class CafeService {
     public CafeUpdateOutDTO updateCafe(Long cafeId, Long masterId, CafeCreateInDTO cafeReq)
             throws CafeException, JsonProcessingException {
 
-        Coordinate coordinate = coordinateService.getCoordinate(cafeReq);
+        Coordinate coordinate = coordinateService.createCoordinate(cafeReq);
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         Master master = masterRepository.findById(masterId)

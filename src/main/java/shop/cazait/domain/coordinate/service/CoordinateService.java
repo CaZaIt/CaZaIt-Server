@@ -19,7 +19,7 @@ public class CoordinateService {
     private String baseUrl = "https://dapi.kakao.com";
     private String uri = "/v2/local/search/address.json";
 
-    public Coordinate getCoordinate(CafeCreateInDTO cafeReq) throws JsonProcessingException {
+    public Coordinate createCoordinate(CafeCreateInDTO cafeReq) throws JsonProcessingException {
         ExtKakaoCoordinateOutDTO extKakaoCoordinateOutDTO = getCoordinateFromAddress(cafeReq.getAddress());
         Coordinate coordinate = Coordinate.builder()
                 .longitude(extKakaoCoordinateOutDTO.getDocuments().get(0).getLongitude())
