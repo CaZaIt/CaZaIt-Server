@@ -1,4 +1,4 @@
-package shop.cazait.domain.s3.api;
+package shop.cazait.infra.s3.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import shop.cazait.domain.s3.dto.response.PreSignedUrlCreateOutDTO;
-import shop.cazait.domain.s3.service.S3Service;
+import shop.cazait.infra.s3.dto.response.PreSignedUrlCreateOutDTO;
+import shop.cazait.infra.s3.service.S3Service;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.status.SuccessStatus;

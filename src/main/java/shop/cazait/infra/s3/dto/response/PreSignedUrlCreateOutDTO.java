@@ -1,4 +1,4 @@
-package shop.cazait.domain.s3.dto.response;
+package shop.cazait.infra.s3.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
