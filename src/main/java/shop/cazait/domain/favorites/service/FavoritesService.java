@@ -7,7 +7,6 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 추가
      */
-    public FavoritesCreateOutDTO addFavorites(Long userId, Long cafeId) throws CafeException, UserException {
+    public FavoritesCreateOutDTO createFavorites(Long userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);

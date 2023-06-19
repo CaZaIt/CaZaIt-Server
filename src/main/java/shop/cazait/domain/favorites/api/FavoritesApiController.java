@@ -36,10 +36,10 @@ public class FavoritesApiController {
             @Parameter(name = "userId", description = "즐겨찾기를 등록할 유저 ID"),
             @Parameter(name = "cafeId", description = "즐겨찾기로 등록할 카페 ID")
     })
-    public SuccessResponse<FavoritesCreateOutDTO> addFavorites(@PathVariable Long userId,
+    public SuccessResponse<FavoritesCreateOutDTO> createFavorites(@PathVariable Long userId,
                                                                @PathVariable Long cafeId)
             throws CafeException, UserException {
-        return new SuccessResponse<>(CREATE_FAVORITES, favoritesService.addFavorites(userId, cafeId));
+        return new SuccessResponse<>(CREATE_FAVORITES, favoritesService.createFavorites(userId, cafeId));
     }
 
     @GetMapping("/user/{userId}")
