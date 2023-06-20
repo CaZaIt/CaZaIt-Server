@@ -51,9 +51,9 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public PostLoginRes reIssueTokensByRole(Role exactRole, String accessToken, String refreshToken, Long userIdx) throws MasterException, UserException {
+    public PostLoginRes reIssueTokensByRole(Role exactRole, String accessToken, String refreshToken) throws MasterException, UserException {
         if (exactRole.equals(USER)) {
-            return userService.reIssueTokens(accessToken, refreshToken, userIdx);
+            return userService.reIssueTokens(accessToken, refreshToken);
         } else {
             return masterService.issueAccessToken(accessToken, refreshToken);
         }

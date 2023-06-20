@@ -149,7 +149,7 @@ public class JwtService {
         } catch (ExpiredJwtException exception) {
             Long userIdx = exception.getClaims().get("userIdx", Long.class);
             return userIdx;
-        } catch (JwtException exception) {
+        } catch (JwtException | IllegalArgumentException exception) {
             log.error("Token tampered.");
             throw new UserException(INVALID_JWT);
         } catch (NullPointerException exception) {

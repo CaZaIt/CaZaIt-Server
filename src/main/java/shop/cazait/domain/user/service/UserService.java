@@ -221,10 +221,10 @@ public class UserService {
 //        return PostLoginRes.of(user,accessToken,refreshToken,USER);
 //    }
 
-    public PostLoginRes reIssueTokens(String accessToken,String refreshToken, Long userIdx) throws UserException{
+    public PostLoginRes reIssueTokens(String accessToken,String refreshToken) throws UserException{
 
         User user = null;
-
+        Long userIdx = jwtService.getUserIdx(accessToken);
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
 
