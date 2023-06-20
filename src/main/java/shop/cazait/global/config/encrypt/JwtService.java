@@ -217,7 +217,7 @@ public class JwtService {
         } catch (ExpiredJwtException exception) {
             log.error("Token Expired UserID = " + exception.getClaims().get("userIdx"));
             return false;
-        } catch (JwtException exception) {
+        } catch (JwtException | IllegalArgumentException exception) {
             log.error("accessToken Tampered.");
             throw new UserException(INVALID_JWT);
         } catch (NullPointerException exception) {
