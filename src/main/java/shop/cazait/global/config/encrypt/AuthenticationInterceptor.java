@@ -49,13 +49,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String accessToken = request.getHeader("Authorization");
         log.info("AccessToken in interceptor prehandle = "+accessToken);
 
-      /*  final Map<String, String> pathVariables = (Map<String, String>) request
-                .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        System.out.println("pathVariables = " + pathVariables);
-
-        Optional<String> masterId = Optional.ofNullable(pathVariables.get("masterId"));
-        Optional<String> userId = Optional.ofNullable(pathVariables.get("userId"));*/
-
         if(jwtService.isValidToken(accessToken)) {
           return true;
         }
