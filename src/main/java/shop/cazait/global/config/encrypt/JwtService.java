@@ -42,7 +42,6 @@ public class JwtService {
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .signWith(key);
-
     }
 
     //accessToken 발행 함수
@@ -50,10 +49,13 @@ public class JwtService {
         log.info("Created token userIdx = " + userIdx);
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + ACCESS_TOKEN_VALID_TIME);
-
+        System.out.println("key = " + key);
         return makeCommonTokenSource(now, expirationDate)
                 .claim("userIdx", userIdx)
                 .compact();
+//        return makeCommonTokenSource(now, expirationDate)
+//                .setSubject(String.valueOf(userIdx))
+//                .compact();
     }
 
     //refreshToken 발행 함수
@@ -106,17 +108,16 @@ public class JwtService {
         try {
             Jws<Claims> parsedToken = parseJwt(token);
             return parsedToken;
-        } catch (ExpiredJwtException exception) {
-            log.error("Token Expired UserID : " + exception.getClaims().get("userIdx"));
-            throw new UserException(EXPIRED_JWT);
-        } catch (JwtException exception) {
-            log.error("RefreshToken Tampered.");
-            throw new UserException(INVALID_JWT);
-        } catch (NullPointerException exception) {
+        } catch (NullPointerException e) {
             log.error("Token is null.");
             throw new UserException(EMPTY_JWT);
+        } catch (ExpiredJwtException e) {
+            log.error("Token Expired UserID : " + e.getClaims().get("userIdx"));
+            throw new UserException(EXPIRED_JWT);
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error("Token tampered");
+            throw new UserException(INVALID_JWT);
         }
-
     }
 
     public Jws<Claims> parseRefreshTokenWithAllException(String token) throws UserException {
