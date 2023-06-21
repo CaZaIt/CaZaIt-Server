@@ -8,7 +8,6 @@ import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXPIRED_TOKEN;
 import static shop.cazait.global.error.status.SuccessStatus.SIGNUP_AVAILABLE;
-import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -19,13 +18,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.cazait.domain.auth.dto.PostLoginReq;
-import shop.cazait.domain.auth.dto.PostLoginRes;
+import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
+import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
@@ -65,20 +63,20 @@ public class UserService {
         return PostUserRes.of(user);
     }
 
-    public PostLoginRes logIn(PostLoginReq postLoginReq)
+    public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (userRepository.findByEmail(postLoginReq.getEmail()).isEmpty()) {
+        if (userRepository.findByEmail(userAuthenticateInDTO.getEmail()).isEmpty()) {
             throw new UserException(FAILED_TO_LOGIN);
         }
 
-        User findUser = userRepository.findByEmail(postLoginReq.getEmail()).get();
+        User findUser = userRepository.findByEmail(userAuthenticateInDTO.getEmail()).get();
 
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
 
         Long userIdx;
-        if (password.equals(postLoginReq.getPassword())) {
+        if (password.equals(userAuthenticateInDTO.getPassword())) {
             userIdx = findUser.getId();
 
             String jwt = jwtService.createJwt(userIdx);
@@ -92,7 +90,7 @@ public class UserService {
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
-            return PostLoginRes.of(findUser, jwt, refreshToken, USER);
+            return UserAuthenticateOutDTO.of(findUser, jwt, refreshToken, USER);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
@@ -221,7 +219,7 @@ public class UserService {
 //        return PostLoginRes.of(user,accessToken,refreshToken,USER);
 //    }
 
-    public PostLoginRes reIssueTokens(String accessToken,String refreshToken) throws UserException{
+    public UserAuthenticateOutDTO reIssueTokens(String accessToken, String refreshToken) throws UserException{
 
         User user = null;
         Long userIdx = jwtService.getUserIdx(accessToken);
@@ -257,7 +255,7 @@ public class UserService {
                 }
             }
         }
-        return PostLoginRes.of(user,accessToken,refreshToken,USER);
+        return UserAuthenticateOutDTO.of(user,accessToken,refreshToken,USER);
     }
     public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException{
         Long userIdx = jwtService.getUserIdx(accessToken);

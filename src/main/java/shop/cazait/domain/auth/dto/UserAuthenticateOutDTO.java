@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "유저 로그인 Response : 로그인 완료된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PostLoginRes {
+public class UserAuthenticateOutDTO {
 
     @Schema(description = "회원 id", example = "1")
     private Long id;
@@ -32,8 +32,8 @@ public class PostLoginRes {
     @NotBlank
     private Role role;
 
-    public static PostLoginRes of(User user, String jwtToken, String refreshToken, Role role){
-        return  PostLoginRes.builder()
+    public static UserAuthenticateOutDTO of(User user, String jwtToken, String refreshToken, Role role){
+        return  UserAuthenticateOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .jwtToken(jwtToken)
@@ -42,8 +42,8 @@ public class PostLoginRes {
                 .build();
     }
 
-    public static PostLoginRes of(Master master, String jwtToken, String refreshToken, Role role) {
-        return  PostLoginRes.builder()
+    public static UserAuthenticateOutDTO of(Master master, String jwtToken, String refreshToken, Role role) {
+        return  UserAuthenticateOutDTO.builder()
                 .id(master.getId())
                 .email(master.getEmail())
                 .jwtToken(jwtToken)

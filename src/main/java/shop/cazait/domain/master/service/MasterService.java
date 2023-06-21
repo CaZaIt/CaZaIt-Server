@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import shop.cazait.domain.auth.dto.PostLoginReq;
-import shop.cazait.domain.auth.dto.PostLoginRes;
+import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
+import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.master.dto.get.GetMasterRes;
 import shop.cazait.domain.master.dto.patch.PatchMasterReq;
 import shop.cazait.domain.master.dto.patch.PatchMasterRes;
@@ -75,7 +75,7 @@ public class MasterService {
 	/**
 	 * 마스터 로그인
 	 */
-	public PostLoginRes LoginMaster(PostLoginReq dto) throws
+	public UserAuthenticateOutDTO LoginMaster(UserAuthenticateInDTO dto) throws
 		MasterException,
 		InvalidAlgorithmParameterException,
 		NoSuchPaddingException,
@@ -109,7 +109,7 @@ public class MasterService {
 			//							.refreshToken(refreshToken)
 			//					        .build();
 			masterRepository.save(findMaster);
-			return PostLoginRes.of(findMaster, jwt, refreshToken, MASTER);
+			return UserAuthenticateOutDTO.of(findMaster, jwt, refreshToken, MASTER);
 		}
 		throw new MasterException(FAILED_TO_LOGIN);
 	}
@@ -154,7 +154,7 @@ public class MasterService {
 	}
 
 	// 토큰 재발급
-	public PostLoginRes issueAccessToken(String accessToken, String refreshToken) throws
+	public UserAuthenticateOutDTO issueAccessToken(String accessToken, String refreshToken) throws
 		MasterException,
 		UserException {
 
@@ -192,7 +192,7 @@ public class MasterService {
 				refreshToken = jwtService.createRefreshToken();
 			}
 		}
-		return PostLoginRes.of(master, accessToken, refreshToken, MASTER);
+		return UserAuthenticateOutDTO.of(master, accessToken, refreshToken, MASTER);
 	}
 
 }

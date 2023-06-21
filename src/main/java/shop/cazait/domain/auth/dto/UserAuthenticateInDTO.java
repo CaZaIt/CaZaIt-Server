@@ -5,16 +5,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Schema(description = "유저 로그인 Request : 로그인시 필요한 유저 정보")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class PostLoginReq {
+public class UserAuthenticateInDTO {
 
     @Schema(description = "이메일", example = "12345@gmail.com")
     @NotBlank
@@ -24,7 +22,7 @@ public class PostLoginReq {
     private String password;
 
     @Builder
-    public PostLoginReq(String email, String password) {
+    public UserAuthenticateInDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }
