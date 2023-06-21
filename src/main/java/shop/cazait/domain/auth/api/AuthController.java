@@ -61,23 +61,21 @@ public class AuthController {
 
 
     @NoAuth
-    @GetMapping(value = "/refresh/{userIdx}")
+    @GetMapping(value = "/refresh")
     @Operation(summary = "토큰 재발급", description = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     @Parameters({
             @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example = "user"),
             @Parameter(name = "Authorization", description = "발급 받은 accesstoken"),
             @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken"),
-            @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1"),
     })
     public SuccessResponse<PostLoginRes> refreshToken(
-            @PathVariable(name = "userIdx") Long userIdx,
             @RequestParam @NotBlank String role,
             @RequestHeader(value = "Authorization") String accessToken,
             @RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
 
-        jwtService.isValidAccessTokenId(userIdx);
+        System.out.println("accessToken = " + accessToken);
         Role exactRole = Role.of(role);
-        PostLoginRes postLoginRes = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken, userIdx);
+        PostLoginRes postLoginRes = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken);
         return new SuccessResponse<>(SUCCESS, postLoginRes);
     }
 }
