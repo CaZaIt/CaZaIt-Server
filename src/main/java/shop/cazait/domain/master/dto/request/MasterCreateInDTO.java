@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.dto.post;
+package shop.cazait.domain.master.dto.request;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -20,7 +20,7 @@ import shop.cazait.global.config.encrypt.Secret;
 @Schema(description = "마스터 정보 Request : 회원 가입에 필요한 마스터 정보")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostMasterReq {
+public class MasterCreateInDTO {
 
 	@NotBlank(message = "Master 이메일을 입력해주세요.")
 	@Schema(description = "이메일", example = "master@gmail.com")
