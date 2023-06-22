@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.dto.post;
+package shop.cazait.domain.master.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -6,11 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.master.entity.Master;
 
-@Schema(description = "마스터 정보 Response : 회원 가입한 마스터 계정 정보")
+@Schema(description = "마스터 조회 Response : 마스터 계정 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PostMasterRes {
-
+public class MasterListOutDTO {
 	@Schema(description = "마스터 계정 ID")
 	private Long id;
 
@@ -20,8 +19,8 @@ public class PostMasterRes {
 	@Schema(description = "마스터 계정 이름")
 	private String nickname;
 
-	static public PostMasterRes of(Master master) {
-		return PostMasterRes.builder()
+	public static MasterListOutDTO of(Master master) {
+		return MasterListOutDTO.builder()
 			.id(master.getId())
 			.email(master.getEmail())
 			.nickname(master.getNickname())
