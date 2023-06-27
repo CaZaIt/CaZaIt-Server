@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Schema(description = "회원 수정 Request : 수정되어야 할 새로운 유저 정보")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PatchUserReq {
+public class UserUpdateInDTO {
 
     @Email(message = "이메일 형식을 지키세요.")
     @NotBlank

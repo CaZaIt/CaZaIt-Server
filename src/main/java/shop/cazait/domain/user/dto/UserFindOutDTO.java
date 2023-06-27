@@ -9,7 +9,7 @@ import shop.cazait.domain.user.entity.User;
 @Schema(description = "유저 조회 Response : 조회된 회원의 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class GetUserRes {
+public class UserFindOutDTO {
 
     @Schema(description = "유저 식별 번호", example = "1")
     private Long id;
@@ -23,8 +23,8 @@ public class GetUserRes {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public static GetUserRes of(User user){
-        return GetUserRes.builder()
+    public static UserFindOutDTO of(User user){
+        return UserFindOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())

@@ -9,7 +9,7 @@ import shop.cazait.domain.user.entity.User;
 @Schema(description = "유저 수정 Response : 수정 완료된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PatchUserRes {
+public class UserUpdateOutDTO {
 
     @Schema(description = "회원 id", example = "1")
     private Long id;
@@ -23,8 +23,8 @@ public class PatchUserRes {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public static PatchUserRes of(User user) {
-        return PatchUserRes.builder()
+    public static UserUpdateOutDTO of(User user) {
+        return UserUpdateOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .nickname(user.getNickname())

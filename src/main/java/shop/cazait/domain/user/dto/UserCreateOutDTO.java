@@ -9,7 +9,7 @@ import shop.cazait.domain.user.entity.User;
 @Schema(description = "유저 정보 Response : 회원 가입된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PostUserRes {
+public class UserCreateOutDTO {
 
     @Schema(description = "회원 id", example = "1")
     private Long id;
@@ -23,8 +23,8 @@ public class PostUserRes {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public static PostUserRes of(User user) {
-        return PostUserRes.builder()
+    public static UserCreateOutDTO of(User user) {
+        return UserCreateOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
