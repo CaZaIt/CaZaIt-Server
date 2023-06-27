@@ -11,7 +11,7 @@ import javax.validation.constraints.*;
 @Schema(description = "유저 정보 Request : 회원 가입에 필요한 유저 정보")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserCreateInDTO {
+public class PostUserReq {
 
     @Email(message = "이메일 형식을 지키세요.")
     @NotBlank
@@ -28,7 +28,7 @@ public class UserCreateInDTO {
     private String nickname;
 
     @Builder
-    public UserCreateInDTO(String email, String password, String nickname){
+    public PostUserReq(String email, String password, String nickname){
         this.email = email;
         this.password = password;
         this.nickname = nickname;

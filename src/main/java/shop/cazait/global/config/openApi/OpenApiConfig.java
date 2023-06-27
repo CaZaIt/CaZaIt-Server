@@ -29,7 +29,7 @@ public class OpenApiConfig {
 
         Server localServer = new Server();
         localServer.setDescription("local");
-        localServer.setUrl("http://localhost:8080");
+        localServer.setUrl("http://localhost:8082");
 
         return new OpenAPI()
                 .info(getInfo())
@@ -49,7 +49,7 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 필요한 API")
-                .pathsToExclude("/api/auths/log-in","/api/auths/kakao/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname")
+                .pathsToExclude("/api/auths/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname")
                 .addOpenApiCustomiser(buildSecurityOpenApi())
                 .build();
 }
@@ -59,7 +59,7 @@ public class OpenApiConfig {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 불필요한 API")
-                .pathsToMatch("/api/auths/log-in","/api/auths/kakao/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname", "/api/s3/**")
+                .pathsToMatch("/api/auths/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname", "/api/s3/**")
                 .build();
     }
 
