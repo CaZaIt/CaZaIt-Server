@@ -65,7 +65,7 @@ public class AuthController {
     })
     public SuccessResponse<UserAuthenticateOutDTO> refreshToken(
             @RequestParam @NotBlank String role,
-            @RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
+            @RequestHeader(value = "Refresh-Token") String refreshToken) throws UserException, BaseException, MasterException {
 
         String accessToken = jwtService.getJwtFromHeader();
         Role exactRole = Role.of(role);
