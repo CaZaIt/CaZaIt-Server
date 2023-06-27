@@ -79,7 +79,7 @@ public class UserService {
         if (password.equals(userAuthenticateInDTO.getPassword())) {
             userIdx = findUser.getId();
 
-            String jwt = jwtService.createJwt(userIdx);
+            String accessToken = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
 
             User loginUser = User.builder()
@@ -90,7 +90,7 @@ public class UserService {
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
-            return UserAuthenticateOutDTO.of(findUser, jwt, refreshToken, USER);
+            return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, USER);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
