@@ -28,7 +28,7 @@ public class UserAuthenticateOutDTO {
     @Schema(description = "refresh token")
     private String refreshToken;
 
-    @Schema(description = "유저인지 마스터인지", example = "USER/MASTER")
+    @Schema(description = "유저인지 마스터인지", example = "user/master")
     @NotBlank
     private String role;
 
