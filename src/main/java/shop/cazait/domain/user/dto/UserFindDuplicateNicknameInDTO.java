@@ -12,13 +12,13 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "닉네임 중복확인 req: 닉네임")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostCheckDuplicateNicknameReq {
+public class UserFindDuplicateNicknameInDTO {
     @NotBlank(message = "닉네임을 입력하세요.")
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
     @Builder
-    public PostCheckDuplicateNicknameReq(String nickname) {
+    public UserFindDuplicateNicknameInDTO(String nickname) {
         this.nickname = nickname;
     }
 

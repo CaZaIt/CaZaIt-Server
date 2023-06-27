@@ -20,8 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 
-import shop.cazait.domain.auth.dto.PostLoginReq;
-import shop.cazait.domain.auth.dto.PostLoginRes;
+import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
+import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.master.dto.request.MasterCreateInDTO;
 import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
 import shop.cazait.domain.master.dto.response.MasterCreateOutDTO;

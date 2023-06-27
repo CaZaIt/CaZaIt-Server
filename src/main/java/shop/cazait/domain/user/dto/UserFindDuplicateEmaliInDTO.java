@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 @Schema(description = "이메일 중복확인 req: 이메일")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostCheckDuplicateEmailReq {
+public class UserFindDuplicateEmaliInDTO {
 
     @Email(message = "이메일 형식을 지키세요.")
     @NotBlank
@@ -22,7 +22,7 @@ public class PostCheckDuplicateEmailReq {
     private String email;
 
     @Builder
-    public PostCheckDuplicateEmailReq(String email){
+    public UserFindDuplicateEmaliInDTO(String email){
         this.email = email;
     }
 
