@@ -22,8 +22,8 @@ public class UserAuthenticateOutDTO {
     @Schema(description = "이메일", example = "12345@gmail.com")
     private String email;
 
-    @Schema(description = "jwt token")
-    private String jwtToken;
+    @Schema(description = "access token")
+    private String accessToken;
 
     @Schema(description = "refresh token")
     private String refreshToken;
@@ -32,21 +32,21 @@ public class UserAuthenticateOutDTO {
     @NotBlank
     private Role role;
 
-    public static UserAuthenticateOutDTO of(User user, String jwtToken, String refreshToken, Role role){
+    public static UserAuthenticateOutDTO of(User user, String accessToken, String refreshToken, Role role){
         return  UserAuthenticateOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .jwtToken(jwtToken)
+                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .role(role)
                 .build();
     }
 
-    public static UserAuthenticateOutDTO of(Master master, String jwtToken, String refreshToken, Role role) {
+    public static UserAuthenticateOutDTO of(Master master, String accessToken, String refreshToken, Role role) {
         return  UserAuthenticateOutDTO.builder()
                 .id(master.getId())
                 .email(master.getEmail())
-                .jwtToken(jwtToken)
+                .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .role(role)
                 .build();
