@@ -90,7 +90,7 @@ public class UserService {
                     .refreshToken(refreshToken)
                     .build();
             userRepository.save(loginUser);
-            return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, USER);
+            return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, "user");
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
@@ -255,7 +255,7 @@ public class UserService {
                 }
             }
         }
-        return UserAuthenticateOutDTO.of(user,accessToken,refreshToken,USER);
+        return UserAuthenticateOutDTO.of(user,accessToken,refreshToken,"user");
     }
     public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException{
         Long userIdx = jwtService.getUserIdx(accessToken);

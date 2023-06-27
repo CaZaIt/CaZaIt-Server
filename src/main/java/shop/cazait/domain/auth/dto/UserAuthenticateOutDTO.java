@@ -30,9 +30,9 @@ public class UserAuthenticateOutDTO {
 
     @Schema(description = "유저인지 마스터인지", example = "USER/MASTER")
     @NotBlank
-    private Role role;
+    private String role;
 
-    public static UserAuthenticateOutDTO of(User user, String accessToken, String refreshToken, Role role){
+    public static UserAuthenticateOutDTO of(User user, String accessToken, String refreshToken, String role){
         return  UserAuthenticateOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -42,7 +42,7 @@ public class UserAuthenticateOutDTO {
                 .build();
     }
 
-    public static UserAuthenticateOutDTO of(Master master, String accessToken, String refreshToken, Role role) {
+    public static UserAuthenticateOutDTO of(Master master, String accessToken, String refreshToken, String role) {
         return  UserAuthenticateOutDTO.builder()
                 .id(master.getId())
                 .email(master.getEmail())
