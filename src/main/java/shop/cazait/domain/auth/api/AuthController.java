@@ -44,7 +44,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/log-in")
     @Operation(summary = "회원 로그인", description = "이메일과 로그인을 통해 로그인을 진행")
-    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example ="master")
+    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)", example = "master")
     public SuccessResponse<UserAuthenticateOutDTO> logIn(
             @RequestParam @NotBlank String role,
             @RequestBody @Valid UserAuthenticateInDTO userAuthenticateInDTO)
@@ -60,16 +60,14 @@ public class AuthController {
     @GetMapping(value = "/refresh")
     @Operation(summary = "토큰 재발급", description = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     @Parameters({
-            @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example = "user"),
-            @Parameter(name = "Authorization", description = "발급 받은 accesstoken"),
+            @Parameter(name = "role", description = "유저인지 마스터인지(user/master)", example = "user"),
             @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken"),
     })
     public SuccessResponse<UserAuthenticateOutDTO> refreshToken(
             @RequestParam @NotBlank String role,
-            @RequestHeader(value = "Authorization") String accessToken,
             @RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
 
-        System.out.println("accessToken = " + accessToken);
+        String accessToken = jwtService.getJwtFromHeader();
         Role exactRole = Role.of(role);
         UserAuthenticateOutDTO userAuthenticateOutDTO = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken);
         return new SuccessResponse<>(SUCCESS, userAuthenticateOutDTO);
