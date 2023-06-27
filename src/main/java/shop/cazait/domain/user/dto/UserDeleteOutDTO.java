@@ -9,7 +9,7 @@ import shop.cazait.domain.user.entity.User;
 @Schema(description = "유저 삭제 Response : 삭제 완료된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class DeleteUserRes {
+public class UserDeleteOutDTO {
 
     @Schema(name = "회원 id", example = "1")
     private Long id;
@@ -25,8 +25,8 @@ public class DeleteUserRes {
 
 
 
-    public static DeleteUserRes of(User user){
-        return DeleteUserRes.builder()
+    public static UserDeleteOutDTO of(User user){
+        return UserDeleteOutDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())

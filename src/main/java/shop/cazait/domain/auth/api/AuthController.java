@@ -16,15 +16,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 
-import shop.cazait.domain.auth.dto.PostLoginReq;
-import shop.cazait.domain.auth.dto.PostLoginRes;
+import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
+import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.auth.service.AuthService;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.user.exception.UserException;
@@ -48,15 +44,15 @@ public class AuthController {
     @NoAuth
     @PostMapping("/log-in")
     @Operation(summary = "회원 로그인", description = "이메일과 로그인을 통해 로그인을 진행")
-    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example ="master")
-    public SuccessResponse<PostLoginRes> logIn(
+    @Parameter(name = "role", description = "유저인지 마스터인지(user/master)", example = "master")
+    public SuccessResponse<UserAuthenticateOutDTO> logIn(
             @RequestParam @NotBlank String role,
-            @RequestBody @Valid PostLoginReq postLoginReq)
+            @RequestBody @Valid UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
 
         Role exactRole = Role.of(role);
-        PostLoginRes postLoginRes = authService.logInByRole(exactRole, postLoginReq);
-        return new SuccessResponse<>(SUCCESS, postLoginRes);
+        UserAuthenticateOutDTO userAuthenticateOutDTO = authService.logInByRole(exactRole, userAuthenticateInDTO);
+        return new SuccessResponse<>(SUCCESS, userAuthenticateOutDTO);
     }
 
 
@@ -64,19 +60,17 @@ public class AuthController {
     @GetMapping(value = "/refresh")
     @Operation(summary = "토큰 재발급", description = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     @Parameters({
-            @Parameter(name = "role", description = "유저인지 마스터인지(user/master)",example = "user"),
-            @Parameter(name = "Authorization", description = "발급 받은 accesstoken"),
-            @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken"),
+            @Parameter(name = "role", description = "유저인지 마스터인지(user/master)", example = "user"),
+            @Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken"),
     })
-    public SuccessResponse<PostLoginRes> refreshToken(
+    public SuccessResponse<UserAuthenticateOutDTO> refreshToken(
             @RequestParam @NotBlank String role,
-            @RequestHeader(value = "Authorization") String accessToken,
-            @RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException, BaseException, MasterException {
+            @RequestHeader(value = "Refresh-Token") String refreshToken) throws UserException, BaseException, MasterException {
 
-        System.out.println("accessToken = " + accessToken);
+        String accessToken = jwtService.getJwtFromHeader();
         Role exactRole = Role.of(role);
-        PostLoginRes postLoginRes = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken);
-        return new SuccessResponse<>(SUCCESS, postLoginRes);
+        UserAuthenticateOutDTO userAuthenticateOutDTO = authService.reIssueTokensByRole(exactRole, accessToken, refreshToken);
+        return new SuccessResponse<>(SUCCESS, userAuthenticateOutDTO);
     }
 }
 

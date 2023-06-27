@@ -1,10 +1,7 @@
 package shop.cazait.domain.auth.service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.auth.Role;
@@ -13,30 +10,18 @@ import shop.cazait.domain.auth.dto.*;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 
-import shop.cazait.domain.user.dto.PostUserReq;
-import shop.cazait.domain.user.dto.PostUserRes;
-import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.domain.user.service.UserService;
-import shop.cazait.global.error.exception.BaseException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 
 import static shop.cazait.domain.auth.Role.USER;
-import static shop.cazait.global.error.status.ErrorStatus.EMPTY_JWT;
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
 
 
 @Service
@@ -51,7 +36,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public PostLoginRes reIssueTokensByRole(Role exactRole, String accessToken, String refreshToken) throws MasterException, UserException {
+    public UserAuthenticateOutDTO reIssueTokensByRole(Role exactRole, String accessToken, String refreshToken) throws MasterException, UserException {
         if (exactRole.equals(USER)) {
             return userService.reIssueTokens(accessToken, refreshToken);
         } else {
@@ -59,11 +44,11 @@ public class AuthService {
         }
     }
 
-    public PostLoginRes logInByRole(Role exactRole, PostLoginReq postLoginReq) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
+    public UserAuthenticateOutDTO logInByRole(Role exactRole, UserAuthenticateInDTO userAuthenticateInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
         if (exactRole.equals(USER)) {
-            return userService.logIn(postLoginReq);
+            return userService.logIn(userAuthenticateInDTO);
         } else {
-            return masterService.LoginMaster(postLoginReq);
+            return masterService.LoginMaster(userAuthenticateInDTO);
         }
     }
 }
