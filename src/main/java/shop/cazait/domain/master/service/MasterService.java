@@ -112,7 +112,7 @@ public class MasterService {
 			//							.refreshToken(refreshToken)
 			//					        .build();
 			masterRepository.save(findMaster);
-			return UserAuthenticateOutDTO.of(findMaster, jwt, refreshToken, MASTER);
+			return UserAuthenticateOutDTO.of(findMaster, jwt, refreshToken, "master");
 		}
 		throw new MasterException(FAILED_TO_LOGIN);
 	}
@@ -195,7 +195,7 @@ public class MasterService {
 				refreshToken = jwtService.createRefreshToken();
 			}
 		}
-		return UserAuthenticateOutDTO.of(master, accessToken, refreshToken, MASTER);
+		return UserAuthenticateOutDTO.of(master, accessToken, refreshToken, "master");
 	}
 
 }
