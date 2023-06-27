@@ -61,7 +61,7 @@ public class AuthController {
     @Operation(summary = "토큰 재발급", description = "인터셉터에서 accesstoken이 만료되고 난 후 클라이언트에서 해당 api로 토큰 재발급 요청 필요")
     @Parameters({
             @Parameter(name = "role", description = "유저인지 마스터인지(user/master)", example = "user"),
-            @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken"),
+            @Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken"),
     })
     public SuccessResponse<UserAuthenticateOutDTO> refreshToken(
             @RequestParam @NotBlank String role,
