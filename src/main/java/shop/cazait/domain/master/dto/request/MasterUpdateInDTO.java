@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.dto.patch;
+package shop.cazait.domain.master.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "마스터 수정 Request : 수정할 마스터 계정 정보")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class PatchMasterReq {
+public class MasterUpdateInDTO {
 
 	@Schema(description = "Master 이메일")
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 이메일을 입력해주세요.")

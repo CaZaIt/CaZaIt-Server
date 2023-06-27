@@ -18,13 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
-import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
-import shop.cazait.domain.master.dto.get.GetMasterRes;
-import shop.cazait.domain.master.dto.patch.PatchMasterReq;
-import shop.cazait.domain.master.dto.patch.PatchMasterRes;
-import shop.cazait.domain.master.dto.post.PostMasterReq;
-import shop.cazait.domain.master.dto.post.PostMasterRes;
+
+
+import shop.cazait.domain.auth.dto.PostLoginReq;
+import shop.cazait.domain.auth.dto.PostLoginRes;
+import shop.cazait.domain.master.dto.request.MasterCreateInDTO;
+import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
+import shop.cazait.domain.master.dto.response.MasterCreateOutDTO;
+import shop.cazait.domain.master.dto.response.MasterListOutDTO;
+import shop.cazait.domain.master.dto.response.MasterUptateOutDTO;
+
 import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.repository.MasterRepository;
@@ -46,7 +49,7 @@ public class MasterService {
 	/**
 	 * 마스터 회원 가입
 	 */
-	public PostMasterRes registerMaster(PostMasterReq dto) throws
+	public MasterCreateOutDTO registerMaster(MasterCreateInDTO dto) throws
 		MasterException,
 		InvalidAlgorithmParameterException,
 		NoSuchPaddingException,
@@ -68,7 +71,7 @@ public class MasterService {
 		Master master = dto.toEntity();
 		masterRepository.save(master);
 
-		return PostMasterRes.of(master);
+		return MasterCreateOutDTO.of(master);
 
 	}
 
@@ -116,11 +119,11 @@ public class MasterService {
 
 	//마스터 회원 전체 조회
 	@Transactional(readOnly = true)
-	public List<GetMasterRes> getMasterByStatus(BaseStatus status) throws MasterException {
+	public List<MasterListOutDTO> getMasterByStatus(BaseStatus status) throws MasterException {
 		List<Master> masterList = masterRepository.findMasterByStatus(status);
-		List<GetMasterRes> masterResList = new ArrayList<>();
+		List<MasterListOutDTO> masterResList = new ArrayList<>();
 		for (Master master : masterList) {
-			GetMasterRes masterRes = GetMasterRes.of(master);
+			MasterListOutDTO masterRes = MasterListOutDTO.of(master);
 			masterResList.add(masterRes);
 		}
 		if (masterResList.isEmpty()) {
@@ -130,10 +133,10 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보 업데이트
-	public PatchMasterRes updateMaster(Long id, PatchMasterReq patchMasterReq) {
+	public MasterUptateOutDTO updateMaster(Long id, MasterUpdateInDTO masterUpdateInDTO) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		Master updateMaster = masterRepository.save(findMaster);
-		return PatchMasterRes.builder()
+		return MasterUptateOutDTO.builder()
 			.id(updateMaster.getId())
 			.email(updateMaster.getEmail())
 			.password(updateMaster.getPassword())

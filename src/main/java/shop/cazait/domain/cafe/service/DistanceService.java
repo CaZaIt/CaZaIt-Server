@@ -5,7 +5,7 @@ public class DistanceService {
     private static final double EARTH_RADIUS = 6371e3; // 지구의 반지름 (m)
 
     // 두 좌표 사이의 거리를 구하는 함수
-    public static int distance(String lati1, String long1, String lati2, String long2) {
+    public static int getDistance(String lati1, String long1, String lati2, String long2) {
         double lat1 = Double.parseDouble(lati1);
         double lon1 = Double.parseDouble(long1);
         double lat2 = Double.parseDouble(lati2);

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.cazait.domain.coordinate.dto.ExtKakaoCoordinateOutDTO;
-import shop.cazait.domain.cafe.dto.PostCafeReq;
+import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
 import shop.cazait.domain.coordinate.entity.Coordinate;
 
 @Service
@@ -19,7 +19,7 @@ public class CoordinateService {
     private String baseUrl = "https://dapi.kakao.com";
     private String uri = "/v2/local/search/address.json";
 
-    public Coordinate getCoordinate(PostCafeReq cafeReq) throws JsonProcessingException {
+    public Coordinate createCoordinate(CafeCreateInDTO cafeReq) throws JsonProcessingException {
         ExtKakaoCoordinateOutDTO extKakaoCoordinateOutDTO = getCoordinateFromAddress(cafeReq.getAddress());
         Coordinate coordinate = Coordinate.builder()
                 .longitude(extKakaoCoordinateOutDTO.getDocuments().get(0).getLongitude())

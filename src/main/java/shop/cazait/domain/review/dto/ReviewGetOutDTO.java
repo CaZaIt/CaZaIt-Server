@@ -6,12 +6,17 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.review.entity.Review;
 
-@Schema(description = "리뷰 수정 Response : 수정한 리뷰 내용")
+
+
+@Schema(description = "리뷰 하나 조회 Response : 해당 리뷰의 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PatchReviewRes {
-    @Schema(description = "리뷰 ID")
-    private Long reviewId;
+public class ReviewGetOutDTO {
+    @Schema(description = "유저 ID")
+    private Long userId;
+
+    @Schema(description = "카페 ID")
+    private Long cafeId;
 
     @Schema(description = "점수")
     private Integer score;
@@ -19,15 +24,12 @@ public class PatchReviewRes {
     @Schema(description = "내용")
     private String content;
 
-    @Schema(description = "수정된 일시")
-    private String updatedAt;
-
-    public static PatchReviewRes of(Review review) {
-        return PatchReviewRes.builder()
-                .reviewId(review.getId())
+    public static ReviewGetOutDTO of(Review review) {
+        return ReviewGetOutDTO.builder()
+                .userId(review.getUser().getId())
+                .cafeId(review.getCafe().getId())
                 .score(review.getScore())
                 .content(review.getContent())
-                .updatedAt(review.getUpdatedAt())
                 .build();
     }
 }

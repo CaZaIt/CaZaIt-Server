@@ -26,9 +26,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import shop.cazait.domain.master.dto.patch.PatchMasterReq;
-import shop.cazait.domain.master.dto.post.PostMasterReq;
-import shop.cazait.domain.master.dto.post.PostMasterRes;
+import shop.cazait.domain.master.dto.request.MasterCreateInDTO;
+import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
+import shop.cazait.domain.master.dto.response.MasterCreateOutDTO;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.domain.user.exception.UserException;
@@ -49,7 +49,7 @@ public class MasterController {
 	@NoAuth
 	@PostMapping("/sign-up")
 	@Operation(summary = "마스터 회원가입", description = "마스터 사용자의 정보들을 이용해서 회원가입을 진행한다.")
-	public SuccessResponse<PostMasterRes> registerMaster(@Validated @RequestBody PostMasterReq dto) throws
+	public SuccessResponse<MasterCreateOutDTO> registerMaster(@Validated @RequestBody MasterCreateInDTO dto) throws
 		MasterException,
 		InvalidAlgorithmParameterException,
 		NoSuchPaddingException,
@@ -57,7 +57,7 @@ public class MasterController {
 		NoSuchAlgorithmException,
 		BadPaddingException,
 		InvalidKeyException {
-		PostMasterRes postCreateMasterRes = masterService.registerMaster(dto);
+		MasterCreateOutDTO postCreateMasterRes = masterService.registerMaster(dto);
 		return new SuccessResponse<>(CREATE_MASTER, postCreateMasterRes);
 	}
 
@@ -69,10 +69,10 @@ public class MasterController {
 	)
 	public SuccessResponse<String> updateMaster(
 		@PathVariable(name = "masterId") Long masterId,
-		@RequestBody @Valid PatchMasterReq patchMasterReq,
+		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO,
 		@RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException {
 		jwtService.isValidAccessTokenId(masterId);
-		masterService.updateMaster(masterId, patchMasterReq);
+		masterService.updateMaster(masterId, masterUpdateInDTO);
 		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");
 	}
 

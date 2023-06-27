@@ -35,10 +35,10 @@ public class CafeImageController {
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "masterId", description = "마스터 ID")
     })
-    public SuccessResponse<String> addCafeImage(@PathVariable Long cafeId,
+    public SuccessResponse<String> createCafeImage(@PathVariable Long cafeId,
                                                 @PathVariable Long masterId,
                                                 @Parameter(description = "카페 이미지") @RequestPart List<MultipartFile> cafeImages) throws CafeException {
-        cafeImageService.addCafeImage(cafeId, masterId, cafeImages);
+        cafeImageService.createCafeImage(cafeId, masterId, cafeImages);
         return new SuccessResponse<>(SUCCESS,"카페 이미지 등록 완료");
     }
 

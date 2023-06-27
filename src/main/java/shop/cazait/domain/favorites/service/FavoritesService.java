@@ -1,11 +1,13 @@
 package shop.cazait.domain.favorites.service;
 
+import static shop.cazait.global.error.status.ErrorStatus.EXIST_FAVORITES;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_FAVORITES;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,13 +40,16 @@ public class FavoritesService {
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
 
+        if (!favoritesRepository.findAllByUserIdAndCafeId(userId, cafeId).isEmpty()) {
+            throw new FavoritesException(EXIST_FAVORITES);
+        }
+
         Favorites favorites = Favorites.builder()
                 .user(user)
                 .cafe(cafe)
                 .build();
 
         Long favoritesId = favoritesRepository.save(favorites).getId();
-
         return FavoritesCreateOutDTO.of(favoritesId);
 
     }

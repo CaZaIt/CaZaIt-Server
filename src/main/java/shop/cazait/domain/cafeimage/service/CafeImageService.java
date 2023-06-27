@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
-import shop.cazait.domain.cafeimage.dto.GetCafeImageRes;
+import shop.cazait.domain.cafeimage.dto.CafeImageGetOutDTO;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
@@ -34,7 +34,7 @@ public class CafeImageService {
     private final MasterRepository masterRepository;
     private final AwsS3Service awsS3Service;
 
-    public void addCafeImage(Long cafeId, Long masterId, List<MultipartFile> imageFiles) throws CafeException {
+    public void createCafeImage(Long cafeId, Long masterId, List<MultipartFile> imageFiles) throws CafeException {
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
@@ -80,12 +80,21 @@ public class CafeImageService {
 
     }
 
-    public List<GetCafeImageRes> readCafeImageList(Long cafeId) {
+    public List<CafeImageGetOutDTO> findCafeImagesByCafeId(Long cafeId) {
         List<CafeImage> cafeImageList = cafeImageRepository.findByCafeId(cafeId);
-        List<GetCafeImageRes> getCafeImageResList = new ArrayList<>();
+        List<CafeImageGetOutDTO> cafeImageGetOutDTOList = new ArrayList<>();
         for (CafeImage cafeImage : cafeImageList) {
-            GetCafeImageRes getCafeImageRes = GetCafeImageRes.of(cafeImage);
-            getCafeImageResList.add(getCafeImageRes);
+            CafeImageGetOutDTO cafeImageGetOutDTO = CafeImageGetOutDTO.of(cafeImage);
+            cafeImageGetOutDTOList.add(cafeImageGetOutDTO);
+        }
+        return cafeImageGetOutDTOList;
+    }
+
+    public List<String> findCafeImageUrlByCafeId(Long cafeId) {
+        List<CafeImage> cafeImageList = cafeImageRepository.findByCafeId(cafeId);
+        List<String> getCafeImageResList = new ArrayList<>();
+        for (CafeImage cafeImage : cafeImageList) {
+            getCafeImageResList.add(cafeImage.getImageUrl());
         }
         return getCafeImageResList;
     }

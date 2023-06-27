@@ -29,6 +29,7 @@ public enum ErrorStatus {
     EXIST_NICKNAME(400,"FAIL","이미 존재하는 닉네임입니다."),
     INVALID_ROLE(400,"FAIL","유효하지 않은 역할입니다."),
     FAIL_UPLOAD_IMAGE(400, "FAIL", "이미지 업로드를 실패했습니다."),
+    EXIST_FAVORITES(400, "FAIL", "이미 존재하는 즐겨찾기입니다."),
 
     /**
      * Success Code : 401

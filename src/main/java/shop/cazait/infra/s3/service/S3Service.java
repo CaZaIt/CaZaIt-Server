@@ -1,4 +1,4 @@
-package shop.cazait.domain.s3.service;
+package shop.cazait.infra.s3.service;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import shop.cazait.domain.s3.dto.response.PreSignedUrlCreateOutDTO;
+import shop.cazait.infra.s3.dto.response.PreSignedUrlCreateOutDTO;
 
 @Slf4j
 @Service

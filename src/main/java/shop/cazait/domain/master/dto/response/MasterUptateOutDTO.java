@@ -1,14 +1,13 @@
-package shop.cazait.domain.master.dto.patch;
+package shop.cazait.domain.master.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
 @Schema(description = "마스터 수정 Response : 수정한 마스터 계정 정보")
 @Getter
 @Builder
-public class PatchMasterRes {
+public class MasterUptateOutDTO {
 
 	@Schema(description = "마스터 계정 ID")
 	private Long id;

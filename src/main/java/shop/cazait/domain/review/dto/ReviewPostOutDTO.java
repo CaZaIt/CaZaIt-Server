@@ -6,10 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.review.entity.Review;
 
+
+
 @Schema(description = "리뷰 수정 Response : 등록한 리뷰 내용")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class PostReviewRes {
+public class ReviewPostOutDTO {
     @Schema(description = "리뷰 ID")
     private Long reviewId;
 
@@ -26,8 +28,8 @@ public class PostReviewRes {
     private String content;
     private String createdAt;
 
-    public static PostReviewRes of(Review review) {
-        return PostReviewRes.builder()
+    public static ReviewPostOutDTO of(Review review) {
+        return ReviewPostOutDTO.builder()
                 .reviewId(review.getId())
                 .cafeId(review.getCafe().getId())
                 .userId(review.getUser().getId())
