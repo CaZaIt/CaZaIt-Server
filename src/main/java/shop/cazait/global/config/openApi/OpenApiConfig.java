@@ -8,14 +8,19 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.servers.Server;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springdoc.core.GroupedOpenApi;
 import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springdoc.core.filters.OpenApiMethodFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import shop.cazait.global.config.encrypt.NoAuth;
 
 @Configuration
 public class OpenApiConfig {
@@ -29,7 +34,7 @@ public class OpenApiConfig {
 
         Server localServer = new Server();
         localServer.setDescription("local");
-        localServer.setUrl("http://localhost:8080");
+        localServer.setUrl("http://localhost:8082");
 
         return new OpenAPI()
                 .info(getInfo())
@@ -37,29 +42,43 @@ public class OpenApiConfig {
 
     }
 
-
     private Info getInfo() {
         return new Info()
                 .title("CaZaIt REST API")
                 .description("CaZaIt API DOCS");
     }
 
+    //토큰 인증이 필요한 API 모음
     @Bean
     public GroupedOpenApi SecurityGroupOpenApi() {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 필요한 API")
-                .pathsToExclude("/api/auths/log-in","/api/auths/kakao/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname")
                 .addOpenApiCustomiser(buildSecurityOpenApi())
+                .addOpenApiMethodFilter(authFilter)
+                .pathsToExclude("/api/auths/refresh")
                 .build();
-}
+    }
 
+    //토큰 인증이 필요 없는 API 모음
     @Bean
     public GroupedOpenApi NonSecurityGroupOpenApi() {
         return GroupedOpenApi
                 .builder()
                 .group("토큰 인증 불필요한 API")
-                .pathsToMatch("/api/auths/log-in","/api/auths/kakao/**","/api/users/sign-up","/api/masters/sign-up","/api/users/email","/api/users/nickname", "/api/s3/**")
+                .addOpenApiMethodFilter(noAuthFilter)
+                .pathsToExclude("/api/auths/refresh")
+                .build();
+    }
+
+    //토큰 재발급 API만 따로 분류
+    @Bean
+    public GroupedOpenApi refreshTokenAPI() {
+        return GroupedOpenApi
+                .builder()
+                .group("토큰 재발급")
+                .addOpenApiCustomiser(buildSecurityOpenApi())
+                .pathsToMatch("/api/auths/refresh")
                 .build();
     }
 
@@ -75,5 +94,25 @@ public class OpenApiConfig {
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"))
                 .getComponents().addSecuritySchemes("Authorization", securityScheme);
     }
+
+    //NoAuth가 존재하는 API들을 필터링합니다 (토큰 인증 필요 x)
+    OpenApiMethodFilter noAuthFilter = ((method)-> {
+        if (method.getAnnotation(NoAuth.class) != null)
+            return true;
+        return false;
+        }
+    );
+
+    //NoAuth가 존재하지 않는 API들을 필터링합니다 (토큰 인증 필요)
+    OpenApiMethodFilter authFilter = ((method)-> {
+        if (method.getAnnotation(NoAuth.class) == null)
+            return true;
+        return false;
+        }
+    );
+
 }
+
+
+
 
