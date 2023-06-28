@@ -29,7 +29,7 @@ public class OpenApiConfig {
 
         Server localServer = new Server();
         localServer.setDescription("local");
-        localServer.setUrl("http://localhost:8080");
+        localServer.setUrl("http://localhost:8082");
 
         return new OpenAPI()
                 .info(getInfo())
