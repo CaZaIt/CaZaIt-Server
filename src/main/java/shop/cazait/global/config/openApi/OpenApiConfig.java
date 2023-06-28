@@ -75,5 +75,25 @@ public class OpenApiConfig {
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"))
                 .getComponents().addSecuritySchemes("Authorization", securityScheme);
     }
+
+    //NoAuth가 존재하는 API들을 필터링합니다 (토큰 인증 필요 x)
+    OpenApiMethodFilter noAuthFilter = ((method)-> {
+        if (method.getAnnotation(NoAuth.class) != null)
+            return true;
+        return false;
+        }
+    );
+
+    //NoAuth가 존재하지 않는 API들을 필터링합니다 (토큰 인증 필요)
+    OpenApiMethodFilter authFilter = ((method)-> {
+        if (method.getAnnotation(NoAuth.class) == null)
+            return true;
+        return false;
+        }
+    );
+
 }
+
+
+
 
