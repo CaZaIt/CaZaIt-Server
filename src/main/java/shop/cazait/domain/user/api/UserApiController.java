@@ -65,14 +65,13 @@ public class UserApiController {
     @PatchMapping("/{userId}")
     @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
     @Parameters({
-            @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1"),
-            @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
+            @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호"),
+            @Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken")}
     )
     public SuccessResponse<UserUpdateOutDTO> modifyUser(
-            @PathVariable(name = "userId") Long userIdx,
+            @PathVariable(name = "userId") UUID userIdx,
             @RequestBody @Valid UserUpdateInDTO userUpdateInDTO,
-            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
-            //jwtService.isValidRefreshToken(refreshToken);
+            @RequestHeader(value="Refresh-Token") String refreshToken) throws UserException {
 
             UserUpdateOutDTO userUpdateOutDTO = userService.modifyUser(userIdx, userUpdateInDTO, refreshToken);
             return new SuccessResponse<>(SUCCESS, userUpdateOutDTO);
