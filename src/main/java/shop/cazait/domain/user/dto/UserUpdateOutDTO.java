@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
+import java.util.UUID;
+
 @Schema(description = "유저 수정 Response : 수정 완료된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserUpdateOutDTO {
 
-    @Schema(description = "회원 id", example = "1")
-    private Long id;
+    @Schema(description = "회원 id")
+    private UUID id;
 
     @Schema(description = "비밀번호", example = "abc12345#!")
     private String password;

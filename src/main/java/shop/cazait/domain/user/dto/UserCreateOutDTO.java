@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
+import java.util.UUID;
+
 @Schema(description = "유저 정보 Response : 회원 가입된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserCreateOutDTO {
 
     @Schema(description = "회원 id", example = "1")
-    private Long id;
+    private UUID id;
 
     @Schema(description = "이메일", example = "12345@gmail.com")
     private String email;

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.review.entity.Review;
 
+import java.util.UUID;
 
 
 @Schema(description = "리뷰 수정 Response : 등록한 리뷰 내용")
@@ -19,7 +20,7 @@ public class ReviewPostOutDTO {
     private Long cafeId;
 
     @Schema(description = "유저 ID")
-    private Long userId;
+    private UUID userId;
 
     @Schema(description = "점수")
     private Integer score;

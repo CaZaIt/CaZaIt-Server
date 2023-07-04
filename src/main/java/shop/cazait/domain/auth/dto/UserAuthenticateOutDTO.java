@@ -10,14 +10,15 @@ import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.NotBlank;
+import java.util.UUID;
 
 @Schema(description = "유저 로그인 Response : 로그인 완료된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserAuthenticateOutDTO {
 
-    @Schema(description = "회원 id", example = "1")
-    private Long id;
+    @Schema(description = "회원 id")
+    private UUID id;
 
     @Schema(description = "이메일", example = "12345@gmail.com")
     private String email;

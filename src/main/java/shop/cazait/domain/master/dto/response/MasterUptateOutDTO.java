@@ -4,14 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Schema(description = "마스터 수정 Response : 수정한 마스터 계정 정보")
 @Getter
 @Builder
 public class MasterUptateOutDTO {
 
 	@Schema(description = "마스터 계정 ID")
-	private Long id;
-
+	private UUID id;
 	@Schema(description = "Master 이메일")
 	private String email;
 

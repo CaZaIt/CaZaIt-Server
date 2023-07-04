@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.review.entity.Review;
 
+import java.util.UUID;
 
 
 @Schema(description = "리뷰 하나 조회 Response : 해당 리뷰의 정보")
@@ -13,7 +14,7 @@ import shop.cazait.domain.review.entity.Review;
 @Builder(access = AccessLevel.PRIVATE)
 public class ReviewGetOutDTO {
     @Schema(description = "유저 ID")
-    private Long userId;
+    private UUID userId;
 
     @Schema(description = "카페 ID")
     private Long cafeId;

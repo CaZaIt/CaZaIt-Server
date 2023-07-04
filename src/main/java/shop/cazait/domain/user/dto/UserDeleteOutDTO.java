@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
+import java.util.UUID;
+
 @Schema(description = "유저 삭제 Response : 삭제 완료된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserDeleteOutDTO {
 
-    @Schema(name = "회원 id", example = "1")
-    private Long id;
+    @Schema(name = "회원 id")
+    private UUID id;
 
     @Schema(name = "이메일", example = "12345@gmail.com")
     private String email;
