@@ -44,6 +44,7 @@ public class ReviewApiController {
     private final ReviewDaoService reviewDaoService;
     private final ReviewProvideService reviewProvideService;
 
+    @NoAuth
     @GetMapping("/{cafeId}/all")
     @Operation(summary = "리뷰 전체 조회", description = "카페 ID를 받아 해당 카페의 리뷰 목록 반환 (성공: 200, 리뷰 없음: 204, 존재하지 않는 카페: 404)")
     @Parameters({
@@ -67,6 +68,7 @@ public class ReviewApiController {
         return new SuccessResponse<>(resultStatus, getReviewsRes);
     }
 
+    @NoAuth
     @GetMapping("/{cafeId}/score")
     @Operation(summary = "카페 평점 조회", description = "카페 ID를 받아 해당 카페의 평점 반환 (성공: 200, 존재하지 않는 카페: 404)")
     @Parameter(name = "cafeId", description = "카페 ID")
@@ -76,6 +78,7 @@ public class ReviewApiController {
         return new SuccessResponse<>(SUCCESS, averageScore);
     }
 
+    @NoAuth
     @GetMapping("/{reviewId}")
     @Operation(summary = "리뷰 하나 조회", description = "리뷰 ID를 받아 해당 리뷰 조회 (성공: 200, 존재하지 않는 리뷰: 404)")
     @Parameter(name = "reviewId", description = "리뷰 ID")
