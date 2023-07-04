@@ -24,7 +24,7 @@ import shop.cazait.global.common.status.BaseStatus;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Master extends BaseEntity {
-	
+
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
