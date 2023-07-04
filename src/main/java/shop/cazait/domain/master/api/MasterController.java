@@ -45,7 +45,6 @@ import shop.cazait.global.config.encrypt.NoAuth;
 public class MasterController {
 
 	private final MasterService masterService;
-	private final JwtService jwtService;
 
 	@NoAuth
 	@PostMapping("/sign-up")
