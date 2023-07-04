@@ -57,10 +57,7 @@ public class UserApiController {
     @GetMapping("/{userId}")
     @Operation(summary = "특정 회원 정보를 조회", description ="자신의 계정 정보를 조회")
     @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
-    public SuccessResponse<UserFindOutDTO> getUser(
-             @PathVariable(name = "userId") UUID userIdx) throws UserException {
-        System.out.println("UUID userIdx = " + userIdx);
-        System.out.println("userIdx.toString() = " + userIdx.toString());
+    public SuccessResponse<UserFindOutDTO> getUser(@PathVariable(name = "userId") UUID userIdx) throws UserException {
         UserFindOutDTO userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
