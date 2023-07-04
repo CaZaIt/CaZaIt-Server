@@ -64,23 +64,23 @@ public class MasterController {
 	@PatchMapping("/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
 	@Parameters({
-		@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호", example = "1"),
-		@Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
+		@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호"),
+		@Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken")}
 	)
 	public SuccessResponse<String> updateMaster(
-		@PathVariable(name = "masterId") long masterId,
+		@PathVariable(name = "masterId") UUID masterId,
 		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO,
-		@RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException {
+		@RequestHeader(value = "Refresh-Token") String refreshToken) throws UserException {
 
 		masterService.updateMaster(masterId, masterUpdateInDTO);
 		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{masterId}")
 	@Operation(summary = "마스터 계정 탈퇴", description = "특정 ID의 마스터 계정을 삭제한다.")
-	@Parameter(name = "masterId", description = "탈퇴하고자 하는 마스터 ID 번호", example = "1")
-	public SuccessResponse<String> deleteMaster(@Validated @PathVariable Long id) throws MasterException {
-		masterService.removeMaster(id);
+	@Parameter(name = "masterId", description = "탈퇴하고자 하는 마스터 ID 번호")
+	public SuccessResponse<String> deleteMaster(@Validated @PathVariable UUID masterId) throws MasterException {
+		masterService.removeMaster(masterId);
 		String response = "회원 탈퇴가 성공하였습니다.";
 		return new SuccessResponse<>(SUCCESS, response);
 	}
