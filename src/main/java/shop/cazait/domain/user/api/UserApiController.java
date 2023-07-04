@@ -11,6 +11,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -55,9 +56,11 @@ public class UserApiController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "특정 회원 정보를 조회", description ="자신의 계정 정보를 조회")
-    @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
+    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
     public SuccessResponse<UserFindOutDTO> getUser(
-             @PathVariable(name = "userId") Long userIdx) throws UserException {
+             @PathVariable(name = "userId") UUID userIdx) throws UserException {
+        System.out.println("UUID userIdx = " + userIdx);
+        System.out.println("userIdx.toString() = " + userIdx.toString());
         UserFindOutDTO userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
@@ -80,8 +83,8 @@ public class UserApiController {
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
-    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호",example="1")
-    public SuccessResponse<UserDeleteOutDTO> deleteUser(@PathVariable(name = "userId") Long userIdx) throws UserException {
+    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
+    public SuccessResponse<UserDeleteOutDTO> deleteUser(@PathVariable(name = "userId") UUID userIdx) throws UserException {
         UserDeleteOutDTO userDeleteOutDTO = userService.deleteUser(userIdx);
         return new SuccessResponse<>(SUCCESS, userDeleteOutDTO);
     }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -81,7 +82,7 @@ public class CafeController {
             @Parameter(name = "sort", description = "정렬 기준(congestion: 혼잡도순, distance: 거리순)"),
             @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
-    public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByStatus(@PathVariable Long userId,
+    public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByStatus(@PathVariable UUID userId,
                                                                        @RequestParam String longitude,
                                                                        @RequestParam String latitude,
                                                                        @RequestParam String sort,
@@ -152,7 +153,7 @@ public class CafeController {
             @Parameter(name = "limit", description = "제한 거리(0일 때는 모든 카페 출력) : 해당 거리 내에 있는 카페 전달, 단위는 m(미터)")
     })
     public SuccessResponse<List<List<CafeListOutDTO>>> findCafesByName(@PathVariable String cafeName,
-                                                                     @PathVariable Long userId,
+                                                                     @PathVariable UUID userId,
                                                                      @RequestParam String longitude,
                                                                      @RequestParam String latitude,
                                                                      @RequestParam String sort,

@@ -32,8 +32,10 @@ import shop.cazait.domain.review.service.ReviewDaoService;
 import shop.cazait.domain.review.service.ReviewProvideService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
+import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.status.SuccessStatus;
 
+import java.util.UUID;
 
 
 @RestController
@@ -94,7 +96,7 @@ public class ReviewApiController {
             @Parameter(name = "userId", description = "유저 ID"),
             @Parameter(name = "cafeId", description = "카페 ID")
     })
-    public SuccessResponse<ReviewPostOutDTO> addReview(@PathVariable Long userId,
+    public SuccessResponse<ReviewPostOutDTO> addReview(@PathVariable UUID userId,
                                                        @PathVariable Long cafeId,
                                                        @RequestBody @Valid ReviewPostInDTO postReviewReq)
             throws UserException, CafeException, ReviewException {
