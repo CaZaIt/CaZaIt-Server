@@ -66,9 +66,7 @@ public class UserService {
     public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (userRepository.findByEmail(userAuthenticateInDTO.getEmail()).isEmpty()) {
-            throw new UserException(FAILED_TO_LOGIN);
-        }
+        userRepository.findByEmail(userAuthenticateInDTO.getEmail()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
 
         User findUser = userRepository.findByEmail(userAuthenticateInDTO.getEmail()).get();
 
@@ -98,31 +96,21 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserFindOutDTO> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        List<UserFindOutDTO> userListsRes = new ArrayList<>();
-
-        for (User user : allUsers) {
-            UserFindOutDTO of = UserFindOutDTO.of(user);
-            userListsRes.add(of);
-        }
-
-        return userListsRes;
+        return  allUsers.stream()
+                .map(UserFindOutDTO::of)
+                .toList();
     }
 
     @Transactional(readOnly = true)
-    public UserFindOutDTO getUserInfo(Long userIdx) throws UserException {
-        if (userRepository.findById(userIdx).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
-        }
+    public UserFindOutDTO getUserInfo(UUID userIdx) throws UserException {
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
         User findUser = userRepository.findById(userIdx).get();
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO modifyUser(Long userIdx, UserUpdateInDTO userUpdateInDTO, String refreshToken) throws UserException {
+    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO, String refreshToken) throws UserException {
         User modifyUser = userUpdateInDTO.toEntity();
-        if (userRepository.findById(userIdx).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
-        }
-
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
 
         User existUser = User.builder()
                 .id(userIdx)
@@ -135,10 +123,8 @@ public class UserService {
         return UserUpdateOutDTO.of(existUser);
     }
 
-    public UserDeleteOutDTO deleteUser(Long userIdx) throws UserException {
-        if (userRepository.findById(userIdx).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
-        }
+    public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
 
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
