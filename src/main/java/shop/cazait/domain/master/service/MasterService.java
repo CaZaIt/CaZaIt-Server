@@ -134,7 +134,7 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보 업데이트
-	public MasterUptateOutDTO updateMaster(long id, MasterUpdateInDTO masterUpdateInDTO) {
+	public MasterUptateOutDTO updateMaster(UUID id, MasterUpdateInDTO masterUpdateInDTO) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		Master updateMaster = masterRepository.save(findMaster);
 		return MasterUptateOutDTO.builder()
@@ -147,7 +147,7 @@ public class MasterService {
 	}
 
 	// 회원 탈퇴하기
-	public void removeMaster(Long id) throws MasterException {
+	public void removeMaster(UUID id) throws MasterException {
 		Master master = masterRepository.findMasterById(id).get();
 
 		if (masterRepository.findMasterById(id).isEmpty()) {

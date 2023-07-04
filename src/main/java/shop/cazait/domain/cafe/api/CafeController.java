@@ -36,13 +36,13 @@ import static shop.cazait.global.error.status.SuccessStatus.*;
 public class CafeController {
 
     private final CafeService cafeService;
-    private final JwtService jwtService;
+
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "카페 등록", description = "master가 카페를 등록한다.")
     @Parameter(name = "masterId", description = "마스터 ID")
-    public SuccessResponse<CafeUpdateOutDTO> createCafe(@PathVariable Long masterId,
+    public SuccessResponse<CafeUpdateOutDTO> createCafe(@PathVariable UUID masterId,
                                                      @Parameter(description = "카페 정보", example = "{\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"}")
                                                 @RequestParam @Valid String cafeInfo,
                                                      @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> images)
@@ -174,7 +174,7 @@ public class CafeController {
             @Parameter(name = "masterId", description = "마스터 ID")
     })
     public SuccessResponse<CafeUpdateOutDTO> updateCafe(@PathVariable Long cafeId,
-                                                        @PathVariable Long masterId,
+                                                        @PathVariable UUID masterId,
                                                         @RequestBody @Valid CafeCreateInDTO cafeReq) throws CafeException, JsonProcessingException {
         CafeUpdateOutDTO cafeUpdateOutDTO = cafeService.updateCafe(cafeId, masterId, cafeReq);
         return new SuccessResponse<>(SUCCESS, cafeUpdateOutDTO);
@@ -188,7 +188,7 @@ public class CafeController {
             @Parameter(name = "masterId", description = "마스터 ID")
     })
     public SuccessResponse<String> deleteCafe(@PathVariable Long cafeId,
-                                              @PathVariable Long masterId) throws CafeException {
+                                              @PathVariable UUID masterId) throws CafeException {
         cafeService.deleteCafe(cafeId, masterId);
         return new SuccessResponse<>(SUCCESS,"카페 삭제 완료");
     }

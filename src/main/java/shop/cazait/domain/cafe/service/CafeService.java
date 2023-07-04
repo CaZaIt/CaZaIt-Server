@@ -51,7 +51,7 @@ public class CafeService {
     /**
      * 카페 등록 좌표와 도로명 주소 받기 -> 카페 생성 -> 초기 혼잡도 등록 -> 이미지 S3 업로드 -> 이미지 객체  -> 마스터 계정에 카페 설정
      */
-    public CafeUpdateOutDTO createCafe(Long masterId, CafeCreateInDTO cafeReq, List<MultipartFile> imageFiles)
+    public CafeUpdateOutDTO createCafe(UUID masterId, CafeCreateInDTO cafeReq, List<MultipartFile> imageFiles)
             throws JsonProcessingException {
 
         // 좌표와 도로명 주소 받기
@@ -157,7 +157,7 @@ public class CafeService {
         return getCafesResList;
     }
 
-    public CafeUpdateOutDTO updateCafe(Long cafeId, Long masterId, CafeCreateInDTO cafeReq)
+    public CafeUpdateOutDTO updateCafe(Long cafeId, UUID masterId, CafeCreateInDTO cafeReq)
             throws CafeException, JsonProcessingException {
 
         Coordinate coordinate = coordinateService.createCoordinate(cafeReq);
@@ -175,7 +175,7 @@ public class CafeService {
         return CafeUpdateOutDTO.of(cafe, cafeImageGetOutDTOList);
     }
 
-    public void deleteCafe(Long cafeId, Long masterId) throws CafeException {
+    public void deleteCafe(Long cafeId, UUID masterId) throws CafeException {
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         Master master = masterRepository.findById(masterId)
                 .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));

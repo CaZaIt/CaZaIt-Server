@@ -11,9 +11,9 @@ import shop.cazait.domain.master.entity.Master;
 import shop.cazait.global.common.status.BaseStatus;
 
 @Repository
-public interface MasterRepository extends JpaRepository<Master, Integer> {
+public interface MasterRepository extends JpaRepository<Master, UUID> {
 
-	Optional<Master> findMasterById(long id);
+	Optional<Master> findMasterById(UUID id);
 
 	Optional<Master> findMasterByEmail(String email);
 
@@ -23,6 +23,5 @@ public interface MasterRepository extends JpaRepository<Master, Integer> {
 
 	List<Master> findMasterByStatus(BaseStatus status);
 
-	Optional<Master> findById(Long id);
 	Optional<Master> findById(UUID id);
 }

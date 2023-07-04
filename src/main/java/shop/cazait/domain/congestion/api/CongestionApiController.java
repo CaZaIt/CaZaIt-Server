@@ -19,6 +19,8 @@ import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.error.status.SuccessStatus;
 
+import java.util.UUID;
+
 @Tag(name = "혼잡도 API")
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +28,6 @@ import shop.cazait.global.error.status.SuccessStatus;
 public class CongestionApiController {
 
     private final CongestionService congestionService;
-    private final JwtService jwtService;
 
     @Operation(summary = "혼잡도 등록 및 수정", description = "마스터 ID, 카페 ID, 혼잡도 상태를 받아 혼잡도를 수정 또는 등록한다.")
     @Parameters({
@@ -34,7 +35,7 @@ public class CongestionApiController {
             @Parameter(name = "cafeId", description = "혼잡도를 등록 또는 수정할 카페 ID")
     })
     @PostMapping("/master/{masterId}/cafe/{cafeId}")
-    public SuccessResponse<CongestionUpdateOutDTO> addCongestion(@PathVariable Long masterId,
+    public SuccessResponse<CongestionUpdateOutDTO> addCongestion(@PathVariable UUID masterId,
                                                                  @PathVariable Long cafeId,
                                                                  @RequestBody @Valid CongestionUpdateInDTO congestionUpdateInDTO)
             throws CongestionException {

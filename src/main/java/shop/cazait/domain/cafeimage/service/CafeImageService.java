@@ -22,6 +22,7 @@ import shop.cazait.global.error.status.ErrorStatus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class CafeImageService {
     private final MasterRepository masterRepository;
     private final AwsS3Service awsS3Service;
 
-    public void createCafeImage(Long cafeId, Long masterId, List<MultipartFile> imageFiles) throws CafeException {
+    public void createCafeImage(Long cafeId, UUID masterId, List<MultipartFile> imageFiles) throws CafeException {
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
@@ -99,7 +100,7 @@ public class CafeImageService {
         return getCafeImageResList;
     }
 
-    public void deleteCafeImage(Long cafeImageId, Long masterId) throws CafeImageException {
+    public void deleteCafeImage(Long cafeImageId, UUID masterId) throws CafeImageException {
         CafeImage cafeImage = cafeImageRepository.findById(cafeImageId).orElseThrow(() -> new CafeImageException(ErrorStatus.NOT_EXIST_IMAGE));
         Master master = masterRepository.findById(masterId).orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         if (!(master.getCafe().getId().equals(cafeImage.getCafe().getId()))) {
