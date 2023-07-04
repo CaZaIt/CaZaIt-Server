@@ -1,6 +1,6 @@
 package shop.cazait.domain.user.service;
 
-import static shop.cazait.domain.auth.Role.USER;
+
 import static shop.cazait.global.error.status.ErrorStatus.EXIST_EMAIL;
 import static shop.cazait.global.error.status.ErrorStatus.EXIST_NICKNAME;
 import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
@@ -14,6 +14,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -66,16 +67,14 @@ public class UserService {
     public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (userRepository.findByEmail(userAuthenticateInDTO.getEmail()).isEmpty()) {
-            throw new UserException(FAILED_TO_LOGIN);
-        }
+        userRepository.findByEmail(userAuthenticateInDTO.getEmail()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
 
         User findUser = userRepository.findByEmail(userAuthenticateInDTO.getEmail()).get();
 
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
 
-        Long userIdx;
+        UUID userIdx;
         if (password.equals(userAuthenticateInDTO.getPassword())) {
             userIdx = findUser.getId();
 
@@ -98,31 +97,21 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserFindOutDTO> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        List<UserFindOutDTO> userListsRes = new ArrayList<>();
-
-        for (User user : allUsers) {
-            UserFindOutDTO of = UserFindOutDTO.of(user);
-            userListsRes.add(of);
-        }
-
-        return userListsRes;
+        return  allUsers.stream()
+                .map(UserFindOutDTO::of)
+                .toList();
     }
 
     @Transactional(readOnly = true)
-    public UserFindOutDTO getUserInfo(Long userIdx) throws UserException {
-        if (userRepository.findById(userIdx).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
-        }
+    public UserFindOutDTO getUserInfo(UUID userIdx) throws UserException {
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
         User findUser = userRepository.findById(userIdx).get();
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO modifyUser(Long userIdx, UserUpdateInDTO userUpdateInDTO, String refreshToken) throws UserException {
+    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO, String refreshToken) throws UserException {
         User modifyUser = userUpdateInDTO.toEntity();
-        if (userRepository.findById(userIdx).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
-        }
-
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
 
         User existUser = User.builder()
                 .id(userIdx)
@@ -135,10 +124,8 @@ public class UserService {
         return UserUpdateOutDTO.of(existUser);
     }
 
-    public UserDeleteOutDTO deleteUser(Long userIdx) throws UserException {
-        if (userRepository.findById(userIdx).isEmpty()) {
-            throw new UserException(NOT_EXIST_USER);
-        }
+    public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
 
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
@@ -150,7 +137,7 @@ public class UserService {
         if (!userRepository.findByEmail(email).isEmpty()) {
             throw new UserException(EXIST_EMAIL);
         }
-        return new SuccessResponse(SIGNUP_AVAILABLE, email);
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, email);
     }
 
     public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
@@ -158,7 +145,8 @@ public class UserService {
         if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
             throw new UserException(EXIST_NICKNAME);
         }
-        return new SuccessResponse(SIGNUP_AVAILABLE, nickname);
+
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, nickname);
     }
 
 
@@ -222,7 +210,7 @@ public class UserService {
     public UserAuthenticateOutDTO reIssueTokens(String accessToken, String refreshToken) throws UserException{
 
         User user = null;
-        Long userIdx = jwtService.getUserIdx(accessToken);
+        UUID userIdx = jwtService.getUserIdx(accessToken);
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
 
@@ -258,7 +246,7 @@ public class UserService {
         return UserAuthenticateOutDTO.of(user,accessToken,refreshToken,"user");
     }
     public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException{
-        Long userIdx = jwtService.getUserIdx(accessToken);
+        UUID userIdx = jwtService.getUserIdx(accessToken);
         User user = userRepository.findById(userIdx).get();
         String tokenFromDB = user.getRefreshToken();
         log.info("userIdx from accessToken: "+userIdx);

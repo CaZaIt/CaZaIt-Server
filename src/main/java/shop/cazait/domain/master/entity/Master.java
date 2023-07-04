@@ -13,11 +13,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.global.common.status.BaseStatus;
 
-;
+;import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,8 +26,10 @@ import shop.cazait.global.common.status.BaseStatus;
 public class Master extends BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@Column(columnDefinition = "BINARY(16)")
+	private UUID id;
 
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -45,7 +48,7 @@ public class Master extends BaseEntity {
 	private Cafe cafe;
 
 	@Builder
-	public Master(Long id, String email, String password, String nickname, String refreshToken, Cafe cafe) {
+	public Master(UUID id, String email, String password, String nickname, String refreshToken, Cafe cafe) {
 		this.id =id;
 		this.email = email;
 		this.password = password;

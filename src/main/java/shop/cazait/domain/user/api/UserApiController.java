@@ -11,6 +11,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.UUID;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -55,9 +56,8 @@ public class UserApiController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "특정 회원 정보를 조회", description ="자신의 계정 정보를 조회")
-    @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1")
-    public SuccessResponse<UserFindOutDTO> getUser(
-             @PathVariable(name = "userId") Long userIdx) throws UserException {
+    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
+    public SuccessResponse<UserFindOutDTO> getUser(@PathVariable(name = "userId") UUID userIdx) throws UserException {
         UserFindOutDTO userInfoRes = userService.getUserInfo(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
@@ -65,14 +65,13 @@ public class UserApiController {
     @PatchMapping("/{userId}")
     @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
     @Parameters({
-            @Parameter(name = "userIdx", description = "response로 발급 받은 계정 ID번호",example="1"),
-            @Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
+            @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호"),
+            @Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken")}
     )
     public SuccessResponse<UserUpdateOutDTO> modifyUser(
-            @PathVariable(name = "userId") Long userIdx,
+            @PathVariable(name = "userId") UUID userIdx,
             @RequestBody @Valid UserUpdateInDTO userUpdateInDTO,
-            @RequestHeader(value="REFRESH-TOKEN") String refreshToken) throws UserException {
-            //jwtService.isValidRefreshToken(refreshToken);
+            @RequestHeader(value="Refresh-Token") String refreshToken) throws UserException {
 
             UserUpdateOutDTO userUpdateOutDTO = userService.modifyUser(userIdx, userUpdateInDTO, refreshToken);
             return new SuccessResponse<>(SUCCESS, userUpdateOutDTO);
@@ -81,8 +80,8 @@ public class UserApiController {
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
-    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호",example="1")
-    public SuccessResponse<UserDeleteOutDTO> deleteUser(@PathVariable(name = "userId") Long userIdx) throws UserException {
+    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
+    public SuccessResponse<UserDeleteOutDTO> deleteUser(@PathVariable(name = "userId") UUID userIdx) throws UserException {
         UserDeleteOutDTO userDeleteOutDTO = userService.deleteUser(userIdx);
         return new SuccessResponse<>(SUCCESS, userDeleteOutDTO);
     }

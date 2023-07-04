@@ -6,6 +6,8 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_REVIEW;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,7 @@ public class ReviewDaoService {
     private final ReviewRepository reviewRepository;
 
 
-    public ReviewPostOutDTO addReview(Long userId, Long cafeId, ReviewPostInDTO postReviewReq)
+    public ReviewPostOutDTO addReview(UUID userId, Long cafeId, ReviewPostInDTO postReviewReq)
             throws CafeException, UserException {
         User user = getUserReference(userId);
         Cafe cafe = getCafeReference(cafeId);
@@ -55,7 +57,7 @@ public class ReviewDaoService {
         }
     }
 
-    private User getUserReference(Long id) throws UserException {
+    private User getUserReference(UUID id) throws UserException {
         try {
             User user = userRepository.findById(id).get();
             return user;

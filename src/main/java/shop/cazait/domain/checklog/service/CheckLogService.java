@@ -4,6 +4,7 @@ import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class CheckLogService {
      * 최근 본 카페 기록 조회
      */
     @Transactional(readOnly = true)
-    public List<GetCheckLogRes> getVisitLog(Long userId) {
+    public List<GetCheckLogRes> getVisitLog(UUID userId) {
 
         List<CheckLog> visitLogs = checkLogRepository.findVisitLogByUserId(userId).orElse(null);
         List<Favorites> favorites = favoritesRepository.findAllByUserId(userId).get();
@@ -57,7 +58,7 @@ public class CheckLogService {
     /**
      * 최근 본 카페 등록
      */
-    public String addVisitLog(Long userId, Long cafeId) throws CafeException, UserException {
+    public String addVisitLog(UUID userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -70,7 +71,7 @@ public class CheckLogService {
         return "방문 기록 등록 완료.";
     }
 
-    private User getUser(Long userId) throws UserException {
+    private User getUser(UUID userId) throws UserException {
         try {
             return userRepository.getReferenceById(userId);
         } catch (EntityNotFoundException exception) {

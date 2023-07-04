@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +38,7 @@ public class CafeImageController {
             @Parameter(name = "masterId", description = "마스터 ID")
     })
     public SuccessResponse<String> createCafeImage(@PathVariable Long cafeId,
-                                                @PathVariable Long masterId,
+                                                @PathVariable UUID masterId,
                                                 @Parameter(description = "카페 이미지") @RequestPart List<MultipartFile> cafeImages) throws CafeException {
         cafeImageService.createCafeImage(cafeId, masterId, cafeImages);
         return new SuccessResponse<>(SUCCESS,"카페 이미지 등록 완료");
@@ -49,7 +51,7 @@ public class CafeImageController {
             @Parameter(name = "masterId", description = "마스터 ID")
     })
     public SuccessResponse<String> deleteCafeImage(@PathVariable Long cafeImageId,
-                                                   @PathVariable Long masterId) throws CafeImageException {
+                                                   @PathVariable UUID masterId) throws CafeImageException {
         cafeImageService.deleteCafeImage(cafeImageId, masterId);
         return new SuccessResponse<>(SUCCESS,"카페 이미지 삭제 완료");
     }

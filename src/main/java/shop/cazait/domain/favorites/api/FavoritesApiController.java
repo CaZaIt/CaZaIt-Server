@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public class FavoritesApiController {
             @Parameter(name = "userId", description = "즐겨찾기를 등록할 유저 ID"),
             @Parameter(name = "cafeId", description = "즐겨찾기로 등록할 카페 ID")
     })
-    public SuccessResponse<FavoritesCreateOutDTO> addFavorites(@PathVariable Long userId,
+    public SuccessResponse<FavoritesCreateOutDTO> addFavorites(@PathVariable UUID userId,
                                                                @PathVariable Long cafeId)
             throws CafeException, UserException {
         return new SuccessResponse<>(CREATE_FAVORITES, favoritesService.addFavorites(userId, cafeId));
@@ -45,7 +47,7 @@ public class FavoritesApiController {
     @GetMapping("/user/{userId}")
     @Operation(summary = "즐겨찾기 조회", description = "유저 ID를 받아 모든 즐겨찾기를 조회한다.")
     @Parameter(name = "userId", description = "즐겨찾기를 조회할 유저 ID")
-    public SuccessResponse<List<FavoritesListOutDTO>> getFavorites(@PathVariable Long userId) {
+    public SuccessResponse<List<FavoritesListOutDTO>> getFavorites(@PathVariable UUID userId) {
 
         List<FavoritesListOutDTO> result = favoritesService.getFavorites(userId);
         SuccessStatus resultStatus = SUCCESS;
@@ -63,7 +65,7 @@ public class FavoritesApiController {
             @Parameter(name= "cafeId", description = "카페 ID")
     })
     @DeleteMapping("/delete/{userId}/{cafeId}")
-    public SuccessResponse<String> deleteFavorites(@PathVariable Long userId, @PathVariable Long cafeId) {
+    public SuccessResponse<String> deleteFavorites(@PathVariable UUID userId, @PathVariable Long cafeId) {
         return new SuccessResponse<>(SUCCESS, favoritesService.deleteFavorites(userId, cafeId));
     }
 
