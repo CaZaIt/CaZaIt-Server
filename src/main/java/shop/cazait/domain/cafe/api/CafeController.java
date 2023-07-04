@@ -87,7 +87,7 @@ public class CafeController {
                                                                        @RequestParam String sort,
                                                                        @RequestParam String limit)
             throws UserException {
-        jwtService.isValidAccessTokenId(userId);
+
         List<List<CafeListOutDTO>> cafeResList = cafeService.findCafesByStatus(userId, longitude, latitude, sort, limit);
         SuccessStatus resultStatus = SUCCESS;
         if (cafeResList.get(0).isEmpty()) {
@@ -111,9 +111,9 @@ public class CafeController {
             @Parameter(name = "userId", description = "유저 ID"),
             @Parameter(name = "cafeId", description = "카페 ID")
     })
-    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable Long userId,
+    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable UUID userId,
                                                       @PathVariable Long cafeId) throws CafeException, UserException {
-        jwtService.isValidAccessTokenId(userId);
+
         CafeGetOutDTO cafeRes = cafeService.getCafe(userId, cafeId);
         return new SuccessResponse<>(SUCCESS, cafeRes);
     }
@@ -157,7 +157,7 @@ public class CafeController {
                                                                      @RequestParam String latitude,
                                                                      @RequestParam String sort,
                                                                      @RequestParam String limit) throws CafeException, UserException {
-        jwtService.isValidAccessTokenId(userId);
+
         List<List<CafeListOutDTO>> cafeResList = cafeService.findCafesByName(cafeName, userId, longitude, latitude, sort, limit);
         SuccessStatus resultStatus = SUCCESS;
         if (cafeResList.get(0).isEmpty()) {

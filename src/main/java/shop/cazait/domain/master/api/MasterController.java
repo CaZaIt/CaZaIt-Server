@@ -68,10 +68,10 @@ public class MasterController {
 		@Parameter(name = "REFRESH-TOKEN", description = "발급 받은 refreshtoken")}
 	)
 	public SuccessResponse<String> updateMaster(
-		@PathVariable(name = "masterId") Long masterId,
+		@PathVariable(name = "masterId") long masterId,
 		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO,
 		@RequestHeader(value = "REFRESH-TOKEN") String refreshToken) throws UserException {
-		jwtService.isValidAccessTokenId(masterId);
+
 		masterService.updateMaster(masterId, masterUpdateInDTO);
 		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");
 	}
