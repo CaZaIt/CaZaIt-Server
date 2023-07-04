@@ -1,6 +1,6 @@
 package shop.cazait.domain.user.service;
 
-import static shop.cazait.domain.auth.Role.USER;
+
 import static shop.cazait.global.error.status.ErrorStatus.EXIST_EMAIL;
 import static shop.cazait.global.error.status.ErrorStatus.EXIST_NICKNAME;
 import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
@@ -14,6 +14,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -73,7 +74,7 @@ public class UserService {
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
 
-        Long userIdx;
+        UUID userIdx;
         if (password.equals(userAuthenticateInDTO.getPassword())) {
             userIdx = findUser.getId();
 
@@ -136,7 +137,7 @@ public class UserService {
         if (!userRepository.findByEmail(email).isEmpty()) {
             throw new UserException(EXIST_EMAIL);
         }
-        return new SuccessResponse(SIGNUP_AVAILABLE, email);
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, email);
     }
 
     public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
@@ -144,7 +145,8 @@ public class UserService {
         if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
             throw new UserException(EXIST_NICKNAME);
         }
-        return new SuccessResponse(SIGNUP_AVAILABLE, nickname);
+
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, nickname);
     }
 
 
@@ -208,7 +210,7 @@ public class UserService {
     public UserAuthenticateOutDTO reIssueTokens(String accessToken, String refreshToken) throws UserException{
 
         User user = null;
-        Long userIdx = jwtService.getUserIdx(accessToken);
+        UUID userIdx = jwtService.getUserIdx(accessToken);
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
 
@@ -244,7 +246,7 @@ public class UserService {
         return UserAuthenticateOutDTO.of(user,accessToken,refreshToken,"user");
     }
     public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException{
-        Long userIdx = jwtService.getUserIdx(accessToken);
+        UUID userIdx = jwtService.getUserIdx(accessToken);
         User user = userRepository.findById(userIdx).get();
         String tokenFromDB = user.getRefreshToken();
         log.info("userIdx from accessToken: "+userIdx);

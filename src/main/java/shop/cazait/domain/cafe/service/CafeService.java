@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -103,7 +104,7 @@ public class CafeService {
     }
 
     @Transactional(readOnly = true)
-    public List<List<CafeListOutDTO>> findCafesByStatus(Long userId, String longitude, String latitude, String sort, String limit) {
+    public List<List<CafeListOutDTO>> findCafesByStatus(UUID userId, String longitude, String latitude, String sort, String limit) {
         List<Cafe> cafeList = cafeRepository.findAll();
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<CafeListOutDTO> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
@@ -125,7 +126,7 @@ public class CafeService {
     }
 
     @Transactional(readOnly = true)
-    public CafeGetOutDTO getCafe(Long userId, Long cafeId) throws CafeException, UserException {
+    public CafeGetOutDTO getCafe(UUID userId, Long cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
         List<CafeImageGetOutDTO> cafeImageGetOutDTOList = cafeImageService.findCafeImagesByCafeId(cafeId);
@@ -147,7 +148,7 @@ public class CafeService {
     }
 
     @Transactional(readOnly = true)
-    public List<List<CafeListOutDTO>> findCafesByName(String name, Long userId, String longitude, String latitude, String sort, String limit) throws CafeException {
+    public List<List<CafeListOutDTO>> findCafesByName(String name, UUID userId, String longitude, String latitude, String sort, String limit) throws CafeException {
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
         cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
         List<CafeListOutDTO> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
@@ -201,7 +202,7 @@ public class CafeService {
         return cafeResList;
     }
 
-    private List<CafeListOutDTO> readCafeList(Long userId, List<Cafe> cafeList, String longitude, String latitude) {
+    private List<CafeListOutDTO> readCafeList(UUID userId, List<Cafe> cafeList, String longitude, String latitude) {
         List<Favorites> favoritesList = favoritesRepository.findAllByUserId(userId).get();
         List<CafeListOutDTO> cafeResList = cafeList.stream()
                 .map(cafe -> {

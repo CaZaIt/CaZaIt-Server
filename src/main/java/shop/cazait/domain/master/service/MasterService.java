@@ -8,6 +8,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -95,7 +96,7 @@ public class MasterService {
 
 		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
 
-		Long masterIdx;
+		UUID masterIdx;
 		if (password.equals(dto.getPassword())) {
 			masterIdx = findMaster.getId();
 			String jwt = jwtService.createJwt(masterIdx);
@@ -133,7 +134,7 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보 업데이트
-	public MasterUptateOutDTO updateMaster(Long id, MasterUpdateInDTO masterUpdateInDTO) {
+	public MasterUptateOutDTO updateMaster(long id, MasterUpdateInDTO masterUpdateInDTO) {
 		Master findMaster = masterRepository.findMasterById(id).get();
 		Master updateMaster = masterRepository.save(findMaster);
 		return MasterUptateOutDTO.builder()
@@ -162,7 +163,7 @@ public class MasterService {
 		UserException {
 
 		Master master = null;
-		Long masterIdx = null;
+		UUID masterIdx = null;
 
 		log.info("accessToken = " + accessToken);
 		log.info("refreshToken = " + refreshToken);

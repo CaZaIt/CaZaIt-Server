@@ -8,6 +8,8 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 추가
      */
-    public FavoritesCreateOutDTO addFavorites(Long userId, Long cafeId) throws CafeException, UserException {
+    public FavoritesCreateOutDTO addFavorites(UUID userId, Long cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -54,7 +56,7 @@ public class FavoritesService {
 
     }
 
-    private User getUser(Long userId) throws UserException {
+    private User getUser(UUID userId) throws UserException {
         try {
             User user = userRepository.findById(userId).get();
             return user;
@@ -77,7 +79,7 @@ public class FavoritesService {
      * 즐겨찾기 조회
      */
     @Transactional(readOnly = true)
-    public List<FavoritesListOutDTO> getFavorites(Long userId) {
+    public List<FavoritesListOutDTO> getFavorites(UUID userId) {
 
         List<Favorites> favorites = favoritesRepository.findAllByUserId(userId).orElse(null);
 
@@ -88,7 +90,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 삭제
      */
-    public String deleteFavorites(Long userId, Long cafeId) {
+    public String deleteFavorites(UUID userId, Long cafeId) {
 
         Favorites favorites = favoritesRepository
                 .findAllByUserIdAndCafeId(userId, cafeId)
