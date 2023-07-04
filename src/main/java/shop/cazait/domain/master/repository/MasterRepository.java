@@ -2,6 +2,7 @@ package shop.cazait.domain.master.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,5 @@ public interface MasterRepository extends JpaRepository<Master, Integer> {
 	List<Master> findMasterByStatus(BaseStatus status);
 
 	Optional<Master> findById(Long id);
+	Optional<Master> findById(UUID id);
 }
