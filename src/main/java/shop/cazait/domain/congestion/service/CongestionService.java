@@ -71,7 +71,7 @@ public class CongestionService {
 
         Congestion addCongestion = CongestionUpdateInDTO.toEntity(cafe, congestionStatus);
         congestionRepository.save(addCongestion);
-        cafe.changeCongestion(addCongestion);
+        cafe.updateCongestion(addCongestion);
         cafeRepository.save(cafe);
 
         return addCongestion;

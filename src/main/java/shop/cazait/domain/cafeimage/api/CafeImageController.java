@@ -30,20 +30,6 @@ public class CafeImageController {
 
     private final CafeImageService cafeImageService;
 
-    // todo: 이미지 등록은 카페 수정으로 대체해도 될 듯!
-    @PostMapping("/add/{cafeId}/master/{masterId}")
-    @Operation(summary = "카페 이미지 등록", description = "특정 ID를 갖는 카페의 이미지를 등록한다.")
-    @Parameters({
-            @Parameter(name = "cafeId", description = "카페 ID"),
-            @Parameter(name = "masterId", description = "마스터 ID")
-    })
-    public SuccessResponse<String> createCafeImage(@PathVariable Long cafeId,
-                                                @PathVariable UUID masterId,
-                                                @Parameter(description = "카페 이미지") @RequestPart List<MultipartFile> cafeImages) throws CafeException {
-        cafeImageService.createCafeImage(cafeId, masterId, cafeImages);
-        return new SuccessResponse<>(SUCCESS,"카페 이미지 등록 완료");
-    }
-
     @DeleteMapping("delete/{cafeImageId}/master/{masterId}")
     @Operation(summary = "카페 이미지 삭제", description = "특정 ID의 카페 이미지를 삭제한다.")
     @Parameters({

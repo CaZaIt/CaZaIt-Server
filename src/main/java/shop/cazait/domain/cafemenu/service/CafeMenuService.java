@@ -25,7 +25,6 @@ import shop.cazait.domain.cafemenu.dto.response.MenuCreateOutDTO;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 import shop.cazait.domain.cafemenu.exception.CafeMenuException;
 import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
-import shop.cazait.global.common.service.AwsS3Service;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,6 @@ public class CafeMenuService {
 
     private final CafeRepository cafeRepository;
     private final CafeMenuRepository cafeMenuRepository;
-    private final AwsS3Service awsS3Servicel;
 
     /**
      * 카페 메뉴 조회
@@ -58,7 +56,7 @@ public class CafeMenuService {
         Cafe findCafe = getCafe(cafeId);
 
         if (menuImage != null) {
-            uploadFileName = awsS3Servicel.uploadImage(menuImage);
+//            uploadFileName = awsS3Servicel.uploadImage(menuImage);
         }
 
         CafeMenu menu = MenuCreateInDTO.toEntity(findCafe, menuCreateInDTO, uploadFileName);
@@ -99,7 +97,7 @@ public class CafeMenuService {
         }
 
         if (menuImage.getName() != NOT_UPDATE_IMAGE) {
-            findMenu.changeImageUrl(awsS3Servicel.uploadImage(menuImage));
+//            findMenu.changeImageUrl(awsS3Servicel.uploadImage(menuImage));
         }
 
         CafeMenu updateCafeMenu = cafeMenuRepository.save(findMenu);

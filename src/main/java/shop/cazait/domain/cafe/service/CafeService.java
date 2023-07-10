@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import shop.cazait.domain.cafe.dto.CafeCreateOutDTO;
 import shop.cazait.domain.cafe.dto.CafeGetOutDTO;
 import shop.cazait.domain.cafe.dto.CafeListOutDTO;
 import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
@@ -22,9 +22,7 @@ import shop.cazait.domain.cafe.dto.CafeUpdateOutDTO;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.cafeimage.dto.CafeImageGetOutDTO;
 import shop.cazait.domain.cafeimage.service.CafeImageService;
-import shop.cazait.domain.checklog.service.CheckLogService;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 import shop.cazait.domain.coordinate.entity.Coordinate;
@@ -41,7 +39,6 @@ import shop.cazait.global.common.status.BaseStatus;
 @Transactional
 public class CafeService {
 
-    private final CheckLogService checkLogService;
     private final CoordinateService coordinateService;
     private final CafeImageService cafeImageService;
     private final CafeRepository cafeRepository;
@@ -51,34 +48,28 @@ public class CafeService {
     /**
      * 카페 등록 좌표와 도로명 주소 받기 -> 카페 생성 -> 초기 혼잡도 등록 -> 이미지 S3 업로드 -> 이미지 객체  -> 마스터 계정에 카페 설정
      */
-    public CafeUpdateOutDTO createCafe(UUID masterId, CafeCreateInDTO cafeReq, List<MultipartFile> imageFiles)
+    public CafeCreateOutDTO createCafe(CafeCreateInDTO req)
             throws JsonProcessingException {
 
         // 좌표와 도로명 주소 받기
-        Coordinate coordinate = coordinateService.createCoordinate(cafeReq);
+        Coordinate coordinate = coordinateService.createCoordinate(req);
 
         // 카페 생성
         Cafe cafe = Cafe.builder()
-                .name(cafeReq.getName())
-                .address(cafeReq.getAddress())
+                .name(req.getName())
+                .address(req.getAddress())
                 .coordinate(coordinate)
                 .build();
-
-        // 초기 혼잡도 등록
         cafe = initCongestion(cafe);
-
-        // 이미지 업로드 후 DB 저장
-        cafeImageService.saveCafeImage(cafe, imageFiles);
-
         cafeRepository.save(cafe);
 
-        Master master = masterRepository.findById(masterId)
+
+        Master master = masterRepository.findById(req.getMasterId())
                 .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
         master.setCafe(cafe);
+        masterRepository.save(master);
 
-        List<CafeImageGetOutDTO> cafeImageGetOutDTOList = cafeImageService.findCafeImagesByCafeId(cafe.getId());
-
-        return CafeUpdateOutDTO.of(cafe, cafeImageGetOutDTOList);
+        return CafeCreateOutDTO.of(cafe);
     }
 
     private Cafe initCongestion(Cafe cafe) {
@@ -95,8 +86,7 @@ public class CafeService {
      */
     @Transactional(readOnly = true)
     public List<List<CafeListOutDTO>> findCafesByStatusNoAuth(String longitude, String latitude, String sort, String limit) {
-        List<Cafe> cafeList = cafeRepository.findAll();
-        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        List<Cafe> cafeList = cafeRepository.findAllByStatus(BaseStatus.ACTIVE);
         List<CafeListOutDTO> getCafesRes = readCafeList(cafeList, longitude, latitude);
         getCafesRes = sortCafeList(getCafesRes, sort, limit);
         List<List<CafeListOutDTO>> getCafesResList = pageCafeList(getCafesRes);
@@ -105,8 +95,7 @@ public class CafeService {
 
     @Transactional(readOnly = true)
     public List<List<CafeListOutDTO>> findCafesByStatus(UUID userId, String longitude, String latitude, String sort, String limit) {
-        List<Cafe> cafeList = cafeRepository.findAll();
-        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        List<Cafe> cafeList = cafeRepository.findAllByStatus(BaseStatus.ACTIVE);
         List<CafeListOutDTO> getCafesRes = readCafeList(userId, cafeList, longitude, latitude);
         getCafesRes = sortCafeList(getCafesRes, sort, limit);
         List<List<CafeListOutDTO>> getCafesResList = pageCafeList(getCafesRes);
@@ -119,19 +108,22 @@ public class CafeService {
     @Transactional(readOnly = true)
     public CafeGetOutDTO getCafeNoAuth(Long cafeId) throws CafeException {
 
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
-        List<CafeImageGetOutDTO> cafeImageGetOutDTOList = cafeImageService.findCafeImagesByCafeId(cafeId);
-        String logResult = "";    // 최근 본 카페 등록
-        return CafeGetOutDTO.of(cafe, cafeImageGetOutDTOList, logResult);
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
+                () -> new CafeException(NOT_EXIST_CAFE)
+        );
+        List<String> cafeImages = cafeImageService.getCafeImages(cafe.getId());
+        return CafeGetOutDTO.of(cafe, cafeImages);
     }
 
     @Transactional(readOnly = true)
     public CafeGetOutDTO getCafe(UUID userId, Long cafeId) throws CafeException, UserException {
 
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
-        List<CafeImageGetOutDTO> cafeImageGetOutDTOList = cafeImageService.findCafeImagesByCafeId(cafeId);
-        String logResult = checkLogService.addVisitLog(userId, cafeId);    // 최근 본 카페 등록
-        return CafeGetOutDTO.of(cafe, cafeImageGetOutDTOList, logResult);
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
+                () -> new CafeException(NOT_EXIST_CAFE)
+        );
+        List<String> cafeImages = cafeImageService.getCafeImages(cafe.getId());
+        return CafeGetOutDTO.of(cafe, cafeImages);
+
     }
 
     /**
@@ -139,11 +131,16 @@ public class CafeService {
      */
     @Transactional(readOnly = true)
     public List<List<CafeListOutDTO>> findCafesByNameNoAuth(String name, String longitude, String latitude, String sort, String limit) throws CafeException {
+
         List<Cafe> cafeList = cafeRepository.findByNameContainingIgnoreCase(name);
-        cafeList.removeIf(cafe -> cafe.getStatus() == BaseStatus.INACTIVE);
+        cafeList.removeIf(
+                cafe -> cafe.getStatus() == BaseStatus.INACTIVE
+        );
+
         List<CafeListOutDTO> getCafesRes = readCafeList(cafeList, longitude, latitude);
         getCafesRes = sortCafeList(getCafesRes, sort, limit);
         List<List<CafeListOutDTO>> getCafesResList = pageCafeList(getCafesRes);
+
         return getCafesResList;
     }
 
@@ -162,17 +159,20 @@ public class CafeService {
 
         Coordinate coordinate = coordinateService.createCoordinate(cafeReq);
 
-        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
+        Cafe cafe = cafeRepository.findById(cafeId)
+                .orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
+
         Master master = masterRepository.findById(masterId)
                 .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
+
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
             throw new CafeException(NOT_OPERATE_CAFE);
         }
-        cafe.changeInfo(cafeReq, coordinate);
-        cafeRepository.save(cafe);
-        List<CafeImageGetOutDTO> cafeImageGetOutDTOList = cafeImageService.findCafeImagesByCafeId(cafe.getId());
 
-        return CafeUpdateOutDTO.of(cafe, cafeImageGetOutDTOList);
+        cafe.updateInformation(cafeReq, coordinate);
+        Cafe updateCafe = cafeRepository.save(cafe);
+
+        return CafeUpdateOutDTO.of(updateCafe);
     }
 
     public void deleteCafe(Long cafeId, UUID masterId) throws CafeException {
@@ -182,7 +182,7 @@ public class CafeService {
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
             throw new CafeException(NOT_OPERATE_CAFE);
         }
-        cafe.changeCafeStatus(BaseStatus.INACTIVE);
+        cafe.changeStatus(BaseStatus.INACTIVE);
         cafeRepository.save(cafe);
     }
 
@@ -190,7 +190,7 @@ public class CafeService {
         List<CafeListOutDTO> cafeResList = cafeList.stream()
                 .map(cafe -> {
                     boolean favorite = false;
-                    List<String> getCafeImageResList = cafeImageService.findCafeImageUrlByCafeId(cafe.getId());
+                    List<String> getCafeImageResList = cafeImageService.getCafeImages(cafe.getId());
 
                     int distance = DistanceService.getDistance(cafe.getCoordinate().getLatitude(),
                             cafe.getCoordinate().getLongitude(),
@@ -213,7 +213,7 @@ public class CafeService {
                             break;
                         }
                     }
-                    List<String> getCafeImageResList = cafeImageService.findCafeImageUrlByCafeId(cafe.getId());
+                    List<String> getCafeImageResList = cafeImageService.getCafeImages(cafe.getId());
 
                     int distance = DistanceService.getDistance(cafe.getCoordinate().getLatitude(),
                             cafe.getCoordinate().getLongitude(),

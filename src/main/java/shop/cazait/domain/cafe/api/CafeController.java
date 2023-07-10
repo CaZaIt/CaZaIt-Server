@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import shop.cazait.domain.cafe.dto.CafeCreateOutDTO;
 import shop.cazait.domain.cafe.dto.CafeGetOutDTO;
 import shop.cazait.domain.cafe.dto.CafeListOutDTO;
 import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
@@ -23,7 +23,6 @@ import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.service.CafeService;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
-import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.status.SuccessStatus;
 
@@ -41,15 +40,10 @@ public class CafeController {
 
     @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "카페 등록", description = "master가 카페를 등록한다.")
-    @Parameter(name = "masterId", description = "마스터 ID")
-    public SuccessResponse<CafeUpdateOutDTO> createCafe(@PathVariable UUID masterId,
-                                                     @Parameter(description = "카페 정보", example = "{\"name\": \"보난자\", \"address\": \"서울 광진구 능동로 239-1 B동 1층\"}")
-                                                @RequestParam @Valid String cafeInfo,
-                                                     @Parameter(description = "카페 이미지") @RequestPart(required = false) List<MultipartFile> images)
-            throws JsonProcessingException {
-        CafeCreateInDTO cafeCreateInDTO = objectMapper.readValue(cafeInfo, new TypeReference<>() {});
-        CafeUpdateOutDTO cafeUpdateOutDTO = cafeService.createCafe(masterId, cafeCreateInDTO, images);
-        return new SuccessResponse<>(CREATE_CAFE, cafeUpdateOutDTO);
+    public SuccessResponse<CafeCreateOutDTO> createCafe(
+            @RequestBody CafeCreateInDTO cafeCreateInDTO
+    ) throws JsonProcessingException {
+        return new SuccessResponse<>(CREATE_CAFE, cafeService.createCafe(cafeCreateInDTO));
     }
 
     @NoAuth
