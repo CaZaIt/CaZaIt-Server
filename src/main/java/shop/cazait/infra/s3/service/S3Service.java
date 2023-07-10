@@ -6,7 +6,10 @@ import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,8 @@ import shop.cazait.infra.s3.dto.response.PreSignedUrlCreateOutDTO;
 public class S3Service {
 
     private final AmazonS3 amazonS3;
+    private final Long EXPIRATION_TIME = Duration.ofMinutes(60).toMillis();
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -28,28 +33,39 @@ public class S3Service {
      */
     public PreSignedUrlCreateOutDTO createPreSignedUrl(String directory) {
 
+        log.info("-----Start To Create Pre-signed Url-----");
         String objectKey = directory + "/" + UUID.randomUUID().toString();
-        log.info(objectKey);
+        String preSignedUrl = createPreSignedUrls(objectKey);
+        log.info("-----Complete To Create Pre-signed Url-----");
 
-        Date expiration = new Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 2;
-        expiration.setTime(expTimeMillis);
-        log.info("Pre-Signed Url Expiration : " + expiration.toString());
+        return PreSignedUrlCreateOutDTO.of(objectKey, preSignedUrl);
+
+    }
+
+    private Date getExpiration(Long expirationTime) {
+
+        Date now = new Date();
+
+        return new Date(now.getTime() + expirationTime);
+
+    }
+
+    private String createPreSignedUrls(String objectKey) {
+
+        Date expirationDate = getExpiration(EXPIRATION_TIME);
 
         GeneratePresignedUrlRequest generatePresignedUrlRequest
                 = new GeneratePresignedUrlRequest(bucket, objectKey)
                 .withMethod(HttpMethod.PUT)
-                .withExpiration(expiration);
+                .withExpiration(expirationDate);
 
-        generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());
-
+        generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL,
+                CannedAccessControlList.PublicRead.toString());
         URL preSignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
-        log.info("Pre-Signed URL : " + preSignedUrl.toString());
-        return PreSignedUrlCreateOutDTO.of(objectKey, preSignedUrl.toString());
+        return preSignedUrl.toString();
 
-    }
+}
 
     /**
      * 객체 주소 조회

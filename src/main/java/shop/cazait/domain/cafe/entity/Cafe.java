@@ -53,18 +53,19 @@ public class Cafe extends BaseEntity {
         this.congestion = congestion;
     }
 
-    public void changeCongestion(Congestion congestion) {
+    public void updateCongestion(Congestion congestion) {
         this.congestion = congestion;
     }
 
-    public void changeInfo(CafeCreateInDTO cafeCreateInDTO, Coordinate coordinate) {
+    public void updateInformation(CafeCreateInDTO cafeCreateInDTO, Coordinate coordinate) {
         this.name = cafeCreateInDTO.getName();
         this.address = cafeCreateInDTO.getAddress();
         this.coordinate = coordinate;
     }
 
-    public void changeCafeStatus(BaseStatus status) {
+    public void changeStatus(BaseStatus status) {
         super.setStatus(status);
     }
+
 
 }

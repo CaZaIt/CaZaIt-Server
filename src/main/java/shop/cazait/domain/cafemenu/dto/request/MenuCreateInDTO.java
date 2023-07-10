@@ -13,6 +13,9 @@ import shop.cazait.domain.cafemenu.entity.CafeMenu;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MenuCreateInDTO {
 
+    @Schema(description = "카페 ID", example = "1")
+    private Long cafeId;
+
     @Schema(description = "이름", example = "아이스 아메리카노", required = true)
     @NotBlank(message = "메뉴 이름을 입력해주세요.")
     private String name;
@@ -24,13 +27,16 @@ public class MenuCreateInDTO {
     @NotBlank(message = "메뉴 가격을 입력해주세요.")
     private Integer price;
 
-    public static CafeMenu toEntity(Cafe cafe, MenuCreateInDTO menuCreateInDTO, String uploadFileName) {
+    @Schema(description = "이미지 URL", example = "https://cazait-bucket.s3.ap-northeast-2.amazonaws.com/cafe-image/abcdefghijklmnopqrstuvwxyz", required = true)
+    private String ImageUrl;
+
+    public static CafeMenu toEntity(Cafe cafe, MenuCreateInDTO menuCreateInDTO) {
         return CafeMenu.builder()
                 .cafe(cafe)
                 .name(menuCreateInDTO.getName())
                 .description(menuCreateInDTO.getDescription())
                 .price(menuCreateInDTO.getPrice())
-                .imageUrl(uploadFileName)
+                .imageUrl(menuCreateInDTO.getImageUrl())
                 .build();
     }
 
