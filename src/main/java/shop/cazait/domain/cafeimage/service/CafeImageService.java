@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import shop.cazait.domain.cafe.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
+import shop.cazait.domain.cafeimage.dto.request.CafeImageCreateInDTO;
+import shop.cazait.domain.cafeimage.dto.response.CafeImageGetOutDTO;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
@@ -32,43 +34,24 @@ public class CafeImageService {
     private final MasterRepository masterRepository;
     private final S3Service S3Service;
 
-    public void createCafeImage(Long cafeId, UUID masterId, List<MultipartFile> imageFiles) throws CafeException {
-        Cafe cafe = cafeRepository.findById(cafeId)
+    public String createCafeImage(CafeImageCreateInDTO req) throws CafeException {
+
+        Cafe cafe = cafeRepository.findById(req.getCafeId())
                 .orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
 
-        Master master = masterRepository.findById(masterId)
-                .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
+        List<CafeImage> cafeImage = req.getImageUrl().stream()
+                    .map(url -> CafeImageCreateInDTO.toEntity(cafe, url))
+                    .collect(Collectors.toList());
 
-        if (!(master.getCafe().getId().equals(cafe.getId()))) {
-            throw new CafeException(NOT_OPERATE_CAFE);
-        }
-
-    }
-    private void saveImageUrl(Cafe cafe, List<String> imageUrl) {
-
-        List<CafeImage> cafeImages = imageUrl.stream()
-                .map(url -> {
-                    return CafeImage.builder()
-                            .cafe(cafe)
-                            .imageUrl(url)
-                            .build();
-                }).collect(Collectors.toList());
-
-        cafeImages.forEach(cafeImage -> {
-            System.out.println("Save Image Url : " + cafeImage.getImageUrl());
-            cafeImageRepository.save(cafeImage);
-        });
+        cafeImageRepository.saveAll(cafeImage);
+        return "등록 완료";
 
     }
 
-    public List<String> getCafeImages(Long cafeId) {
+    public CafeImageGetOutDTO getCafeImages(Long cafeId) {
 
         List<CafeImage> cafeImages = cafeImageRepository.findByCafeId(cafeId);
-        List<String> result = cafeImages.stream().
-                map(image -> image.getImageUrl())
-                .collect(Collectors.toList());
-
-        return result;
+        return CafeImageGetOutDTO.of(cafeImages);
 
     }
 
@@ -77,14 +60,8 @@ public class CafeImageService {
         CafeImage cafeImage = cafeImageRepository.findById(cafeImageId)
                 .orElseThrow(() -> new CafeImageException(ErrorStatus.NOT_EXIST_IMAGE));
 
-        Master master = masterRepository.findById(masterId)
-                .orElseThrow(() -> new CafeException(NOT_EXIST_MASTER));
-
-        if (!(master.getCafe().getId().equals(cafeImage.getCafe().getId()))) {
-            throw new CafeException(NOT_OPERATE_CAFE);
-        }
-
         cafeImageRepository.deleteById(cafeImageId);
 
     }
+
 }

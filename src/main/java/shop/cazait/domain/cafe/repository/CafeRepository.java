@@ -10,6 +10,6 @@ public interface CafeRepository extends JpaRepository <Cafe, Long> {
 
     List<Cafe >findAllByStatus(BaseStatus status);
 
-    List<Cafe> findByNameContainingIgnoreCase(String name);
+    List<Cafe> findByNameContainingIgnoreCaseAndStatus(String name, BaseStatus status);
 
 }

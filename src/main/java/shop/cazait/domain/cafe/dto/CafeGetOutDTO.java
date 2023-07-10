@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import shop.cazait.domain.cafe.entity.Cafe;
-import shop.cazait.domain.cafeimage.dto.CafeImageGetOutDTO;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
 import java.util.List;

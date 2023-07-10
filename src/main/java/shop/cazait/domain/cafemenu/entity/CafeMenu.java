@@ -56,4 +56,5 @@ public class CafeMenu {
     public void changeImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
 }

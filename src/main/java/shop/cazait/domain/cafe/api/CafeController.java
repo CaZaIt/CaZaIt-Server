@@ -106,10 +106,9 @@ public class CafeController {
             @Parameter(name = "userId", description = "유저 ID"),
             @Parameter(name = "cafeId", description = "카페 ID")
     })
-    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable UUID userId,
-                                                      @PathVariable Long cafeId) throws CafeException, UserException {
+    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable Long cafeId) throws CafeException, UserException {
 
-        CafeGetOutDTO cafeRes = cafeService.getCafe(userId, cafeId);
+        CafeGetOutDTO cafeRes = cafeService.getCafe(cafeId);
         return new SuccessResponse<>(SUCCESS, cafeRes);
     }
 
