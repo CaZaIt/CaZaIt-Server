@@ -16,11 +16,14 @@ public class UserUpdateOutDTO {
     @Schema(description = "회원 id")
     private UUID id;
 
+    @Schema(description = "아이디", example = "cazait1234")
+    private String idNumber;
+
     @Schema(description = "비밀번호", example = "abc12345#!")
     private String password;
 
-    @Schema(description = "이메일", example = "12345@gmail.com")
-    private String email;
+    @Schema(description = "휴대전화 번호", example = "01012345678")
+    private String phoneNumber;
 
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
@@ -28,7 +31,8 @@ public class UserUpdateOutDTO {
     public static UserUpdateOutDTO of(User user) {
         return UserUpdateOutDTO.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                .idNumber(user.getIdNumber())
+                .password(user.getPassword())
                 .nickname(user.getNickname())
                 .password(user.getPassword())
                 .build();
