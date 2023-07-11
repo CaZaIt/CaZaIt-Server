@@ -115,7 +115,7 @@ public class UserService {
         return UserDeleteOutDTO.of(deleteUser);
     }
 
-    public SuccessResponse<String> checkduplicateEmail(UserFindDuplicateIdNumberInDTO userFindDuplicateIdNumberInDTO) throws UserException {
+    public SuccessResponse<String> checkduplicateIdNumber(UserFindDuplicateIdNumberInDTO userFindDuplicateIdNumberInDTO) throws UserException {
         String idNumber = userFindDuplicateIdNumberInDTO.getIdNumber();
         if (!userRepository.findByIdNumber(idNumber).isEmpty()) {
             throw new UserException(EXIST_IDNUMBER);
