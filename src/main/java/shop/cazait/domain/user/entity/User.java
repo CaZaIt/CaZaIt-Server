@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.GenericGenerator;
+import shop.cazait.domain.user.dto.UserUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.global.common.status.BaseStatus;
 
@@ -46,6 +47,26 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.refreshToken = refreshToken;
 //        this.isKakao = KakaoIntegrated.NORMAL;
+    }
+
+    public static User loginUser(User user, String refreshToken){
+        return User.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .nickname(user.getNickname())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
+        return User.builder()
+                .id(userIdx)
+                .email(userUpdateInDTO.getEmail())
+                .password(userUpdateInDTO.getPassword())
+                .nickname(userUpdateInDTO.getNickname())
+                .refreshToken(refreshToken)
+                .build();
     }
 }
 

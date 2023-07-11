@@ -81,13 +81,7 @@ public class UserService {
             String accessToken = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
 
-            User loginUser = User.builder()
-                    .id(findUser.getId())
-                    .email(findUser.getEmail())
-                    .password(findUser.getPassword())
-                    .nickname(findUser.getNickname())
-                    .refreshToken(refreshToken)
-                    .build();
+            User loginUser = User.loginUser(findUser,refreshToken);
             userRepository.save(loginUser);
             return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, "user");
         }
@@ -109,19 +103,13 @@ public class UserService {
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO, String refreshToken) throws UserException {
-        User modifyUser = userUpdateInDTO.toEntity();
-        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
+    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException {
 
-        User existUser = User.builder()
-                .id(userIdx)
-                .email(modifyUser.getEmail())
-                .password(modifyUser.getPassword())
-                .nickname(modifyUser.getNickname())
-                .refreshToken(refreshToken)
-                .build();
-        userRepository.save(existUser);
-        return UserUpdateOutDTO.of(existUser);
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
+        String refreshToken = userRepository.findById(userIdx).get().getRefreshToken();
+        User modifyUser = User.updateUserProfile(userIdx, refreshToken, userUpdateInDTO);
+        userRepository.save(modifyUser);
+        return UserUpdateOutDTO.of(modifyUser);
     }
 
     public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
