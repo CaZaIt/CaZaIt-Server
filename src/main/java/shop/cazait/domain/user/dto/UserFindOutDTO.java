@@ -16,11 +16,14 @@ public class UserFindOutDTO {
     @Schema(description = "유저 식별 번호")
     private UUID id;
 
-    @Schema(description = "Email", example = "12345@gmail.com")
-    private String email;
+    @Schema(description = "아이디", example = "cazait1234")
+    private String idNumber;
 
     @Schema(description = "Password", example = "abc12345#!")
     private String password;
+
+    @Schema(description = "휴대전화 번호", example = "01012345678")
+    private String phoneNumber;
 
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
@@ -28,8 +31,9 @@ public class UserFindOutDTO {
     public static UserFindOutDTO of(User user){
         return UserFindOutDTO.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                .idNumber(user.getIdNumber())
                 .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
                 .build();
     }
