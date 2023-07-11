@@ -16,11 +16,14 @@ public class UserDeleteOutDTO {
     @Schema(name = "회원 id")
     private UUID id;
 
-    @Schema(name = "이메일", example = "12345@gmail.com")
-    private String email;
+    @Schema(description = "아이디", example = "cazait1234")
+    private String idNumber;
 
     @Schema(name = "비밀번호", example = "abc12345#!")
     private String password;
+
+    @Schema(description = "휴대전화 번호", example = "01012345678")
+    private String phoneNumber;
 
     @Schema(name = "닉네임", example = "토마스")
     private String nickname;
@@ -30,8 +33,9 @@ public class UserDeleteOutDTO {
     public static UserDeleteOutDTO of(User user){
         return UserDeleteOutDTO.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                .idNumber(user.getIdNumber())
                 .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
                 .build();
     }
