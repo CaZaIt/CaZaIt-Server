@@ -2,27 +2,40 @@ package shop.cazait.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.cazait.domain.auth.Role;
 
+import shop.cazait.domain.auth.Role;
+import shop.cazait.domain.auth.client.SensClient;
 import shop.cazait.domain.auth.dto.*;
+import shop.cazait.domain.auth.dto.sens.*;
 import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 
 import shop.cazait.domain.user.exception.UserException;
-import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.domain.user.service.UserService;
+import shop.cazait.global.error.status.ErrorStatus;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpSession;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static shop.cazait.domain.auth.Role.USER;
-
 
 @Service
 @RequiredArgsConstructor
@@ -66,9 +79,164 @@ public class AuthService {
             return masterService.LoginMaster(userAuthenticateInDTO);
         }
     }
+
+    public AuthSendMessageCodeOutDTO sendMessageCode(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+
+        /**Body Content**/
+        //인증번호 및 메시지 발송 내용 생성
+        Integer verificationCode = random.nextInt(900000) + 100000;
+        String customMessageContent = "[카자잇] 인증번호["+verificationCode+"]를 입력해주세요";
+        System.out.println("verificationCode = " + verificationCode);
+        List<AuthSendMessageInfoInDTO> messages = new ArrayList<>();
+
+        AuthSendMessageInfoInDTO authSendMessageInfoInDTO = AuthSendMessageInfoInDTO.builder().
+                            to(recipientPhoneNumber).
+                            content(customMessageContent).build();
+
+        messages.add(authSendMessageInfoInDTO);
+
+        /**Headers Content**/
+        //현재 시간
+        Long currentTime = System.currentTimeMillis();
+        //시그니처 생성
+        String signature = createSignature(currentTime);
+
+        /**SENS API 통신 **/
+        //Request DTO 생성
+        ExtSensSendMessageCodeInDTO extSensSendMessageCodeInDTO = ExtSensSendMessageCodeInDTO.builder().
+                type("SMS").
+                contentType("COMM").
+                countryCode("82").
+                from(senderPhoneNumber).
+                content("[카자잇]").
+                messages(messages).build();
+
+        //요청
+        ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO = sensClient.sendMessage(
+                new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + this.serviceId + "/messages"),
+                currentTime.toString(),
+                this.accessKey,
+                signature,
+                extSensSendMessageCodeInDTO);
+
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+//        ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO = ExtSensSendMessageCodeOutDTO.builder().
+//                requestId("1").
+//                requestTime(currentDateTime).
+//                statusCode("202").
+//                statusName("success").build();
+
+        /**전송 성공시 세션에 (전화번호, 인증번호) 저장 **/
+        httpSession.setMaxInactiveInterval(smsVerifyTime);
+        httpSession.setAttribute(recipientPhoneNumber,verificationCode);
+
+        return AuthSendMessageCodeOutDTO.of(recipientPhoneNumber,extSensSendMessageCodeOutDTO);
+    }
+
+    public String createSignature(Long currentTime) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+
+        String space = " ";
+        String newLine = "\n";
+        String method = "POST";
+        String url = "/sms/v2/services/"+ this.serviceId+"/messages";
+        String timestamp = currentTime.toString();
+        String accessKey = this.accessKey;
+        String secretKey = this.secretKey;
+
+        String message = new StringBuilder()
+                .append(method)
+                .append(space)
+                .append(url)
+                .append(newLine)
+                .append(timestamp)
+                .append(newLine)
+                .append(accessKey)
+                .toString();
+
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(signingKey);
+
+        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
+        String encodeBase64String = Base64.encodeBase64String(rawHmac);
+
+        return encodeBase64String;
+    }
+
+
+    public AuthVerifyMessageCodeOutDTO verifyMessageCode(String recipientPhoneNumber , Integer verificationCode) throws UserException {
+
+        Optional<Object> attribute = Optional.ofNullable(httpSession.getAttribute(recipientPhoneNumber));
+        //세션에서 key가 휴대전화번호인 값이 없을 시 예외 발생 (만료된 인증번호)
+        attribute.orElseThrow(()->new UserException(ErrorStatus.EXPIRED_VERIFICATION_CODE));
+
+        Integer authNumberInSession = (Integer)attribute.get();
+
+        //인증 성공
+        if(verificationCode.equals(authNumberInSession)){
+            return AuthVerifyMessageCodeOutDTO.of(recipientPhoneNumber);
+             }
+        else{//인증 실패 (잘못된 인증 번호)
+            throw new UserException(ErrorStatus.INVALID_VERIFICATION_CODE);
+        }
+    }
+    public AuthSendMessageCodeOutDTO sendMessageCodeTest(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+
+        /**Body Content**/
+        //인증번호 및 메시지 발송 내용 생성
+        Integer verificationCode = random.nextInt(900000) + 100000;
+        String customMessageContent = "[카자잇] 인증번호["+verificationCode+"]를 입력해주세요";
+        System.out.println("verificationCode = " + verificationCode);
+        List<AuthSendMessageInfoInDTO> messages = new ArrayList<>();
+
+        AuthSendMessageInfoInDTO authSendMessageInfoInDTO = AuthSendMessageInfoInDTO.builder().
+                to(recipientPhoneNumber).
+                content(customMessageContent).build();
+
+        messages.add(authSendMessageInfoInDTO);
+
+        /**Headers Content**/
+        //현재 시간
+        Long currentTime = System.currentTimeMillis();
+        //시그니처 생성
+        String signature = createSignature(currentTime);
+
+        /**SENS API 통신 **/
+        //Request DTO 생성
+        ExtSensSendMessageCodeInDTO extSensSendMessageCodeInDTO = ExtSensSendMessageCodeInDTO.builder().
+                type("SMS").
+                contentType("COMM").
+                countryCode("82").
+                from(senderPhoneNumber).
+                content("[카자잇]").
+                messages(messages).build();
+
+        //요청
+//        ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO = sensClient.sendMessage(
+//                new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + this.serviceId + "/messages"),
+//                currentTime.toString(),
+//                this.accessKey,
+//                signature,
+//                extSensSendMessageCodeInDTO);
+
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO = ExtSensSendMessageCodeOutDTO.builder().
+                requestId("1").
+                requestTime(currentDateTime).
+                statusCode("202").
+                statusName("success").build();
+
+        /**전송 성공시 세션에 (전화번호, 인증번호) 저장 **/
+        httpSession.setMaxInactiveInterval(smsVerifyTime);
+        httpSession.setAttribute(recipientPhoneNumber,verificationCode);
+
+        return AuthSendMessageCodeOutDTO.of(recipientPhoneNumber,extSensSendMessageCodeOutDTO);
+    }
 }
-
-
 
 
 //    public KakaoToken getToken(final String code) {
