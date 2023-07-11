@@ -34,7 +34,22 @@ public class AuthService {
 
     private final MasterService masterService;
 
-    private final UserRepository userRepository;
+    private final SensClient sensClient;
+
+    private final HttpSession httpSession;
+
+    @Value("${credentials.api-key.access-key}")
+    private String accessKey;
+    @Value("${credentials.api-key.secret-key}")
+    private String secretKey;
+    @Value("${credentials.service-id.SMS}")
+    private String serviceId;
+
+    @Value("${user-info.sender-phone-number}")
+    private static String senderPhoneNumber;
+
+    private static final Integer smsVerifyTime = 180;
+    private static final Random random = new SecureRandom();
 
     public UserAuthenticateOutDTO reIssueTokensByRole(Role exactRole, String accessToken, String refreshToken) throws MasterException, UserException {
         if (exactRole.equals(USER)) {
