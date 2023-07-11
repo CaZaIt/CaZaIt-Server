@@ -25,10 +25,13 @@ public class User extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String email;
+    private String idNumber;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String nickname;
@@ -36,24 +39,22 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String refreshToken;
 
-//    @Enumerated(EnumType.STRING)
-//    private KakaoIntegrated isKakao;
-
     @Builder
-    public User(UUID id, String email, String password, String nickname, String refreshToken) {
+    public User(UUID id, String idNumber, String phoneNumber, String password, String nickname, String refreshToken) {
         this.id = id;
-        this.email = email;
+        this.idNumber = idNumber;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.nickname = nickname;
         this.refreshToken = refreshToken;
-//        this.isKakao = KakaoIntegrated.NORMAL;
     }
 
     public static User loginUser(User user, String refreshToken){
         return User.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                .idNumber(user.getIdNumber())
                 .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
                 .refreshToken(refreshToken)
                 .build();
@@ -62,7 +63,7 @@ public class User extends BaseEntity {
     public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
         return User.builder()
                 .id(userIdx)
-                .email(userUpdateInDTO.getEmail())
+                .phoneNumber(userUpdateInDTO.getphoneNumber())
                 .password(userUpdateInDTO.getPassword())
                 .nickname(userUpdateInDTO.getNickname())
                 .refreshToken(refreshToken)
