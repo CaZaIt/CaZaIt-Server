@@ -14,22 +14,23 @@ import javax.validation.constraints.NotBlank;
 @Getter
 public class UserAuthenticateInDTO {
 
-    @Schema(description = "이메일", example = "12345@gmail.com")
     @NotBlank
-    private String email;
+    @Schema(description = "아이디", example = "cazait1234")
+    private String idNumber;
     @Schema(description = "비밀번호", example = "abc12345#!")
     @NotBlank
     private String password;
 
+
     @Builder
-    public UserAuthenticateInDTO(String email, String password) {
-        this.email = email;
+    public UserAuthenticateInDTO(String idNumber, String password) {
+        this.idNumber = idNumber;
         this.password = password;
     }
 
     public User toEntity(){
         return User.builder()
-                .email(email)
+                .idNumber(idNumber)
                 .password(password)
                 .build();
     }
