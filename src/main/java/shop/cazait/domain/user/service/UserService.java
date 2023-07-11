@@ -54,11 +54,11 @@ public class UserService {
             throw new UserException(EXIST_NICKNAME);
         }
 
-        String pwd;
-        pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(userCreateInDTO.getPassword());
+        String encryptedPassword;
+        encryptedPassword = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(userCreateInDTO.getPassword());
 
-        UserCreateInDTO encryptUserCreateInDTO = new UserCreateInDTO(userCreateInDTO.getEmail(), pwd, userCreateInDTO.getNickname());
-        User user = encryptUserCreateInDTO.toEntity();
+        UserCreateInDTO encryptUserCreateInDTO = UserCreateInDTO.encryptUserPassword(userCreateInDTO, encryptedPassword);
+        User user = UserCreateInDTO.toEntity(encryptUserCreateInDTO);
         userRepository.save(user);
 
         return UserCreateOutDTO.of(user);
