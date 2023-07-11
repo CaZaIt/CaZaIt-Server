@@ -46,8 +46,8 @@ public class UserService {
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (!userRepository.findByEmail(userCreateInDTO.getEmail()).isEmpty()) {
-            throw new UserException(EXIST_EMAIL);
+        if (!userRepository.findByEmail(userCreateInDTO.getIdNumber()).isEmpty()) {
+            throw new UserException(EXIST_IDNUMBER);
         }
 
         if (!userRepository.findByNickname(userCreateInDTO.getNickname()).isEmpty()) {
