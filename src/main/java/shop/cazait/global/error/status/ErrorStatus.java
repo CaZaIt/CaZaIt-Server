@@ -30,6 +30,8 @@ public enum ErrorStatus {
     INVALID_ROLE(400,"FAIL","유효하지 않은 역할입니다."),
     FAIL_UPLOAD_IMAGE(400, "FAIL", "이미지 업로드를 실패했습니다."),
     EXIST_FAVORITES(400, "FAIL", "이미 존재하는 즐겨찾기입니다."),
+    INVALID_VERIFICATION_CODE(400,"FAIL","인증번호가 올바르지 않습니다."),
+    EXPIRED_VERIFICATION_CODE(400,"FAIL","만료된 인증번호입니다."),
 
     /**
      * Success Code : 401
