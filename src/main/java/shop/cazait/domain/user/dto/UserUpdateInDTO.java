@@ -15,25 +15,29 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserUpdateInDTO {
 
-    @Email(message = "이메일 형식을 지키세요.")
     @NotBlank
-    @Schema(description = "이메일", example = "12345@gmail.com")
-    private String email;
+    @Schema(description = "아이디", example = "cazait1234")
+    private String idNumber;
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
     @NotBlank
     @Schema(description = "비밀번호", example = "abc12345#!")
     private String password;
 
+    @NotBlank
+    @Schema(description = "휴대전화 번호", example = "01012345678")
+    private String phoneNumber;
+
     @NotBlank(message="닉네임을 입력하세요.")
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public User toEntity(){
+    public static User toEntity(UserUpdateInDTO userUpdateInDTO){
         return User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
+                .idNumber(userUpdateInDTO.getIdNumber())
+                .password(userUpdateInDTO.getPhoneNumber())
+                .phoneNumber(userUpdateInDTO.getPhoneNumber())
+                .nickname(userUpdateInDTO.getNickname())
                 .build();
     }
 }
