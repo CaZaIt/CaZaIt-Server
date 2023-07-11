@@ -1,12 +1,7 @@
 package shop.cazait.domain.user.service;
 
 
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_EMAIL;
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_NICKNAME;
-import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
-import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
-import static shop.cazait.global.error.status.ErrorStatus.NOT_EXPIRED_TOKEN;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.error.status.SuccessStatus.SIGNUP_AVAILABLE;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -46,7 +41,7 @@ public class UserService {
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (!userRepository.findByEmail(userCreateInDTO.getIdNumber()).isEmpty()) {
+        if (!userRepository.findByIdNumber(userCreateInDTO.getIdNumber()).isEmpty()) {
             throw new UserException(EXIST_IDNUMBER);
         }
 
@@ -67,9 +62,9 @@ public class UserService {
     public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        userRepository.findByEmail(userAuthenticateInDTO.getEmail()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
+        userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
 
-        User findUser = userRepository.findByEmail(userAuthenticateInDTO.getEmail()).get();
+        User findUser = userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).get();
 
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
@@ -120,12 +115,12 @@ public class UserService {
         return UserDeleteOutDTO.of(deleteUser);
     }
 
-    public SuccessResponse<String> checkduplicateEmail(UserFindDuplicateEmaliInDTO userFindDuplicateEmailInDTO) throws UserException {
-        String email = userFindDuplicateEmailInDTO.getEmail();
-        if (!userRepository.findByEmail(email).isEmpty()) {
-            throw new UserException(EXIST_EMAIL);
+    public SuccessResponse<String> checkduplicateEmail(UserFindDuplicateIdNumberInDTO userFindDuplicateIdNumberInDTO) throws UserException {
+        String idNumber = userFindDuplicateIdNumberInDTO.getIdNumber();
+        if (!userRepository.findByIdNumber(idNumber).isEmpty()) {
+            throw new UserException(EXIST_IDNUMBER);
         }
-        return new SuccessResponse<>(SIGNUP_AVAILABLE, email);
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, idNumber);
     }
 
     public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
