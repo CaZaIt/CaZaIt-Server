@@ -63,8 +63,9 @@ public class User extends BaseEntity {
     public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
         return User.builder()
                 .id(userIdx)
-                .phoneNumber(userUpdateInDTO.getphoneNumber())
+                .idNumber(userUpdateInDTO.getIdNumber())
                 .password(userUpdateInDTO.getPassword())
+                .phoneNumber(userUpdateInDTO.getPhoneNumber())
                 .nickname(userUpdateInDTO.getNickname())
                 .refreshToken(refreshToken)
                 .build();
