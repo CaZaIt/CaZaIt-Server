@@ -60,7 +60,7 @@ public class MasterService {
 		InvalidKeyException {
 
 		//이메일 확인
-		if (!masterRepository.findMasterByEmail(dto.getIdNumber()).isEmpty()) {
+		if (!masterRepository.findMasterByIdNumber(dto.getIdNumber()).isEmpty()) {
 			throw new MasterException(EXIST_IDNUMBER);
 		}
 		//닉네임 중복확인
@@ -103,12 +103,13 @@ public class MasterService {
 			String refreshToken = jwtService.createRefreshToken();
 
 			findMaster = Master.builder()
-				.id(masterIdx)
-				.email(findMaster.getEmail())
-				.password(findMaster.getPassword())
-				.nickname(findMaster.getNickname())
-				.refreshToken(refreshToken)
-				.build();
+					.id(masterIdx)
+					.idNumber(findMaster.getIdNumber())
+					.password(findMaster.getPassword())
+					.phoneNumber(findMaster.getPhoneNumber())
+					.nickname(findMaster.getNickname())
+					.refreshToken(refreshToken)
+					.build();
 			//			findMaster.builder()
 			//							.refreshToken(refreshToken)
 			//					        .build();
