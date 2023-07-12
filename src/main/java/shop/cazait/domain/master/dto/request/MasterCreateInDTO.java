@@ -27,7 +27,7 @@ public class MasterCreateInDTO {
 	private String idNumber;
 
 	@NotBlank(message = "Master 비밀번호를 입력해주세요.")
-	@Schema(description = "비밀번호", example = "abcde!12345")
+	@Schema(description = "비밀번호", example = "abc12345#!")
 	private String password;
 
 	@NotBlank(message = "Master 전화번호를 입력해주세요.")
