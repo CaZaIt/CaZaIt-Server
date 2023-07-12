@@ -46,7 +46,7 @@ public class UserAuthenticateOutDTO {
     public static UserAuthenticateOutDTO of(Master master, String accessToken, String refreshToken, String role) {
         return  UserAuthenticateOutDTO.builder()
                 .id(master.getId())
-                .email(master.getEmail())
+                .idNumber(master.getIdNumber())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .role(role)
