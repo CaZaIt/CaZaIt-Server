@@ -15,6 +15,7 @@ import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 
 import shop.cazait.domain.user.exception.UserException;
+import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.error.status.ErrorStatus;
 
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static shop.cazait.domain.auth.Role.USER;
+import static shop.cazait.global.error.status.ErrorStatus.EXIST_PHONENUMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,8 @@ public class AuthService {
     private final UserService userService;
 
     private final MasterService masterService;
+
+    private final UserRepository userRepository;
 
     private final SensClient sensClient;
 
@@ -80,7 +84,11 @@ public class AuthService {
         }
     }
 
-    public AuthSendMessageCodeOutDTO sendMessageCode(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+    public AuthSendMessageCodeOutDTO sendMessageCode(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
+
+        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
+            throw new UserException(EXIST_PHONENUMBER);
+        }
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
@@ -182,7 +190,11 @@ public class AuthService {
             throw new UserException(ErrorStatus.INVALID_VERIFICATION_CODE);
         }
     }
-    public AuthSendMessageCodeOutDTO sendMessageCodeTest(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
+    public AuthSendMessageCodeOutDTO sendMessageCodeTest(String recipientPhoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
+
+        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
+            throw new UserException(EXIST_PHONENUMBER);
+        }
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성

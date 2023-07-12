@@ -83,7 +83,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send")
     @Operation(summary = "문자 인증번호 발송", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, UnsupportedEncodingException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, JsonProcessingException {
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, UnsupportedEncodingException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, JsonProcessingException, UserException {
         String recipientPhoneNumber = userSensAuthenticateInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
@@ -92,7 +92,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send/test")
     @Operation(summary = "문자 인증번호 발송 테스트", description = "실제로 문자 발송은 진행하지 않음")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, UnsupportedEncodingException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, JsonProcessingException {
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, UnsupportedEncodingException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, JsonProcessingException, UserException {
         String recipientPhoneNumber = userSensAuthenticateInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
