@@ -43,10 +43,11 @@ public class MasterCreateInDTO {
 		BadPaddingException,
 		InvalidKeyException {
 		return Master.builder()
-			.email(getEmail())
-			.password(new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(getPassword()))
-			.nickname(getNickname())
-			.build();
+				.idNumber(getIdNumber())
+				.password(new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(getPassword()))
+				.phoneNumber(getPhoneNumber())
+				.nickname(getNickname())
+				.build();
 	}
 
 }
