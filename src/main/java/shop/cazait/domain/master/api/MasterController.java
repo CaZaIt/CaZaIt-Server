@@ -63,14 +63,10 @@ public class MasterController {
 
 	@PatchMapping("/{masterId}")
 	@Operation(summary = "마스터 정보 수정", description = "특정 ID의 마스터 관련 정보를 수정한다.")
-	@Parameters({
-		@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호"),
-		@Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken")}
-	)
+	@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호")
 	public SuccessResponse<String> updateMaster(
 		@PathVariable(name = "masterId") UUID masterId,
-		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO,
-		@RequestHeader(value = "Refresh-Token") String refreshToken) throws UserException {
+		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO){
 
 		masterService.updateMaster(masterId, masterUpdateInDTO);
 		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");
