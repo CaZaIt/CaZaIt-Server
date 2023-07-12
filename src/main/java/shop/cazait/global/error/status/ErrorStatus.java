@@ -25,7 +25,7 @@ public enum ErrorStatus {
     FAILED_TO_LOGIN(400, "FAIL", "이메일 또는 비밀번호를 잘못 입력했습니다."),
     ALREADY_INACTIVE_MASTER(400, "FAIL", "이미 탈퇴한 계정입니다"),
     NOT_EXPIRED_TOKEN(400 ,"FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
-    EXIST_EMAIL(400,"FAIL","이미 존재하는 이메일입니다."),
+    EXIST_IDNUMBER(400,"FAIL","이미 존재하는 아이디입니다."),
     EXIST_NICKNAME(400,"FAIL","이미 존재하는 닉네임입니다."),
     INVALID_ROLE(400,"FAIL","유효하지 않은 역할입니다."),
     FAIL_UPLOAD_IMAGE(400, "FAIL", "이미지 업로드를 실패했습니다."),
