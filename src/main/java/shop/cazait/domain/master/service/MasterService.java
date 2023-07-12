@@ -136,15 +136,10 @@ public class MasterService {
 
 	//마스터 회원 정보 업데이트
 	public MasterUptateOutDTO updateMaster(UUID id, MasterUpdateInDTO masterUpdateInDTO) {
-		Master findMaster = masterRepository.findMasterById(id).get();
-		Master updateMaster = masterRepository.save(findMaster);
-		return MasterUptateOutDTO.builder()
-			.id(updateMaster.getId())
-			.email(updateMaster.getEmail())
-			.password(updateMaster.getPassword())
-			.nickname(updateMaster.getNickname())
-			.build();
-
+		String refreshToken = masterRepository.findMasterById(id).get().getRefreshToken();
+		Master updatedMaster = Master.updateMasterProfile(id, masterUpdateInDTO, refreshToken);
+		masterRepository.save(updatedMaster);
+		return MasterUptateOutDTO.of(updatedMaster);
 	}
 
 	// 회원 탈퇴하기

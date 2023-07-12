@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.global.common.status.BaseStatus;
 
@@ -79,5 +80,16 @@ public class Master extends BaseEntity {
 
 	public void setCafe(Cafe cafe) {
 		this.cafe = cafe;
+	}
+
+	public static Master updateMasterProfile(UUID userid, MasterUpdateInDTO masterUpdateInDTO, String refreshToken){
+		return Master.builder()
+				.id(userid)
+				.idNumber(masterUpdateInDTO.getIdNumber())
+				.password(masterUpdateInDTO.getPassword())
+				.phoneNumber(masterUpdateInDTO.getPhoneNumber())
+				.nickname(masterUpdateInDTO.getNickname())
+				.refreshToken(refreshToken)
+				.build();
 	}
 }
