@@ -31,11 +31,14 @@ public class Master extends BaseEntity {
 	@Column(columnDefinition = "BINARY(16)")
 	private UUID id;
 
-	@Column(nullable = false, unique = true)
-	private String email;
+	@Column(nullable = false)
+	private String idNumber;
 
 	@Column(nullable = false)
 	private String password;
+
+	@Column(nullable = false)
+	private String phoneNumber;
 
 	@Column(nullable = false, unique = true)
 	private String nickname;
@@ -48,17 +51,18 @@ public class Master extends BaseEntity {
 	private Cafe cafe;
 
 	@Builder
-	public Master(UUID id, String email, String password, String nickname, String refreshToken, Cafe cafe) {
+	public Master(UUID id, String idNumber, String password, String phoneNumber, String nickname, String refreshToken, Cafe cafe) {
 		this.id =id;
-		this.email = email;
+		this.idNumber = idNumber;
 		this.password = password;
+		this.phoneNumber = phoneNumber;
 		this.nickname = nickname;
 		this.refreshToken = refreshToken;
 		this.cafe = cafe;
 	}
 
 	public void changeMasterEmail(String email) {
-		this.email = email;
+		this.idNumber = idNumber;
 	}
 
 	public void changeMasterPassword(String password) {
