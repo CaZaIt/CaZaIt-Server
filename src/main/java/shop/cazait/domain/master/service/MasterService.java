@@ -88,11 +88,11 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
+		if (masterRepository.findMasterByIdNumber(dto.getIdNumber()).isEmpty()) {
 			throw new MasterException(NOT_EXIST_MASTER);
 		}
 
-		Master findMaster = masterRepository.findMasterByEmail(dto.getEmail()).get();
+		Master findMaster = masterRepository.findMasterByIdNumber(dto.getIdNumber()).get();
 
 		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
 
