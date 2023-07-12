@@ -15,6 +15,8 @@ public interface MasterRepository extends JpaRepository<Master, UUID> {
 
 	Optional<Master> findMasterById(UUID id);
 
+	Optional<Master> findMasterByIdNumber(String id);
+
 	Optional<Master> findMasterByEmail(String email);
 
 	Optional<Master> findMasterByNickname(String nickname);
