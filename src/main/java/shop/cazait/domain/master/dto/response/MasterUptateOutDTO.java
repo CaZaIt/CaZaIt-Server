@@ -15,16 +15,16 @@ public class MasterUptateOutDTO {
 
 	@Schema(description = "마스터 계정 ID")
 	private UUID id;
-	@Schema(description = "Master 아이디")
+	@Schema(description = "마스터 로그인 아이디")
 	private String idNumber;
 
-	@Schema(description = "Master 패스워드")
+	@Schema(description = "마스터 패스워드")
 	private String password;
 
-	@Schema(description = "Master 휴대전화번호")
+	@Schema(description = "마스터 휴대전화번호")
 	private String phoneNumber;
 
-	@Schema(description = "Master 닉네임")
+	@Schema(description = "마스터 닉네임")
 	private String nickname;
 
 	public static MasterUptateOutDTO of(Master master){

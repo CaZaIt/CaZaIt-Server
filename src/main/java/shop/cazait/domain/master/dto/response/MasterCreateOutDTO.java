@@ -16,7 +16,7 @@ public class MasterCreateOutDTO {
 	@Schema(description = "마스터 계정 ID")
 	private UUID id;
 
-	@Schema(description = "마스터 계정 아이디")
+	@Schema(description = "마스터 로그인 아이디")
 	private String idNumber;
 
 	@Schema(description = "마스터 계정 이름")

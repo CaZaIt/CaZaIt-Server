@@ -22,20 +22,20 @@ import shop.cazait.global.config.encrypt.Secret;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MasterCreateInDTO {
 
-	@NotBlank(message = "Master 아이디를 입력해주세요.")
-	@Schema(description = "아이디", example = "cazait1234")
+	@NotBlank(message = "마스터 아이디를 입력해주세요.")
+	@Schema(description = "로그인 아이디", example = "cazait1234")
 	private String idNumber;
 
-	@NotBlank(message = "Master 비밀번호를 입력해주세요.")
+	@NotBlank(message = "마스터 비밀번호를 입력해주세요.")
 	@Schema(description = "비밀번호", example = "abc12345#!")
 	private String password;
 
-	@NotBlank(message = "Master 전화번호를 입력해주세요.")
+	@NotBlank(message = "마스터 전화번호를 입력해주세요.")
 	@Schema(description = "휴대폰 번호", example = "01012345678")
 	private String phoneNumber;
 
-	@NotBlank(message = "Master 닉네임을 입력해주세요.")
-	@Schema(description = "Master 닉네임", example = "master")
+	@NotBlank(message = "마스터 닉네임을 입력해주세요.")
+	@Schema(description = "마스터 닉네임", example = "master")
 	private String nickname;
 
 	public Master toEntity()

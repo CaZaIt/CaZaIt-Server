@@ -15,7 +15,7 @@ public class MasterListOutDTO {
 	@Schema(description = "마스터 계정 ID")
 	private UUID id;
 
-	@Schema(description = "마스터 회원가입시 아이디")
+	@Schema(description = "마스터 로그인 아이디")
 	private String idNumber;
 
 

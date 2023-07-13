@@ -16,20 +16,20 @@ import java.util.UUID;
 @Getter
 public class MasterUpdateInDTO {
 
-	@Schema(description = "Master 아이디")
+	@Schema(description = "마스터 로그인 아이디")
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 아이디를 입력해주세요.")
 	private String idNumber;
 
-	@Schema(description = "Master 패스워드")
+	@Schema(description = "마스터 패스워드")
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 패스워드를 입력해주세요.")
 	private String password;
 
-	@Schema(description = "Master 전화번호")
+	@Schema(description = "마스터 전화번호")
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 휴대폰 전화번호를 입력해주세요.")
 	private String phoneNumber;
 
-	@Schema(description = "Master 닉네임")
+	@Schema(description = "마스터 닉네임")
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 닉네임을 입력해주세요.")
 	private String nickname;
 
