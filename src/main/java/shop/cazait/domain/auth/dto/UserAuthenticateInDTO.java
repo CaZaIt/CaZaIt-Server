@@ -17,7 +17,7 @@ public class UserAuthenticateInDTO {
 
     @Pattern(regexp = "^[a-z0-9]{5,20}$")
     @NotBlank
-    @Schema(description = "아이디", example = "cazait1234")
+    @Schema(description = "로그인 아이디", example = "cazait1234")
     private String idNumber;
     @Schema(description = "비밀번호", example = "abc12345#!")
     @NotBlank

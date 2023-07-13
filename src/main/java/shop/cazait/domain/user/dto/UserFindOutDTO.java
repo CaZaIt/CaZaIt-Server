@@ -13,10 +13,10 @@ import java.util.UUID;
 @Builder(access = AccessLevel.PRIVATE)
 public class UserFindOutDTO {
 
-    @Schema(description = "유저 식별 번호")
+    @Schema(description = "회원 id")
     private UUID id;
 
-    @Schema(description = "아이디", example = "cazait1234")
+    @Schema(description = "로그인 아이디", example = "cazait1234")
     private String idNumber;
 
     @Schema(description = "Password", example = "abc12345#!")

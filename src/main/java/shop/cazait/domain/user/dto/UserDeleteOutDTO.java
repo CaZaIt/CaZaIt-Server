@@ -16,7 +16,7 @@ public class UserDeleteOutDTO {
     @Schema(name = "회원 id")
     private UUID id;
 
-    @Schema(description = "아이디", example = "cazait1234")
+    @Schema(description = "로그인 아이디", example = "cazait1234")
     private String idNumber;
 
     @Schema(name = "비밀번호", example = "abc12345#!")
