@@ -63,7 +63,7 @@ public class AuthService {
     private String serviceId;
 
     @Value("${user-info.sender-phone-number}")
-    private static String senderPhoneNumber;
+    private String senderPhoneNumber;
 
     private static final Integer smsVerifyTime = 180;
     private static final Random random = new SecureRandom();
