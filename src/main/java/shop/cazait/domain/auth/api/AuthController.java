@@ -132,6 +132,7 @@ public class AuthController {
 
     @NoAuth
     @GetMapping(value = "/kakao/callback")
+    @Operation(summary = "카카오 로그인(웹) redirecturl", description = "카카오 API에서 code를 쿼리 파라미터로 받아옴, 클라이언트에서 직접 호출 x")
     public SuccessResponse<?> kakaoCallBack(@RequestParam String code) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
         log.info(code);
 
