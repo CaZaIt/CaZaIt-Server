@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 
@@ -59,6 +60,12 @@ public class AuthController {
 
 
     private final UserRepository userRepository;
+
+    @Value("${rest-api-key}")
+    private String clientId;
+
+    @Value("${kakao.redirect-url}")
+    private String redirectUrl;
 
     @NoAuth
     @PostMapping("/log-in")
@@ -123,7 +130,7 @@ public class AuthController {
     @GetMapping("/kakao/login")
     @Operation(summary = "카카오 로그인(웹)", description = "/kakao/callback로 redirect")
     public void kakaoLoginUser(HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=59998cc010f4d694d452c4c1b86e6475&redirect_uri=http://localhost:8080/api/auths/kakao/callback");
+        httpServletResponse.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+clientId+"&redirect_uri="+redirectUrl);
     }
 
 
