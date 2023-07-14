@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 import shop.cazait.domain.user.dto.UserUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
@@ -39,14 +40,18 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String refreshToken;
 
+    @Column(nullable = true)
+    private Long kakaoId;
+
     @Builder
-    public User(UUID id, String idNumber, String phoneNumber, String password, String nickname, String refreshToken) {
+    public User(UUID id, String idNumber, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
         this.id = id;
         this.idNumber = idNumber;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.nickname = nickname;
         this.refreshToken = refreshToken;
+        this.kakaoId = kakaoId;
     }
 
     public static User loginUser(User user, String refreshToken){
@@ -69,6 +74,32 @@ public class User extends BaseEntity {
                 .nickname(userUpdateInDTO.getNickname())
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public static User kakaoSignUpUser(Long kakaoId){
+        return User.builder()
+                .idNumber(generateRandomString())
+                .password(generateRandomString())
+                .phoneNumber(generateRandomString())
+                .nickname(generateRandomString())
+                .kakaoId(kakaoId)
+                .build();
+    }
+
+    public static User kakaoLoginUser(User user, String refreshToken) {
+        return User.builder()
+                .id(user.getId())
+                .idNumber(user.getIdNumber())
+                .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
+                .nickname(user.getNickname())
+                .kakaoId(user.getKakaoId())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private static String generateRandomString() {
+        return UUID.randomUUID().toString();
     }
 }
 
