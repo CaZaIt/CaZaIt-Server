@@ -25,4 +25,6 @@ public interface MasterRepository extends JpaRepository<Master, UUID> {
 	List<Master> findMasterByStatus(BaseStatus status);
 
 	Optional<Master> findById(UUID id);
+
+	Optional<Master> findByPhoneNumber(String phoneNumber);
 }

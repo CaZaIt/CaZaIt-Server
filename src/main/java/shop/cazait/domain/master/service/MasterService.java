@@ -59,12 +59,18 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		//이메일 확인
-		if (!masterRepository.findMasterByIdNumber(dto.getIdNumber()).isEmpty()) {
+		//아이디 중복확인
+		if (masterRepository.findMasterByIdNumber(dto.getIdNumber()).isPresent()) {
 			throw new MasterException(EXIST_IDNUMBER);
 		}
+
+		//휴대전화번호 중복확인
+		if (masterRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
+			throw new MasterException(EXIST_PHONENUMBER);
+		}
+
 		//닉네임 중복확인
-		if (!masterRepository.findMasterByNickname(dto.getNickname()).isEmpty()) {
+		if (masterRepository.findMasterByNickname(dto.getNickname()).isPresent()) {
 			throw new MasterException(EXIST_NICKNAME);
 		}
 
