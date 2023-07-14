@@ -41,11 +41,15 @@ public class UserService {
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (!userRepository.findByIdNumber(userCreateInDTO.getIdNumber()).isEmpty()) {
+        if (userRepository.findByIdNumber(userCreateInDTO.getIdNumber()).isPresent()) {
             throw new UserException(EXIST_IDNUMBER);
         }
 
-        if (!userRepository.findByNickname(userCreateInDTO.getNickname()).isEmpty()) {
+        if (userRepository.findByPhoneNumber(userCreateInDTO.getPhoneNumber()).isPresent()) {
+            throw new UserException(EXIST_PHONENUMBER);
+        }
+
+        if (userRepository.findByNickname(userCreateInDTO.getNickname()).isPresent()) {
             throw new UserException(EXIST_NICKNAME);
         }
 
@@ -117,7 +121,7 @@ public class UserService {
 
     public SuccessResponse<String> checkduplicateIdNumber(UserFindDuplicateIdNumberInDTO userFindDuplicateIdNumberInDTO) throws UserException {
         String idNumber = userFindDuplicateIdNumberInDTO.getIdNumber();
-        if (!userRepository.findByIdNumber(idNumber).isEmpty()) {
+        if (userRepository.findByIdNumber(idNumber).isPresent()) {
             throw new UserException(EXIST_IDNUMBER);
         }
         return new SuccessResponse<>(SIGNUP_AVAILABLE, idNumber);
@@ -125,7 +129,7 @@ public class UserService {
 
     public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         String nickname = userFindDuplicateNicknameInDTO.getNickname();
-        if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
+        if (userRepository.findByNickname(nickname.trim()).isPresent()) {
             throw new UserException(EXIST_NICKNAME);
         }
 
