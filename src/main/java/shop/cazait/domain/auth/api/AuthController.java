@@ -3,7 +3,6 @@ package shop.cazait.domain.auth.api;
 import static shop.cazait.global.error.status.SuccessStatus.ACCEPTED_SEND_MESSAGE;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -101,7 +100,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send")
     @Operation(summary = "문자 인증번호 발송", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, UnsupportedEncodingException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, JsonProcessingException, UserException {
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = userSensAuthenticateInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
@@ -110,7 +109,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send/test")
     @Operation(summary = "문자 인증번호 발송 테스트", description = "실제로 문자 발송은 진행하지 않음")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, URISyntaxException, UnsupportedEncodingException, InvalidKeyException, JsonProcessingException, UnsupportedEncodingException, JsonProcessingException, UserException {
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = userSensAuthenticateInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
