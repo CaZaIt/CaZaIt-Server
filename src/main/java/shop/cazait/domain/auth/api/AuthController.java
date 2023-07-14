@@ -130,15 +130,18 @@ public class AuthController {
     @NoAuth
     @GetMapping(value = "/kakao/callback")
     @Operation(summary = "카카오 로그인(웹) redirecturl", description = "카카오 API에서 code를 쿼리 파라미터로 받아옴, 클라이언트에서 직접 호출 x")
+    @Parameter(name = "code", description = "카카오 API에서 받아오는 code")
     public SuccessResponse<?> kakaoCallBack(@RequestParam String code) {
         log.info(code);
 
         ExtKakaoUserInfoOutDTO extKakaoUserInfoOutDTO = kakaoService.getInfo(code);
         Long kakaoId = extKakaoUserInfoOutDTO.getId();
+        //카카오 id로 조회, 있을 시 로그인 처리
         if(userRepository.findByKakaoId(kakaoId).isPresent()){
             UserAuthenticateOutDTO userAuthenticateOutDTO = kakaoService.kakaoLoginUser(kakaoId);
             return new SuccessResponse<>(SUCCESS,userAuthenticateOutDTO);
         }
+        //카카오 id로 조회, 없을 시 회원가입 처리
         else{
             UserCreateOutDTO userCreateOutDTO = kakaoService.kakaoSignUpnUser(kakaoId);
             return new SuccessResponse<>(SUCCESS,userCreateOutDTO);
