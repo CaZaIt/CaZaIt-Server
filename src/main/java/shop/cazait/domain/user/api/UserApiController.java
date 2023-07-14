@@ -36,7 +36,6 @@ import shop.cazait.global.config.encrypt.NoAuth;
 public class UserApiController {
 
     private final UserService userService;
-    private final JwtService jwtService;
 
     @NoAuth
     @Operation(summary = "회원 가입", description = "User 정보를 추가하여 회원가입을 진행")
@@ -64,16 +63,12 @@ public class UserApiController {
 
     @PatchMapping("/{userId}")
     @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
-    @Parameters({
-            @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호"),
-            @Parameter(name = "Refresh-Token", description = "발급 받은 refreshtoken")}
-    )
+    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
     public SuccessResponse<UserUpdateOutDTO> modifyUser(
             @PathVariable(name = "userId") UUID userIdx,
-            @RequestBody @Valid UserUpdateInDTO userUpdateInDTO,
-            @RequestHeader(value="Refresh-Token") String refreshToken) throws UserException {
+            @RequestBody @Valid UserUpdateInDTO userUpdateInDTO) throws UserException {
 
-            UserUpdateOutDTO userUpdateOutDTO = userService.modifyUser(userIdx, userUpdateInDTO, refreshToken);
+            UserUpdateOutDTO userUpdateOutDTO = userService.modifyUser(userIdx, userUpdateInDTO);
             return new SuccessResponse<>(SUCCESS, userUpdateOutDTO);
 
     }
@@ -87,11 +82,11 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/email")
-    @Operation(summary = "이메일 중복확인", description = "회원가입 전 이미 존재하는 이메일인지 중복확인")
-    public SuccessResponse<String> checkDuplicateEmail(@RequestBody @Valid UserFindDuplicateEmaliInDTO userFindDuplicateEmailInDTO) throws UserException {
-        SuccessResponse<String> emailDuplicateSuccessResponse = userService.checkduplicateEmail(userFindDuplicateEmailInDTO);
-        return emailDuplicateSuccessResponse;
+    @PostMapping ("/idnumber")
+    @Operation(summary = "아이디 중복확인", description = "회원가입 전 이미 존재하는 아이디인지 중복확인")
+    public SuccessResponse<String> checkDuplicateIdNumber(@RequestBody @Valid UserFindDuplicateIdNumberInDTO userFindDuplicateEmailInDTO) throws UserException {
+        SuccessResponse<String> idNumberSuccessResponse = userService.checkduplicateIdNumber(userFindDuplicateEmailInDTO);
+        return idNumberSuccessResponse;
     }
 
     @NoAuth

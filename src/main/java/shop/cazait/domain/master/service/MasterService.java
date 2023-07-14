@@ -59,12 +59,18 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		//이메일 확인
-		if (!masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
-			throw new MasterException(EXIST_EMAIL);
+		//아이디 중복확인
+		if (masterRepository.findMasterByIdNumber(dto.getIdNumber()).isPresent()) {
+			throw new MasterException(EXIST_IDNUMBER);
 		}
+
+		//휴대전화번호 중복확인
+		if (masterRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
+			throw new MasterException(EXIST_PHONENUMBER);
+		}
+
 		//닉네임 중복확인
-		if (!masterRepository.findMasterByNickname(dto.getNickname()).isEmpty()) {
+		if (masterRepository.findMasterByNickname(dto.getNickname()).isPresent()) {
 			throw new MasterException(EXIST_NICKNAME);
 		}
 
@@ -88,11 +94,11 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByEmail(dto.getEmail()).isEmpty()) {
+		if (masterRepository.findMasterByIdNumber(dto.getIdNumber()).isEmpty()) {
 			throw new MasterException(NOT_EXIST_MASTER);
 		}
 
-		Master findMaster = masterRepository.findMasterByEmail(dto.getEmail()).get();
+		Master findMaster = masterRepository.findMasterByIdNumber(dto.getIdNumber()).get();
 
 		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
 
@@ -103,12 +109,13 @@ public class MasterService {
 			String refreshToken = jwtService.createRefreshToken();
 
 			findMaster = Master.builder()
-				.id(masterIdx)
-				.email(findMaster.getEmail())
-				.password(findMaster.getPassword())
-				.nickname(findMaster.getNickname())
-				.refreshToken(refreshToken)
-				.build();
+					.id(masterIdx)
+					.idNumber(findMaster.getIdNumber())
+					.password(findMaster.getPassword())
+					.phoneNumber(findMaster.getPhoneNumber())
+					.nickname(findMaster.getNickname())
+					.refreshToken(refreshToken)
+					.build();
 			//			findMaster.builder()
 			//							.refreshToken(refreshToken)
 			//					        .build();
@@ -135,15 +142,10 @@ public class MasterService {
 
 	//마스터 회원 정보 업데이트
 	public MasterUptateOutDTO updateMaster(UUID id, MasterUpdateInDTO masterUpdateInDTO) {
-		Master findMaster = masterRepository.findMasterById(id).get();
-		Master updateMaster = masterRepository.save(findMaster);
-		return MasterUptateOutDTO.builder()
-			.id(updateMaster.getId())
-			.email(updateMaster.getEmail())
-			.password(updateMaster.getPassword())
-			.nickname(updateMaster.getNickname())
-			.build();
-
+		String refreshToken = masterRepository.findMasterById(id).get().getRefreshToken();
+		Master updatedMaster = Master.updateMasterProfile(id, masterUpdateInDTO, refreshToken);
+		masterRepository.save(updatedMaster);
+		return MasterUptateOutDTO.of(updatedMaster);
 	}
 
 	// 회원 탈퇴하기

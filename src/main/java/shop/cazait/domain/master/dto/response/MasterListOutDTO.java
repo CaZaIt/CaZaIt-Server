@@ -15,18 +15,23 @@ public class MasterListOutDTO {
 	@Schema(description = "마스터 계정 ID")
 	private UUID id;
 
-	@Schema(description = "마스터 계정 이메일")
-	private String email;
+	@Schema(description = "마스터 로그인 아이디")
+	private String idNumber;
+
+
+	@Schema(description = "마스터 계정 전화번호")
+	private String phoneNumber;
 
 	@Schema(description = "마스터 계정 이름")
 	private String nickname;
 
 	public static MasterListOutDTO of(Master master) {
 		return MasterListOutDTO.builder()
-			.id(master.getId())
-			.email(master.getEmail())
-			.nickname(master.getNickname())
-			.build();
+				.id(master.getId())
+				.idNumber(master.getIdNumber())
+				.phoneNumber(master.getPhoneNumber())
+				.nickname(master.getNickname())
+				.build();
 	}
 
 }

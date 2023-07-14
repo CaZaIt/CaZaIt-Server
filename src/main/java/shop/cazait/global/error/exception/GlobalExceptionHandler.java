@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             description.append("[");
             description.append(fieldError.getField());
-            description.append("](은)는 ");
+            description.append("]의 ");
             description.append(fieldError.getDefaultMessage());
             description.append(" 입력된 값: [");
             description.append(fieldError.getRejectedValue());

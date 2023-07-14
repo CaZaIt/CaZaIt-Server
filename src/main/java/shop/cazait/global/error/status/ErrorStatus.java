@@ -22,14 +22,17 @@ public enum ErrorStatus {
      */
     INVALID_REQUEST(400, "FAIL", "유효하지 않은 요청입니다."),
     INVALID_CONGESTION(400, "FAIL", "유효하지 않은 혼잡도 입니다."),
-    FAILED_TO_LOGIN(400, "FAIL", "이메일 또는 비밀번호를 잘못 입력했습니다."),
+    FAILED_TO_LOGIN(400, "FAIL", "아이디 또는 비밀번호를 잘못 입력했습니다."),
     ALREADY_INACTIVE_MASTER(400, "FAIL", "이미 탈퇴한 계정입니다"),
     NOT_EXPIRED_TOKEN(400 ,"FAIL", "JWT가 아직 만료되지 않아, 재발급이 불가능합니다."),
-    EXIST_EMAIL(400,"FAIL","이미 존재하는 이메일입니다."),
+    EXIST_IDNUMBER(400,"FAIL","이미 존재하는 아이디입니다."),
+    EXIST_PHONENUMBER(400,"FAIL","이미 가입된 전화번호입니다"),
     EXIST_NICKNAME(400,"FAIL","이미 존재하는 닉네임입니다."),
     INVALID_ROLE(400,"FAIL","유효하지 않은 역할입니다."),
     FAIL_UPLOAD_IMAGE(400, "FAIL", "이미지 업로드를 실패했습니다."),
     EXIST_FAVORITES(400, "FAIL", "이미 존재하는 즐겨찾기입니다."),
+    INVALID_VERIFICATION_CODE(400,"FAIL","인증번호가 올바르지 않습니다."),
+    EXPIRED_VERIFICATION_CODE(400,"FAIL","만료된 인증번호입니다."),
 
     /**
      * Success Code : 401

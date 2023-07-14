@@ -7,28 +7,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Schema(description = "이메일 중복확인 req: 이메일")
+@Schema(description = "아이디 중복확인 req: 아이디")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserFindDuplicateEmaliInDTO {
+public class UserFindDuplicateIdNumberInDTO {
 
-    @Email(message = "이메일 형식을 지키세요.")
+    @Pattern(regexp = "^[a-z0-9]{5,20}$", message = "올바른 아이디 형식이 아닙니다")
     @NotBlank
-    @Schema(description = "이메일", example = "12345@gmail.com")
-    private String email;
+    @Schema(description = "로그인 아이디", example = "cazait1234")
+    private String idNumber;
 
     @Builder
-    public UserFindDuplicateEmaliInDTO(String email){
-        this.email = email;
+    public UserFindDuplicateIdNumberInDTO(String idNumber){
+        this.idNumber = idNumber;
     }
 
     public User toEntity(){
         return User.builder()
-                .email(email)
+                .idNumber(idNumber)
                 .build();
     }
 }

@@ -22,16 +22,20 @@ import shop.cazait.global.config.encrypt.Secret;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MasterCreateInDTO {
 
-	@NotBlank(message = "Master 이메일을 입력해주세요.")
-	@Schema(description = "이메일", example = "master@gmail.com")
-	private String email;
+	@NotBlank(message = "마스터 아이디를 입력해주세요.")
+	@Schema(description = "로그인 아이디", example = "cazait1234")
+	private String idNumber;
 
-	@NotBlank(message = "Master 비밀번호를 입력해주세요.")
-	@Schema(description = "비밀번호", example = "abcde!12345")
+	@NotBlank(message = "마스터 비밀번호를 입력해주세요.")
+	@Schema(description = "비밀번호", example = "abc12345#!")
 	private String password;
 
-	@NotBlank(message = "Master 닉네임을 입력해주세요.")
-	@Schema(description = "Master 닉네임", example = "master")
+	@NotBlank(message = "마스터 전화번호를 입력해주세요.")
+	@Schema(description = "휴대폰 번호", example = "01012345678")
+	private String phoneNumber;
+
+	@NotBlank(message = "마스터 닉네임을 입력해주세요.")
+	@Schema(description = "마스터 닉네임", example = "master")
 	private String nickname;
 
 	public Master toEntity()
@@ -43,10 +47,11 @@ public class MasterCreateInDTO {
 		BadPaddingException,
 		InvalidKeyException {
 		return Master.builder()
-			.email(getEmail())
-			.password(new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(getPassword()))
-			.nickname(getNickname())
-			.build();
+				.idNumber(getIdNumber())
+				.password(new AES128(Secret.MASTER_INFO_PASSWORD_KEY).encrypt(getPassword()))
+				.phoneNumber(getPhoneNumber())
+				.nickname(getNickname())
+				.build();
 	}
 
 }

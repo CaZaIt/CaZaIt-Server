@@ -36,6 +36,12 @@ public enum SuccessStatus {
     CREATE_MASTER(201, "SUCCESS", "마스터 등록이 완료 되었습니다"),
 
     /**
+     * Success Code : 202
+     * Accepted
+     */
+    ACCEPTED_SEND_MESSAGE(202,"SUCCESS","인증번호가 발송되었습니다"),
+
+    /**
      * Success Code : 204
      * No Content
      */

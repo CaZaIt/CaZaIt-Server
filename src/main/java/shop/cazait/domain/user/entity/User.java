@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
+import shop.cazait.domain.user.dto.UserUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.global.common.status.BaseStatus;
 
@@ -24,10 +26,13 @@ public class User extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String email;
+    private String idNumber;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String nickname;
@@ -35,17 +40,66 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private String refreshToken;
 
-//    @Enumerated(EnumType.STRING)
-//    private KakaoIntegrated isKakao;
+    @Column(nullable = true)
+    private Long kakaoId;
 
     @Builder
-    public User(UUID id, String email, String password, String nickname, String refreshToken) {
+    public User(UUID id, String idNumber, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
         this.id = id;
-        this.email = email;
+        this.idNumber = idNumber;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.nickname = nickname;
         this.refreshToken = refreshToken;
-//        this.isKakao = KakaoIntegrated.NORMAL;
+        this.kakaoId = kakaoId;
+    }
+
+    public static User loginUser(User user, String refreshToken){
+        return User.builder()
+                .id(user.getId())
+                .idNumber(user.getIdNumber())
+                .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
+                .nickname(user.getNickname())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
+        return User.builder()
+                .id(userIdx)
+                .idNumber(userUpdateInDTO.getIdNumber())
+                .password(userUpdateInDTO.getPassword())
+                .phoneNumber(userUpdateInDTO.getPhoneNumber())
+                .nickname(userUpdateInDTO.getNickname())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static User kakaoSignUpUser(Long kakaoId){
+        return User.builder()
+                .idNumber(generateRandomString())
+                .password(generateRandomString())
+                .phoneNumber(generateRandomString())
+                .nickname(generateRandomString())
+                .kakaoId(kakaoId)
+                .build();
+    }
+
+    public static User kakaoLoginUser(User user, String refreshToken) {
+        return User.builder()
+                .id(user.getId())
+                .idNumber(user.getIdNumber())
+                .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
+                .nickname(user.getNickname())
+                .kakaoId(user.getKakaoId())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private static String generateRandomString() {
+        return UUID.randomUUID().toString();
     }
 }
 

@@ -1,12 +1,7 @@
 package shop.cazait.domain.user.service;
 
 
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_EMAIL;
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_NICKNAME;
-import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
-import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
-import static shop.cazait.global.error.status.ErrorStatus.NOT_EXPIRED_TOKEN;
+import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.error.status.SuccessStatus.SIGNUP_AVAILABLE;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -46,19 +41,23 @@ public class UserService {
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (!userRepository.findByEmail(userCreateInDTO.getEmail()).isEmpty()) {
-            throw new UserException(EXIST_EMAIL);
+        if (userRepository.findByIdNumber(userCreateInDTO.getIdNumber()).isPresent()) {
+            throw new UserException(EXIST_IDNUMBER);
         }
 
-        if (!userRepository.findByNickname(userCreateInDTO.getNickname()).isEmpty()) {
+        if (userRepository.findByPhoneNumber(userCreateInDTO.getPhoneNumber()).isPresent()) {
+            throw new UserException(EXIST_PHONENUMBER);
+        }
+
+        if (userRepository.findByNickname(userCreateInDTO.getNickname()).isPresent()) {
             throw new UserException(EXIST_NICKNAME);
         }
 
-        String pwd;
-        pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(userCreateInDTO.getPassword());
+        String encryptedPassword;
+        encryptedPassword = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(userCreateInDTO.getPassword());
 
-        UserCreateInDTO encryptUserCreateInDTO = new UserCreateInDTO(userCreateInDTO.getEmail(), pwd, userCreateInDTO.getNickname());
-        User user = encryptUserCreateInDTO.toEntity();
+        UserCreateInDTO encryptUserCreateInDTO = UserCreateInDTO.encryptUserPassword(userCreateInDTO, encryptedPassword);
+        User user = UserCreateInDTO.toEntity(encryptUserCreateInDTO);
         userRepository.save(user);
 
         return UserCreateOutDTO.of(user);
@@ -67,9 +66,9 @@ public class UserService {
     public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        userRepository.findByEmail(userAuthenticateInDTO.getEmail()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
+        userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
 
-        User findUser = userRepository.findByEmail(userAuthenticateInDTO.getEmail()).get();
+        User findUser = userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).get();
 
         String password;
         password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
@@ -81,13 +80,7 @@ public class UserService {
             String accessToken = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
 
-            User loginUser = User.builder()
-                    .id(findUser.getId())
-                    .email(findUser.getEmail())
-                    .password(findUser.getPassword())
-                    .nickname(findUser.getNickname())
-                    .refreshToken(refreshToken)
-                    .build();
+            User loginUser = User.loginUser(findUser,refreshToken);
             userRepository.save(loginUser);
             return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, "user");
         }
@@ -109,19 +102,13 @@ public class UserService {
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO, String refreshToken) throws UserException {
-        User modifyUser = userUpdateInDTO.toEntity();
-        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
+    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException {
 
-        User existUser = User.builder()
-                .id(userIdx)
-                .email(modifyUser.getEmail())
-                .password(modifyUser.getPassword())
-                .nickname(modifyUser.getNickname())
-                .refreshToken(refreshToken)
-                .build();
-        userRepository.save(existUser);
-        return UserUpdateOutDTO.of(existUser);
+        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
+        String refreshToken = userRepository.findById(userIdx).get().getRefreshToken();
+        User modifyUser = User.updateUserProfile(userIdx, refreshToken, userUpdateInDTO);
+        userRepository.save(modifyUser);
+        return UserUpdateOutDTO.of(modifyUser);
     }
 
     public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
@@ -132,17 +119,17 @@ public class UserService {
         return UserDeleteOutDTO.of(deleteUser);
     }
 
-    public SuccessResponse<String> checkduplicateEmail(UserFindDuplicateEmaliInDTO userFindDuplicateEmailInDTO) throws UserException {
-        String email = userFindDuplicateEmailInDTO.getEmail();
-        if (!userRepository.findByEmail(email).isEmpty()) {
-            throw new UserException(EXIST_EMAIL);
+    public SuccessResponse<String> checkduplicateIdNumber(UserFindDuplicateIdNumberInDTO userFindDuplicateIdNumberInDTO) throws UserException {
+        String idNumber = userFindDuplicateIdNumberInDTO.getIdNumber();
+        if (userRepository.findByIdNumber(idNumber).isPresent()) {
+            throw new UserException(EXIST_IDNUMBER);
         }
-        return new SuccessResponse<>(SIGNUP_AVAILABLE, email);
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, idNumber);
     }
 
     public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         String nickname = userFindDuplicateNicknameInDTO.getNickname();
-        if (!userRepository.findByNickname(nickname.trim()).isEmpty()) {
+        if (userRepository.findByNickname(nickname.trim()).isPresent()) {
             throw new UserException(EXIST_NICKNAME);
         }
 

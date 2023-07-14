@@ -29,13 +29,15 @@ public class QMaster extends EntityPathBase<Master> {
     //inherited
     public final StringPath createdAt = _super.createdAt;
 
-    public final StringPath email = createString("email");
-
     public final ComparablePath<java.util.UUID> id = createComparable("id", java.util.UUID.class);
+
+    public final StringPath idNumber = createString("idNumber");
 
     public final StringPath nickname = createString("nickname");
 
     public final StringPath password = createString("password");
+
+    public final StringPath phoneNumber = createString("phoneNumber");
 
     public final StringPath refreshToken = createString("refreshToken");
 
