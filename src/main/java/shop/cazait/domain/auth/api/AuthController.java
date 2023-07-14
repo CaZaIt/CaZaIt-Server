@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 
-
 import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
 import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.auth.dto.kakao.ExtKakaoUserInfoOutDTO;
@@ -40,7 +39,6 @@ import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.user.dto.UserCreateOutDTO;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
-import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
@@ -59,7 +57,6 @@ public class AuthController {
 
     private final KakaoService kakaoService;
 
-    private final UserService userService;
 
     private final UserRepository userRepository;
 
@@ -133,7 +130,7 @@ public class AuthController {
     @NoAuth
     @GetMapping(value = "/kakao/callback")
     @Operation(summary = "카카오 로그인(웹) redirecturl", description = "카카오 API에서 code를 쿼리 파라미터로 받아옴, 클라이언트에서 직접 호출 x")
-    public SuccessResponse<?> kakaoCallBack(@RequestParam String code) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
+    public SuccessResponse<?> kakaoCallBack(@RequestParam String code) {
         log.info(code);
 
         ExtKakaoUserInfoOutDTO extKakaoUserInfoOutDTO = kakaoService.getInfo(code);
