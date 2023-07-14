@@ -148,7 +148,7 @@ public class JwtService {
             claims = parseJwt(token);
             log.info("Access expireTime = " + claims.getBody().getExpiration());
         } catch (ExpiredJwtException exception) {
-            UUID userIdx = exception.getClaims().get("userIdx", UUID.class);
+            UUID userIdx = UUID.fromString(exception.getClaims().get("userIdx", String.class));
             return userIdx;
         } catch (JwtException | IllegalArgumentException exception) {
             log.error("Token tampered.");
@@ -158,7 +158,7 @@ public class JwtService {
             throw new UserException(EMPTY_JWT);
         }
 
-        return claims.getBody().get("userIdx", UUID.class);
+        return UUID.fromString(claims.getBody().get("userIdx", String.class));
     }
 
     //액세스 토큰이 유효한 지 검증하는 함수 //인터셉터에서 모든 예외가 발생
@@ -189,7 +189,7 @@ public class JwtService {
 
         Jws<Claims> accessClaims = parseTokenWithAllException(token);
         log.info("Access expire time = " + accessClaims.getBody().getExpiration());
-        log.info("Access userId =  " + accessClaims.getBody().get("userIdx", UUID.class));
+        log.info("Access userId =  " + accessClaims.getBody().get("userIdx", String.class));
         return true;
     }
 
@@ -198,7 +198,7 @@ public class JwtService {
 
         Jws<Claims> accessClaims = parseRefreshTokenWithAllException(token);
         log.info("Access expire time = " + accessClaims.getBody().getExpiration());
-        log.info("Access userId =  " + accessClaims.getBody().get("userIdx", UUID.class));
+        log.info("Access userId =  " + accessClaims.getBody().get("userIdx", String.class));
         return true;
     }
 
