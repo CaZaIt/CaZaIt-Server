@@ -29,10 +29,7 @@ import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
 import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.auth.dto.kakao.ExtKakaoUserInfoOutDTO;
-import shop.cazait.domain.auth.dto.sens.AuthSendMessageCodeInDTO;
-import shop.cazait.domain.auth.dto.sens.AuthSendMessageCodeOutDTO;
-import shop.cazait.domain.auth.dto.sens.AuthVerifyMessageCodeInDTO;
-import shop.cazait.domain.auth.dto.sens.AuthVerifyMessageCodeOutDTO;
+import shop.cazait.domain.auth.dto.sens.*;
 import shop.cazait.domain.auth.service.AuthService;
 import shop.cazait.domain.auth.service.KakaoService;
 import shop.cazait.domain.master.error.MasterException;
@@ -109,9 +106,9 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send/test")
     @Operation(summary = "문자 인증번호 발송 테스트", description = "실제로 문자 발송은 진행하지 않음")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
+    public SuccessResponse<AuthSendMessageCodeOutDTOTest> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInDTO userSensAuthenticateInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = userSensAuthenticateInDTO.getRecipientPhoneNumber();
-        AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
+        AuthSendMessageCodeOutDTOTest authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
     }
 

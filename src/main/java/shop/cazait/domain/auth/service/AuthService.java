@@ -137,9 +137,10 @@ public class AuthService {
 //                statusName("success").build();
 
         /**전송 성공시 세션에 (전화번호, 인증번호) 저장 **/
+        Optional<Object> attribute = Optional.ofNullable(httpSession.getAttribute(recipientPhoneNumber));
         httpSession.setMaxInactiveInterval(smsVerifyTime);
         httpSession.setAttribute(recipientPhoneNumber,verificationCode);
-
+        
         return AuthSendMessageCodeOutDTO.of(recipientPhoneNumber,extSensSendMessageCodeOutDTO);
     }
 
@@ -190,7 +191,7 @@ public class AuthService {
             throw new UserException(ErrorStatus.INVALID_VERIFICATION_CODE);
         }
     }
-    public AuthSendMessageCodeOutDTO sendMessageCodeTest(String recipientPhoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
+    public AuthSendMessageCodeOutDTOTest sendMessageCodeTest(String recipientPhoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
 
         if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
             throw new UserException(EXIST_PHONENUMBER);
@@ -246,7 +247,7 @@ public class AuthService {
         httpSession.setMaxInactiveInterval(smsVerifyTime);
         httpSession.setAttribute(recipientPhoneNumber,verificationCode);
 
-        return AuthSendMessageCodeOutDTO.of(recipientPhoneNumber,extSensSendMessageCodeOutDTO);
+        return AuthSendMessageCodeOutDTOTest.of(recipientPhoneNumber, verificationCode, extSensSendMessageCodeOutDTO);
     }
 }
 
