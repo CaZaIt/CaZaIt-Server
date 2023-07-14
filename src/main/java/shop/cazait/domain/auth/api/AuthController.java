@@ -65,7 +65,7 @@ public class AuthController {
 
     @NoAuth
     @PostMapping("/log-in")
-    @Operation(summary = "회원 로그인", description = "이메일과 로그인을 통해 로그인을 진행")
+    @Operation(summary = "로그인", description = "유저/마스터 로그인 진행")
     @Parameter(name = "role", description = "유저인지 마스터인지(user/master)", example = "master")
     public SuccessResponse<UserAuthenticateOutDTO> logIn(
             @RequestParam @NotBlank String role,
