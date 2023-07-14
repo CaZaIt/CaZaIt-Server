@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidAlgorithmParameterException;
@@ -17,6 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +26,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import shop.cazait.domain.auth.Role;
 
+
 import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
 import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
+import shop.cazait.domain.auth.dto.kakao.ExtKakaoUserInfoOutDTO;
 import shop.cazait.domain.auth.dto.sens.AuthSendMessageCodeInDTO;
 import shop.cazait.domain.auth.dto.sens.AuthSendMessageCodeOutDTO;
 import shop.cazait.domain.auth.dto.sens.AuthVerifyMessageCodeInDTO;
 import shop.cazait.domain.auth.dto.sens.AuthVerifyMessageCodeOutDTO;
 import shop.cazait.domain.auth.service.AuthService;
+import shop.cazait.domain.auth.service.KakaoService;
 import shop.cazait.domain.master.error.MasterException;
+import shop.cazait.domain.user.dto.UserCreateOutDTO;
 import shop.cazait.domain.user.exception.UserException;
+import shop.cazait.domain.user.repository.UserRepository;
+import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
@@ -48,6 +56,12 @@ public class AuthController {
     private final JwtService jwtService;
 
     private final AuthService authService;
+
+    private final KakaoService kakaoService;
+
+    private final UserService userService;
+
+    private final UserRepository userRepository;
 
     @NoAuth
     @PostMapping("/log-in")
@@ -107,17 +121,32 @@ public class AuthController {
         AuthVerifyMessageCodeOutDTO authVerifyMessageCodeOutDTO = authService.verifyMessageCode(recipientPhoneNumber, verificationCode);
         return new SuccessResponse<>(SUCCESS, authVerifyMessageCodeOutDTO);
     }
+
+    @NoAuth
+    @GetMapping("/kakao/login")
+    @Operation(summary = "카카오 로그인(웹)", description = "/kakao/callback로 redirect")
+    public void kakaoLoginUser(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=59998cc010f4d694d452c4c1b86e6475&redirect_uri=http://localhost:8080/api/auths/kakao/callback");
+    }
+
+
+    @NoAuth
+    @GetMapping(value = "/kakao/callback")
+    public SuccessResponse<?> kakaoCallBack(@RequestParam String code) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
+        log.info(code);
+
+        ExtKakaoUserInfoOutDTO extKakaoUserInfoOutDTO = kakaoService.getInfo(code);
+        Long kakaoId = extKakaoUserInfoOutDTO.getId();
+        if(userRepository.findByKakaoId(kakaoId).isPresent()){
+            UserAuthenticateOutDTO userAuthenticateOutDTO = kakaoService.kakaoLoginUser(kakaoId);
+            return new SuccessResponse<>(SUCCESS,userAuthenticateOutDTO);
+        }
+        else{
+            UserCreateOutDTO userCreateOutDTO = kakaoService.kakaoSignUpnUser(kakaoId);
+            return new SuccessResponse<>(SUCCESS,userCreateOutDTO);
+        }
+    }
 }
 
-//    @NoAuth
-//    @GetMapping(value = "/kakao")
-//    public void kakaoCallBack(@RequestParam String code) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-//
-//        KakaoAccount kakaoAccountInfo = authService.getInfo(code).getKakaoAccount();
-//        System.out.println("kakaoAccountInfo = " + kakaoAccountInfo);
-//        System.out.println("kakaoAccountInfo.getEmail() = " + kakaoAccountInfo.getEmail());
-//        System.out.println("kakaoAccountInfo.getProfile() = " + kakaoAccountInfo.getProfile());
-//
-//        authService.loginByKakao(kakaoAccountInfo.getEmail());
-//    }
+
 
