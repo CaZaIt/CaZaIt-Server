@@ -26,7 +26,7 @@ public class User extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String idNumber;
+    private String accountNumber;
 
     @Column(nullable = false)
     private String password;
@@ -44,9 +44,9 @@ public class User extends BaseEntity {
     private Long kakaoId;
 
     @Builder
-    public User(UUID id, String idNumber, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
+    public User(UUID id, String accountNumber, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
         this.id = id;
-        this.idNumber = idNumber;
+        this.accountNumber = accountNumber;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.nickname = nickname;
@@ -57,7 +57,7 @@ public class User extends BaseEntity {
     public static User loginUser(User user, String refreshToken){
         return User.builder()
                 .id(user.getId())
-                .idNumber(user.getIdNumber())
+                .accountNumber(user.getAccountNumber())
                 .password(user.getPassword())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
@@ -68,7 +68,7 @@ public class User extends BaseEntity {
     public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
         return User.builder()
                 .id(userIdx)
-                .idNumber(userUpdateInDTO.getIdNumber())
+                .accountNumber(userUpdateInDTO.getAccountNumber())
                 .password(userUpdateInDTO.getPassword())
                 .phoneNumber(userUpdateInDTO.getPhoneNumber())
                 .nickname(userUpdateInDTO.getNickname())
@@ -78,7 +78,7 @@ public class User extends BaseEntity {
 
     public static User kakaoSignUpUser(Long kakaoId){
         return User.builder()
-                .idNumber(generateRandomString())
+                .accountNumber(generateRandomString())
                 .password(generateRandomString())
                 .phoneNumber(generateRandomString())
                 .nickname(generateRandomString())
@@ -89,7 +89,7 @@ public class User extends BaseEntity {
     public static User kakaoLoginUser(User user, String refreshToken) {
         return User.builder()
                 .id(user.getId())
-                .idNumber(user.getIdNumber())
+                .accountNumber(user.getAccountNumber())
                 .password(user.getPassword())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())

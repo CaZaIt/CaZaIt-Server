@@ -17,7 +17,7 @@ public class UserUpdateOutDTO {
     private UUID id;
 
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String idNumber;
+    private String accountNumber;
 
     @Schema(description = "비밀번호", example = "abc12345#!")
     private String password;
@@ -31,7 +31,7 @@ public class UserUpdateOutDTO {
     public static UserUpdateOutDTO of(User user) {
         return UserUpdateOutDTO.builder()
                 .id(user.getId())
-                .idNumber(user.getIdNumber())
+                .accountNumber(user.getAccountNumber())
                 .password(user.getPassword())
                 .nickname(user.getNickname())
                 .password(user.getPassword())

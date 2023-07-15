@@ -43,8 +43,8 @@ public class UserService {
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (userRepository.findByIdNumber(userCreateInDTO.getIdNumber()).isPresent()) {
-            throw new UserException(EXIST_IDNUMBER);
+        if (userRepository.findByAccountNumber(userCreateInDTO.getAccountNumber()).isPresent()) {
+            throw new UserException(EXIST_ACCOUNTNUMBER);
         }
 
         if (userRepository.findByPhoneNumber(userCreateInDTO.getPhoneNumber()).isPresent()) {
@@ -68,9 +68,9 @@ public class UserService {
     public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
+        userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
 
-        User findUser = userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).get();
+        User findUser = userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber()).get();
 
         String password;
         password = new AES128(PASSWORD_SECRET_KEY).decrypt(findUser.getPassword());
@@ -121,12 +121,12 @@ public class UserService {
         return UserDeleteOutDTO.of(deleteUser);
     }
 
-    public SuccessResponse<String> checkduplicateIdNumber(UserFindDuplicateIdNumberInDTO userFindDuplicateIdNumberInDTO) throws UserException {
-        String idNumber = userFindDuplicateIdNumberInDTO.getIdNumber();
-        if (userRepository.findByIdNumber(idNumber).isPresent()) {
-            throw new UserException(EXIST_IDNUMBER);
+    public SuccessResponse<String> checkduplicateaccountNumber(UserFindDuplicateAccountNumberInDTO userFindDuplicateAccountNumberInDTO) throws UserException {
+        String accountNumber = userFindDuplicateAccountNumberInDTO.getAccountNumber();
+        if (userRepository.findByAccountNumber(accountNumber).isPresent()) {
+            throw new UserException(EXIST_ACCOUNTNUMBER);
         }
-        return new SuccessResponse<>(SIGNUP_AVAILABLE, idNumber);
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, accountNumber);
     }
 
     public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {

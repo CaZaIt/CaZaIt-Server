@@ -18,7 +18,7 @@ public class MasterUpdateInDTO {
 
 	@Schema(description = "마스터 로그인 아이디")
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 아이디를 입력해주세요.")
-	private String idNumber;
+	private String accountNumber;
 
 	@Schema(description = "마스터 패스워드")
 	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")

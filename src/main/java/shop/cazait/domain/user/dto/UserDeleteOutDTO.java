@@ -17,7 +17,7 @@ public class UserDeleteOutDTO {
     private UUID id;
 
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String idNumber;
+    private String accountNumber;
 
     @Schema(name = "비밀번호", example = "abc12345#!")
     private String password;
@@ -33,7 +33,7 @@ public class UserDeleteOutDTO {
     public static UserDeleteOutDTO of(User user){
         return UserDeleteOutDTO.builder()
                 .id(user.getId())
-                .idNumber(user.getIdNumber())
+                .accountNumber(user.getAccountNumber())
                 .password(user.getPassword())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())

@@ -15,7 +15,7 @@ public class MasterCreateInDTO {
 
 	@NotBlank(message = "마스터 아이디를 입력해주세요.")
 	@Schema(description = "로그인 아이디", example = "cazait1234")
-	private String idNumber;
+	private String accountNumber;
 
 	@NotBlank(message = "마스터 비밀번호를 입력해주세요.")
 	@Schema(description = "비밀번호", example = "abc12345#!")
@@ -31,7 +31,7 @@ public class MasterCreateInDTO {
 
 	public Master encryptMasterPassword(String encryptedMasterPassword) {
 		return Master.builder()
-				.idNumber(getIdNumber())
+				.accountNumber(getAccountNumber())
 				.password(encryptedMasterPassword)
 				.phoneNumber(getPhoneNumber())
 				.nickname(getNickname())
