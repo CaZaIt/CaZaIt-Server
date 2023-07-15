@@ -82,7 +82,7 @@ public class UserService {
             String accessToken = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
 
-            User loginUser = User.loginUser(findUser,refreshToken);
+            User loginUser = findUser.loginUser(refreshToken);
             userRepository.save(loginUser);
             return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, "user");
         }

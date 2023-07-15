@@ -54,15 +54,9 @@ public class User extends BaseEntity {
         this.kakaoId = kakaoId;
     }
 
-    public static User loginUser(User user, String refreshToken){
-        return User.builder()
-                .id(user.getId())
-                .accountNumber(user.getAccountNumber())
-                .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .nickname(user.getNickname())
-                .refreshToken(refreshToken)
-                .build();
+    public User loginUser(String refreshToken){
+        this.refreshToken = refreshToken;
+        return this;
     }
 
     public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
