@@ -59,15 +59,13 @@ public class User extends BaseEntity {
         return this;
     }
 
-    public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
-        return User.builder()
-                .id(userIdx)
-                .accountNumber(userUpdateInDTO.getAccountNumber())
-                .password(userUpdateInDTO.getPassword())
-                .phoneNumber(userUpdateInDTO.getPhoneNumber())
-                .nickname(userUpdateInDTO.getNickname())
-                .refreshToken(refreshToken)
-                .build();
+    public User updateUserProfile(UserUpdateInDTO userUpdateInDTO){
+        this.accountNumber = userUpdateInDTO.getAccountNumber();
+        this.password = userUpdateInDTO.getPassword();
+        this.phoneNumber = userUpdateInDTO.getPhoneNumber();
+        this.nickname = userUpdateInDTO.getNickname();
+
+        return this;
     }
 
     public static User kakaoSignUpUser(Long kakaoId){
