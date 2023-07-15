@@ -78,16 +78,10 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public static User kakaoLoginUser(User user, String refreshToken) {
-        return User.builder()
-                .id(user.getId())
-                .accountNumber(user.getAccountNumber())
-                .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .nickname(user.getNickname())
-                .kakaoId(user.getKakaoId())
-                .refreshToken(refreshToken)
-                .build();
+    public User kakaoLoginUser(String refreshToken) {
+        this.refreshToken = refreshToken;
+
+        return this;
     }
 
     private static String generateRandomString() {

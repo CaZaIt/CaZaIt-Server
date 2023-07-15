@@ -71,10 +71,13 @@ public class KakaoService {
     public UserAuthenticateOutDTO kakaoLoginUser(Long kakaoId){
         User user = userRepository.findByKakaoId(kakaoId).get();
         UUID id = user.getId();
+
         String accessToken = jwtService.createJwt(id);
         String refreshToken = jwtService.createRefreshToken();
-        User kakaoLoginUser = User.kakaoLoginUser(user, refreshToken);
+
+        User kakaoLoginUser = user.kakaoLoginUser(refreshToken);
         userRepository.save(kakaoLoginUser);
+
         return UserAuthenticateOutDTO.of(user, accessToken);
     }
 
