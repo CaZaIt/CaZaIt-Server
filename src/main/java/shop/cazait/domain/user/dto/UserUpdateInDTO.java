@@ -41,4 +41,10 @@ public class UserUpdateInDTO {
                 .nickname(userUpdateInDTO.getNickname())
                 .build();
     }
+
+    public UserUpdateInDTO encryptUserUpdateDTO(String encryptedPassword){
+        this.password = encryptedPassword;
+
+        return this;
+    }
 }
