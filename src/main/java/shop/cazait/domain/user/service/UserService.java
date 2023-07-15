@@ -7,7 +7,6 @@ import static shop.cazait.global.error.status.SuccessStatus.SIGNUP_AVAILABLE;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.crypto.BadPaddingException;
@@ -16,6 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
@@ -27,7 +27,6 @@ import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
-import shop.cazait.global.config.encrypt.Secret;
 
 
 @Service
@@ -37,6 +36,9 @@ import shop.cazait.global.config.encrypt.Secret;
 public class UserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
+
+    @Value("${password-secret-key}")
+    private String PASSWORD_SECRET_KEY;
 
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
@@ -54,7 +56,7 @@ public class UserService {
         }
 
         String encryptedPassword;
-        encryptedPassword = new AES128(Secret.USER_INFO_PASSWORD_KEY).encrypt(userCreateInDTO.getPassword());
+        encryptedPassword = new AES128(PASSWORD_SECRET_KEY).encrypt(userCreateInDTO.getPassword());
 
         UserCreateInDTO encryptUserCreateInDTO = UserCreateInDTO.encryptUserPassword(userCreateInDTO, encryptedPassword);
         User user = UserCreateInDTO.toEntity(encryptUserCreateInDTO);
@@ -71,7 +73,7 @@ public class UserService {
         User findUser = userRepository.findByIdNumber(userAuthenticateInDTO.getIdNumber()).get();
 
         String password;
-        password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(findUser.getPassword());
+        password = new AES128(PASSWORD_SECRET_KEY).decrypt(findUser.getPassword());
 
         UUID userIdx;
         if (password.equals(userAuthenticateInDTO.getPassword())) {

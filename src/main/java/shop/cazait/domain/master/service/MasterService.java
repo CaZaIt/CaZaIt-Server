@@ -1,6 +1,5 @@
 package shop.cazait.domain.master.service;
 
-import static shop.cazait.domain.auth.Role.*;
 import static shop.cazait.global.error.status.ErrorStatus.*;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -14,6 +13,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +36,6 @@ import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.status.BaseStatus;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
-import shop.cazait.global.config.encrypt.Secret;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +45,9 @@ public class MasterService {
 
 	private final MasterRepository masterRepository;
 	private final JwtService jwtService;
+
+	@Value("${password-secret-key}")
+	private String PASSWORD_SECRET_KEY;
 
 	/**
 	 * 마스터 회원 가입
@@ -74,8 +76,9 @@ public class MasterService {
 			throw new MasterException(EXIST_NICKNAME);
 		}
 
+		String encryptedMasterPassword = new AES128(PASSWORD_SECRET_KEY).encrypt(dto.getPassword());
 		// 마스터 엔티티 생성
-		Master master = dto.toEntity();
+		Master master = dto.encryptMasterPassword(encryptedMasterPassword);
 		masterRepository.save(master);
 
 		return MasterCreateOutDTO.of(master);
@@ -100,7 +103,7 @@ public class MasterService {
 
 		Master findMaster = masterRepository.findMasterByIdNumber(dto.getIdNumber()).get();
 
-		String password = new AES128(Secret.MASTER_INFO_PASSWORD_KEY).decrypt(findMaster.getPassword());
+		String password = new AES128(PASSWORD_SECRET_KEY).decrypt(findMaster.getPassword());
 
 		UUID masterIdx;
 		if (password.equals(dto.getPassword())) {
