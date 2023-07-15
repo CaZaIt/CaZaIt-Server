@@ -68,7 +68,7 @@ public class UserService {
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         User findUser = userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber())
-                .orElseThrow(()->new UserException(FAILED_TO_LOGIN));
+                .orElseThrow(() -> new UserException(FAILED_TO_LOGIN));
 
         //DB에 있는 암호화된 비밀번호
         String findUserPassword = findUser.getPassword();
@@ -94,14 +94,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserFindOutDTO> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
-        return  allUsers.stream()
+        return allUsers.stream()
                 .map(UserFindOutDTO::of)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public UserFindOutDTO getUserInfo(UUID userIdx) throws UserException {
-        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
+        userRepository.findById(userIdx).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         User findUser = userRepository.findById(userIdx).get();
         return UserFindOutDTO.of(findUser);
     }
@@ -122,7 +122,7 @@ public class UserService {
     }
 
     public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
-        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
+        userRepository.findById(userIdx).orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
@@ -151,33 +151,28 @@ public class UserService {
     }
 
 
-    public UserAuthenticateOutDTO reIssueTokens(String accessToken, String refreshToken) throws UserException{
+    public UserAuthenticateOutDTO reIssueTokens(String accessToken, String refreshToken) throws UserException {
 
         User user = null;
         UUID userIdx = jwtService.getUserIdx(accessToken);
         log.info("accessToken = " + accessToken);
         log.info("refreshToken = " + refreshToken);
 
-        if(jwtService.isValidAccessTokenInRefresh(accessToken))
-        {
+        if (jwtService.isValidAccessTokenInRefresh(accessToken)) {
             log.info("아직 accesstoken 유효");
             throw new UserException(NOT_EXPIRED_TOKEN);
-        }
-        else
-        {
+        } else {
             log.info("Access 토큰 만료됨");
-            if(jwtService.isValidRefreshTokenInRefresh(refreshToken)){     //들어온 Refresh 토큰이 유효한지
+            if (jwtService.isValidRefreshTokenInRefresh(refreshToken)) {     //들어온 Refresh 토큰이 유효한지
                 log.info("아직 refreshtoken 유효함");
 
-                if(isEqualRefreshTokenFromDB(accessToken, refreshToken)) {
+                if (isEqualRefreshTokenFromDB(accessToken, refreshToken)) {
                     log.info("Access token 재발급");
                     accessToken = jwtService.createJwt(userIdx);
                     user = userRepository.findById(userIdx).get();
                 }
-            }
-            else
-            {
-                if(isEqualRefreshTokenFromDB(accessToken, refreshToken)) {
+            } else {
+                if (isEqualRefreshTokenFromDB(accessToken, refreshToken)) {
                     log.info("Access token 재발급");
                     accessToken = jwtService.createJwt(userIdx);
 
@@ -187,22 +182,22 @@ public class UserService {
                 }
             }
         }
-        return UserAuthenticateOutDTO.of(user,accessToken);
+        return UserAuthenticateOutDTO.of(user, accessToken);
     }
-    public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException{
+
+    public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException {
         UUID userIdx = jwtService.getUserIdx(accessToken);
         User user = userRepository.findById(userIdx).get();
         String tokenFromDB = user.getRefreshToken();
-        log.info("userIdx from accessToken: "+userIdx);
-        log.info("refreshToken found by accessToken(userIdx): "+tokenFromDB);
+        log.info("userIdx from accessToken: " + userIdx);
+        log.info("refreshToken found by accessToken(userIdx): " + tokenFromDB);
 
-        if(refreshToken.equals(tokenFromDB)) {
+        if (refreshToken.equals(tokenFromDB)) {
             log.info("Access token 재발급");
             return true;
-        }
-        else{
+        } else {
             log.error("Refresh Token Tampered, not equal from db refreshtoken");
             throw new UserException(INVALID_JWT);
         }
     }
-    
+}
