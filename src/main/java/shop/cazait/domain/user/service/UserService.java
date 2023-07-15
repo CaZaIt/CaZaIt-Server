@@ -67,23 +67,26 @@ public class UserService {
     public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber()).orElseThrow(()->new UserException(FAILED_TO_LOGIN));
+        User findUser = userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber())
+                .orElseThrow(()->new UserException(FAILED_TO_LOGIN));
 
-        User findUser = userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber()).get();
+        //DB에 있는 암호화된 비밀번호
+        String findUserPassword = findUser.getPassword();
+        //로그인 시 입력한 비밀번호를 암호화
+        String loginPassword = encryptPassword(userAuthenticateInDTO.getPassword());
 
-        String password;
-        password = new AES128(PASSWORD_SECRET_KEY).decrypt(findUser.getPassword());
+        if (findUserPassword.equals(loginPassword)) {
+            UUID userIdx = findUser.getId();
 
-        UUID userIdx;
-        if (password.equals(userAuthenticateInDTO.getPassword())) {
-            userIdx = findUser.getId();
-
+            //토큰 발행
             String accessToken = jwtService.createJwt(userIdx);
             String refreshToken = jwtService.createRefreshToken();
 
+            //refreshToken 추가하여 DB저장
             User loginUser = findUser.loginUser(refreshToken);
             userRepository.save(loginUser);
-            return UserAuthenticateOutDTO.of(findUser, accessToken, refreshToken, "user");
+
+            return UserAuthenticateOutDTO.of(loginUser, accessToken);
         }
         throw new UserException(FAILED_TO_LOGIN);
     }
