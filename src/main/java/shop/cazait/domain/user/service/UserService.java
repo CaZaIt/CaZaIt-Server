@@ -106,13 +106,19 @@ public class UserService {
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException {
+    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        userRepository.findById(userIdx).orElseThrow(()->new UserException(NOT_EXIST_USER));
-        String refreshToken = userRepository.findById(userIdx).get().getRefreshToken();
-        User modifyUser = User.updateUserProfile(userIdx, refreshToken, userUpdateInDTO);
-        userRepository.save(modifyUser);
-        return UserUpdateOutDTO.of(modifyUser);
+        User existUser = userRepository.findById(userIdx)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        //DTO의 비밀번호 암호화
+        String encryptedPassword = encryptPassword(userUpdateInDTO.getPassword());
+        UserUpdateInDTO encryptedUserUpdateDTO = userUpdateInDTO.encryptUserUpdateDTO(encryptedPassword);
+
+        //유저 정보 수정
+        User modifiedUser = existUser.updateUserProfile(encryptedUserUpdateDTO);
+        userRepository.save(modifiedUser);
+        return UserUpdateOutDTO.of(modifiedUser);
     }
 
     public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
