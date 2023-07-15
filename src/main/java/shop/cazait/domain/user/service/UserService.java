@@ -187,7 +187,7 @@ public class UserService {
                 }
             }
         }
-        return UserAuthenticateOutDTO.of(user,accessToken,refreshToken,"user");
+        return UserAuthenticateOutDTO.of(user,accessToken);
     }
     public boolean isEqualRefreshTokenFromDB(String accessToken, String refreshToken) throws UserException{
         UUID userIdx = jwtService.getUserIdx(accessToken);
