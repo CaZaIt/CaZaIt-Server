@@ -55,10 +55,9 @@ public class UserService {
             throw new UserException(EXIST_NICKNAME);
         }
 
-        String encryptedPassword;
-        encryptedPassword = new AES128(PASSWORD_SECRET_KEY).encrypt(userCreateInDTO.getPassword());
-
+        String encryptedPassword = encryptPassword(userCreateInDTO.getPassword());
         UserCreateInDTO encryptUserCreateInDTO = UserCreateInDTO.encryptUserPassword(userCreateInDTO, encryptedPassword);
+
         User user = UserCreateInDTO.toEntity(encryptUserCreateInDTO);
         userRepository.save(user);
 
@@ -119,6 +118,10 @@ public class UserService {
         User deleteUser = userRepository.findById(userIdx).get();
         userRepository.delete(deleteUser);
         return UserDeleteOutDTO.of(deleteUser);
+    }
+
+    public String encryptPassword(String password) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
     public SuccessResponse<String> checkduplicateaccountNumber(UserFindDuplicateAccountNumberInDTO userFindDuplicateAccountNumberInDTO) throws UserException {
