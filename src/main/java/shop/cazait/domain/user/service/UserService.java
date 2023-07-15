@@ -56,7 +56,7 @@ public class UserService {
         }
 
         String encryptedPassword = encryptPassword(userCreateInDTO.getPassword());
-        UserCreateInDTO encryptUserCreateInDTO = UserCreateInDTO.encryptUserPassword(userCreateInDTO, encryptedPassword);
+        UserCreateInDTO encryptUserCreateInDTO = userCreateInDTO.encryptUserUpdateDTO(userCreateInDTO, encryptedPassword);
 
         User user = UserCreateInDTO.toEntity(encryptUserCreateInDTO);
         userRepository.save(user);
