@@ -82,11 +82,11 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/idnumber")
+    @PostMapping ("/accountnumber")
     @Operation(summary = "아이디 중복확인", description = "회원가입 전 이미 존재하는 아이디인지 중복확인")
-    public SuccessResponse<String> checkDuplicateIdNumber(@RequestBody @Valid UserFindDuplicateIdNumberInDTO userFindDuplicateEmailInDTO) throws UserException {
-        SuccessResponse<String> idNumberSuccessResponse = userService.checkduplicateIdNumber(userFindDuplicateEmailInDTO);
-        return idNumberSuccessResponse;
+    public SuccessResponse<String> checkDuplicateaccountNumber(@RequestBody @Valid UserFindDuplicateAccountNumberInDTO userFindDuplicateEmailInDTO) throws UserException {
+        SuccessResponse<String> accountNumberSuccessResponse = userService.checkduplicateaccountNumber(userFindDuplicateEmailInDTO);
+        return accountNumberSuccessResponse;
     }
 
     @NoAuth

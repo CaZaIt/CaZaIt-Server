@@ -13,21 +13,21 @@ import javax.validation.constraints.Pattern;
 @Schema(description = "아이디 중복확인 req: 아이디")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserFindDuplicateIdNumberInDTO {
+public class UserFindDuplicateAccountNumberInDTO {
 
     @Pattern(regexp = "^[a-z0-9]{5,20}$", message = "올바른 아이디 형식이 아닙니다")
     @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String idNumber;
+    private String accountNumber;
 
     @Builder
-    public UserFindDuplicateIdNumberInDTO(String idNumber){
-        this.idNumber = idNumber;
+    public UserFindDuplicateAccountNumberInDTO(String accountNumber){
+        this.accountNumber = accountNumber;
     }
 
     public User toEntity(){
         return User.builder()
-                .idNumber(idNumber)
+                .accountNumber(accountNumber)
                 .build();
     }
 }

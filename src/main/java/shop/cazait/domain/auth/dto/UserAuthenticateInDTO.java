@@ -18,21 +18,21 @@ public class UserAuthenticateInDTO {
     @Pattern(regexp = "^[a-z0-9]{5,20}$")
     @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String idNumber;
+    private String accountNumber;
     @Schema(description = "비밀번호", example = "abc12345#!")
     @NotBlank
     private String password;
 
 
     @Builder
-    public UserAuthenticateInDTO(String idNumber, String password) {
-        this.idNumber = idNumber;
+    public UserAuthenticateInDTO(String accountNumber, String password) {
+        this.accountNumber = accountNumber;
         this.password = password;
     }
 
     public User toEntity(){
         return User.builder()
-                .idNumber(idNumber)
+                .accountNumber(accountNumber)
                 .password(password)
                 .build();
     }

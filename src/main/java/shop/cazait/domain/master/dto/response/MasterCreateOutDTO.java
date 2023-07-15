@@ -17,7 +17,7 @@ public class MasterCreateOutDTO {
 	private UUID id;
 
 	@Schema(description = "마스터 로그인 아이디")
-	private String idNumber;
+	private String accountNumber;
 
 	@Schema(description = "마스터 계정 이름")
 	private String nickname;
@@ -28,7 +28,7 @@ public class MasterCreateOutDTO {
 	static public MasterCreateOutDTO of(Master master) {
 		return MasterCreateOutDTO.builder()
 				.id(master.getId())
-				.idNumber(master.getIdNumber())
+				.accountNumber(master.getAccountNumber())
 				.phoneNumber(master.getPhoneNumber())
 				.nickname(master.getNickname())
 				.build();

@@ -62,8 +62,8 @@ public class MasterService {
 		InvalidKeyException {
 
 		//아이디 중복확인
-		if (masterRepository.findMasterByIdNumber(dto.getIdNumber()).isPresent()) {
-			throw new MasterException(EXIST_IDNUMBER);
+		if (masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).isPresent()) {
+			throw new MasterException(EXIST_ACCOUNTNUMBER);
 		}
 
 		//휴대전화번호 중복확인
@@ -97,11 +97,11 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByIdNumber(dto.getIdNumber()).isEmpty()) {
+		if (masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).isEmpty()) {
 			throw new MasterException(NOT_EXIST_MASTER);
 		}
 
-		Master findMaster = masterRepository.findMasterByIdNumber(dto.getIdNumber()).get();
+		Master findMaster = masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).get();
 
 		String password = new AES128(PASSWORD_SECRET_KEY).decrypt(findMaster.getPassword());
 
@@ -113,7 +113,7 @@ public class MasterService {
 
 			findMaster = Master.builder()
 					.id(masterIdx)
-					.idNumber(findMaster.getIdNumber())
+					.accountNumber(findMaster.getAccountNumber())
 					.password(findMaster.getPassword())
 					.phoneNumber(findMaster.getPhoneNumber())
 					.nickname(findMaster.getNickname())

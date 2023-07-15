@@ -17,7 +17,7 @@ public class UserFindOutDTO {
     private UUID id;
 
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String idNumber;
+    private String accountNumber;
 
     @Schema(description = "Password", example = "abc12345#!")
     private String password;
@@ -31,7 +31,7 @@ public class UserFindOutDTO {
     public static UserFindOutDTO of(User user){
         return UserFindOutDTO.builder()
                 .id(user.getId())
-                .idNumber(user.getIdNumber())
+                .accountNumber(user.getAccountNumber())
                 .password(user.getPassword())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())

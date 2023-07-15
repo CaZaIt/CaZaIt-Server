@@ -9,7 +9,7 @@ import shop.cazait.domain.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User,UUID> {
 
-    Optional<User> findByIdNumber(String email);
+    Optional<User> findByAccountNumber(String email);
     Optional<User> findByNickname(String nickname);
 
     Optional<User> findById(UUID id);

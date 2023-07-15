@@ -24,14 +24,14 @@ public class QMaster extends EntityPathBase<Master> {
 
     public final shop.cazait.global.common.entity.QBaseEntity _super = new shop.cazait.global.common.entity.QBaseEntity(this);
 
+    public final StringPath accountNumber = createString("accountNumber");
+
     public final shop.cazait.domain.cafe.entity.QCafe cafe;
 
     //inherited
     public final StringPath createdAt = _super.createdAt;
 
     public final ComparablePath<java.util.UUID> id = createComparable("id", java.util.UUID.class);
-
-    public final StringPath idNumber = createString("idNumber");
 
     public final StringPath nickname = createString("nickname");
 
