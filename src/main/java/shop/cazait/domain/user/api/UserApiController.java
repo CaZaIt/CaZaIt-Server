@@ -66,7 +66,7 @@ public class UserApiController {
     @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
     public SuccessResponse<UserUpdateOutDTO> modifyUser(
             @PathVariable(name = "userId") UUID userIdx,
-            @RequestBody @Valid UserUpdateInDTO userUpdateInDTO) throws UserException {
+            @RequestBody @Valid UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
             UserUpdateOutDTO userUpdateOutDTO = userService.modifyUser(userIdx, userUpdateInDTO);
             return new SuccessResponse<>(SUCCESS, userUpdateOutDTO);
