@@ -24,7 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/v3/api-docs/**",
                         "/webjars/**",
                         "/error/**"
-                ).addPathPatterns("/rest-api-root/**");
+                );
+                //.addPathPatterns("/rest-api-root/**");
     }
 
 }
