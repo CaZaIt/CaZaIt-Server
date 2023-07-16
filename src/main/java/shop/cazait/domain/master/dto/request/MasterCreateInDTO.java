@@ -29,12 +29,18 @@ public class MasterCreateInDTO {
 	@Schema(description = "마스터 닉네임", example = "master")
 	private String nickname;
 
-	public Master encryptMasterPassword(String encryptedMasterPassword) {
+	public MasterCreateInDTO encryptMasterCreateDTO(String encryptedMasterPassword) {
+		this.password = encryptedMasterPassword;
+
+		return this;
+	}
+
+	public static Master toEntity(MasterCreateInDTO masterCreateInDTO){
 		return Master.builder()
-				.accountNumber(getAccountNumber())
-				.password(encryptedMasterPassword)
-				.phoneNumber(getPhoneNumber())
-				.nickname(getNickname())
+				.accountNumber(masterCreateInDTO.getAccountNumber())
+				.password(masterCreateInDTO.getPassword())
+				.phoneNumber(masterCreateInDTO.getPhoneNumber())
+				.nickname(masterCreateInDTO.getNickname())
 				.build();
 	}
 

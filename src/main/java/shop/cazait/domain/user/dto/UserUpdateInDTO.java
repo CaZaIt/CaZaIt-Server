@@ -22,15 +22,15 @@ public class UserUpdateInDTO {
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
     @NotBlank
-    @Schema(description = "비밀번호", example = "abc12345#!")
+    @Schema(description = "비밀번호", example = "abc123456#!")
     private String password;
 
     @NotBlank
-    @Schema(description = "휴대전화 번호", example = "01012345678")
+    @Schema(description = "휴대전화 번호", example = "01012345679")
     private String phoneNumber;
 
     @NotBlank(message="닉네임을 입력하세요.")
-    @Schema(description = "닉네임", example = "토마스")
+    @Schema(description = "닉네임", example = "토마스수정")
     private String nickname;
 
     public static User toEntity(UserUpdateInDTO userUpdateInDTO){
@@ -40,5 +40,11 @@ public class UserUpdateInDTO {
                 .phoneNumber(userUpdateInDTO.getPhoneNumber())
                 .nickname(userUpdateInDTO.getNickname())
                 .build();
+    }
+
+    public UserUpdateInDTO encryptUserUpdateDTO(String encryptedPassword){
+        this.password = encryptedPassword;
+
+        return this;
     }
 }

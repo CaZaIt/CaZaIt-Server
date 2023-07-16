@@ -48,13 +48,10 @@ public class UserCreateInDTO {
                 .build();
     }
 
-    public static UserCreateInDTO encryptUserPassword(UserCreateInDTO userCreateInDTO, String encryptedPassword){
-        return UserCreateInDTO.builder()
-                .accountNumber(userCreateInDTO.getAccountNumber())
-                .password(encryptedPassword)
-                .phoneNumber(userCreateInDTO.getPhoneNumber())
-                .nickname(userCreateInDTO.getNickname())
-                .build();
+    public UserCreateInDTO encryptUserUpdateDTO(UserCreateInDTO userCreateInDTO, String encryptedPassword){
+        this.password = encryptedPassword;
+
+        return this;
     }
 
 }

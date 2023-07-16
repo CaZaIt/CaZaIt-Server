@@ -66,7 +66,7 @@ public class MasterController {
 	@Parameter(name = "masterId", description = "response로 발급 받은 계정 마스터 ID 번호")
 	public SuccessResponse<String> updateMaster(
 		@PathVariable(name = "masterId") UUID masterId,
-		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO){
+		@RequestBody @Valid MasterUpdateInDTO masterUpdateInDTO) throws InvalidAlgorithmParameterException, MasterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
 		masterService.updateMaster(masterId, masterUpdateInDTO);
 		return new SuccessResponse<>(SUCCESS, "마스터 정보 수정 완료");

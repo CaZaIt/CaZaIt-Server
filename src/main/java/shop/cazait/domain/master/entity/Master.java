@@ -82,14 +82,18 @@ public class Master extends BaseEntity {
 		this.cafe = cafe;
 	}
 
-	public static Master updateMasterProfile(UUID userid, MasterUpdateInDTO masterUpdateInDTO, String refreshToken){
-		return Master.builder()
-				.id(userid)
-				.accountNumber(masterUpdateInDTO.getAccountNumber())
-				.password(masterUpdateInDTO.getPassword())
-				.phoneNumber(masterUpdateInDTO.getPhoneNumber())
-				.nickname(masterUpdateInDTO.getNickname())
-				.refreshToken(refreshToken)
-				.build();
+	public Master updateMasterProfile(MasterUpdateInDTO masterUpdateInDTO){
+		this.accountNumber = masterUpdateInDTO.getAccountNumber();
+		this.password = masterUpdateInDTO.getPassword();
+		this.phoneNumber = masterUpdateInDTO.getPhoneNumber();
+		this.nickname = masterUpdateInDTO.getNickname();
+
+		return this;
+	}
+
+	public Master loginMaster(String refreshToken){
+		this.refreshToken = refreshToken;
+
+		return this;
 	}
 }

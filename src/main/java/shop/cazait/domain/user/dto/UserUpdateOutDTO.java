@@ -33,6 +33,7 @@ public class UserUpdateOutDTO {
                 .id(user.getId())
                 .accountNumber(user.getAccountNumber())
                 .password(user.getPassword())
+                .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
                 .password(user.getPassword())
                 .build();

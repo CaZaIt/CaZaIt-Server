@@ -17,6 +17,10 @@ import java.util.UUID;
 @Builder(access = AccessLevel.PRIVATE)
 public class UserAuthenticateOutDTO {
 
+    private static final String userRole = "user";
+
+    private static final String masterRole = "master";
+
     @Schema(description = "회원 id")
     private UUID id;
 
@@ -33,23 +37,23 @@ public class UserAuthenticateOutDTO {
     @NotBlank
     private String role;
 
-    public static UserAuthenticateOutDTO of(User user, String accessToken, String refreshToken, String role){
+    public static UserAuthenticateOutDTO of(User user, String accessToken){
         return  UserAuthenticateOutDTO.builder()
                 .id(user.getId())
                 .accountNumber(user.getAccountNumber())
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .role(role)
+                .refreshToken(user.getRefreshToken())
+                .role(userRole)
                 .build();
     }
 
-    public static UserAuthenticateOutDTO of(Master master, String accessToken, String refreshToken, String role) {
+    public static UserAuthenticateOutDTO of(Master master, String accessToken) {
         return  UserAuthenticateOutDTO.builder()
                 .id(master.getId())
                 .accountNumber(master.getAccountNumber())
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .role(role)
+                .refreshToken(master.getRefreshToken())
+                .role(masterRole)
                 .build();
     }
 }

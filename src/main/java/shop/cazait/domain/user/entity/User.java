@@ -54,26 +54,18 @@ public class User extends BaseEntity {
         this.kakaoId = kakaoId;
     }
 
-    public static User loginUser(User user, String refreshToken){
-        return User.builder()
-                .id(user.getId())
-                .accountNumber(user.getAccountNumber())
-                .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .nickname(user.getNickname())
-                .refreshToken(refreshToken)
-                .build();
+    public User loginUser(String refreshToken){
+        this.refreshToken = refreshToken;
+        return this;
     }
 
-    public static User updateUserProfile(UUID userIdx, String refreshToken, UserUpdateInDTO userUpdateInDTO){
-        return User.builder()
-                .id(userIdx)
-                .accountNumber(userUpdateInDTO.getAccountNumber())
-                .password(userUpdateInDTO.getPassword())
-                .phoneNumber(userUpdateInDTO.getPhoneNumber())
-                .nickname(userUpdateInDTO.getNickname())
-                .refreshToken(refreshToken)
-                .build();
+    public User updateUserProfile(UserUpdateInDTO userUpdateInDTO){
+        this.accountNumber = userUpdateInDTO.getAccountNumber();
+        this.password = userUpdateInDTO.getPassword();
+        this.phoneNumber = userUpdateInDTO.getPhoneNumber();
+        this.nickname = userUpdateInDTO.getNickname();
+
+        return this;
     }
 
     public static User kakaoSignUpUser(Long kakaoId){
@@ -86,16 +78,10 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public static User kakaoLoginUser(User user, String refreshToken) {
-        return User.builder()
-                .id(user.getId())
-                .accountNumber(user.getAccountNumber())
-                .password(user.getPassword())
-                .phoneNumber(user.getPhoneNumber())
-                .nickname(user.getNickname())
-                .kakaoId(user.getKakaoId())
-                .refreshToken(refreshToken)
-                .build();
+    public User kakaoLoginUser(String refreshToken) {
+        this.refreshToken = refreshToken;
+
+        return this;
     }
 
     private static String generateRandomString() {
