@@ -90,4 +90,10 @@ public class Master extends BaseEntity {
 
 		return this;
 	}
+
+	public Master loginMaster(String refreshToken){
+		this.refreshToken = refreshToken;
+
+		return this;
+	}
 }

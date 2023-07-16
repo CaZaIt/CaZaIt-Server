@@ -90,7 +90,7 @@ public class MasterService {
 	/**
 	 * 마스터 로그인
 	 */
-	public UserAuthenticateOutDTO LoginMaster(UserAuthenticateInDTO dto) throws
+	public UserAuthenticateOutDTO LoginMaster(UserAuthenticateInDTO userAuthenticateInDTO) throws
 		MasterException,
 		InvalidAlgorithmParameterException,
 		NoSuchPaddingException,
@@ -99,33 +99,26 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).isEmpty()) {
-			throw new MasterException(NOT_EXIST_MASTER);
-		}
+		Master findMaster = masterRepository.findMasterByAccountNumber(userAuthenticateInDTO.getAccountNumber())
+				.orElseThrow(() -> new MasterException(FAILED_TO_LOGIN));
 
-		Master findMaster = masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).get();
+		//DB에 있는 암호화된 비밀번호
+		String findMasterPassword = findMaster.getPassword();
+		//로그인 시 입력한 비밀번호를 암호화
+		String loginPassword = encryptPassword(userAuthenticateInDTO.getPassword());
 
-		String password = new AES128(PASSWORD_SECRET_KEY).decrypt(findMaster.getPassword());
 
-		UUID masterIdx;
-		if (password.equals(dto.getPassword())) {
-			masterIdx = findMaster.getId();
-			String jwt = jwtService.createJwt(masterIdx);
+		if (findMasterPassword.equals(loginPassword)){
+			//토큰 생성
+			UUID masterIdx = findMaster.getId();
+			String accessToken = jwtService.createJwt(masterIdx);
 			String refreshToken = jwtService.createRefreshToken();
 
-			findMaster = Master.builder()
-					.id(masterIdx)
-					.accountNumber(findMaster.getAccountNumber())
-					.password(findMaster.getPassword())
-					.phoneNumber(findMaster.getPhoneNumber())
-					.nickname(findMaster.getNickname())
-					.refreshToken(refreshToken)
-					.build();
-			//			findMaster.builder()
-			//							.refreshToken(refreshToken)
-			//					        .build();
+			//리프레시 토큰 추가 후 저장
+			findMaster.loginMaster(refreshToken);
 			masterRepository.save(findMaster);
-			return UserAuthenticateOutDTO.of(findMaster, jwt);
+
+			return UserAuthenticateOutDTO.of(findMaster, accessToken);
 		}
 		throw new MasterException(FAILED_TO_LOGIN);
 	}
