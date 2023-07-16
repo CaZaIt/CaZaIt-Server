@@ -76,9 +76,11 @@ public class MasterService {
 			throw new MasterException(EXIST_NICKNAME);
 		}
 
-		String encryptedMasterPassword = new AES128(PASSWORD_SECRET_KEY).encrypt(dto.getPassword());
-		// 마스터 엔티티 생성
-		Master master = dto.encryptMasterPassword(encryptedMasterPassword);
+		//비밀번호 암호화
+		String encryptedMasterPassword = encryptPassword(dto.getPassword());
+		MasterCreateInDTO masterCreateInDTO = dto.encryptMasterCreateDTO(encryptedMasterPassword);
+
+		Master master = MasterCreateInDTO.toEntity(masterCreateInDTO);
 		masterRepository.save(master);
 
 		return MasterCreateOutDTO.of(master);
