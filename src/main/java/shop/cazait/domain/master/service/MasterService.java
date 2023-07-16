@@ -162,6 +162,10 @@ public class MasterService {
 		masterRepository.delete(master);
 	}
 
+	public String encryptPassword(String password) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+		return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
+	}
+
 	// 토큰 재발급
 	public UserAuthenticateOutDTO issueAccessToken(String accessToken, String refreshToken) throws
 		MasterException,
