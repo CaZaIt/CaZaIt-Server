@@ -33,4 +33,11 @@ public class MasterUpdateInDTO {
 	@NotBlank(message = "수정하고자 하는 마스터 계정의 닉네임을 입력해주세요.")
 	private String nickname;
 
+
+	public MasterUpdateInDTO encryptMasterUpdateDTO(String encryptedPassword){
+		this.password = encryptedPassword;
+
+		return this;
+	}
+
 }

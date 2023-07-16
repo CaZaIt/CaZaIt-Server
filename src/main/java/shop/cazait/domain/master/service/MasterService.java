@@ -146,10 +146,14 @@ public class MasterService {
 	}
 
 	//마스터 회원 정보 업데이트
-	public MasterUptateOutDTO updateMaster(UUID id, MasterUpdateInDTO masterUpdateInDTO) {
-		String refreshToken = masterRepository.findMasterById(id).get().getRefreshToken();
-		Master updatedMaster = Master.updateMasterProfile(id, masterUpdateInDTO, refreshToken);
-		masterRepository.save(updatedMaster);
+	public MasterUptateOutDTO updateMaster(UUID id, MasterUpdateInDTO masterUpdateInDTO) throws MasterException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+		Master master = masterRepository.findMasterById(id)
+				.orElseThrow(()->new MasterException(NOT_EXIST_MASTER));
+
+		String encryptPassword = encryptPassword(masterUpdateInDTO.getPassword());
+		MasterUpdateInDTO encryptedUserUpdateDTO = masterUpdateInDTO.encryptMasterUpdateDTO(encryptPassword);
+
+		Master updatedMaster = master.updateMasterProfile(encryptedUserUpdateDTO);
 		return MasterUptateOutDTO.of(updatedMaster);
 	}
 
