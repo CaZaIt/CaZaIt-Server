@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.entity;
+package shop.cazait.domain.master.model.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,9 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QMaster extends EntityPathBase<Master> {
 
-    private static final long serialVersionUID = -182342587L;
-
-    private static final PathInits INITS = PathInits.DIRECT2;
+    private static final long serialVersionUID = -940424128L;
 
     public static final QMaster master = new QMaster("master");
 
@@ -26,7 +24,7 @@ public class QMaster extends EntityPathBase<Master> {
 
     public final StringPath accountNumber = createString("accountNumber");
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final ListPath<shop.cazait.domain.cafe.model.entity.Cafe, shop.cazait.domain.cafe.model.entity.QCafe> cafes = this.<shop.cazait.domain.cafe.model.entity.Cafe, shop.cazait.domain.cafe.model.entity.QCafe>createList("cafes", shop.cazait.domain.cafe.model.entity.Cafe.class, shop.cazait.domain.cafe.model.entity.QCafe.class, PathInits.DIRECT2);
 
     //inherited
     public final StringPath createdAt = _super.createdAt;
@@ -48,24 +46,15 @@ public class QMaster extends EntityPathBase<Master> {
     public final StringPath updatedAt = _super.updatedAt;
 
     public QMaster(String variable) {
-        this(Master.class, forVariable(variable), INITS);
+        super(Master.class, forVariable(variable));
     }
 
     public QMaster(Path<? extends Master> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QMaster(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QMaster(PathMetadata metadata, PathInits inits) {
-        this(Master.class, metadata, inits);
-    }
-
-    public QMaster(Class<? extends Master> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        super(Master.class, metadata);
     }
 
 }

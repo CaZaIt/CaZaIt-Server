@@ -22,7 +22,7 @@ public class QCheckLog extends EntityPathBase<CheckLog> {
 
     public static final QCheckLog checkLog = new QCheckLog("checkLog");
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final shop.cazait.domain.cafe.model.entity.QCafe cafe;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -46,7 +46,7 @@ public class QCheckLog extends EntityPathBase<CheckLog> {
 
     public QCheckLog(Class<? extends CheckLog> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.model.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
         this.user = inits.isInitialized("user") ? new shop.cazait.domain.user.entity.QUser(forProperty("user")) : null;
     }
 

@@ -1,4 +1,4 @@
-package shop.cazait.domain.master.dto.request;
+package shop.cazait.domain.master.model.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.cazait.domain.master.entity.Master;
+import shop.cazait.domain.master.model.entity.Master;
 
 @Schema(description = "마스터 정보 Request : 회원 가입에 필요한 마스터 정보")
 @Getter

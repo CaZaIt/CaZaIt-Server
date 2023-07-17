@@ -1,9 +1,6 @@
 package shop.cazait.domain.cafe.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -12,20 +9,16 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import shop.cazait.domain.cafe.dto.CafeCreateOutDTO;
-import shop.cazait.domain.cafe.dto.CafeGetOutDTO;
-import shop.cazait.domain.cafe.dto.CafeListOutDTO;
-import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
-import shop.cazait.domain.cafe.dto.CafeUpdateOutDTO;
+import shop.cazait.domain.cafe.model.dto.response.CafeCreateOutDTO;
+import shop.cazait.domain.cafe.model.dto.request.CafeCreateInDTO;
+import shop.cazait.domain.cafe.model.dto.response.CafeUpdateOutDTO;
 import shop.cazait.domain.cafe.exception.CafeException;
-import shop.cazait.domain.cafe.service.CafeSearchService;
-import shop.cazait.domain.cafe.service.CafeService;
-import shop.cazait.domain.user.exception.UserException;
+import shop.cazait.domain.cafe.model.dto.response.ManageCafeListOutDTO;
+import shop.cazait.domain.cafe.service.CafeManageService;
+import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
-import shop.cazait.global.config.encrypt.NoAuth;
-import shop.cazait.global.error.status.SuccessStatus;
 
 import static shop.cazait.global.error.status.SuccessStatus.*;
 
@@ -33,17 +26,17 @@ import static shop.cazait.global.error.status.SuccessStatus.*;
 @RestController
 @RequestMapping("/api/cafes")
 @RequiredArgsConstructor
-public class CafeController {
+public class CafeManageApiController {
 
-    private final CafeService cafeService;
+    private final CafeManageService cafeManageService;
 
 
-    @PostMapping(value = "/add/master/{masterId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/add/master/{masterId}")
     @Operation(summary = "카페 등록", description = "master가 카페를 등록한다.")
     public SuccessResponse<CafeCreateOutDTO> createCafe(
             @RequestBody CafeCreateInDTO cafeCreateInDTO
     ) throws JsonProcessingException {
-        return new SuccessResponse<>(CREATE_CAFE, cafeService.createCafe(cafeCreateInDTO));
+        return new SuccessResponse<>(CREATE_CAFE, cafeManageService.createCafe(cafeCreateInDTO));
     }
 
 
@@ -56,7 +49,7 @@ public class CafeController {
     public SuccessResponse<CafeUpdateOutDTO> updateCafe(@PathVariable Long cafeId,
                                                         @PathVariable UUID masterId,
                                                         @RequestBody @Valid CafeCreateInDTO cafeReq) throws CafeException, JsonProcessingException {
-        CafeUpdateOutDTO cafeUpdateOutDTO = cafeService.updateCafe(cafeId, masterId, cafeReq);
+        CafeUpdateOutDTO cafeUpdateOutDTO = cafeManageService.updateCafe(cafeId, masterId, cafeReq);
         return new SuccessResponse<>(SUCCESS, cafeUpdateOutDTO);
 
     }
@@ -69,8 +62,14 @@ public class CafeController {
     })
     public SuccessResponse<String> deleteCafe(@PathVariable Long cafeId,
                                               @PathVariable UUID masterId) throws CafeException {
-        cafeService.deleteCafe(cafeId, masterId);
+        cafeManageService.deleteCafe(cafeId, masterId);
         return new SuccessResponse<>(SUCCESS,"카페 삭제 완료");
+    }
+
+    @GetMapping("/{masterId}/cafes")
+    @Operation(summary = "관리하고 있는 카페 목록 불러오기", description = "마스터 ID를 받아 관리하고 있는 카페를 조회")
+    public SuccessResponse<List<ManageCafeListOutDTO>> getManageCafes(@Validated @PathVariable UUID masterId) throws MasterException {
+        return new SuccessResponse(SUCCESS, cafeManageService.getManageCafes(masterId));
     }
 
 }

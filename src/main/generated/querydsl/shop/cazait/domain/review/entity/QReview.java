@@ -24,7 +24,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public final shop.cazait.global.common.entity.QBaseEntity _super = new shop.cazait.global.common.entity.QBaseEntity(this);
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final shop.cazait.domain.cafe.model.entity.QCafe cafe;
 
     public final StringPath content = createString("content");
 
@@ -61,7 +61,7 @@ public class QReview extends EntityPathBase<Review> {
 
     public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.model.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
         this.user = inits.isInitialized("user") ? new shop.cazait.domain.user.entity.QUser(forProperty("user")) : null;
     }
 

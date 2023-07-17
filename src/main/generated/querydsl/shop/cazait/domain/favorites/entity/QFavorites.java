@@ -22,7 +22,7 @@ public class QFavorites extends EntityPathBase<Favorites> {
 
     public static final QFavorites favorites = new QFavorites("favorites");
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final shop.cazait.domain.cafe.model.entity.QCafe cafe;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -46,7 +46,7 @@ public class QFavorites extends EntityPathBase<Favorites> {
 
     public QFavorites(Class<? extends Favorites> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.model.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
         this.user = inits.isInitialized("user") ? new shop.cazait.domain.user.entity.QUser(forProperty("user")) : null;
     }
 

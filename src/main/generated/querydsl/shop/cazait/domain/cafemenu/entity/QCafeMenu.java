@@ -22,7 +22,7 @@ public class QCafeMenu extends EntityPathBase<CafeMenu> {
 
     public static final QCafeMenu cafeMenu = new QCafeMenu("cafeMenu");
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final shop.cazait.domain.cafe.model.entity.QCafe cafe;
 
     public final StringPath description = createString("description");
 
@@ -52,7 +52,7 @@ public class QCafeMenu extends EntityPathBase<CafeMenu> {
 
     public QCafeMenu(Class<? extends CafeMenu> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.model.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
     }
 
 }

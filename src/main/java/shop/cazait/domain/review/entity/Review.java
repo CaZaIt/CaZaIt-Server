@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.review.dto.ReviewUpdateInDTO;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.global.common.entity.BaseEntity;

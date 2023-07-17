@@ -1,17 +1,12 @@
 package shop.cazait.domain.cafeimage.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
-import shop.cazait.domain.cafemenu.dto.request.MenuCreateInDTO;
-import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
 @Schema(description = "카페 이미지 저장 Request")
 @Data

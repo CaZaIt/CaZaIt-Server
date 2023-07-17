@@ -1,11 +1,11 @@
-package shop.cazait.domain.cafe.entity;
+package shop.cazait.domain.cafe.model.entity;
 
 import javax.persistence.*;
 import lombok.*;
-import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
+import shop.cazait.domain.cafe.model.dto.request.CafeCreateInDTO;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.coordinate.entity.Coordinate;
-import shop.cazait.domain.master.entity.Master;
+import shop.cazait.domain.master.model.entity.Master;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.domain.congestion.entity.Congestion;
 import shop.cazait.global.common.status.BaseStatus;
@@ -25,7 +25,8 @@ public class Cafe extends BaseEntity {
     @JoinColumn(name = "congestion_id")
     private Congestion congestion;
 
-    @OneToOne(mappedBy = "cafe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "master_id")
     private Master master;
 
     @Column(nullable = false)
