@@ -38,8 +38,7 @@ public class FavoritesApiController {
             @Parameter(name = "userId", description = "즐겨찾기를 등록할 유저 ID"),
             @Parameter(name = "cafeId", description = "즐겨찾기로 등록할 카페 ID")
     })
-    public SuccessResponse<FavoritesCreateOutDTO> addFavorites(@PathVariable UUID userId,
-                                                               @PathVariable Long cafeId)
+    public SuccessResponse<FavoritesCreateOutDTO> addFavorites(@PathVariable UUID userId, @PathVariable Long cafeId)
             throws CafeException, UserException {
         return new SuccessResponse<>(CREATE_FAVORITES, favoritesService.addFavorites(userId, cafeId));
     }
