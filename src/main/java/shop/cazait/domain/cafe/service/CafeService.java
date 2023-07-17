@@ -86,7 +86,7 @@ public class CafeService {
         if (!(master.getCafe().getId().equals(cafe.getId()))) {
             throw new CafeException(NOT_OPERATE_CAFE);
         }
-제
+
         Cafe updateCafe = cafeRepository.save(cafe);
 
         return CafeUpdateOutDTO.of(updateCafe);
