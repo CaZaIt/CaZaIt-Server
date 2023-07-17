@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafe.entity;
+package shop.cazait.domain.cafe.model.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QCafe extends EntityPathBase<Cafe> {
 
-    private static final long serialVersionUID = 293097467L;
+    private static final long serialVersionUID = -1227050378L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
@@ -37,7 +37,7 @@ public class QCafe extends EntityPathBase<Cafe> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final shop.cazait.domain.master.entity.QMaster master;
+    public final shop.cazait.domain.master.model.entity.QMaster master;
 
     public final StringPath name = createString("name");
 
@@ -67,7 +67,7 @@ public class QCafe extends EntityPathBase<Cafe> {
         super(type, metadata, inits);
         this.congestion = inits.isInitialized("congestion") ? new shop.cazait.domain.congestion.entity.QCongestion(forProperty("congestion"), inits.get("congestion")) : null;
         this.coordinate = inits.isInitialized("coordinate") ? new shop.cazait.domain.coordinate.entity.QCoordinate(forProperty("coordinate")) : null;
-        this.master = inits.isInitialized("master") ? new shop.cazait.domain.master.entity.QMaster(forProperty("master"), inits.get("master")) : null;
+        this.master = inits.isInitialized("master") ? new shop.cazait.domain.master.model.entity.QMaster(forProperty("master")) : null;
     }
 
 }

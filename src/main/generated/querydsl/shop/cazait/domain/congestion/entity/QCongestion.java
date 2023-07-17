@@ -24,7 +24,7 @@ public class QCongestion extends EntityPathBase<Congestion> {
 
     public final shop.cazait.global.common.entity.QBaseEntity _super = new shop.cazait.global.common.entity.QBaseEntity(this);
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final shop.cazait.domain.cafe.model.entity.QCafe cafe;
 
     public final EnumPath<CongestionStatus> congestionStatus = createEnum("congestionStatus", CongestionStatus.class);
 
@@ -57,7 +57,7 @@ public class QCongestion extends EntityPathBase<Congestion> {
 
     public QCongestion(Class<? extends Congestion> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.model.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
     }
 
 }

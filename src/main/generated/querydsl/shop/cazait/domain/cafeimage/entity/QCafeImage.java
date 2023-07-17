@@ -22,7 +22,7 @@ public class QCafeImage extends EntityPathBase<CafeImage> {
 
     public static final QCafeImage cafeImage = new QCafeImage("cafeImage");
 
-    public final shop.cazait.domain.cafe.entity.QCafe cafe;
+    public final shop.cazait.domain.cafe.model.entity.QCafe cafe;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -46,7 +46,7 @@ public class QCafeImage extends EntityPathBase<CafeImage> {
 
     public QCafeImage(Class<? extends CafeImage> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
+        this.cafe = inits.isInitialized("cafe") ? new shop.cazait.domain.cafe.model.entity.QCafe(forProperty("cafe"), inits.get("cafe")) : null;
     }
 
 }

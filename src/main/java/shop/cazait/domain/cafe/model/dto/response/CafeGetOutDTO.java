@@ -1,10 +1,10 @@
-package shop.cazait.domain.cafe.dto;
+package shop.cazait.domain.cafe.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
 import java.util.List;

@@ -1,13 +1,11 @@
 package shop.cazait.domain.cafeimage.service;
 
-import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafeimage.dto.request.CafeImageCreateInDTO;
 import shop.cazait.domain.cafeimage.dto.response.CafeImageGetOutDTO;
@@ -15,7 +13,6 @@ import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
 import shop.cazait.domain.cafeimage.exception.CafeImageException;
-import shop.cazait.domain.master.entity.Master;
 import shop.cazait.domain.master.repository.MasterRepository;
 import shop.cazait.global.error.status.ErrorStatus;
 

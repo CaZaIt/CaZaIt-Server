@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafemenu.entity.CafeMenu;
 
 @Schema(name = "메뉴 등록 Request", description = "등록할 메뉴에 대한 정보")

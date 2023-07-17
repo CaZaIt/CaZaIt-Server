@@ -1,12 +1,14 @@
-package shop.cazait.domain.master.entity;
+package shop.cazait.domain.master.model.entity;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
@@ -14,7 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
 import shop.cazait.global.common.status.BaseStatus;
@@ -47,19 +49,18 @@ public class Master extends BaseEntity {
 	@Column(nullable = true)
 	private String refreshToken;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id")
-	private Cafe cafe;
+	@OneToMany(mappedBy = "master", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Cafe> cafes;
 
 	@Builder
-	public Master(UUID id, String accountNumber, String password, String phoneNumber, String nickname, String refreshToken, Cafe cafe) {
+	public Master(UUID id, String accountNumber, String password, String phoneNumber, String nickname, String refreshToken, List<Cafe> cafes) {
 		this.id =id;
 		this.accountNumber = accountNumber;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.nickname = nickname;
 		this.refreshToken = refreshToken;
-		this.cafe = cafe;
+		this.cafes = cafes;
 	}
 
 	public void changeMasterEmail(String email) {
@@ -76,10 +77,6 @@ public class Master extends BaseEntity {
 
 	public void changeMasterStatus(BaseStatus status) {
 		super.setStatus(status);
-	}
-
-	public void setCafe(Cafe cafe) {
-		this.cafe = cafe;
 	}
 
 	public Master updateMasterProfile(MasterUpdateInDTO masterUpdateInDTO){

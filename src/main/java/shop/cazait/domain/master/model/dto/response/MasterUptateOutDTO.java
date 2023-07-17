@@ -3,8 +3,7 @@ package shop.cazait.domain.master.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
-import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
-import shop.cazait.domain.master.entity.Master;
+import shop.cazait.domain.master.model.entity.Master;
 
 import java.util.UUID;
 
