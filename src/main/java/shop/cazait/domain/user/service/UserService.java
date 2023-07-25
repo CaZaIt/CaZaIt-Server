@@ -83,7 +83,7 @@ public class UserService {
             String refreshToken = jwtService.createRefreshToken();
 
             //refreshToken 추가하여 DB저장
-            User loginUser = findUser.loginUser(refreshToken);
+            User loginUser = findUser.updateUserRefreshToken(refreshToken);
             userRepository.save(loginUser);
 
             return UserAuthenticateOutDTO.of(loginUser, accessToken);
@@ -179,6 +179,10 @@ public class UserService {
                     log.info("refresh token 재발급");
                     refreshToken = jwtService.createRefreshToken();
                     user = userRepository.findById(userIdx).get();
+
+                    //새로 발급된 RefreshToken 업데이트 후 유저를 DB에 저장
+                    user = user.updateUserRefreshToken(refreshToken);
+                    userRepository.save(user);
                 }
             }
         }
