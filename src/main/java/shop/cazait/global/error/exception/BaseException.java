@@ -5,9 +5,12 @@ import lombok.Getter;
 import shop.cazait.global.error.status.ErrorStatus;
 
 @Getter
-@AllArgsConstructor
-public class BaseException extends Exception{
+public class BaseException extends RuntimeException {
 
     private ErrorStatus error;
+
+    public BaseException(ErrorStatus error) {
+        this.error = error;
+    }
 
 }

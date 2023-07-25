@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.dto.response;
+package shop.cazait.domain.menu.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import shop.cazait.domain.cafemenu.entity.CafeMenu;
+import shop.cazait.domain.menu.entity.Menu;
 
 @Schema(name = "메뉴 조회  Response", description = "카페의 모든 메뉴에 대한 정보")
 @Getter
@@ -28,7 +28,7 @@ public class MenuListOutDTO {
     @Schema(description = "이미지 URL", example = "iceAmericano.png")
     private String imageUrl;
 
-    public static List<MenuListOutDTO> of(List<CafeMenu> menus) {
+    public static List<MenuListOutDTO> of(List<Menu> menus) {
         return menus.stream()
                 .map(menu -> MenuListOutDTO .builder()
                         .cafeMenuId(menu.getId())

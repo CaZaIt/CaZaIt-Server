@@ -32,7 +32,7 @@ import shop.cazait.domain.auth.dto.kakao.ExtKakaoUserInfoOutDTO;
 import shop.cazait.domain.auth.dto.sens.*;
 import shop.cazait.domain.auth.service.AuthService;
 import shop.cazait.domain.auth.service.KakaoService;
-import shop.cazait.domain.master.error.MasterException;
+import shop.cazait.domain.master.exception.MasterException;
 import shop.cazait.domain.user.dto.UserCreateOutDTO;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;

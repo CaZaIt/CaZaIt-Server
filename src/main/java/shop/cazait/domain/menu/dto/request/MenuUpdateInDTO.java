@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.dto.request;
+package shop.cazait.domain.menu.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
