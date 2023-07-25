@@ -19,9 +19,6 @@ public class UserUpdateOutDTO {
     @Schema(description = "로그인 아이디", example = "cazait1234")
     private String accountNumber;
 
-    @Schema(description = "비밀번호", example = "abc12345#!")
-    private String password;
-
     @Schema(description = "휴대전화 번호", example = "01012345678")
     private String phoneNumber;
 
@@ -32,10 +29,8 @@ public class UserUpdateOutDTO {
         return UserUpdateOutDTO.builder()
                 .id(user.getId())
                 .accountNumber(user.getAccountNumber())
-                .password(user.getPassword())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
-                .password(user.getPassword())
                 .build();
     }
 
