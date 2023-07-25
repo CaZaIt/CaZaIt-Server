@@ -54,7 +54,7 @@ public class User extends BaseEntity {
         this.kakaoId = kakaoId;
     }
 
-    public User loginUser(String refreshToken){
+    public User updateUserRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
         return this;
     }
