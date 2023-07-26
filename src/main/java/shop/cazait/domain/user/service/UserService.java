@@ -204,4 +204,11 @@ public class UserService {
             throw new UserException(INVALID_JWT);
         }
     }
+
+    public UserFindAccountNameOutDTO findUserAccountName(String phoneNumber) throws UserException {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        return UserFindAccountNameOutDTO.of(user);
+    }
 }
