@@ -96,6 +96,14 @@ public class UserApiController {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(userFindDuplicateNicknameInDTO);
         return nicknameDuplicateSuccessResponse;
     }
+
+    @NoAuth
+    @GetMapping ("/accountname")
+    @Operation(summary = "아이디 찾기", description = "문자 인증 성공 시 아이디 반환")
+    public SuccessResponse<UserFindAccountNameOutDTO> findUserAccountName(@RequestBody UserFindAccountNameInDTO userFindAccountNumberInDTO) throws UserException {
+        UserFindAccountNameOutDTO userAccountName = userService.findUserAccountName(userFindAccountNumberInDTO.getUserPhoneNumber());
+        return new SuccessResponse<>(SUCCESS,userAccountName);
+    }
 }
 
 
