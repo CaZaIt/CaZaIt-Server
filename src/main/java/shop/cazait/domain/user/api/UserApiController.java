@@ -98,11 +98,19 @@ public class UserApiController {
     }
 
     @NoAuth
-    @GetMapping ("/accountname")
+    @PostMapping ("/accountname")
     @Operation(summary = "아이디 찾기", description = "문자 인증 성공 시 아이디 반환")
-    public SuccessResponse<UserFindAccountNameOutDTO> findUserAccountName(@RequestBody UserFindAccountNameInDTO userFindAccountNumberInDTO) throws UserException {
-        UserFindAccountNameOutDTO userAccountName = userService.findUserAccountName(userFindAccountNumberInDTO.getUserPhoneNumber());
+    public SuccessResponse<UserFindAccountNameOutDTO> findUserAccountName(@RequestBody UserFindAccountNameInDTO userFindAccountNameInDTO) throws UserException {
+        UserFindAccountNameOutDTO userAccountName = userService.findUserAccountName(userFindAccountNameInDTO.getUserPhoneNumber());
         return new SuccessResponse<>(SUCCESS,userAccountName);
+    }
+
+    @NoAuth
+    @PatchMapping("/password")
+    @Operation(summary = "비밀번호 변경", description = "비밀번호는 아이디와 달리 재설정을 요구")
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS,userUpdatePasswordOutDTO);
     }
 }
 
