@@ -33,6 +33,8 @@ public enum ErrorStatus {
     EXIST_FAVORITES(400, "FAIL", "이미 존재하는 즐겨찾기입니다."),
     INVALID_VERIFICATION_CODE(400,"FAIL","인증번호가 올바르지 않습니다."),
     EXPIRED_VERIFICATION_CODE(400,"FAIL","만료된 인증번호입니다."),
+    INVALID_PHONENUMBER(400,"FAIL","잘못된 전화번호입니다"),
+    SAME_AS_CURRENT_PASSWORD(400,"FAIL","새로운 비밀번호가 현재 비밀번호와 동일합니다. 다른 비밀번호를 입력해주세요."),
 
     /**
      * Success Code : 401
