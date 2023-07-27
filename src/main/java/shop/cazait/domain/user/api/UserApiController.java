@@ -5,7 +5,6 @@ import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -25,7 +24,6 @@ import shop.cazait.domain.user.dto.*;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
-import shop.cazait.global.config.encrypt.JwtService;
 import shop.cazait.global.config.encrypt.NoAuth;
 
 @Tag(name = "유저 API")
@@ -95,6 +93,22 @@ public class UserApiController {
     public SuccessResponse<String> checkDuplicateNickname(@RequestBody @Valid UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(userFindDuplicateNicknameInDTO);
         return nicknameDuplicateSuccessResponse;
+    }
+
+    @NoAuth
+    @PostMapping ("/accountname")
+    @Operation(summary = "아이디 찾기", description = "문자 인증 성공 시 아이디 반환")
+    public SuccessResponse<UserFindAccountNameOutDTO> findUserAccountName(@RequestBody UserFindAccountNameInDTO userFindAccountNameInDTO) throws UserException {
+        UserFindAccountNameOutDTO userAccountName = userService.findUserAccountName(userFindAccountNameInDTO.getUserPhoneNumber());
+        return new SuccessResponse<>(SUCCESS,userAccountName);
+    }
+
+    @NoAuth
+    @PatchMapping("/password")
+    @Operation(summary = "비밀번호 변경", description = "비밀번호는 아이디와 달리 재설정을 요구")
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS,userUpdatePasswordOutDTO);
     }
 }
 

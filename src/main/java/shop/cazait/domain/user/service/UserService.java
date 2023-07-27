@@ -204,4 +204,28 @@ public class UserService {
             throw new UserException(INVALID_JWT);
         }
     }
+
+    public UserFindAccountNameOutDTO findUserAccountName(String phoneNumber) throws UserException {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        return UserFindAccountNameOutDTO.of(user);
+    }
+
+    public UserUpdatePasswordOutDTO updateUserPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+
+        String encryptPassword = encryptPassword(password);
+        if(user.getPassword().equals(encryptPassword)){
+            throw new UserException(SAME_AS_CURRENT_PASSWORD);
+        }
+        //비밀번호 암호화
+
+        User updatePasswordUser = user.updateUserPassword(encryptPassword);
+        userRepository.save(updatePasswordUser);
+
+        return UserUpdatePasswordOutDTO.of(user,password);
+    }
 }

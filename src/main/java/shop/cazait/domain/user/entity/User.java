@@ -84,6 +84,12 @@ public class User extends BaseEntity {
         return this;
     }
 
+    public User updateUserPassword(String password){
+        this.password = password;
+
+        return this;
+    }
+
     private static String generateRandomString() {
         return UUID.randomUUID().toString();
     }
