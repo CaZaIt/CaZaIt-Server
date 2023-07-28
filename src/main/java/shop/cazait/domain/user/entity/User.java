@@ -78,13 +78,7 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public User kakaoLoginUser(String refreshToken) {
-        this.refreshToken = refreshToken;
-
-        return this;
-    }
-
-    public User updateUserPassword(String password){
+    public User updateUserPasswordInResetPassword(String password){
         this.password = password;
 
         return this;

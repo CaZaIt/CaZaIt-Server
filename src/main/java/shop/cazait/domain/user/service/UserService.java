@@ -55,7 +55,7 @@ public class UserService {
             throw new UserException(EXIST_NICKNAME);
         }
 
-        String encryptedPassword = encryptPassword(userCreateInDTO.getPassword());
+        String encryptedPassword = encryptUserPassword(userCreateInDTO.getPassword());
         UserCreateInDTO encryptUserCreateInDTO = userCreateInDTO.encryptUserUpdateDTO(userCreateInDTO, encryptedPassword);
 
         User user = UserCreateInDTO.toEntity(encryptUserCreateInDTO);
@@ -64,7 +64,7 @@ public class UserService {
         return UserCreateOutDTO.of(user);
     }
 
-    public UserAuthenticateOutDTO logIn(UserAuthenticateInDTO userAuthenticateInDTO)
+    public UserAuthenticateOutDTO logInUser(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         User findUser = userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber())
@@ -73,7 +73,7 @@ public class UserService {
         //DB에 있는 암호화된 비밀번호
         String findUserPassword = findUser.getPassword();
         //로그인 시 입력한 비밀번호를 암호화
-        String loginPassword = encryptPassword(userAuthenticateInDTO.getPassword());
+        String loginPassword = encryptUserPassword(userAuthenticateInDTO.getPassword());
 
         if (findUserPassword.equals(loginPassword)) {
             UUID userIdx = findUser.getId();
@@ -92,7 +92,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserFindOutDTO> getAllUsers() {
+    public List<UserFindOutDTO> getUsers() {
         List<User> allUsers = userRepository.findAll();
         return allUsers.stream()
                 .map(UserFindOutDTO::of)
@@ -100,19 +100,19 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserFindOutDTO getUserInfo(UUID userIdx) throws UserException {
+    public UserFindOutDTO getUser(UUID userIdx) throws UserException {
         userRepository.findById(userIdx).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         User findUser = userRepository.findById(userIdx).get();
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO modifyUser(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public UserUpdateOutDTO updateUserProfile(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         User existUser = userRepository.findById(userIdx)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
         //DTO의 비밀번호 암호화
-        String encryptedPassword = encryptPassword(userUpdateInDTO.getPassword());
+        String encryptedPassword = encryptUserPassword(userUpdateInDTO.getPassword());
         UserUpdateInDTO encryptedUserUpdateDTO = userUpdateInDTO.encryptUserUpdateDTO(encryptedPassword);
 
         //유저 정보 수정
@@ -121,7 +121,7 @@ public class UserService {
         return UserUpdateOutDTO.of(modifiedUser);
     }
 
-    public UserDeleteOutDTO deleteUser(UUID userIdx) throws UserException {
+    public UserDeleteOutDTO deleteUserById(UUID userIdx) throws UserException {
         userRepository.findById(userIdx).orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
         User deleteUser = userRepository.findById(userIdx).get();
@@ -129,11 +129,11 @@ public class UserService {
         return UserDeleteOutDTO.of(deleteUser);
     }
 
-    public String encryptPassword(String password) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String encryptUserPassword(String password) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<String> checkduplicateaccountNumber(UserFindDuplicateAccountNumberInDTO userFindDuplicateAccountNumberInDTO) throws UserException {
+    public SuccessResponse<String> findUserDuplicateAccountName(UserFindDuplicateAccountNumberInDTO userFindDuplicateAccountNumberInDTO) throws UserException {
         String accountNumber = userFindDuplicateAccountNumberInDTO.getAccountNumber();
         if (userRepository.findByAccountNumber(accountNumber).isPresent()) {
             throw new UserException(EXIST_ACCOUNTNUMBER);
@@ -141,7 +141,7 @@ public class UserService {
         return new SuccessResponse<>(SIGNUP_AVAILABLE, accountNumber);
     }
 
-    public SuccessResponse<String> checkduplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
+    public SuccessResponse<String> findUserDuplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         String nickname = userFindDuplicateNicknameInDTO.getNickname();
         if (userRepository.findByNickname(nickname.trim()).isPresent()) {
             throw new UserException(EXIST_NICKNAME);
@@ -212,24 +212,24 @@ public class UserService {
         return UserFindAccountNameOutDTO.of(user);
     }
 
-    public UserEnterAccountNameInResetPasswordOutDTO verifyUserInResetPassword(String accountName) throws UserException {
+    public UserEnterAccountNameInResetPasswordOutDTO verifyUserAccountNameInResetPassword(String accountName) throws UserException {
         User user = userRepository.findByAccountNumber(accountName)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
         return UserEnterAccountNameInResetPasswordOutDTO.of(user);
     }
 
-    public UserEnterPasswordInResetPasswordOutDTO updateUserPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public UserEnterPasswordInResetPasswordOutDTO updateUserPasswordInResetPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
 
-        String encryptPassword = encryptPassword(password);
-        if(user.getPassword().equals(encryptPassword)){
+        String encryptUserPassword = encryptUserPassword(password);
+        if(user.getPassword().equals(encryptUserPassword)){
             throw new UserException(SAME_AS_CURRENT_PASSWORD);
         }
         //비밀번호 암호화
 
-        User updatePasswordUser = user.updateUserPassword(encryptPassword);
+        User updatePasswordUser = user.updateUserPasswordInResetPassword(encryptUserPassword);
         userRepository.save(updatePasswordUser);
 
         return UserEnterPasswordInResetPasswordOutDTO.of(user,password);

@@ -78,7 +78,7 @@ public class AuthService {
 
     public UserAuthenticateOutDTO logInByRole(Role exactRole, UserAuthenticateInDTO userAuthenticateInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, MasterException {
         if (exactRole.equals(USER)) {
-            return userService.logIn(userAuthenticateInDTO);
+            return userService.logInUser(userAuthenticateInDTO);
         } else {
             return masterService.LoginMaster(userAuthenticateInDTO);
         }
