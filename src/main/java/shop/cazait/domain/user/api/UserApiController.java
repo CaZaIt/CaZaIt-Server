@@ -104,18 +104,18 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/reset-password/userinfo")
+    @PostMapping("/reset-password/accountname")
     @Operation(summary = "비밀번호 변경 (아이디 입력)", description = "비밀번호 변경시 가입한 아이디 입력")
-    public SuccessResponse<UserEnterUserInfoInResetPasswordOutDTO> verifyUserInResetPassword(@RequestBody UserEnterUserInfoInResetPasswordInDTO userEnterUserInfoInResetPasswordInDTO) throws UserException {
-        UserEnterUserInfoInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserInResetPassword(userEnterUserInfoInResetPasswordInDTO.getAccountName());
+    public SuccessResponse<UserEnterAccountNameInResetPasswordOutDTO> verifyUserInResetPassword(@RequestBody UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOutDTO) throws UserException {
+        UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserInResetPassword(userEnterAccountNameInResetPasswordOutDTO.getAccountName());
         return new SuccessResponse<>(SUCCESS, userEnterAccountNameInResetPasswordOUTDTO);
     }
 
     @NoAuth
     @PatchMapping("/reset-password/password")
     @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
-    public SuccessResponse<UserEnterPasswordInResetPasswordOutDTO> updateUserPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserEnterPasswordInResetPasswordOutDTO userEnterPasswordInResetPasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInDTO.getPassword());
+    public SuccessResponse<UserEnterPasswordInResetPasswordOutDTO> updateUserPassword(@RequestBody UserEnterPasswordInResetPasswordInDTO userEnterPasswordInResetPasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserEnterPasswordInResetPasswordOutDTO userEnterPasswordInResetPasswordOutDTO = userService.updateUserPassword(userEnterPasswordInResetPasswordInDTO.getUserPhoneNumber(), userEnterPasswordInResetPasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userEnterPasswordInResetPasswordOutDTO);
     }
 }
