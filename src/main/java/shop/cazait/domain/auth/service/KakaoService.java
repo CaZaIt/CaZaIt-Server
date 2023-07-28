@@ -75,7 +75,7 @@ public class KakaoService {
         String accessToken = jwtService.createJwt(id);
         String refreshToken = jwtService.createRefreshToken();
 
-        User kakaoLoginUser = user.kakaoLoginUser(refreshToken);
+        User kakaoLoginUser = user.updateUserRefreshToken(refreshToken);
         userRepository.save(kakaoLoginUser);
 
         return UserAuthenticateOutDTO.of(user, accessToken);
