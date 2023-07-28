@@ -80,7 +80,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/accountnumber")
+    @PostMapping ("/duplicate-check/accountname")
     @Operation(summary = "아이디 중복확인", description = "회원가입 전 이미 존재하는 아이디인지 중복확인")
     public SuccessResponse<String> checkDuplicateaccountNumber(@RequestBody @Valid UserFindDuplicateAccountNumberInDTO userFindDuplicateEmailInDTO) throws UserException {
         SuccessResponse<String> accountNumberSuccessResponse = userService.checkduplicateaccountNumber(userFindDuplicateEmailInDTO);
@@ -88,7 +88,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/nickname")
+    @PostMapping ("/duplicate-check/nickname")
     @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
     public SuccessResponse<String> checkDuplicateNickname(@RequestBody @Valid UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(userFindDuplicateNicknameInDTO);
@@ -96,19 +96,27 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/accountname")
-    @Operation(summary = "아이디 찾기", description = "문자 인증 성공 시 아이디 반환")
+    @PostMapping ("/find-accountname")
+    @Operation(summary = "아이디 찾기", description = "문자 인증 완료 후 아이디 반환")
     public SuccessResponse<UserFindAccountNameOutDTO> findUserAccountName(@RequestBody UserFindAccountNameInDTO userFindAccountNameInDTO) throws UserException {
         UserFindAccountNameOutDTO userAccountName = userService.findUserAccountName(userFindAccountNameInDTO.getUserPhoneNumber());
         return new SuccessResponse<>(SUCCESS,userAccountName);
     }
 
     @NoAuth
-    @PatchMapping("/password")
-    @Operation(summary = "비밀번호 변경", description = "비밀번호는 아이디와 달리 재설정을 요구")
-    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInDTO.getPassword());
-        return new SuccessResponse<>(SUCCESS,userUpdatePasswordOutDTO);
+    @PostMapping("/reset-password/userinfo")
+    @Operation(summary = "비밀번호 변경 (아이디 입력)", description = "비밀번호 변경시 가입한 아이디 입력")
+    public SuccessResponse<UserEnterUserInfoInResetPasswordOutDTO> verifyUserInResetPassword(@RequestBody UserEnterUserInfoInResetPasswordInDTO userEnterUserInfoInResetPasswordInDTO) throws UserException {
+        UserEnterUserInfoInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserInResetPassword(userEnterUserInfoInResetPasswordInDTO.getAccountName());
+        return new SuccessResponse<>(SUCCESS, userEnterAccountNameInResetPasswordOUTDTO);
+    }
+
+    @NoAuth
+    @PatchMapping("/reset-password/password")
+    @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
+    public SuccessResponse<UserEnterPasswordInResetPasswordOutDTO> updateUserPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserEnterPasswordInResetPasswordOutDTO userEnterPasswordInResetPasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS, userEnterPasswordInResetPasswordOutDTO);
     }
 }
 

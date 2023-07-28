@@ -86,9 +86,9 @@ public class AuthService {
 
     public AuthSendMessageCodeOutDTO sendMessageCode(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
 
-        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
-            throw new UserException(EXIST_PHONENUMBER);
-        }
+//        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
+//            throw new UserException(EXIST_PHONENUMBER);
+//        }
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
@@ -191,11 +191,11 @@ public class AuthService {
             throw new UserException(ErrorStatus.INVALID_VERIFICATION_CODE);
         }
     }
-    public AuthSendMessageCodeOutDTOTest sendMessageCodeTest(String recipientPhoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
+    public AuthSendMessageCodeTestOutDTO sendMessageCodeTest(String recipientPhoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
 
-        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
-            throw new UserException(EXIST_PHONENUMBER);
-        }
+//        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
+//            throw new UserException(EXIST_PHONENUMBER);
+//        }
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
@@ -247,7 +247,7 @@ public class AuthService {
         httpSession.setMaxInactiveInterval(smsVerifyTime);
         httpSession.setAttribute(recipientPhoneNumber,verificationCode);
 
-        return AuthSendMessageCodeOutDTOTest.of(recipientPhoneNumber, verificationCode, extSensSendMessageCodeOutDTO);
+        return AuthSendMessageCodeTestOutDTO .of(recipientPhoneNumber, verificationCode, extSensSendMessageCodeOutDTO);
     }
 }
 

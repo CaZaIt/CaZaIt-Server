@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Schema(description = "문자 인증번호 발송 response :  문자 인증번호 발송 결과 (테스트) ")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class AuthSendMessageCodeOutDTOTest {
+public class AuthSendMessageCodeTestOutDTO {
     @Schema(description = "인증 번호가 발송된 전화번호", example = "01012345678")
     private String recipientPhoneNumber;
 
@@ -23,8 +23,8 @@ public class AuthSendMessageCodeOutDTOTest {
     @NotBlank
     private Integer verificationCode;
 
-    public static AuthSendMessageCodeOutDTOTest of(String recipientPhoneNumber, Integer verificationCode, ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO) {
-        return AuthSendMessageCodeOutDTOTest.builder().
+    public static AuthSendMessageCodeTestOutDTO of(String recipientPhoneNumber, Integer verificationCode, ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO) {
+        return AuthSendMessageCodeTestOutDTO.builder().
                 recipientPhoneNumber(recipientPhoneNumber).
                 requestTime(extSensSendMessageCodeOutDTO.getRequestTime()).
                 verificationCode(verificationCode).build();
