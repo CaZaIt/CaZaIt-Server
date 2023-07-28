@@ -86,9 +86,9 @@ public class AuthService {
 
     public AuthSendMessageCodeOutDTO sendMessageCode(String recipientPhoneNumber) throws URISyntaxException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
 
-        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
-            throw new UserException(EXIST_PHONENUMBER);
-        }
+//        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
+//            throw new UserException(EXIST_PHONENUMBER);
+//        }
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
@@ -193,9 +193,9 @@ public class AuthService {
     }
     public AuthSendMessageCodeOutDTOTest sendMessageCodeTest(String recipientPhoneNumber) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, UserException {
 
-        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
-            throw new UserException(EXIST_PHONENUMBER);
-        }
+//        if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
+//            throw new UserException(EXIST_PHONENUMBER);
+//        }
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
