@@ -98,8 +98,8 @@ public class AuthController {
     }
 
     @NoAuth
-    @PostMapping("/messages/codes/send")
-    @Operation(summary = "문자 인증번호 발송 (회원가입시)", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
+    @PostMapping("/messages/codes/send/sign-up")
+    @Operation(summary = "문자 인증번호 발송 (회원 가입)", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
     public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendMessageCodeInSignUpInDTO authSendMessageCodeInSignUpInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = authSendMessageCodeInSignUpInDTO.getRecipientPhoneNumber();
         if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
@@ -110,18 +110,34 @@ public class AuthController {
     }
 
     @NoAuth
-    @PostMapping("/messages/codes/send/accountnumber")
-    @Operation(summary = "문자 인증번호 발송 (아이디, 비밀번호 찾기시)", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeInFindUserInfo(@RequestBody AuthSendMessageCodeInSignUpInDTO authSendMessageCodeInSignUpInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
-        String recipientPhoneNumber = authSendMessageCodeInSignUpInDTO.getRecipientPhoneNumber();
+    @PostMapping("/messages/codes/send/find-accountname")
+    @Operation(summary = "문자 인증번호 발송 (아이디 찾기)", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeInFindUserAccountName(@RequestBody AuthSendMessageCodeInFindAccountNameInDTO authSendMessageCodeInFindAccountNameInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
+        String recipientPhoneNumber = authSendMessageCodeInFindAccountNameInDTO.getRecipientPhoneNumber();
         userRepository.findByPhoneNumber(recipientPhoneNumber).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
     }
 
     @NoAuth
+    @PostMapping("/messages/codes/send/reset-password")
+    @Operation(summary = "문자 인증번호 발송 (비밀번호 변경)", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeInFindUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
+        String accountName = authSendMessageCodeInResetPasswordInDTO.getAccountName();
+        String recipientPhoneNumber = authSendMessageCodeInResetPasswordInDTO.getRecipientPhoneNumber();
+        User user = userRepository.findByAccountNumber(accountName).get();
+
+        if(user.getPhoneNumber().equals(recipientPhoneNumber)) {
+            AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
+            return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
+        }else{
+            throw new UserException(INVALID_PHONENUMBER);
+        }
+    }
+
+    @NoAuth
     @PostMapping("/messages/codes/send/test/sign-up")
-    @Operation(summary = "문자 인증번호 발송 테스트 (회원가입시)", description = "실제로 문자 발송은 진행하지 않음")
+    @Operation(summary = "문자 인증번호 발송 테스트 (회원 가입)", description = "실제로 문자 발송은 진행하지 않음")
     public SuccessResponse<AuthSendMessageCodeOutDTOTest> sendMessageCodeTest(@RequestBody AuthSendMessageCodeInSignUpInDTO authSendMessageCodeInSignUpInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = authSendMessageCodeInSignUpInDTO.getRecipientPhoneNumber();
         if(userRepository.findByPhoneNumber(recipientPhoneNumber).isPresent()){
@@ -134,8 +150,8 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send/test/find-accountname")
     @Operation(summary = "문자 인증번호 발송 테스트 (아이디 찾기)", description = "실제로 문자 발송은 진행하지 않음")
-    public SuccessResponse<AuthSendMessageCodeOutDTOTest> sendMessageCodeTestInFindUserAccountName(@RequestBody AuthSendMessageCodeInSignUpInDTO authSendMessageCodeInSignUpInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
-        String recipientPhoneNumber = authSendMessageCodeInSignUpInDTO.getRecipientPhoneNumber();
+    public SuccessResponse<AuthSendMessageCodeOutDTOTest> sendMessageCodeTestInFindUserAccountName(@RequestBody AuthSendMessageCodeInFindAccountNameInDTO authSendMessageCodeInFindAccountNameInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
+        String recipientPhoneNumber = authSendMessageCodeInFindAccountNameInDTO.getRecipientPhoneNumber();
         userRepository.findByPhoneNumber(recipientPhoneNumber).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         AuthSendMessageCodeOutDTOTest authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
@@ -143,7 +159,7 @@ public class AuthController {
 
     @NoAuth
     @PostMapping("/messages/codes/send/test/reset-password")
-    @Operation(summary = "문자 인증번호 발송 테스트 (비밀번호 찾기)", description = "실제로 문자 발송은 진행하지 않음")
+    @Operation(summary = "문자 인증번호 발송 테스트 (비밀번호 변경)", description = "실제로 문자 발송은 진행하지 않음")
     public SuccessResponse<AuthSendMessageCodeOutDTOTest> sendMessageCodeTestInFindUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String accountName = authSendMessageCodeInResetPasswordInDTO.getAccountName();
         String recipientPhoneNumber = authSendMessageCodeInResetPasswordInDTO.getRecipientPhoneNumber();
