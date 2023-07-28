@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
-@Schema(description = "유저 비밀번호 수정 Response : 비밀번호 변경 시 입력한 아이디")
+@Schema(description = "유저 비밀번호 수정시 아이디 입력 Response : 비밀번호 변경 시 입력한 가입 아이디")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserEnterAccountNameInResetPasswordOutDTO {

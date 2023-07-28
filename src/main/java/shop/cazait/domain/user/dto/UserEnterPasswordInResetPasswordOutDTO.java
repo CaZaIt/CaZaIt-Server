@@ -9,7 +9,7 @@ import shop.cazait.domain.user.entity.User;
 
 import java.util.UUID;
 
-@Schema(description = "유저 비밀번호 수정 Response : 비밀번호 수정된 유저의 정보")
+@Schema(description = "유저 비밀번호 수정시 비밀번호 입력 Response : 비밀번호 수정된 유저의 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserEnterPasswordInResetPasswordOutDTO {
