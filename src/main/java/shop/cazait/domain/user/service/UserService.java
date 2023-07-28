@@ -212,7 +212,13 @@ public class UserService {
         return UserFindAccountNameOutDTO.of(user);
     }
 
-    public UserUpdatePasswordOutDTO updateUserPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public UserEnterUserInfoInResetPasswordOutDTO verifyUserInResetPassword(String accountName) throws UserException {
+        User user = userRepository.findByAccountNumber(accountName)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+        return UserEnterUserInfoInResetPasswordOutDTO.of(user);
+    }
+
+    public UserEnterPasswordInResetPasswordOutDTO updateUserPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
