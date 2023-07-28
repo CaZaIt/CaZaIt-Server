@@ -121,7 +121,7 @@ public class AuthController {
 
     @NoAuth
     @PostMapping("/messages/codes/send/reset-password")
-    @Operation(summary = "문자 인증번호 발송 (비밀번호 변경)", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
+    @Operation(summary = "문자 인증번호 발송 (비밀번호 변경)", description = "이전 단계에서 인증한 아이디와 전화번호 불일치시 에러 반환")
     public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeInFindUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String accountName = authSendMessageCodeInResetPasswordInDTO.getAccountName();
         String recipientPhoneNumber = authSendMessageCodeInResetPasswordInDTO.getRecipientPhoneNumber();
@@ -159,7 +159,7 @@ public class AuthController {
 
     @NoAuth
     @PostMapping("/messages/codes/send/test/reset-password")
-    @Operation(summary = "문자 인증번호 발송 테스트 (비밀번호 변경)", description = "실제로 문자 발송은 진행하지 않음")
+    @Operation(summary = "문자 인증번호 발송 테스트 (비밀번호 변경)", description = "실제로 문자 발송은 진행하지 않음, 이전 단계에서 인증한 아이디와 전화번호 불일치시 에러 반환")
     public SuccessResponse<AuthSendMessageCodeOutDTOTest> sendMessageCodeTestInFindUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String accountName = authSendMessageCodeInResetPasswordInDTO.getAccountName();
         String recipientPhoneNumber = authSendMessageCodeInResetPasswordInDTO.getRecipientPhoneNumber();
