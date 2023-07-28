@@ -80,7 +80,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/accountnumber")
+    @PostMapping ("/duplicate-check/accountname")
     @Operation(summary = "아이디 중복확인", description = "회원가입 전 이미 존재하는 아이디인지 중복확인")
     public SuccessResponse<String> checkDuplicateaccountNumber(@RequestBody @Valid UserFindDuplicateAccountNumberInDTO userFindDuplicateEmailInDTO) throws UserException {
         SuccessResponse<String> accountNumberSuccessResponse = userService.checkduplicateaccountNumber(userFindDuplicateEmailInDTO);
@@ -88,7 +88,7 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/nickname")
+    @PostMapping ("/duplicate-check/nickname")
     @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
     public SuccessResponse<String> checkDuplicateNickname(@RequestBody @Valid UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.checkduplicateNickname(userFindDuplicateNicknameInDTO);
