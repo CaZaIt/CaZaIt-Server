@@ -232,6 +232,6 @@ public class UserService {
         User updatePasswordUser = user.updateUserPassword(encryptPassword);
         userRepository.save(updatePasswordUser);
 
-        return UserUpdatePasswordOutDTO.of(user,password);
+        return UserEnterPasswordInResetPasswordOutDTO.of(user,password);
     }
 }
