@@ -26,7 +26,7 @@ public class User extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String accountNumber;
+    private String accountName;
 
     @Column(nullable = false)
     private String password;
@@ -44,9 +44,9 @@ public class User extends BaseEntity {
     private Long kakaoId;
 
     @Builder
-    public User(UUID id, String accountNumber, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
+    public User(UUID id, String accountName, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
         this.id = id;
-        this.accountNumber = accountNumber;
+        this.accountName = accountName;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.nickname = nickname;
@@ -60,7 +60,7 @@ public class User extends BaseEntity {
     }
 
     public User updateUserProfile(UserUpdateInDTO userUpdateInDTO){
-        this.accountNumber = userUpdateInDTO.getAccountNumber();
+        this.accountName = userUpdateInDTO.getAccountName();
         this.password = userUpdateInDTO.getPassword();
         this.phoneNumber = userUpdateInDTO.getPhoneNumber();
         this.nickname = userUpdateInDTO.getNickname();
@@ -70,7 +70,7 @@ public class User extends BaseEntity {
 
     public static User kakaoSignUpUser(Long kakaoId){
         return User.builder()
-                .accountNumber(generateRandomString())
+                .accountName(generateRandomString())
                 .password(generateRandomString())
                 .phoneNumber(generateRandomString())
                 .nickname(generateRandomString())

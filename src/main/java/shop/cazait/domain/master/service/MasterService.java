@@ -1,13 +1,5 @@
 package shop.cazait.domain.master.service;
 
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_ACCOUNTNUMBER;
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_NICKNAME;
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_PHONENUMBER;
-import static shop.cazait.global.error.status.ErrorStatus.FAILED_TO_LOGIN;
-import static shop.cazait.global.error.status.ErrorStatus.INVALID_JWT;
-import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_MASTER;
-import static shop.cazait.global.error.status.ErrorStatus.NOT_EXPIRED_TOKEN;
-
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -33,6 +25,8 @@ import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.config.encrypt.AES128;
 import shop.cazait.global.config.encrypt.JwtService;
 
+import static shop.cazait.global.error.status.ErrorStatus.*;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -57,8 +51,11 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		if (masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).isPresent()) {
-			throw new MasterException(EXIST_ACCOUNTNUMBER);
+
+		//아이디 중복확인
+		if (masterRepository.findMasterByAccountName(dto.getAccountName()).isPresent()) {
+			throw new MasterException(EXIST_ACCOUNTNAME);
+
 		}
 
 		if (masterRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {
@@ -91,7 +88,7 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		Master findMaster = masterRepository.findMasterByAccountNumber(userAuthenticateInDTO.getAccountNumber())
+		Master findMaster = masterRepository.findMasterByAccountName(userAuthenticateInDTO.getAccountName())
 				.orElseThrow(() -> new MasterException(FAILED_TO_LOGIN));
 
 		String findMasterPassword = findMaster.getPassword();

@@ -35,7 +35,7 @@ public class Master extends BaseEntity {
 	private UUID id;
 
 	@Column(nullable = false)
-	private String accountNumber;
+	private String accountName;
 
 	@Column(nullable = false)
 	private String password;
@@ -53,9 +53,9 @@ public class Master extends BaseEntity {
 	private List<Cafe> cafes;
 
 	@Builder
-	public Master(UUID id, String accountNumber, String password, String phoneNumber, String nickname, String refreshToken, List<Cafe> cafes) {
+	public Master(UUID id, String accountName, String password, String phoneNumber, String nickname, String refreshToken, List<Cafe> cafes) {
 		this.id =id;
-		this.accountNumber = accountNumber;
+		this.accountName = accountName;
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.nickname = nickname;
@@ -63,8 +63,8 @@ public class Master extends BaseEntity {
 		this.cafes = cafes;
 	}
 
-	public void changeMasterEmail(String email) {
-		this.accountNumber = accountNumber;
+	public void changeMasterAccountName(String accountName) {
+		this.accountName = accountName;
 	}
 
 	public void changeMasterPassword(String password) {
@@ -80,7 +80,7 @@ public class Master extends BaseEntity {
 	}
 
 	public Master updateMasterProfile(MasterUpdateInDTO masterUpdateInDTO){
-		this.accountNumber = masterUpdateInDTO.getAccountNumber();
+		this.accountName = masterUpdateInDTO.getAccountName();
 		this.password = masterUpdateInDTO.getPassword();
 		this.phoneNumber = masterUpdateInDTO.getPhoneNumber();
 		this.nickname = masterUpdateInDTO.getNickname();

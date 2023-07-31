@@ -15,6 +15,6 @@ public class UserEnterAccountNameInResetPasswordOutDTO {
 
     public static UserEnterAccountNameInResetPasswordOutDTO of (User user){
         return UserEnterAccountNameInResetPasswordOutDTO.builder()
-                .accountName(user.getAccountNumber()).build();
+                .accountName(user.getAccountName()).build();
     }
 }

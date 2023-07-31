@@ -16,6 +16,6 @@ public class UserFindAccountNameOutDTO {
 
     public static UserFindAccountNameOutDTO of (User user){
         return UserFindAccountNameOutDTO.builder()
-                .accountName(user.getAccountNumber()).build();
+                .accountName(user.getAccountName()).build();
     }
 }

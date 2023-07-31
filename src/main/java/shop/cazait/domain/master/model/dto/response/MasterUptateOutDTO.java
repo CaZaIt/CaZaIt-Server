@@ -15,7 +15,7 @@ public class MasterUptateOutDTO {
 	@Schema(description = "마스터 계정 ID")
 	private UUID id;
 	@Schema(description = "마스터 로그인 아이디")
-	private String accountNumber;
+	private String accountName;
 
 	@Schema(description = "마스터 패스워드")
 	private String password;
@@ -29,7 +29,7 @@ public class MasterUptateOutDTO {
 	public static MasterUptateOutDTO of(Master master){
 		return MasterUptateOutDTO.builder()
 				.id(master.getId())
-				.accountNumber(master.getAccountNumber())
+				.accountName(master.getAccountName())
 				.password(master.getPassword())
 				.phoneNumber(master.getPhoneNumber())
 				.nickname(master.getNickname())

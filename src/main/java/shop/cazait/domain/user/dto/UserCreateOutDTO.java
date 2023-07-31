@@ -18,7 +18,7 @@ public class UserCreateOutDTO {
     private UUID id;
 
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String accountNumber;
+    private String accountName;
 
     @Schema(description = "휴대전화 번호", example = "01012345678")
     private String phoneNumber;
@@ -29,7 +29,7 @@ public class UserCreateOutDTO {
     public static UserCreateOutDTO of(User user) {
         return UserCreateOutDTO.builder()
                 .id(user.getId())
-                .accountNumber(user.getAccountNumber())
+                .accountName(user.getAccountName())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
                 .build();
