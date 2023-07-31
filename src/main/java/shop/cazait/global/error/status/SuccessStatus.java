@@ -26,6 +26,7 @@ public enum SuccessStatus {
      * Success Code : 201
      * Created
      */
+    CREATE_CAFE_IMAGE(201, "SUCCESS", "카페 이미지 등록이 완료 되었습니다"),
     CREATE_FAVORITES(201, "SUCCESS", "즐겨찾기 등록이 완료 되었습니다"),
     CREATE_CONGESTION(201, "SUCCESS", "혼잡도 등록이 완료 되었습니다"),
     CREATE_MENU(201, "SUCCESS", "메뉴 등록이 완료 되었습니다"),

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.cazait.domain.coordinate.dto.ExtKakaoCoordinateOutDTO;
-import shop.cazait.domain.cafe.dto.CafeCreateInDTO;
+import shop.cazait.domain.cafe.model.dto.request.CafeCreateInDTO;
 import shop.cazait.domain.coordinate.entity.Coordinate;
 
 @Service

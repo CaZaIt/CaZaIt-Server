@@ -4,9 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import shop.cazait.domain.auth.Role;
 
-import shop.cazait.domain.master.entity.Master;
+import shop.cazait.domain.master.model.entity.Master;
 import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.NotBlank;

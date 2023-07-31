@@ -19,6 +19,7 @@ src/main/resources/*.yml
 .idea/**/aws.xml
 
 # Generated files
+src/main/generated/**
 .idea/**/contentModel.xml
 
 # Sensitive or high-churn files

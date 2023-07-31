@@ -7,13 +7,12 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.cazait.domain.cafe.entity.Cafe;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.favorites.dto.response.FavoritesListOutDTO;

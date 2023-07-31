@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import shop.cazait.domain.master.entity.Master;
+import shop.cazait.domain.master.model.entity.Master;
 import shop.cazait.global.common.status.BaseStatus;
 
 @Repository
@@ -27,4 +27,5 @@ public interface MasterRepository extends JpaRepository<Master, UUID> {
 	Optional<Master> findById(UUID id);
 
 	Optional<Master> findByPhoneNumber(String phoneNumber);
+
 }

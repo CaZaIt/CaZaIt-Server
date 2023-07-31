@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MenuUpdateInDTO {
 
+    @Schema(description = "메뉴 ID", example = "1")
+    private Long menuId;
+
     @Schema(description = "이름", example = "아이스 아메리카노 (미수정 : null)")
     private String name;
 
@@ -18,5 +21,9 @@ public class MenuUpdateInDTO {
 
     @Schema(description = "가격", example = "4500 (미수정 : null)")
     private Integer price;
+
+    @Schema(description = "이미지 URL", example = "https://cazait-bucket.s3.ap-northeast-2.amazonaws.com/cafe-image/abcdefghijklmnopqrstuvwxyz", required = true)
+    private String ImageUrl;
+
 
 }
