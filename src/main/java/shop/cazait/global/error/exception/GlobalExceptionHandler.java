@@ -1,6 +1,7 @@
 package shop.cazait.global.error.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -61,8 +62,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({UserException.class})
-    protected FailResponse handleUserException(UserException exception) {
-        return new FailResponse(exception.getError());
+    protected ResponseEntity<FailResponse>  handleUserException(UserException exception) {
+        return ResponseEntity.status(HttpStatus.valueOf(exception.getError().getCode())).body(new FailResponse(exception.getError()));
     }
 
     @ExceptionHandler({ReviewException.class})
