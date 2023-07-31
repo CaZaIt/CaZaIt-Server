@@ -15,7 +15,7 @@ public class MasterCreateInDTO {
 
 	@NotBlank(message = "마스터 아이디를 입력해주세요.")
 	@Schema(description = "로그인 아이디", example = "cazait1234")
-	private String accountNumber;
+	private String accountName;
 
 	@NotBlank(message = "마스터 비밀번호를 입력해주세요.")
 	@Schema(description = "비밀번호", example = "abc12345#!")
@@ -37,7 +37,7 @@ public class MasterCreateInDTO {
 
 	public static Master toEntity(MasterCreateInDTO masterCreateInDTO){
 		return Master.builder()
-				.accountNumber(masterCreateInDTO.getAccountNumber())
+				.accountName(masterCreateInDTO.getAccountName())
 				.password(masterCreateInDTO.getPassword())
 				.phoneNumber(masterCreateInDTO.getPhoneNumber())
 				.nickname(masterCreateInDTO.getNickname())

@@ -21,7 +21,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final shop.cazait.global.common.entity.QBaseEntity _super = new shop.cazait.global.common.entity.QBaseEntity(this);
 
-    public final StringPath accountNumber = createString("accountNumber");
+    public final StringPath accountName = createString("accountName");
 
     //inherited
     public final StringPath createdAt = _super.createdAt;

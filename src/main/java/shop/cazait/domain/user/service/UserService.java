@@ -43,8 +43,8 @@ public class UserService {
     public UserCreateOutDTO createUser(UserCreateInDTO userCreateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (userRepository.findByAccountNumber(userCreateInDTO.getAccountNumber()).isPresent()) {
-            throw new UserException(EXIST_ACCOUNTNUMBER);
+        if (userRepository.findByAccountName(userCreateInDTO.getAccountName()).isPresent()) {
+            throw new UserException(EXIST_ACCOUNTNAME);
         }
 
         if (userRepository.findByPhoneNumber(userCreateInDTO.getPhoneNumber()).isPresent()) {
@@ -67,7 +67,7 @@ public class UserService {
     public UserAuthenticateOutDTO logInUser(UserAuthenticateInDTO userAuthenticateInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        User findUser = userRepository.findByAccountNumber(userAuthenticateInDTO.getAccountNumber())
+        User findUser = userRepository.findByAccountName(userAuthenticateInDTO.getAccountName())
                 .orElseThrow(() -> new UserException(FAILED_TO_LOGIN));
 
         //DB에 있는 암호화된 비밀번호
@@ -133,12 +133,12 @@ public class UserService {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<String> findUserDuplicateAccountName(UserFindDuplicateAccountNumberInDTO userFindDuplicateAccountNumberInDTO) throws UserException {
-        String accountNumber = userFindDuplicateAccountNumberInDTO.getAccountNumber();
-        if (userRepository.findByAccountNumber(accountNumber).isPresent()) {
-            throw new UserException(EXIST_ACCOUNTNUMBER);
+    public SuccessResponse<String> findUserDuplicateAccountName(UserFindDuplicateAccountNameInDTO userFindDuplicateAccountNameInDTO) throws UserException {
+        String accountName = userFindDuplicateAccountNameInDTO.getAccountName();
+        if (userRepository.findByAccountName(accountName).isPresent()) {
+            throw new UserException(EXIST_ACCOUNTNAME);
         }
-        return new SuccessResponse<>(SIGNUP_AVAILABLE, accountNumber);
+        return new SuccessResponse<>(SIGNUP_AVAILABLE, accountName);
     }
 
     public SuccessResponse<String> findUserDuplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
@@ -213,7 +213,7 @@ public class UserService {
     }
 
     public UserEnterAccountNameInResetPasswordOutDTO verifyUserAccountNameInResetPassword(String accountName) throws UserException {
-        User user = userRepository.findByAccountNumber(accountName)
+        User user = userRepository.findByAccountName(accountName)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
         return UserEnterAccountNameInResetPasswordOutDTO.of(user);
     }

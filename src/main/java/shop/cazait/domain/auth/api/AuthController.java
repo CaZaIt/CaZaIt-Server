@@ -122,10 +122,10 @@ public class AuthController {
     @NoAuth
     @PostMapping("/messages/codes/send/reset-password")
     @Operation(summary = "문자 인증번호 발송 (비밀번호 변경)", description = "이전 단계에서 인증한 아이디와 전화번호 불일치시 에러 반환")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCodeInFindUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendUserMessageCodeInResetUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String accountName = authSendMessageCodeInResetPasswordInDTO.getAccountName();
         String recipientPhoneNumber = authSendMessageCodeInResetPasswordInDTO.getRecipientPhoneNumber();
-        User user = userRepository.findByAccountNumber(accountName).get();
+        User user = userRepository.findByAccountName(accountName).get();
 
         if(user.getPhoneNumber().equals(recipientPhoneNumber)) {
             AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
@@ -163,7 +163,7 @@ public class AuthController {
     public SuccessResponse<AuthSendMessageCodeTestOutDTO > sendMessageCodeTestInFindUserPassword(@RequestBody AuthSendMessageCodeInResetPasswordInDTO authSendMessageCodeInResetPasswordInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String accountName = authSendMessageCodeInResetPasswordInDTO.getAccountName();
         String recipientPhoneNumber = authSendMessageCodeInResetPasswordInDTO.getRecipientPhoneNumber();
-        User user = userRepository.findByAccountNumber(accountName).get();
+        User user = userRepository.findByAccountName(accountName).get();
 
         if(user.getPhoneNumber().equals(recipientPhoneNumber)) {
                 AuthSendMessageCodeTestOutDTO authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);

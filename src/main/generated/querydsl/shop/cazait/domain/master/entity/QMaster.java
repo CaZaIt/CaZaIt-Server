@@ -24,7 +24,7 @@ public class QMaster extends EntityPathBase<Master> {
 
     public final shop.cazait.global.common.entity.QBaseEntity _super = new shop.cazait.global.common.entity.QBaseEntity(this);
 
-    public final StringPath accountNumber = createString("accountNumber");
+    public final StringPath accountName = createString("accountName");
 
     public final shop.cazait.domain.cafe.entity.QCafe cafe;
 

@@ -25,7 +25,7 @@ public class UserAuthenticateOutDTO {
     private UUID id;
 
     @Schema(description = "로그인한 아이디", example = "cazait1234")
-    private String accountNumber;
+    private String accountName;
 
     @Schema(description = "access token")
     private String accessToken;
@@ -40,7 +40,7 @@ public class UserAuthenticateOutDTO {
     public static UserAuthenticateOutDTO of(User user, String accessToken){
         return  UserAuthenticateOutDTO.builder()
                 .id(user.getId())
-                .accountNumber(user.getAccountNumber())
+                .accountName(user.getAccountName())
                 .accessToken(accessToken)
                 .refreshToken(user.getRefreshToken())
                 .role(userRole)
@@ -50,7 +50,7 @@ public class UserAuthenticateOutDTO {
     public static UserAuthenticateOutDTO of(Master master, String accessToken) {
         return  UserAuthenticateOutDTO.builder()
                 .id(master.getId())
-                .accountNumber(master.getAccountNumber())
+                .accountName(master.getAccountName())
                 .accessToken(accessToken)
                 .refreshToken(master.getRefreshToken())
                 .role(masterRole)

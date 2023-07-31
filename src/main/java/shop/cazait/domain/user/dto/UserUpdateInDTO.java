@@ -18,7 +18,7 @@ public class UserUpdateInDTO {
     @Pattern(regexp = "^[a-z0-9]{5,20}$", message = "올바른 아이디 형식이 아닙니다")
     @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String accountNumber;
+    private String accountName;
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
     @NotBlank
@@ -35,7 +35,7 @@ public class UserUpdateInDTO {
 
     public static User toEntity(UserUpdateInDTO userUpdateInDTO){
         return User.builder()
-                .accountNumber(userUpdateInDTO.getAccountNumber())
+                .accountName(userUpdateInDTO.getAccountName())
                 .password(userUpdateInDTO.getPhoneNumber())
                 .phoneNumber(userUpdateInDTO.getPhoneNumber())
                 .nickname(userUpdateInDTO.getNickname())

@@ -62,8 +62,8 @@ public class MasterService {
 		InvalidKeyException {
 
 		//아이디 중복확인
-		if (masterRepository.findMasterByAccountNumber(dto.getAccountNumber()).isPresent()) {
-			throw new MasterException(EXIST_ACCOUNTNUMBER);
+		if (masterRepository.findMasterByAccountName(dto.getAccountName()).isPresent()) {
+			throw new MasterException(EXIST_ACCOUNTNAME);
 		}
 
 		//휴대전화번호 중복확인
@@ -99,7 +99,7 @@ public class MasterService {
 		BadPaddingException,
 		InvalidKeyException {
 
-		Master findMaster = masterRepository.findMasterByAccountNumber(userAuthenticateInDTO.getAccountNumber())
+		Master findMaster = masterRepository.findMasterByAccountName(userAuthenticateInDTO.getAccountName())
 				.orElseThrow(() -> new MasterException(FAILED_TO_LOGIN));
 
 		//DB에 있는 암호화된 비밀번호
