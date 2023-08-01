@@ -11,7 +11,7 @@ import shop.cazait.domain.auth.Role;
 import shop.cazait.domain.auth.client.SensClient;
 import shop.cazait.domain.auth.dto.*;
 import shop.cazait.domain.auth.dto.sens.*;
-import shop.cazait.domain.master.error.MasterException;
+import shop.cazait.domain.master.exception.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 
 import shop.cazait.domain.user.exception.UserException;
@@ -37,7 +37,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static shop.cazait.domain.auth.Role.USER;
-import static shop.cazait.global.error.status.ErrorStatus.EXIST_PHONENUMBER;
 
 @Service
 @RequiredArgsConstructor

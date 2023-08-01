@@ -4,19 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import shop.cazait.domain.cafe.exception.CafeException;
-import shop.cazait.domain.cafeimage.exception.CafeImageException;
-import shop.cazait.domain.congestion.exception.CongestionException;
-import shop.cazait.domain.favorites.exception.FavoritesException;
-import shop.cazait.domain.master.error.MasterException;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.global.common.dto.response.FailResponse;
@@ -31,33 +22,13 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler({BaseException.class})
-    protected FailResponse handleBaseException(BaseException exception) {
-        return new FailResponse(exception.getError());
+    @ExceptionHandler
+    protected ResponseEntity<FailResponse> handleBaseException(BaseException exception) {
+        return ResponseEntity.status(HttpStatus.valueOf(exception.getError().getCode())).body(new FailResponse(exception.getError()));
     }
 
     @ExceptionHandler({CafeException.class})
     protected FailResponse handleCongestionException(CafeException exception) {
-        return new FailResponse(exception.getError());
-    }
-
-    @ExceptionHandler({CafeImageException.class})
-    protected FailResponse handleCongestionException(CafeImageException exception) {
-        return new FailResponse(exception.getError());
-    }
-
-    @ExceptionHandler({FavoritesException.class})
-    protected FailResponse handleFavoritesException(FavoritesException exception) {
-        return new FailResponse(exception.getError());
-    }
-
-    @ExceptionHandler({CongestionException.class})
-    protected FailResponse handleCongestionException(CongestionException exception) {
-        return new FailResponse(exception.getError());
-    }
-
-    @ExceptionHandler({MasterException.class})
-    protected FailResponse handleCongestionException(MasterException exception) {
         return new FailResponse(exception.getError());
     }
 

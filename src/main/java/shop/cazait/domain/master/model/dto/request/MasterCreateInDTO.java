@@ -31,7 +31,6 @@ public class MasterCreateInDTO {
 
 	public MasterCreateInDTO encryptMasterCreateDTO(String encryptedMasterPassword) {
 		this.password = encryptedMasterPassword;
-
 		return this;
 	}
 

@@ -17,7 +17,7 @@ import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
 import shop.cazait.domain.master.dto.response.MasterCreateOutDTO;
 import shop.cazait.domain.master.dto.response.MasterUptateOutDTO;
-import shop.cazait.domain.master.error.MasterException;
+import shop.cazait.domain.master.exception.MasterException;
 import shop.cazait.domain.master.model.dto.request.MasterCreateInDTO;
 import shop.cazait.domain.master.model.entity.Master;
 import shop.cazait.domain.master.repository.MasterRepository;
@@ -55,7 +55,6 @@ public class MasterService {
 		//아이디 중복확인
 		if (masterRepository.findMasterByAccountName(dto.getAccountName()).isPresent()) {
 			throw new MasterException(EXIST_ACCOUNTNAME);
-
 		}
 
 		if (masterRepository.findByPhoneNumber(dto.getPhoneNumber()).isPresent()) {

@@ -1,11 +1,15 @@
 package shop.cazait.domain.menu.exception;
 
+import com.fasterxml.jackson.databind.ser.Serializers.Base;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import shop.cazait.global.error.exception.BaseException;
 import shop.cazait.global.error.status.ErrorStatus;
 
-@RequiredArgsConstructor
-public class MenuException extends RuntimeException {
+public class MenuException extends BaseException {
 
-    private final ErrorStatus error;
+    public MenuException(ErrorStatus error) {
+        super(error);
+    }
 
 }
