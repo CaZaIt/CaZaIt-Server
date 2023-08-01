@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.dto.request;
+package shop.cazait.domain.menu.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.cafe.model.entity.Cafe;
-import shop.cazait.domain.cafemenu.entity.CafeMenu;
+import shop.cazait.domain.menu.entity.Menu;
 
 @Schema(name = "메뉴 등록 Request", description = "등록할 메뉴에 대한 정보")
 @Data
@@ -30,8 +30,8 @@ public class MenuCreateInDTO {
     @Schema(description = "이미지 URL", example = "https://cazait-bucket.s3.ap-northeast-2.amazonaws.com/cafe-image/abcdefghijklmnopqrstuvwxyz", required = true)
     private String ImageUrl;
 
-    public static CafeMenu toEntity(Cafe cafe, MenuCreateInDTO menuCreateInDTO) {
-        return CafeMenu.builder()
+    public static Menu toEntity(Cafe cafe, MenuCreateInDTO menuCreateInDTO) {
+        return Menu.builder()
                 .cafe(cafe)
                 .name(menuCreateInDTO.getName())
                 .description(menuCreateInDTO.getDescription())

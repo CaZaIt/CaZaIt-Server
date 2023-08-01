@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.entity;
+package shop.cazait.domain.menu.entity;
 
 import javax.persistence.*;
 import lombok.AccessLevel;
@@ -10,7 +10,7 @@ import shop.cazait.domain.cafe.model.entity.Cafe;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CafeMenu {
+public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class CafeMenu {
     private String imageUrl;
 
     @Builder
-    public CafeMenu(Cafe cafe, String name, String description, int price, String imageUrl) {
+    public Menu(Cafe cafe, String name, String description, int price, String imageUrl) {
         this.cafe = cafe;
         this.name = name;
         this.description = description;
