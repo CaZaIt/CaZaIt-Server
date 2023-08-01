@@ -1,10 +1,10 @@
-package shop.cazait.domain.cafemenu.dto.response;
+package shop.cazait.domain.menu.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import shop.cazait.domain.cafemenu.entity.CafeMenu;
+import shop.cazait.domain.menu.entity.Menu;
 
 @Schema(name = "등록 메뉴 Response", description = "등록을 완료한 메뉴 정보")
 @Getter
@@ -26,7 +26,7 @@ public class MenuCreateOutDTO {
     @Schema(description = "이미지 URL", example = "americano.png")
     private String imageUrl;
 
-    public static MenuCreateOutDTO of(CafeMenu menu) {
+    public static MenuCreateOutDTO of(Menu menu) {
 
         return MenuCreateOutDTO.builder()
                 .menuId(menu.getId())

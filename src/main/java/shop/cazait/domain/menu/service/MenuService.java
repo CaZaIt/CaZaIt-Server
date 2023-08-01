@@ -1,4 +1,4 @@
-package shop.cazait.domain.cafemenu.service;
+package shop.cazait.domain.menu.service;
 
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_DESCRIPTION;
 import static shop.cazait.global.common.constant.Constant.NOT_UPDATE_IMAGE;
@@ -16,22 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
-import shop.cazait.domain.cafemenu.dto.request.MenuUpdateInDTO;
-import shop.cazait.domain.cafemenu.dto.response.MenuListOutDTO;
-import shop.cazait.domain.cafemenu.dto.response.MenuUpdateOutDTO;
-import shop.cazait.domain.cafemenu.dto.request.MenuCreateInDTO;
-import shop.cazait.domain.cafemenu.dto.response.MenuCreateOutDTO;
-import shop.cazait.domain.cafemenu.entity.CafeMenu;
-import shop.cazait.domain.cafemenu.exception.CafeMenuException;
-import shop.cazait.domain.cafemenu.repository.CafeMenuRepository;
+import shop.cazait.domain.menu.dto.request.MenuUpdateInDTO;
+import shop.cazait.domain.menu.dto.response.MenuListOutDTO;
+import shop.cazait.domain.menu.dto.response.MenuUpdateOutDTO;
+import shop.cazait.domain.menu.dto.request.MenuCreateInDTO;
+import shop.cazait.domain.menu.dto.response.MenuCreateOutDTO;
+import shop.cazait.domain.menu.entity.Menu;
+import shop.cazait.domain.menu.exception.MenuException;
+import shop.cazait.domain.menu.repository.MenuRepository;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CafeMenuService {
+public class MenuService {
 
     private final CafeRepository cafeRepository;
-    private final CafeMenuRepository cafeMenuRepository;
+    private final MenuRepository menuRepository;
 
     /**
      * 카페 메뉴 조회
@@ -39,7 +39,7 @@ public class CafeMenuService {
     @Transactional(readOnly = true)
     public List<MenuListOutDTO> getMenu(Long cafeId) {
 
-        List<CafeMenu> findMenus = cafeMenuRepository.findAllByCafeId(cafeId).orElse(null);
+        List<Menu> findMenus = menuRepository.findAllByCafeId(cafeId).orElse(null);
         return MenuListOutDTO.of(findMenus);
 
     }
@@ -51,8 +51,8 @@ public class CafeMenuService {
     public MenuCreateOutDTO createMenu(MenuCreateInDTO req) throws CafeException{
 
         Cafe findCafe = getCafe(req.getCafeId());
-        CafeMenu menu = MenuCreateInDTO.toEntity(findCafe, req);
-        CafeMenu addMenu = cafeMenuRepository.save(menu);
+        Menu menu = MenuCreateInDTO.toEntity(findCafe, req);
+        Menu addMenu = menuRepository.save(menu);
         return MenuCreateOutDTO.of(addMenu);
     }
 
@@ -72,9 +72,9 @@ public class CafeMenuService {
     public MenuUpdateOutDTO updateMenu(MenuUpdateInDTO req)
             throws IOException {
 
-        CafeMenu findMenu = cafeMenuRepository
+        Menu findMenu = menuRepository
                 .findById(req.getMenuId())
-                .orElseThrow(() -> new CafeMenuException(NOT_EXIST_MENU));
+                .orElseThrow(() -> new MenuException(NOT_EXIST_MENU));
 
         if (req.getName() != NOT_UPDATE_NAME) {
             findMenu.changeName(req.getName());
@@ -92,7 +92,7 @@ public class CafeMenuService {
             findMenu.changeImageUrl(req.getImageUrl());
         }
 
-        CafeMenu updateMenu = cafeMenuRepository.save(findMenu);
+        Menu updateMenu = menuRepository.save(findMenu);
 
         return MenuUpdateOutDTO.of(updateMenu);
 
@@ -103,11 +103,11 @@ public class CafeMenuService {
      */
     public String deleteMenu(Long cafeMenuId) {
 
-        CafeMenu findMenu = cafeMenuRepository
+        Menu findMenu = menuRepository
                 .findById(cafeMenuId)
-                .orElseThrow(() -> new CafeMenuException(NOT_EXIST_MENU));
+                .orElseThrow(() -> new MenuException(NOT_EXIST_MENU));
 
-        cafeMenuRepository.delete(findMenu);
+        menuRepository.delete(findMenu);
 
         return "메뉴 삭제 완료";
 
