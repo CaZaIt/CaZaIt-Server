@@ -17,7 +17,7 @@ import shop.cazait.domain.cafe.model.dto.response.CafeUpdateOutDTO;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.model.dto.response.ManageCafeListOutDTO;
 import shop.cazait.domain.cafe.service.CafeManageService;
-import shop.cazait.domain.master.error.MasterException;
+import shop.cazait.domain.master.exception.MasterException;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 
 import static shop.cazait.global.error.status.SuccessStatus.*;

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import shop.cazait.domain.master.model.dto.request.MasterCreateInDTO;
 import shop.cazait.domain.master.dto.request.MasterUpdateInDTO;
 import shop.cazait.domain.master.dto.response.MasterCreateOutDTO;
-import shop.cazait.domain.master.error.MasterException;
+import shop.cazait.domain.master.exception.MasterException;
 import shop.cazait.domain.master.service.MasterService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.NoAuth;

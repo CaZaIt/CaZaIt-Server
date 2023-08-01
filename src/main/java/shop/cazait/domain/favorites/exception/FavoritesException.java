@@ -2,12 +2,14 @@ package shop.cazait.domain.favorites.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import shop.cazait.global.error.exception.BaseException;
 import shop.cazait.global.error.status.ErrorStatus;
 
 @Getter
-@AllArgsConstructor
-public class FavoritesException extends RuntimeException {
+public class FavoritesException extends BaseException {
 
-    private ErrorStatus error;
+    public FavoritesException(ErrorStatus error) {
+        super(error);
+    }
 
 }

@@ -2,12 +2,15 @@ package shop.cazait.domain.master.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import shop.cazait.global.error.exception.BaseException;
 import shop.cazait.global.error.status.ErrorStatus;
 
 @Getter
-@AllArgsConstructor
-public class MasterException {
+public class MasterException extends BaseException {
 
-    private ErrorStatus error;
+	public MasterException(ErrorStatus error) {
+		super(error);
+	}
 
 }
+ 
