@@ -3,11 +3,13 @@ package shop.cazait.domain.user.service;
 
 import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.error.status.SuccessStatus.SIGNUP_AVAILABLE;
+import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -134,11 +136,22 @@ public class UserService {
     }
 
     public SuccessResponse<String> findUserDuplicateAccountName(UserFindDuplicateAccountNameInDTO userFindDuplicateAccountNameInDTO) throws UserException {
+        String isExist = userFindDuplicateAccountNameInDTO.getIsExist();
         String accountName = userFindDuplicateAccountNameInDTO.getAccountName();
-        if (userRepository.findByAccountName(accountName).isPresent()) {
+        Optional<User> accountNameNullable = userRepository.findByAccountName(accountName);
+
+        if(isExist.equals("true")){
+            if(accountNameNullable.isPresent()){
+                    return new SuccessResponse<>(SUCCESS,accountName);
+            }
+            throw new UserException(NOT_EXIST_USER);
+        }
+        else{
+            if (accountNameNullable.isEmpty()) {
+                return new SuccessResponse<>(SIGNUP_AVAILABLE, accountName);
+            }
             throw new UserException(EXIST_ACCOUNTNAME);
         }
-        return new SuccessResponse<>(SIGNUP_AVAILABLE, accountName);
     }
 
     public SuccessResponse<String> findUserDuplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
