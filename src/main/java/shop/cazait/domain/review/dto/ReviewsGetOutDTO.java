@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Slice;
 import shop.cazait.domain.review.entity.Review;
-import shop.cazait.global.pagination.ScrollPaginationCollection;
 
 
 
@@ -16,36 +16,24 @@ import shop.cazait.global.pagination.ScrollPaginationCollection;
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class ReviewsGetOutDTO {
-    @Schema(description = "다음 스크롤이 존재하지 않을 경우 대입할 값")
-    private static final Long LAST_CURSOR = -1L;
-
     @Schema(description = "전체 리뷰 Response : 해당 카페의 전체 리뷰 정보")
     private List<ReviewGetOutDTO> reviewResponses;
 
     @Schema(description = "한 페이지의 리뷰 개수")
     private Integer totalElements;
 
-    @Schema(description = "다음에 조회할 리뷰의 ID (다음에 조회할 커서)")
-    private Long nextCursor;
+    @Schema(description = "마지막 페이지 여부")
+    private Boolean isLast;
 
-    public static ReviewsGetOutDTO of(ScrollPaginationCollection<Review> reviewScroll) {
-        List<Review> reviews = reviewScroll.getCurrentScrollItems();
+    public static ReviewsGetOutDTO of(Slice<Review> reviews) {
+        List<ReviewGetOutDTO> reviewGetOutDTOs = reviews.stream()
+                .map(ReviewGetOutDTO::of)
+                .collect(Collectors.toUnmodifiableList());
 
-        if (reviewScroll.isLastScroll()) {
-            return getNextScroll(reviews, reviews.size(), LAST_CURSOR);
-        }
-
-        return getNextScroll(reviews, reviews.size(),
-                reviewScroll.getNextCursor().getId());
-    }
-
-    private static ReviewsGetOutDTO getNextScroll(List<Review> reviews, Integer totalElements, Long nextCursor) {
         return ReviewsGetOutDTO.builder()
-                .reviewResponses(reviews.stream()
-                        .map(review -> ReviewGetOutDTO.of(review))
-                        .collect(Collectors.toList()))
-                .totalElements(totalElements)
-                .nextCursor(nextCursor)
+                .isLast(reviews.isLast())
+                .totalElements(reviews.getNumberOfElements())
+                .reviewResponses(reviewGetOutDTOs)
                 .build();
     }
 }

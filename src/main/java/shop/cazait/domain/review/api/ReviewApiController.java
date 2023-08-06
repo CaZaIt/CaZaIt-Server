@@ -53,14 +53,16 @@ public class ReviewApiController {
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "sortBy", description = "정렬 기준(newest, oldest)", example = "newest"),
             @Parameter(name = "score", description = "리뷰 점수"),
-            @Parameter(name = "lastId", description = "마지막으로 조회한 리뷰의 ID(미입력시 최초값 자동 설정)")
+            @Parameter(name = "index", description = "페이지 번호 (0부터 시작)"),
+            @Parameter(name = "nums", description = "한 페이지에 보여줄 리뷰의 갯수")
     })
     public SuccessResponse<ReviewsGetOutDTO> getReviews(@PathVariable UUID cafeId,
                                                         @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
-                                                        @RequestParam(value = "score", required = false) Integer score,
-                                                        @RequestParam(value = "lastId", required = false) Long lastId)
+                                                        @RequestParam(value = "index", defaultValue = "0") Integer index,
+                                                        @RequestParam(value = "nums") Integer nums,
+                                                        @RequestParam(value = "score", required = false) Integer score)
             throws CafeException, ReviewException {
-        ReviewsGetOutDTO getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score, lastId);
+        ReviewsGetOutDTO getReviewsRes = reviewProvideService.getReviews(cafeId, index, nums, sortBy, score);
         SuccessStatus resultStatus = SUCCESS;
 
         if (getReviewsRes == null) {
