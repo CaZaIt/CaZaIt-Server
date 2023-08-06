@@ -20,9 +20,15 @@ public class UserFindDuplicateAccountNameInDTO {
     @Schema(description = "로그인 아이디", example = "cazait1234")
     private String accountName;
 
+    @NotBlank
+    @Schema(description = "존재/존재하지 않는지 여부",example = "true/false")
+    private String isExist;
+
     @Builder
-    public UserFindDuplicateAccountNameInDTO(String accountName){
+    public UserFindDuplicateAccountNameInDTO(String accountName, String isExist){
+
         this.accountName = accountName;
+        this.isExist = isExist; 
     }
 
     public User toEntity(){
