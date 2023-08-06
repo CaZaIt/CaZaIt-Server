@@ -45,7 +45,7 @@ public class ReviewProvideService {
     }
 
 
-    public ReviewGetOutDTO getReviewDetail(Long reviewId) throws ReviewException {
+    public ReviewGetOutDTO getReviewDetail(UUID reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 

@@ -86,7 +86,7 @@ public class ReviewApiController {
     @GetMapping("/{reviewId}")
     @Operation(summary = "리뷰 하나 조회", description = "리뷰 ID를 받아 해당 리뷰 조회 (성공: 200, 존재하지 않는 리뷰: 404)")
     @Parameter(name = "reviewId", description = "리뷰 ID")
-    public SuccessResponse<ReviewGetOutDTO> getReview(@PathVariable Long reviewId) throws ReviewException {
+    public SuccessResponse<ReviewGetOutDTO> getReview(@PathVariable UUID reviewId) throws ReviewException {
         ReviewGetOutDTO getReviewRes = reviewProvideService.getReviewDetail(reviewId);
 
         return new SuccessResponse<>(SUCCESS, getReviewRes);
@@ -108,7 +108,7 @@ public class ReviewApiController {
 
     @PatchMapping("/edit/{reviewId}")
     @Operation(summary = "리뷰 수정", description = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정 (성공: 200, 존재하지 않는 리뷰: 404)")
-    public SuccessResponse<ReviewUpdateOutDTO> updateReview(@PathVariable Long reviewId,
+    public SuccessResponse<ReviewUpdateOutDTO> updateReview(@PathVariable UUID reviewId,
                                                             @RequestBody @Valid ReviewUpdateInDTO patchReviewReq)
             throws ReviewException {
         ReviewUpdateOutDTO patchReviewRes = reviewDaoService.updateReview(reviewId, patchReviewReq);
@@ -117,7 +117,7 @@ public class ReviewApiController {
 
     @DeleteMapping("/{reviewId}")
     @Operation(summary = "리뷰 삭제", description = "리뷰 ID를 받아 해당 리뷰 삭제 (성공: 200, 존재하지 않는 리뷰: 404)")
-    public SuccessResponse<ReviewDeleteOutDTO> deleteReview(@PathVariable Long reviewId) throws ReviewException {
+    public SuccessResponse<ReviewDeleteOutDTO> deleteReview(@PathVariable UUID reviewId) throws ReviewException {
         ReviewDeleteOutDTO delReviewRes = reviewDaoService.deleteReview(reviewId);
         return new SuccessResponse<>(SUCCESS, delReviewRes);
     }
