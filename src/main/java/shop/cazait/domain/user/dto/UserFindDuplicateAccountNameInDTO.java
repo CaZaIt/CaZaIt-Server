@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserFindDuplicateAccountNameInDTO {
 
-    @Pattern(regexp = "^[a-z0-9]{5,20}$", message = "올바른 아이디 형식이 아닙니다")
+
     @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
     private String accountName;
