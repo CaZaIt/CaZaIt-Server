@@ -3,7 +3,10 @@ package shop.cazait.domain.review.service;
 import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_REVIEW;
 
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.review.dto.ReviewGetOutDTO;
@@ -12,7 +15,6 @@ import shop.cazait.domain.review.entity.Review;
 import shop.cazait.domain.review.exception.ReviewException;
 import shop.cazait.domain.review.repository.ReviewRepository;
 import shop.cazait.domain.review.requestvalue.SortType;
-import shop.cazait.global.pagination.ScrollPaginationCollection;
 
 
 
@@ -23,7 +25,7 @@ public class ReviewProvideService {
     static final int COUNT_PER_SCROLL = 20;
     private final ReviewRepository reviewRepository;
 
-    public Double getAverageScore(Long cafeId) {
+    public Double getAverageScore(UUID cafeId) {
         List<Review> reviews = reviewRepository.findAllByCafeId(cafeId);
 
         Double averageScore = reviews.stream()
@@ -34,36 +36,16 @@ public class ReviewProvideService {
         return Math.round(averageScore * 100) / 100.0;
     }
 
-    public ReviewsGetOutDTO getReviews(Long cafeId, String sortBy, Integer score, Long lastId) {
+    public ReviewsGetOutDTO getReviews(UUID cafeId, int index, int nums, String sortBy, Integer score) {
         SortType sortType = SortType.of(sortBy);
-        List<Review> reviews = null;
 
-        if (reviewRepository.findTopByCafeId(cafeId) == null) {
-            return null;
-        }
+        Slice<Review> reviews = reviewRepository.findReviewByCafeId(cafeId, PageRequest.of(index, nums));
 
-        // ToDo: HashMap<SortType, Function>으로 함수 매핑시키기
-        {
-            if (sortType == SortType.NEWEST) {
-                if (lastId == null) {
-                    lastId = 0L;
-                }
-                reviews = reviewRepository.findNewestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
-            } else if (sortType == sortType.OLDEST) {
-                if (lastId == null) {
-                    lastId = Long.MAX_VALUE;
-                }
-                reviews = reviewRepository.findOldestPageByCafeId(cafeId, score, lastId, COUNT_PER_SCROLL);
-            }
-        }
-
-        ScrollPaginationCollection<Review> reviewScroll = ScrollPaginationCollection.of(reviews, COUNT_PER_SCROLL);
-
-        return ReviewsGetOutDTO.of(reviewScroll);
+        return ReviewsGetOutDTO.of(reviews);
     }
 
 
-    public ReviewGetOutDTO getReviewDetail(Long reviewId) throws ReviewException {
+    public ReviewGetOutDTO getReviewDetail(UUID reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 

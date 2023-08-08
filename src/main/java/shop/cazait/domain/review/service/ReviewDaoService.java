@@ -7,12 +7,11 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_USER;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
+import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.review.dto.ReviewDeleteOutDTO;
 import shop.cazait.domain.review.dto.ReviewPostInDTO;
@@ -37,7 +36,7 @@ public class ReviewDaoService {
     private final ReviewRepository reviewRepository;
 
 
-    public ReviewPostOutDTO addReview(UUID userId, Long cafeId, ReviewPostInDTO postReviewReq)
+    public ReviewPostOutDTO addReview(UUID userId, UUID cafeId, ReviewPostInDTO postReviewReq)
             throws CafeException, UserException {
         User user = getUserReference(userId);
         Cafe cafe = getCafeReference(cafeId);
@@ -48,7 +47,7 @@ public class ReviewDaoService {
         return ReviewPostOutDTO.of(newReview);
     }
 
-    private Cafe getCafeReference(Long id) throws CafeException {
+    private Cafe getCafeReference(UUID id) throws CafeException {
         try {
             Cafe cafe = cafeRepository.findById(id).get();
             return cafe;
@@ -66,7 +65,7 @@ public class ReviewDaoService {
         }
     }
 
-    public ReviewUpdateOutDTO updateReview(Long reviewId, ReviewUpdateInDTO patchReviewReq) throws ReviewException {
+    public ReviewUpdateOutDTO updateReview(UUID reviewId, ReviewUpdateInDTO patchReviewReq) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 
@@ -76,7 +75,7 @@ public class ReviewDaoService {
         return ReviewUpdateOutDTO.of(updatedReview);
     }
 
-    public ReviewDeleteOutDTO deleteReview(Long reviewId) throws ReviewException {
+    public ReviewDeleteOutDTO deleteReview(UUID reviewId) throws ReviewException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewException(NOT_EXIST_REVIEW));
 

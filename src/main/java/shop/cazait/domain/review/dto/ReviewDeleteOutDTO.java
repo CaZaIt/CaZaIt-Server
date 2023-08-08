@@ -1,6 +1,7 @@
 package shop.cazait.domain.review.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import shop.cazait.domain.review.entity.Review;
 public class ReviewDeleteOutDTO {
 
     @Schema(description = "리뷰 ID")
-    private Long reviewId;
+    private UUID reviewId;
 
     public static ReviewDeleteOutDTO of(Review review) {
         return ReviewDeleteOutDTO.builder()

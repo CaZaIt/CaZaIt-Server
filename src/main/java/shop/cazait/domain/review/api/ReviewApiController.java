@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +36,6 @@ import shop.cazait.global.common.dto.response.SuccessResponse;
 import shop.cazait.global.config.encrypt.NoAuth;
 import shop.cazait.global.error.status.SuccessStatus;
 
-import java.util.UUID;
 
 
 @RestController
@@ -53,14 +53,16 @@ public class ReviewApiController {
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "sortBy", description = "정렬 기준(newest, oldest)", example = "newest"),
             @Parameter(name = "score", description = "리뷰 점수"),
-            @Parameter(name = "lastId", description = "마지막으로 조회한 리뷰의 ID(미입력시 최초값 자동 설정)")
+            @Parameter(name = "index", description = "페이지 번호 (0부터 시작)"),
+            @Parameter(name = "nums", description = "한 페이지에 보여줄 리뷰의 갯수")
     })
-    public SuccessResponse<ReviewsGetOutDTO> getReviews(@PathVariable Long cafeId,
+    public SuccessResponse<ReviewsGetOutDTO> getReviews(@PathVariable UUID cafeId,
                                                         @RequestParam(value = "sortBy", defaultValue = "newest") String sortBy,
-                                                        @RequestParam(value = "score", required = false) Integer score,
-                                                        @RequestParam(value = "lastId", required = false) Long lastId)
+                                                        @RequestParam(value = "index", defaultValue = "0") Integer index,
+                                                        @RequestParam(value = "nums") Integer nums,
+                                                        @RequestParam(value = "score", required = false) Integer score)
             throws CafeException, ReviewException {
-        ReviewsGetOutDTO getReviewsRes = reviewProvideService.getReviews(cafeId, sortBy, score, lastId);
+        ReviewsGetOutDTO getReviewsRes = reviewProvideService.getReviews(cafeId, index, nums, sortBy, score);
         SuccessStatus resultStatus = SUCCESS;
 
         if (getReviewsRes == null) {
@@ -74,7 +76,7 @@ public class ReviewApiController {
     @GetMapping("/{cafeId}/score")
     @Operation(summary = "카페 평점 조회", description = "카페 ID를 받아 해당 카페의 평점 반환 (성공: 200, 존재하지 않는 카페: 404)")
     @Parameter(name = "cafeId", description = "카페 ID")
-    public SuccessResponse<Double> getAverageScore(@PathVariable Long cafeId) throws CafeException {
+    public SuccessResponse<Double> getAverageScore(@PathVariable UUID cafeId) throws CafeException {
         Double averageScore = reviewProvideService.getAverageScore(cafeId);
 
         return new SuccessResponse<>(SUCCESS, averageScore);
@@ -84,7 +86,7 @@ public class ReviewApiController {
     @GetMapping("/{reviewId}")
     @Operation(summary = "리뷰 하나 조회", description = "리뷰 ID를 받아 해당 리뷰 조회 (성공: 200, 존재하지 않는 리뷰: 404)")
     @Parameter(name = "reviewId", description = "리뷰 ID")
-    public SuccessResponse<ReviewGetOutDTO> getReview(@PathVariable Long reviewId) throws ReviewException {
+    public SuccessResponse<ReviewGetOutDTO> getReview(@PathVariable UUID reviewId) throws ReviewException {
         ReviewGetOutDTO getReviewRes = reviewProvideService.getReviewDetail(reviewId);
 
         return new SuccessResponse<>(SUCCESS, getReviewRes);
@@ -97,7 +99,7 @@ public class ReviewApiController {
             @Parameter(name = "cafeId", description = "카페 ID")
     })
     public SuccessResponse<ReviewPostOutDTO> addReview(@PathVariable UUID userId,
-                                                       @PathVariable Long cafeId,
+                                                       @PathVariable UUID cafeId,
                                                        @RequestBody @Valid ReviewPostInDTO postReviewReq)
             throws UserException, CafeException, ReviewException {
         ReviewPostOutDTO postReviewRes = reviewDaoService.addReview(userId, cafeId, postReviewReq);
@@ -106,7 +108,7 @@ public class ReviewApiController {
 
     @PatchMapping("/edit/{reviewId}")
     @Operation(summary = "리뷰 수정", description = "리뷰 ID를 받아 해당 리뷰 점수 및 내용 수정 (성공: 200, 존재하지 않는 리뷰: 404)")
-    public SuccessResponse<ReviewUpdateOutDTO> updateReview(@PathVariable Long reviewId,
+    public SuccessResponse<ReviewUpdateOutDTO> updateReview(@PathVariable UUID reviewId,
                                                             @RequestBody @Valid ReviewUpdateInDTO patchReviewReq)
             throws ReviewException {
         ReviewUpdateOutDTO patchReviewRes = reviewDaoService.updateReview(reviewId, patchReviewReq);
@@ -115,7 +117,7 @@ public class ReviewApiController {
 
     @DeleteMapping("/{reviewId}")
     @Operation(summary = "리뷰 삭제", description = "리뷰 ID를 받아 해당 리뷰 삭제 (성공: 200, 존재하지 않는 리뷰: 404)")
-    public SuccessResponse<ReviewDeleteOutDTO> deleteReview(@PathVariable Long reviewId) throws ReviewException {
+    public SuccessResponse<ReviewDeleteOutDTO> deleteReview(@PathVariable UUID reviewId) throws ReviewException {
         ReviewDeleteOutDTO delReviewRes = reviewDaoService.deleteReview(reviewId);
         return new SuccessResponse<>(SUCCESS, delReviewRes);
     }
