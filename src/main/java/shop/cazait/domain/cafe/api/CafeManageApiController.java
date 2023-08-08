@@ -33,9 +33,7 @@ public class CafeManageApiController {
 
     @PostMapping(value = "/add/master/{masterId}")
     @Operation(summary = "카페 등록", description = "master가 카페를 등록한다.")
-    public SuccessResponse<CafeCreateOutDTO> createCafe(
-            @RequestBody CafeCreateInDTO cafeCreateInDTO
-    ) throws JsonProcessingException {
+    public SuccessResponse<CafeCreateOutDTO> createCafe(@RequestBody CafeCreateInDTO cafeCreateInDTO) throws JsonProcessingException {
         return new SuccessResponse<>(CREATE_CAFE, cafeManageService.createCafe(cafeCreateInDTO));
     }
 
@@ -46,7 +44,7 @@ public class CafeManageApiController {
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "masterId", description = "마스터 ID")
     })
-    public SuccessResponse<CafeUpdateOutDTO> updateCafe(@PathVariable Long cafeId,
+    public SuccessResponse<CafeUpdateOutDTO> updateCafe(@PathVariable UUID cafeId,
                                                         @PathVariable UUID masterId,
                                                         @RequestBody @Valid CafeCreateInDTO cafeReq) throws CafeException, JsonProcessingException {
         CafeUpdateOutDTO cafeUpdateOutDTO = cafeManageService.updateCafe(cafeId, masterId, cafeReq);
@@ -60,7 +58,7 @@ public class CafeManageApiController {
             @Parameter(name = "cafeId", description = "카페 ID"),
             @Parameter(name = "masterId", description = "마스터 ID")
     })
-    public SuccessResponse<String> deleteCafe(@PathVariable Long cafeId,
+    public SuccessResponse<String> deleteCafe(@PathVariable UUID cafeId,
                                               @PathVariable UUID masterId) throws CafeException {
         cafeManageService.deleteCafe(cafeId, masterId);
         return new SuccessResponse<>(SUCCESS,"카페 삭제 완료");

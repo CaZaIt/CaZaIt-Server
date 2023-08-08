@@ -36,7 +36,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 추가
      */
-    public FavoritesCreateOutDTO addFavorites(UUID userId, Long cafeId) throws CafeException, UserException {
+    public FavoritesCreateOutDTO addFavorites(UUID userId, UUID cafeId) throws CafeException, UserException {
 
         User user = getUser(userId);
         Cafe cafe = getCafe(cafeId);
@@ -65,7 +65,7 @@ public class FavoritesService {
 
     }
 
-    private Cafe getCafe(Long cafeId) throws CafeException {
+    private Cafe getCafe(UUID cafeId) throws CafeException {
         try {
             Cafe cafe = cafeRepository.findById(cafeId).get();
             return cafe;
@@ -89,7 +89,7 @@ public class FavoritesService {
     /**
      * 즐겨찾기 삭제
      */
-    public String deleteFavorites(UUID userId, Long cafeId) {
+    public String deleteFavorites(UUID userId, UUID cafeId) {
 
         Favorites favorites = favoritesRepository
                 .findAllByUserIdAndCafeId(userId, cafeId)

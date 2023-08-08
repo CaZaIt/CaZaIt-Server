@@ -104,7 +104,7 @@ public class CafeManageService {
     /**
      *  카페 수정
      */
-    public CafeUpdateOutDTO updateCafe(Long cafeId, UUID masterId, CafeCreateInDTO cafeReq)
+    public CafeUpdateOutDTO updateCafe(UUID cafeId, UUID masterId, CafeCreateInDTO cafeReq)
             throws CafeException, JsonProcessingException {
 
         Coordinate coordinate = coordinateService.createCoordinate(cafeReq);
@@ -127,7 +127,7 @@ public class CafeManageService {
     /**
      *  카페 삭제
      */
-    public void deleteCafe(Long cafeId, UUID masterId) throws CafeException {
+    public void deleteCafe(UUID cafeId, UUID masterId) throws CafeException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(() -> new CafeException(NOT_EXIST_CAFE));
 

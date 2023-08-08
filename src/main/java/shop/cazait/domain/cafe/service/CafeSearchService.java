@@ -64,7 +64,7 @@ public class CafeSearchService {
      * 카페 상세 조회 (카페 id)
      */
     @Transactional(readOnly = true)
-    public CafeGetOutDTO getCafeNoAuth(Long cafeId) throws CafeException {
+    public CafeGetOutDTO getCafeNoAuth(UUID cafeId) throws CafeException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
                 () -> new CafeException(NOT_EXIST_CAFE)
@@ -76,7 +76,7 @@ public class CafeSearchService {
     }
 
     @Transactional(readOnly = true)
-    public CafeGetOutDTO getCafe(Long cafeId) throws CafeException, UserException {
+    public CafeGetOutDTO getCafe(UUID cafeId) throws CafeException, UserException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
                 () -> new CafeException(NOT_EXIST_CAFE)
@@ -185,7 +185,7 @@ public class CafeSearchService {
         return getCafesResList;
     }
 
-    private List<String> getImages(Long cafeId) {
+    private List<String> getImages(UUID cafeId) {
         List<String> cafeImages = cafeImageRepository.findByCafeId(cafeId)
                 .stream()
                 .map(cafeImage -> cafeImage.getImageUrl())
