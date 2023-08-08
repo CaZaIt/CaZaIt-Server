@@ -1,6 +1,7 @@
 package shop.cazait.domain.menu.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -14,7 +15,7 @@ import shop.cazait.domain.menu.entity.Menu;
 public class MenuCreateInDTO {
 
     @Schema(description = "카페 ID", example = "1")
-    private Long cafeId;
+    private UUID cafeId;
 
     @Schema(description = "이름", example = "아이스 아메리카노", required = true)
     @NotBlank(message = "메뉴 이름을 입력해주세요.")

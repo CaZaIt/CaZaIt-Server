@@ -1,6 +1,7 @@
 package shop.cazait.domain.congestion.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class CongestionUpdateOutDTO {
     private Long congestionId;
 
     @Schema(description = "카페 ID", example = "1")
-    private Long cafeId;
+    private UUID cafeId;
 
     @Schema(description = "혼잡도 상태", example = "FREE")
     private String congestionStatus;

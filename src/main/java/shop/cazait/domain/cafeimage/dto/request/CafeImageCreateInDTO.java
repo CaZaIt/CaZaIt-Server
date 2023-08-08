@@ -2,6 +2,7 @@ package shop.cazait.domain.cafeimage.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import shop.cazait.domain.cafeimage.entity.CafeImage;
 public class CafeImageCreateInDTO {
 
     @Schema(description = "카페 ID", example = "1")
-    private Long cafeId;
+    private UUID cafeId;
 
     @Schema(description = "카페 이미지 url")
     private List<String> imageUrl;

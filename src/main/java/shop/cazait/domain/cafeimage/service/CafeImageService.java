@@ -45,7 +45,7 @@ public class CafeImageService {
 
     }
 
-    public CafeImageGetOutDTO getCafeImages(Long cafeId) {
+    public CafeImageGetOutDTO getCafeImages(UUID cafeId) {
 
         List<CafeImage> cafeImages = cafeImageRepository.findByCafeId(cafeId);
         return CafeImageGetOutDTO.of(cafeImages);

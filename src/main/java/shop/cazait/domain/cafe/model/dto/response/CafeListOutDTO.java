@@ -2,6 +2,7 @@ package shop.cazait.domain.cafe.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CafeListOutDTO {
     @JsonProperty
     @Schema(description = "카페 ID", example = "1")
-    private Long cafeId;
+    private UUID cafeId;
     @JsonProperty
     @Schema(description = "혼잡도 상태", example = "FREE")
     private CongestionStatus congestionStatus;

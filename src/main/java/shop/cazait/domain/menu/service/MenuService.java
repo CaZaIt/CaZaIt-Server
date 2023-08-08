@@ -10,6 +10,7 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_MENU;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class MenuService {
         return MenuCreateOutDTO.of(addMenu);
     }
 
-    private Cafe getCafe(Long cafeId) throws CafeException {
+    private Cafe getCafe(UUID cafeId) throws CafeException {
         try {
             Cafe cafe = cafeRepository.findById(cafeId).get();
             return cafe;

@@ -5,6 +5,7 @@ import static shop.cazait.global.error.status.ErrorStatus.NOT_EXIST_CAFE;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class CongestionService {
     /**
      * 혼잡도 등록 및 수정
      */
-    public CongestionUpdateOutDTO createOrUpdateCongestion(Long cafeId, CongestionUpdateInDTO congestionUpdateInDTO) {
+    public CongestionUpdateOutDTO createOrUpdateCongestion(UUID cafeId, CongestionUpdateInDTO congestionUpdateInDTO) {
 
         Cafe findCafe = getCafe(cafeId);
         Congestion findCongestion = findCafe.getCongestion();
@@ -47,7 +48,7 @@ public class CongestionService {
 
     }
 
-    private Cafe getCafe(Long cafeId) throws CafeException {
+    private Cafe getCafe(UUID cafeId) throws CafeException {
         try {
             Cafe cafe = cafeRepository.findById(cafeId).get();
             return cafe;

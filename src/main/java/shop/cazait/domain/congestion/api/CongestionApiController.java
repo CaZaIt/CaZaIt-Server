@@ -36,7 +36,7 @@ public class CongestionApiController {
     })
     @PostMapping("/master/{masterId}/cafe/{cafeId}")
     public SuccessResponse<CongestionUpdateOutDTO> addCongestion(@PathVariable UUID masterId,
-                                                                 @PathVariable Long cafeId,
+                                                                 @PathVariable UUID cafeId,
                                                                  @RequestBody @Valid CongestionUpdateInDTO congestionUpdateInDTO)
             throws CongestionException {
 

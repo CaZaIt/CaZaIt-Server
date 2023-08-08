@@ -9,7 +9,7 @@ import java.util.List;
 import shop.cazait.domain.master.model.entity.Master;
 import shop.cazait.global.common.status.BaseStatus;
 
-public interface CafeRepository extends JpaRepository <Cafe, Long> {
+public interface CafeRepository extends JpaRepository <Cafe, UUID> {
 
     List<Cafe >findAllByStatus(BaseStatus status);
 

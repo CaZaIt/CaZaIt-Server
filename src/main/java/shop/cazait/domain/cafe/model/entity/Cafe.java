@@ -1,7 +1,9 @@
 package shop.cazait.domain.cafe.model.entity;
 
+import java.util.UUID;
 import javax.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import shop.cazait.domain.cafe.model.dto.request.CafeCreateInDTO;
 import shop.cazait.domain.cafeimage.entity.CafeImage;
 import shop.cazait.domain.coordinate.entity.Coordinate;
@@ -18,8 +20,10 @@ import java.util.List;
 public class Cafe extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "congestion_id")

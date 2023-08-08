@@ -3,6 +3,7 @@ package shop.cazait.domain.cafe.model.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class ManageCafeListOutDTO {
 
     @JsonProperty
     @Schema(description = "카페 ID", example = "1")
-    private Long cafeId;
+    private UUID cafeId;
 
     @Schema(description = "이름", example = "롬곡")
     private String name;
