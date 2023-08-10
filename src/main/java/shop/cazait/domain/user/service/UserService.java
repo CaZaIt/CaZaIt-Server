@@ -135,7 +135,7 @@ public class UserService {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<String> findUserDuplicateAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+    public SuccessResponse<String> findUserExistAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
         String isExist = userFindExistAccountNameInDTO.getIsExist();
         String accountName = userFindExistAccountNameInDTO.getAccountName();
         Optional<User> accountNameNullable = userRepository.findByAccountName(accountName);
@@ -154,7 +154,7 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserDuplicateNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+    public SuccessResponse<String> findUserExistNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
         String isExist = userFindExistNicknameInDTO.getIsExist();
         String nickname = userFindExistNicknameInDTO.getNickname();
         Optional<User> nicknameNullable = userRepository.findByNickname(nickname);
@@ -173,7 +173,7 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserDuplicatePhoneNumber(UserFindExistPhonenumberInDTO userFindExistPhonenumberInDTO)
+    public SuccessResponse<String> findUserExistPhoneNumber(UserFindExistPhonenumberInDTO userFindExistPhonenumberInDTO)
             throws UserException {
         String isExist = userFindExistPhonenumberInDTO.getIsExist();
         String phoneNumber= userFindExistPhonenumberInDTO.getPhoneNumber();
