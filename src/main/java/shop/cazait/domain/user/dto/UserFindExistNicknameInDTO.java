@@ -8,32 +8,28 @@ import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
-@Schema(description = "아이디 중복확인 req: 아이디")
+@Schema(description = "닉네임 중복확인 req: 닉네임")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserFindDuplicateAccountNameInDTO {
-
-
-    @NotBlank
-    @Schema(description = "로그인 아이디", example = "cazait1234")
-    private String accountName;
+public class UserFindExistNicknameInDTO {
+    @NotBlank(message = "닉네임을 입력하세요.")
+    @Schema(description = "닉네임", example = "토마스")
+    private String nickname;
 
     @NotBlank
     @Schema(description = "존재/존재하지 않는지 여부",example = "true/false")
     private String isExist;
 
     @Builder
-    public UserFindDuplicateAccountNameInDTO(String accountName, String isExist){
-
-        this.accountName = accountName;
-        this.isExist = isExist; 
+    public UserFindExistNicknameInDTO(String nickname, String isExist) {
+        this.nickname = nickname;
+        this.isExist = isExist;
     }
 
-    public User toEntity(){
+    public User toEntity() {
         return User.builder()
-                .accountName(accountName)
+                .nickname(nickname)
                 .build();
     }
 }

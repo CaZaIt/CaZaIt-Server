@@ -1,35 +1,37 @@
 package shop.cazait.domain.user.dto;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import shop.cazait.domain.user.entity.User;
 
-import javax.validation.constraints.NotBlank;
-
-@Schema(description = "닉네임 중복확인 req: 닉네임")
+@Schema(description = "전화번호 중복확인 req")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserFindDuplicateNicknameInDTO {
-    @NotBlank(message = "닉네임을 입력하세요.")
-    @Schema(description = "닉네임", example = "토마스")
-    private String nickname;
+public class UserFindExistPhonenumberInDTO {
+    @NotBlank
+    @Schema(description = "전화번호", example = "01012345678")
+    private String phoneNumber;
 
     @NotBlank
     @Schema(description = "존재/존재하지 않는지 여부",example = "true/false")
     private String isExist;
 
     @Builder
-    public UserFindDuplicateNicknameInDTO(String nickname, String isExist) {
-        this.nickname = nickname;
+    public UserFindExistPhonenumberInDTO(String phoneNumber, String isExist){
+
+        this.phoneNumber = phoneNumber;
         this.isExist = isExist;
     }
 
-    public User toEntity() {
+    public User toEntity(){
         return User.builder()
-                .nickname(nickname)
+                .phoneNumber(phoneNumber)
                 .build();
     }
+
 }
