@@ -115,8 +115,8 @@ public class UserApiController {
     @NoAuth
     @PostMapping("/reset-password/accountname")
     @Operation(summary = "비밀번호 변경 (아이디 입력)", description = "비밀번호 변경시 가입한 아이디 입력")
-    public SuccessResponse<UserEnterAccountNameInResetPasswordOutDTO> verifyUserAccountNameInResetPassword(@RequestBody UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOutDTO) throws UserException {
-        UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserAccountNameInResetPassword(userEnterAccountNameInResetPasswordOutDTO.getAccountName());
+    public SuccessResponse<UserEnterAccountNameInResetPasswordOutDTO> verifyUserAccountNameInResetPassword(@RequestBody UserEnterAccountNameInResetPasswordInDTO userEnterAccountNameInResetPasswordInDTO) throws UserException {
+        UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserAccountNameInResetPassword(userEnterAccountNameInResetPasswordInDTO.getAccountName());
         return new SuccessResponse<>(SUCCESS, userEnterAccountNameInResetPasswordOUTDTO);
     }
 
