@@ -135,9 +135,9 @@ public class UserService {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<String> findUserDuplicateAccountName(UserFindDuplicateAccountNameInDTO userFindDuplicateAccountNameInDTO) throws UserException {
-        String isExist = userFindDuplicateAccountNameInDTO.getIsExist();
-        String accountName = userFindDuplicateAccountNameInDTO.getAccountName();
+    public SuccessResponse<String> findUserDuplicateAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+        String isExist = userFindExistAccountNameInDTO.getIsExist();
+        String accountName = userFindExistAccountNameInDTO.getAccountName();
         Optional<User> accountNameNullable = userRepository.findByAccountName(accountName);
 
         if(isExist.equals("true")){
@@ -154,9 +154,9 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserDuplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
-        String isExist = userFindDuplicateNicknameInDTO.getIsExist();
-        String nickname = userFindDuplicateNicknameInDTO.getNickname();
+    public SuccessResponse<String> findUserDuplicateNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+        String isExist = userFindExistNicknameInDTO.getIsExist();
+        String nickname = userFindExistNicknameInDTO.getNickname();
         Optional<User> nicknameNullable = userRepository.findByNickname(nickname);
 
         if(isExist.equals("true")){
@@ -173,10 +173,10 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserDuplicatePhoneNumber(UserFindDuplicatePhonenumberInDTO userFindDuplicatePhonenumberInDTO)
+    public SuccessResponse<String> findUserDuplicatePhoneNumber(UserFindExistPhonenumberInDTO userFindExistPhonenumberInDTO)
             throws UserException {
-        String isExist = userFindDuplicatePhonenumberInDTO.getIsExist();
-        String phoneNumber= userFindDuplicatePhonenumberInDTO.getPhoneNumber();
+        String isExist = userFindExistPhonenumberInDTO.getIsExist();
+        String phoneNumber= userFindExistPhonenumberInDTO.getPhoneNumber();
         Optional<User> nicknameNullable = userRepository.findByPhoneNumber(phoneNumber);
 
         if(isExist.equals("true")){
@@ -261,7 +261,7 @@ public class UserService {
         return UserEnterAccountNameInResetPasswordOutDTO.of(user);
     }
 
-    public UserEnterPasswordInResetPasswordOutDTO updateUserPasswordInResetPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public UserUpdatePasswordInResetPasswordOutDTO updateUserPasswordInResetPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
@@ -275,7 +275,7 @@ public class UserService {
         User updatePasswordUser = user.updateUserPasswordInResetPassword(encryptUserPassword);
         userRepository.save(updatePasswordUser);
 
-        return UserEnterPasswordInResetPasswordOutDTO.of(user,password);
+        return UserUpdatePasswordInResetPasswordOutDTO.of(user,password);
     }
 
     public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO)
