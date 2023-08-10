@@ -82,7 +82,7 @@ public class UserApiController {
 
     @NoAuth
     @PostMapping ("/exist/accountname")
-    @Operation(summary = "아이디 조회", description = "입력한 아이디를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
+    @Operation(summary = "아이디 DB 조회", description = "입력한 아이디를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
     public SuccessResponse<String> findUserDuplicateAccountName(@RequestBody @Valid UserFindExistAccountNameInDTO userFindDuplicateEmailInDTO) throws UserException {
         SuccessResponse<String> accountNameSuccessResponse = userService.findUserDuplicateAccountName(userFindDuplicateEmailInDTO);
         return accountNameSuccessResponse;
@@ -90,7 +90,7 @@ public class UserApiController {
 
     @NoAuth
     @PostMapping ("/exist/nickname")
-    @Operation(summary = "닉네임 조회", description = "입력한 비밀번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
+    @Operation(summary = "닉네임 DB 조회", description = "입력한 비밀번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
     public SuccessResponse<String> findUserDuplicateNickname(@RequestBody @Valid UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.findUserDuplicateNickname(userFindExistNicknameInDTO);
         return nicknameDuplicateSuccessResponse;
@@ -98,7 +98,7 @@ public class UserApiController {
 
     @NoAuth
     @PostMapping ("/exist/phonenumber")
-    @Operation(summary = "전화번호 조회", description = "입력한 전화번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
+    @Operation(summary = "전화번호 DB 조회", description = "입력한 전화번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
     public SuccessResponse<String> findUserDuplicatePhoneNumber(@RequestBody @Valid UserFindExistPhonenumberInDTO userFindExistPhonenumberInDTO) throws UserException {
         SuccessResponse<String> phoneNumberDuplicateSuccessResponse = userService.findUserDuplicatePhoneNumber(userFindExistPhonenumberInDTO);
         return phoneNumberDuplicateSuccessResponse;
