@@ -173,10 +173,10 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserExistPhoneNumber(UserFindExistPhonenumberInDTO userFindExistPhonenumberInDTO)
+    public SuccessResponse<String> findUserExistPhoneNumber(UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
             throws UserException {
-        String isExist = userFindExistPhonenumberInDTO.getIsExist();
-        String phoneNumber= userFindExistPhonenumberInDTO.getPhoneNumber();
+        String isExist = userFindExistPhoneNumberInDTO.getIsExist();
+        String phoneNumber= userFindExistPhoneNumberInDTO.getPhoneNumber();
         Optional<User> nicknameNullable = userRepository.findByPhoneNumber(phoneNumber);
 
         if(isExist.equals("true")){

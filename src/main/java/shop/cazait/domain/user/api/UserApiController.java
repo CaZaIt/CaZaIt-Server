@@ -99,8 +99,8 @@ public class UserApiController {
     @NoAuth
     @PostMapping ("/exist/phonenumber")
     @Operation(summary = "전화번호 DB 조회", description = "입력한 전화번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
-    public SuccessResponse<String> findUserExistPhoneNumber(@RequestBody @Valid UserFindExistPhonenumberInDTO userFindExistPhonenumberInDTO) throws UserException {
-        SuccessResponse<String> userFindExistPhonenumber = userService.findUserExistPhoneNumber(userFindExistPhonenumberInDTO);
+    public SuccessResponse<String> findUserExistPhoneNumber(@RequestBody @Valid UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO) throws UserException {
+        SuccessResponse<String> userFindExistPhonenumber = userService.findUserExistPhoneNumber(userFindExistPhoneNumberInDTO);
         return userFindExistPhonenumber;
     }
 

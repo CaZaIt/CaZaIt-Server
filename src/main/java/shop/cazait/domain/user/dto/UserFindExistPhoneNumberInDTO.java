@@ -12,7 +12,7 @@ import shop.cazait.domain.user.entity.User;
 @Schema(description = "전화번호 중복확인 req")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserFindExistPhonenumberInDTO {
+public class UserFindExistPhoneNumberInDTO {
     @NotBlank
     @Schema(description = "전화번호", example = "01012345678")
     private String phoneNumber;
@@ -22,7 +22,7 @@ public class UserFindExistPhonenumberInDTO {
     private String isExist;
 
     @Builder
-    public UserFindExistPhonenumberInDTO(String phoneNumber, String isExist){
+    public UserFindExistPhoneNumberInDTO(String phoneNumber, String isExist){
 
         this.phoneNumber = phoneNumber;
         this.isExist = isExist;
