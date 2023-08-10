@@ -277,4 +277,19 @@ public class UserService {
 
         return UserEnterPasswordInResetPasswordOutDTO.of(user,password);
     }
+
+    public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO)
+            throws UserException {
+        String accountName = userVerifyUserInfoInResetPasswordInDTO.getAccountName();
+        String phoneNumber = userVerifyUserInfoInResetPasswordInDTO.getPhoneNumber();
+
+        User user = userRepository.findByAccountName(accountName).get();
+        String existUserPhoneNumber = user.getPhoneNumber();
+        if(phoneNumber.equals(existUserPhoneNumber)) {
+            return UserVerifyUserInfoInResetPasswordOutDTO.of(user);
+        }
+        else{
+            throw new UserException(INVALID_USER_INFO);
+        }
+    }
 }

@@ -2,6 +2,7 @@ package shop.cazait.domain.user.api;
 
 import static shop.cazait.global.error.status.SuccessStatus.CREATE_USER;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+import static shop.cazait.global.error.status.SuccessStatus.VALID_USER_INFO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -125,6 +126,14 @@ public class UserApiController {
     public SuccessResponse<UserEnterPasswordInResetPasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserEnterPasswordInResetPasswordInDTO userEnterPasswordInResetPasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         UserEnterPasswordInResetPasswordOutDTO userEnterPasswordInResetPasswordOutDTO = userService.updateUserPasswordInResetPassword(userEnterPasswordInResetPasswordInDTO.getUserPhoneNumber(), userEnterPasswordInResetPasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userEnterPasswordInResetPasswordOutDTO);
+    }
+
+    @NoAuth
+    @PostMapping("/reset-password/checkuserinfo")
+    @Operation(summary = "비밀번호 변경 (유저정보 검증)", description = "아이디와 전화번호가 일치하는지")
+    public SuccessResponse<UserVerifyUserInfoInResetPasswordOutDTO> verifyUserInfoInResetPassword(@RequestBody UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO) throws UserException {
+        UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userVerifyUserInfoInResetPasswordInDTO);
+        return new SuccessResponse<>(VALID_USER_INFO,userVerifyUserInfoInResetPasswordOutDTO);
     }
 }
 
