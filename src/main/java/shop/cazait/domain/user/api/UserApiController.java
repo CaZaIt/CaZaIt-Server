@@ -81,24 +81,24 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/duplicate-check/accountname")
-    @Operation(summary = "아이디 중복확인", description = "회원가입 전 이미 존재하는 아이디인지 중복확인")
+    @PostMapping ("/exist/accountname")
+    @Operation(summary = "아이디 조회", description = "입력한 아이디를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
     public SuccessResponse<String> findUserDuplicateAccountName(@RequestBody @Valid UserFindDuplicateAccountNameInDTO userFindDuplicateEmailInDTO) throws UserException {
         SuccessResponse<String> accountNameSuccessResponse = userService.findUserDuplicateAccountName(userFindDuplicateEmailInDTO);
         return accountNameSuccessResponse;
     }
 
     @NoAuth
-    @PostMapping ("/duplicate-check/nickname")
-    @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
+    @PostMapping ("/exist/nickname")
+    @Operation(summary = "닉네임 조회", description = "입력한 비밀번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
     public SuccessResponse<String> findUserDuplicateNickname(@RequestBody @Valid UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
         SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.findUserDuplicateNickname(userFindDuplicateNicknameInDTO);
         return nicknameDuplicateSuccessResponse;
     }
 
     @NoAuth
-    @PostMapping ("/duplicate-check/phonenumber")
-    @Operation(summary = "전화번호 중복확인", description = "회원가입 전 이미 존재하는 전화번호인지 중복확인")
+    @PostMapping ("/exist/phonenumber")
+    @Operation(summary = "전화번호 조회", description = "입력한 전화번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
     public SuccessResponse<String> findUserDuplicatePhoneNumber(@RequestBody @Valid UserFindDuplicatePhonenumberInDTO userFindDuplicatePhonenumberInDTO) throws UserException {
         SuccessResponse<String> phoneNumberDuplicateSuccessResponse = userService.findUserDuplicatePhoneNumber(userFindDuplicatePhonenumberInDTO);
         return phoneNumberDuplicateSuccessResponse;
