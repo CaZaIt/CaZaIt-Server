@@ -1,6 +1,5 @@
 package shop.cazait.domain.auth.api;
 
-import static shop.cazait.global.error.status.ErrorStatus.*;
 import static shop.cazait.global.error.status.SuccessStatus.ACCEPTED_SEND_MESSAGE;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
 
@@ -34,9 +33,7 @@ import shop.cazait.domain.auth.dto.sens.*;
 import shop.cazait.domain.auth.service.AuthService;
 import shop.cazait.domain.auth.service.KakaoService;
 import shop.cazait.domain.master.exception.MasterException;
-import shop.cazait.domain.auth.dto.sens.AuthSendMessageCodeInResetPasswordInDTO;
 import shop.cazait.domain.user.dto.UserCreateOutDTO;
-import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.global.common.dto.response.SuccessResponse;
@@ -100,8 +97,8 @@ public class AuthController {
     @NoAuth
     @PostMapping("/sendauthno")
     @Operation(summary = "문자 인증번호 발송", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendMessageCodeInSignUpInDTO authSendMessageCodeInSignUpInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
-        String recipientPhoneNumber = authSendMessageCodeInSignUpInDTO.getRecipientPhoneNumber();
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendAuthNumberCodeInDTO authSendAuthNumberCodeInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
+        String recipientPhoneNumber = authSendAuthNumberCodeInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
     }
@@ -109,8 +106,8 @@ public class AuthController {
     @NoAuth
     @PostMapping("/sendauthno/test")
     @Operation(summary = "문자 인증번호 발송 테스트", description = "실제로 문자 발송은 진행하지 않음")
-    public SuccessResponse<AuthSendMessageCodeTestOutDTO > sendMessageCodeTest(@RequestBody AuthSendMessageCodeInSignUpInDTO authSendMessageCodeInSignUpInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
-        String recipientPhoneNumber = authSendMessageCodeInSignUpInDTO.getRecipientPhoneNumber();
+    public SuccessResponse<AuthSendMessageCodeTestOutDTO > sendMessageCodeTest(@RequestBody AuthSendAuthNumberCodeInDTO authSendAuthNumberCodeInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
+        String recipientPhoneNumber = authSendAuthNumberCodeInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeTestOutDTO authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
     }
