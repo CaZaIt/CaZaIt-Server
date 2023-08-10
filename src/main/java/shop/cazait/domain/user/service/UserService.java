@@ -173,6 +173,26 @@ public class UserService {
         }
     }
 
+    public SuccessResponse<String> findUserDuplicatePhoneNumber(UserFindDuplicatePhonenumberInDTO userFindDuplicatePhonenumberInDTO)
+            throws UserException {
+        String isExist = userFindDuplicatePhonenumberInDTO.getIsExist();
+        String phoneNumber= userFindDuplicatePhonenumberInDTO.getPhoneNumber();
+        Optional<User> nicknameNullable = userRepository.findByPhoneNumber(phoneNumber);
+
+        if(isExist.equals("true")){
+            if(nicknameNullable.isPresent()){
+                return new SuccessResponse<>(SUCCESS,phoneNumber);
+            }
+            throw new UserException(NOT_EXIST_USER);
+        }
+        else{
+            if (nicknameNullable.isEmpty()) {
+                return new SuccessResponse<>(SIGNUP_AVAILABLE, phoneNumber);
+            }
+            throw new UserException(EXIST_ACCOUNTNAME);
+        }
+    }
+
 
     public UserAuthenticateOutDTO reIssueTokens(String accessToken, String refreshToken) throws UserException {
 

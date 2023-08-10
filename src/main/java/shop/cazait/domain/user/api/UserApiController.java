@@ -96,6 +96,14 @@ public class UserApiController {
     }
 
     @NoAuth
+    @PostMapping ("/duplicate-check/phonenumber")
+    @Operation(summary = "전화번호 중복확인", description = "회원가입 전 이미 존재하는 전화번호인지 중복확인")
+    public SuccessResponse<String> findUserDuplicatePhoneNumber(@RequestBody @Valid UserFindDuplicatePhonenumberInDTO userFindDuplicatePhonenumberInDTO) throws UserException {
+        SuccessResponse<String> phoneNumberDuplicateSuccessResponse = userService.findUserDuplicatePhoneNumber(userFindDuplicatePhonenumberInDTO);
+        return phoneNumberDuplicateSuccessResponse;
+    }
+
+    @NoAuth
     @PostMapping ("/find-accountname")
     @Operation(summary = "아이디 찾기", description = "문자 인증 완료 후 아이디 반환")
     public SuccessResponse<UserFindAccountNameOutDTO> findUserAccountName(@RequestBody UserFindAccountNameInDTO userFindAccountNameInDTO) throws UserException {
