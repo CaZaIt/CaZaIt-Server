@@ -17,9 +17,14 @@ public class UserFindDuplicateNicknameInDTO {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
+    @NotBlank
+    @Schema(description = "존재/존재하지 않는지 여부",example = "true/false")
+    private String isExist;
+
     @Builder
-    public UserFindDuplicateNicknameInDTO(String nickname) {
+    public UserFindDuplicateNicknameInDTO(String nickname, String isExist) {
         this.nickname = nickname;
+        this.isExist = isExist;
     }
 
     public User toEntity() {

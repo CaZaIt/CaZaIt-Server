@@ -155,12 +155,22 @@ public class UserService {
     }
 
     public SuccessResponse<String> findUserDuplicateNickname(UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
+        String isExist = userFindDuplicateNicknameInDTO.getIsExist();
         String nickname = userFindDuplicateNicknameInDTO.getNickname();
-        if (userRepository.findByNickname(nickname.trim()).isPresent()) {
-            throw new UserException(EXIST_NICKNAME);
-        }
+        Optional<User> nicknameNullable = userRepository.findByNickname(nickname);
 
-        return new SuccessResponse<>(SIGNUP_AVAILABLE, nickname);
+        if(isExist.equals("true")){
+            if(nicknameNullable.isPresent()){
+                return new SuccessResponse<>(SUCCESS,nickname);
+            }
+            throw new UserException(NOT_EXIST_USER);
+        }
+        else{
+            if (nicknameNullable.isEmpty()) {
+                return new SuccessResponse<>(SIGNUP_AVAILABLE, nickname);
+            }
+            throw new UserException(EXIST_ACCOUNTNAME);
+        }
     }
 
 
