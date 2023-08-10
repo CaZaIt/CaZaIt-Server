@@ -113,14 +113,6 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/reset-password/accountname")
-    @Operation(summary = "비밀번호 변경 (아이디 입력)", description = "비밀번호 변경시 가입한 아이디 입력")
-    public SuccessResponse<UserEnterAccountNameInResetPasswordOutDTO> verifyUserAccountNameInResetPassword(@RequestBody UserEnterAccountNameInResetPasswordInDTO userEnterAccountNameInResetPasswordInDTO) throws UserException {
-        UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserAccountNameInResetPassword(userEnterAccountNameInResetPasswordInDTO.getAccountName());
-        return new SuccessResponse<>(SUCCESS, userEnterAccountNameInResetPasswordOUTDTO);
-    }
-
-    @NoAuth
     @PatchMapping("/reset-password/password")
     @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
     public SuccessResponse<UserUpdatePasswordInResetPasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInResetPasswordInDTO userUpdatePasswordInResetPasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {

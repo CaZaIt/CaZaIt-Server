@@ -255,12 +255,6 @@ public class UserService {
         return UserFindAccountNameOutDTO.of(user);
     }
 
-    public UserEnterAccountNameInResetPasswordOutDTO verifyUserAccountNameInResetPassword(String accountName) throws UserException {
-        User user = userRepository.findByAccountName(accountName)
-                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
-        return UserEnterAccountNameInResetPasswordOutDTO.of(user);
-    }
-
     public UserUpdatePasswordInResetPasswordOutDTO updateUserPasswordInResetPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
