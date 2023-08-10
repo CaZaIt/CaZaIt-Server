@@ -40,6 +40,7 @@ public enum SuccessStatus {
      * Accepted
      */
     ACCEPTED_SEND_MESSAGE(202,"SUCCESS","인증번호가 발송되었습니다"),
+    VALID_USER_INFO(202,"SUCCESS","인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해주세요."),
 
     /**
      * Success Code : 204
