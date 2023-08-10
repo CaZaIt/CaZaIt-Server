@@ -10,7 +10,7 @@ import shop.cazait.domain.user.entity.User;
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class UserEnterAccountNameInResetPasswordOutDTO {
-    @Schema(description = "회원 아이디")
+    @Schema(description = "회원 아이디",example = "cazait1234")
     private String accountName;
 
     public static UserEnterAccountNameInResetPasswordOutDTO of (User user){
