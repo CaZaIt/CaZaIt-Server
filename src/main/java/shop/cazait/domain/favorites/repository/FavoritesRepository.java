@@ -10,6 +10,6 @@ import shop.cazait.domain.favorites.entity.Favorites;
 public interface FavoritesRepository extends JpaRepository<Favorites, Long> {
 
     Optional<Favorites> findAllByUserIdAndCafeId(UUID userId, UUID cafeId);
-
+    
     Optional<List<Favorites>> findAllByUserId(UUID userId);
 }

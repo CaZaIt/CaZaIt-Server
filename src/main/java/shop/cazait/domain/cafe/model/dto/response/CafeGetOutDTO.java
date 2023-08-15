@@ -1,10 +1,10 @@
 package shop.cazait.domain.cafe.model.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.congestion.entity.CongestionStatus;
 
@@ -13,6 +13,7 @@ import shop.cazait.domain.favorites.entity.FavoritesStatus;
 
 @Schema(name = "특정 카페 정보 조회 Response", description = "카페 조회 시 얻을 수 있는 정보")
 @Builder(access = AccessLevel.PRIVATE)
+@Getter
 public class CafeGetOutDTO {
 
     @Schema(description = "카페 ID", example = "1")
