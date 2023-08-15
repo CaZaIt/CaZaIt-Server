@@ -77,26 +77,23 @@ public class CafeSearchApiController {
         return new SuccessResponse<>(resultStatus ,cafeResList);
     }
 
-    @NoAuth
-    @GetMapping("/id/{cafeId}/users/{userId}")
-    @Operation(summary = "카페 ID 조회", description = "특정 ID의 카페를 조회한다.")
+    @GetMapping("/{cafeId}/users/{userId}")
+    @Operation(summary = "카페 ID 조회(회원)", description = "특정 ID의 카페를 조회한다.")
     @Parameter(name = "cafeId", description = "카페 ID")
     public SuccessResponse<CafeGetOutDTO> getCafeById(@PathVariable UUID cafeId, @PathVariable UUID userId) throws CafeException {
-        CafeGetOutDTO cafeRes = cafeSearchService.getCafeById(cafeId, userId);
+        CafeGetOutDTO cafeRes = cafeSearchService.getCafeForLogin(cafeId, userId);
         return new SuccessResponse<>(SUCCESS, cafeRes);
     }
 
-//    @GetMapping("/id/{cafeId}/user/{userId}")
-//    @Operation(summary = "카페 ID 조회(토큰 필요 O)", description = "특정 ID의 카페를 조회한다.")
-//    @Parameters({
-//            @Parameter(name = "userId", description = "유저 ID"),
-//            @Parameter(name = "cafeId", description = "카페 ID")
-//    })
-//    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable Long cafeId) throws CafeException, UserException {
-//
-//        CafeGetOutDTO cafeRes = cafeSearchService.getCafe(cafeId);
-//        return new SuccessResponse<>(SUCCESS, cafeRes);
-//    }
+    @NoAuth
+    @GetMapping("/{cafeId}")
+    @Operation(summary = "카페 ID 조회(비회원)", description = "특정 ID의 카페를 조회한다.")
+    @Parameter(name = "cafeId", description = "카페 ID")
+    public SuccessResponse<CafeGetOutDTO> getCafe(@PathVariable UUID cafeId) throws CafeException {
+
+        CafeGetOutDTO cafeRes = cafeSearchService.getCafeForNotLogin(cafeId);
+        return new SuccessResponse<>(SUCCESS, cafeRes);
+    }
 
     @NoAuth
     @GetMapping("/name/{cafeName}")

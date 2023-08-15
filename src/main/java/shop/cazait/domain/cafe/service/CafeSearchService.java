@@ -33,7 +33,8 @@ public class CafeSearchService {
      * 카페 조회 (ACTIVE 상태)
      */
     @Transactional(readOnly = true)
-    public List<List<CafeListOutDTO>> findCafesByStatusNoAuth(String longitude, String latitude, String sort, String limit) {
+    public List<List<CafeListOutDTO>> findCafesByStatusNoAuth(String longitude, String latitude, String sort,
+                                                              String limit) {
         List<Cafe> cafeList = cafeRepository.findAllByStatus(BaseStatus.ACTIVE);
         List<CafeListOutDTO> getCafesRes = readCafeListNoAuth(cafeList, longitude, latitude);
         getCafesRes = sortCafeList(getCafesRes, sort, limit);
@@ -55,13 +56,24 @@ public class CafeSearchService {
      * 카페 상세 조회 (카페 id)
      */
     @Transactional(readOnly = true)
-    public CafeGetOutDTO getCafeById(UUID cafeId, UUID userId) throws CafeException {
+    public CafeGetOutDTO getCafeForLogin(UUID cafeId, UUID userId) throws CafeException {
 
         Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
                 () -> new CafeException(NOT_EXIST_CAFE)
         );
 
         return CafeGetOutDTO.of(cafe, getFavoritesStatus(cafeId, userId), getImages(cafe.getId()));
+
+    }
+
+    @Transactional(readOnly = true)
+    public CafeGetOutDTO getCafeForNotLogin(UUID cafeId) throws CafeException {
+
+        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
+                () -> new CafeException(NOT_EXIST_CAFE)
+        );
+
+        return CafeGetOutDTO.of(cafe, FavoritesStatus.INACTIVE, getImages(cafe.getId()));
 
     }
 
@@ -74,17 +86,6 @@ public class CafeSearchService {
         return FavoritesStatus.ACTIVE;
     }
 
-//    @Transactional(readOnly = true)
-//    public CafeGetOutDTO getCafe(UUID cafeId) throws CafeException, UserException {
-//
-//        Cafe cafe = cafeRepository.findById(cafeId).orElseThrow(
-//                () -> new CafeException(NOT_EXIST_CAFE)
-//        );
-//        List<String> cafeImages = getImages(cafe.getId());
-//
-//        return CafeGetOutDTO.of(cafe, cafeImages);
-//
-//    }
 
     /**
      * 카페 상세 조회 (카페 이름)
@@ -117,7 +118,8 @@ public class CafeSearchService {
         List<CafeListOutDTO> cafeResList = cafeList.stream()
                 .map(cafe -> {
                     int distance = DistanceService
-                            .getDistance(cafe.getCoordinate().getLatitude(), cafe.getCoordinate().getLongitude(), latitude, longitude);
+                            .getDistance(cafe.getCoordinate().getLatitude(), cafe.getCoordinate().getLongitude(),
+                                    latitude, longitude);
 
                     return CafeListOutDTO.of(cafe, getImages(cafe.getId()), distance, FavoritesStatus.INACTIVE);
                 })
@@ -129,9 +131,11 @@ public class CafeSearchService {
         List<CafeListOutDTO> cafeResList = cafeList.stream()
                 .map(cafe -> {
                     int distance = DistanceService
-                            .getDistance(cafe.getCoordinate().getLatitude(), cafe.getCoordinate().getLongitude(), longitude, latitude);
+                            .getDistance(cafe.getCoordinate().getLatitude(), cafe.getCoordinate().getLongitude(),
+                                    longitude, latitude);
 
-                    return CafeListOutDTO.of(cafe, getImages(cafe.getId()), distance, getFavoritesStatus(cafe.getId(), userId));
+                    return CafeListOutDTO.of(cafe, getImages(cafe.getId()), distance,
+                            getFavoritesStatus(cafe.getId(), userId));
                 })
                 .collect(Collectors.toList());
         return cafeResList;
