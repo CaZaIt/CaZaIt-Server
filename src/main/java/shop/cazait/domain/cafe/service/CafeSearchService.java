@@ -16,11 +16,8 @@ import shop.cazait.domain.cafe.model.entity.Cafe;
 import shop.cazait.domain.cafe.exception.CafeException;
 import shop.cazait.domain.cafe.repository.CafeRepository;
 import shop.cazait.domain.cafeimage.repository.CafeImageRepository;
-import shop.cazait.domain.cafeimage.service.CafeImageService;
-import shop.cazait.domain.coordinate.service.CoordinateService;
 import shop.cazait.domain.favorites.entity.FavoritesStatus;
 import shop.cazait.domain.favorites.repository.FavoritesRepository;
-import shop.cazait.domain.master.repository.MasterRepository;
 import shop.cazait.global.common.status.BaseStatus;
 
 @Service
@@ -28,12 +25,8 @@ import shop.cazait.global.common.status.BaseStatus;
 @Transactional
 public class CafeSearchService {
 
-    private final CoordinateService coordinateService;
-    private final CafeImageService cafeImageService;
-
     private final CafeRepository cafeRepository;
     private final CafeImageRepository cafeImageRepository;
-    private final MasterRepository masterRepository;
     private final FavoritesRepository favoritesRepository;
 
     /**
