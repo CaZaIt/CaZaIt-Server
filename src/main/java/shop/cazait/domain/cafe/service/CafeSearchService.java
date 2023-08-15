@@ -67,7 +67,7 @@ public class CafeSearchService {
 
     private FavoritesStatus getFavoritesStatus(UUID cafeId, UUID userId) {
 
-        if (favoritesRepository.findAllByUserIdAndCafeId(cafeId, userId).isEmpty()) {
+        if (favoritesRepository.findAllByUserIdAndCafeId(userId, cafeId).isEmpty()) {
             return FavoritesStatus.INACTIVE;
         }
 
