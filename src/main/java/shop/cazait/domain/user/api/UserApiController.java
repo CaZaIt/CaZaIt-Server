@@ -2,6 +2,7 @@ package shop.cazait.domain.user.api;
 
 import static shop.cazait.global.error.status.SuccessStatus.CREATE_USER;
 import static shop.cazait.global.error.status.SuccessStatus.SUCCESS;
+import static shop.cazait.global.error.status.SuccessStatus.VALID_USER_INFO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -80,19 +81,27 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping ("/duplicate-check/accountname")
-    @Operation(summary = "아이디 중복확인", description = "회원가입 전 이미 존재하는 아이디인지 중복확인")
-    public SuccessResponse<String> findUserDuplicateAccountName(@RequestBody @Valid UserFindDuplicateAccountNameInDTO userFindDuplicateEmailInDTO) throws UserException {
-        SuccessResponse<String> accountNameSuccessResponse = userService.findUserDuplicateAccountName(userFindDuplicateEmailInDTO);
-        return accountNameSuccessResponse;
+    @PostMapping ("/exist/accountname")
+    @Operation(summary = "아이디 DB 조회", description = "입력한 아이디를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
+    public SuccessResponse<String> findUserExistAccountName(@RequestBody @Valid UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+        SuccessResponse<String> userFindExistAccountNameSuccessResponse = userService.findUserExistAccountName(userFindExistAccountNameInDTO);
+        return userFindExistAccountNameSuccessResponse;
     }
 
     @NoAuth
-    @PostMapping ("/duplicate-check/nickname")
-    @Operation(summary = "닉네임 중복확인", description = "회원가입 전 이미 존재하는 닉네임인지 중복확인")
-    public SuccessResponse<String> findUserDuplicateNickname(@RequestBody @Valid UserFindDuplicateNicknameInDTO userFindDuplicateNicknameInDTO) throws UserException {
-        SuccessResponse<String> nicknameDuplicateSuccessResponse = userService.findUserDuplicateNickname(userFindDuplicateNicknameInDTO);
-        return nicknameDuplicateSuccessResponse;
+    @PostMapping ("/exist/nickname")
+    @Operation(summary = "닉네임 DB 조회", description = "입력한 비밀번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
+    public SuccessResponse<String> findUserExistNickname(@RequestBody @Valid UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+        SuccessResponse<String> userFindExistNicknameSuccessResponse = userService.findUserExistNickname(userFindExistNicknameInDTO);
+        return userFindExistNicknameSuccessResponse;
+    }
+
+    @NoAuth
+    @PostMapping ("/exist/phonenumber")
+    @Operation(summary = "전화번호 DB 조회", description = "입력한 전화번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
+    public SuccessResponse<String> findUserExistPhoneNumber(@RequestBody @Valid UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO) throws UserException {
+        SuccessResponse<String> userFindExistPhonenumber = userService.findUserExistPhoneNumber(userFindExistPhoneNumberInDTO);
+        return userFindExistPhonenumber;
     }
 
     @NoAuth
@@ -104,19 +113,19 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PostMapping("/reset-password/accountname")
-    @Operation(summary = "비밀번호 변경 (아이디 입력)", description = "비밀번호 변경시 가입한 아이디 입력")
-    public SuccessResponse<UserEnterAccountNameInResetPasswordOutDTO> verifyUserAccountNameInResetPassword(@RequestBody UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOutDTO) throws UserException {
-        UserEnterAccountNameInResetPasswordOutDTO userEnterAccountNameInResetPasswordOUTDTO = userService.verifyUserAccountNameInResetPassword(userEnterAccountNameInResetPasswordOutDTO.getAccountName());
-        return new SuccessResponse<>(SUCCESS, userEnterAccountNameInResetPasswordOUTDTO);
+    @PatchMapping("/reset-password/password")
+    @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
+    public SuccessResponse<UserUpdatePasswordInResetPasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInResetPasswordInDTO userUpdatePasswordInResetPasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordInResetPasswordOutDTO userUpdatePasswordInResetPasswordOutDTO = userService.updateUserPasswordInResetPassword(userUpdatePasswordInResetPasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInResetPasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS, userUpdatePasswordInResetPasswordOutDTO);
     }
 
     @NoAuth
-    @PatchMapping("/reset-password/password")
-    @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
-    public SuccessResponse<UserEnterPasswordInResetPasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserEnterPasswordInResetPasswordInDTO userEnterPasswordInResetPasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserEnterPasswordInResetPasswordOutDTO userEnterPasswordInResetPasswordOutDTO = userService.updateUserPasswordInResetPassword(userEnterPasswordInResetPasswordInDTO.getUserPhoneNumber(), userEnterPasswordInResetPasswordInDTO.getPassword());
-        return new SuccessResponse<>(SUCCESS, userEnterPasswordInResetPasswordOutDTO);
+    @PostMapping("/reset-password/checkuserinfo")
+    @Operation(summary = "비밀번호 변경 (유저정보 검증)", description = "아이디와 전화번호가 일치하는지")
+    public SuccessResponse<UserVerifyUserInfoInResetPasswordOutDTO> verifyUserInfoInResetPassword(@RequestBody UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO) throws UserException {
+        UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userVerifyUserInfoInResetPasswordInDTO);
+        return new SuccessResponse<>(VALID_USER_INFO,userVerifyUserInfoInResetPasswordOutDTO);
     }
 }
 
