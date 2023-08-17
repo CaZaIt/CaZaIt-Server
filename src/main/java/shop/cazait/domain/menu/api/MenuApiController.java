@@ -50,7 +50,6 @@ public class MenuApiController {
      * 카페 메뉴 등록
      */
     @Operation(summary = "카페 메뉴 등록", description = "카페 ID와 메뉴에 대한 정보를 받아 등록한다.")
-    @Parameter(name = "cafeId", description = "메뉴를 추가할 카페에 대한 id 입력")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
