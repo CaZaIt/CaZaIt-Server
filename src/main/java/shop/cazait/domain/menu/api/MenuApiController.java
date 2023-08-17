@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,7 +85,7 @@ public class MenuApiController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 카페"),
     })
     @GetMapping("/cafe/{cafeId}")
-    public SuccessResponse<List<MenuListOutDTO>> getMenu(@PathVariable Long cafeId) {
+    public SuccessResponse<List<MenuListOutDTO>> getMenu(@PathVariable UUID cafeId) {
 
         List<MenuListOutDTO> result = menuService.getMenu(cafeId);
         SuccessStatus resultStatus = SUCCESS;

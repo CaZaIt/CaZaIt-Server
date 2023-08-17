@@ -38,7 +38,7 @@ public class MenuService {
      * 카페 메뉴 조회
      */
     @Transactional(readOnly = true)
-    public List<MenuListOutDTO> getMenu(Long cafeId) {
+    public List<MenuListOutDTO> getMenu(UUID cafeId) {
 
         List<Menu> findMenus = menuRepository.findAllByCafeId(cafeId).orElse(null);
         return MenuListOutDTO.of(findMenus);
