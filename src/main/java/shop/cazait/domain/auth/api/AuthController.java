@@ -139,7 +139,7 @@ public class AuthController {
         log.info(code);
 
         ExtKakaoUserInfoOutDTO extKakaoUserInfoOutDTO = kakaoService.getInfo(code);
-        Long kakaoId = extKakaoUserInfoOutDTO.getId();
+        long kakaoId = extKakaoUserInfoOutDTO.getId();
         //카카오 id로 조회, 있을 시 로그인 처리
         if(userRepository.findByKakaoId(kakaoId).isPresent()){
             UserAuthenticateOutDTO userAuthenticateOutDTO = kakaoService.kakaoLoginUser(kakaoId);

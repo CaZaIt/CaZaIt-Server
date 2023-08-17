@@ -16,8 +16,8 @@ public class ExtKakaoUserTokenOutDTO {
     private String accessToken;
     private String refreshToken;
 
-    private Long expiresIn;
-    private Long refreshTokenExpiresIn;
+    private long expiresIn;
+    private long refreshTokenExpiresIn;
 
     public static ExtKakaoUserTokenOutDTO fail() {
         return new ExtKakaoUserTokenOutDTO(null, null);

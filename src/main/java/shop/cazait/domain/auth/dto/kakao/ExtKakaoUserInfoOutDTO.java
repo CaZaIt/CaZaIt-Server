@@ -13,7 +13,7 @@ import lombok.ToString;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ExtKakaoUserInfoOutDTO {
     private ExtKakaoUserAccountOutDTO extKakaoUserAccountOutDTO;
-    Long id;
+    long id;
 
     public static ExtKakaoUserInfoOutDTO fail() {
         return null;
