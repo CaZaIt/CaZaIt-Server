@@ -64,7 +64,7 @@ public class AuthService {
     @Value("${user-info.sender-phone-number}")
     private String senderPhoneNumber;
 
-    private static final Integer smsVerifyTime = 180;
+    private static final int smsVerifyTime = 180;
     private static final Random random = new SecureRandom();
 
     public UserAuthenticateOutDTO reIssueTokensByRole(Role exactRole, String accessToken, String refreshToken) throws MasterException, UserException {
@@ -91,7 +91,7 @@ public class AuthService {
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
-        Integer verificationCode = random.nextInt(900000) + 100000;
+        int verificationCode = random.nextInt(900000) + 100000;
         String customMessageContent = "[카자잇] 인증번호["+verificationCode+"]를 입력해주세요";
         System.out.println("verificationCode = " + verificationCode);
         List<AuthSendMessageInfoInDTO> messages = new ArrayList<>();
@@ -104,7 +104,7 @@ public class AuthService {
 
         /**Headers Content**/
         //현재 시간
-        Long currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         //시그니처 생성
         String signature = createSignature(currentTime);
 
@@ -121,7 +121,7 @@ public class AuthService {
         //요청
         ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO = sensClient.sendMessage(
                 new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + this.serviceId + "/messages"),
-                currentTime.toString(),
+                String.valueOf(currentTime),
                 this.accessKey,
                 signature,
                 extSensSendMessageCodeInDTO);
@@ -143,13 +143,13 @@ public class AuthService {
         return AuthSendMessageCodeOutDTO.of(recipientPhoneNumber,extSensSendMessageCodeOutDTO);
     }
 
-    public String createSignature(Long currentTime) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
+    public String createSignature(long currentTime) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
 
         String space = " ";
         String newLine = "\n";
         String method = "POST";
         String url = "/sms/v2/services/"+ this.serviceId+"/messages";
-        String timestamp = currentTime.toString();
+        String timestamp = String.valueOf(currentTime);
         String accessKey = this.accessKey;
         String secretKey = this.secretKey;
 
@@ -174,16 +174,16 @@ public class AuthService {
     }
 
 
-    public AuthVerifyMessageCodeOutDTO verifyMessageCode(String recipientPhoneNumber , Integer verificationCode) throws UserException {
+    public AuthVerifyMessageCodeOutDTO verifyMessageCode(String recipientPhoneNumber , int verificationCode) throws UserException {
 
         Optional<Object> attribute = Optional.ofNullable(httpSession.getAttribute(recipientPhoneNumber));
         //세션에서 key가 휴대전화번호인 값이 없을 시 예외 발생 (만료된 인증번호)
         attribute.orElseThrow(()->new UserException(ErrorStatus.EXPIRED_VERIFICATION_CODE));
 
-        Integer authNumberInSession = (Integer)attribute.get();
+        int authNumberInSession = (int)attribute.get();
 
         //인증 성공
-        if(verificationCode.equals(authNumberInSession)){
+        if(verificationCode==(authNumberInSession)){
             return AuthVerifyMessageCodeOutDTO.of(recipientPhoneNumber);
              }
         else{//인증 실패 (잘못된 인증 번호)
@@ -198,7 +198,7 @@ public class AuthService {
 
         /**Body Content**/
         //인증번호 및 메시지 발송 내용 생성
-        Integer verificationCode = random.nextInt(900000) + 100000;
+        int verificationCode = random.nextInt(900000) + 100000;
         String customMessageContent = "[카자잇] 인증번호["+verificationCode+"]를 입력해주세요";
         System.out.println("verificationCode = " + verificationCode);
         List<AuthSendMessageInfoInDTO> messages = new ArrayList<>();
@@ -211,7 +211,7 @@ public class AuthService {
 
         /**Headers Content**/
         //현재 시간
-        Long currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
         //시그니처 생성
         String signature = createSignature(currentTime);
 
