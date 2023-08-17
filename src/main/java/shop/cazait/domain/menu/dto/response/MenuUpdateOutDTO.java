@@ -13,7 +13,7 @@ import shop.cazait.domain.menu.entity.Menu;
 public class MenuUpdateOutDTO {
 
     @Schema(description = "메뉴 ID", example = "1")
-    private Long cafeMenuId;
+    private Long menuId;
 
     @Schema(description = "카페 ID", example = "1")
     private UUID cafeId;
@@ -32,7 +32,7 @@ public class MenuUpdateOutDTO {
 
     public static MenuUpdateOutDTO of(Menu menu) {
         return MenuUpdateOutDTO.builder()
-                .cafeMenuId(menu.getId())
+                .menuId(menu.getId())
                 .cafeId(menu.getCafe().getId())
                 .name(menu.getName())
                 .description(menu.getDescription())

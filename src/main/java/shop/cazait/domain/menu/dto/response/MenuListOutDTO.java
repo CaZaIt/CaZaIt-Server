@@ -14,7 +14,7 @@ import shop.cazait.domain.menu.entity.Menu;
 public class MenuListOutDTO {
 
     @Schema(description = "메뉴 ID", example = "1")
-    private Long cafeMenuId;
+    private Long menuId;
 
     @Schema(description = "이름", example = "아이스 아메리카노")
     private String name;
@@ -31,7 +31,7 @@ public class MenuListOutDTO {
     public static List<MenuListOutDTO> of(List<Menu> menus) {
         return menus.stream()
                 .map(menu -> MenuListOutDTO .builder()
-                        .cafeMenuId(menu.getId())
+                        .menuId(menu.getId())
                         .name(menu.getName())
                         .description(menu.getDescription())
                         .price(menu.getPrice())
