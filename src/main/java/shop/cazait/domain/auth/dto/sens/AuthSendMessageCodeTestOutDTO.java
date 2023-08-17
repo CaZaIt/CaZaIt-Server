@@ -21,9 +21,9 @@ public class AuthSendMessageCodeTestOutDTO {
 
     @Schema(description = "인증 번호", example = "123456")
     @NotBlank
-    private Integer verificationCode;
+    private int verificationCode;
 
-    public static AuthSendMessageCodeTestOutDTO of(String recipientPhoneNumber, Integer verificationCode, ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO) {
+    public static AuthSendMessageCodeTestOutDTO of(String recipientPhoneNumber, int verificationCode, ExtSensSendMessageCodeOutDTO extSensSendMessageCodeOutDTO) {
         return AuthSendMessageCodeTestOutDTO.builder().
                 recipientPhoneNumber(recipientPhoneNumber).
                 requestTime(extSensSendMessageCodeOutDTO.getRequestTime()).

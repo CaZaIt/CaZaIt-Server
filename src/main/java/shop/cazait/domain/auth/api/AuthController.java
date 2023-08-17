@@ -118,7 +118,7 @@ public class AuthController {
     @Operation(summary = "문자 인증번호 인증", description = "문자로 받은 인증 번호를 입력하여, 적절한 인증번호인지 판단")
     public SuccessResponse<AuthVerifyMessageCodeOutDTO>verifyMessageCode(@RequestBody AuthVerifyMessageCodeInDTO authVerifyMessageCodeInDTO) throws UserException {
         String recipientPhoneNumber = authVerifyMessageCodeInDTO.getRecipientPhoneNumber();
-        Integer verificationCode = authVerifyMessageCodeInDTO.getVerificationCode();
+        int verificationCode = authVerifyMessageCodeInDTO.getVerificationCode();
         AuthVerifyMessageCodeOutDTO authVerifyMessageCodeOutDTO = authService.verifyMessageCode(recipientPhoneNumber, verificationCode);
         return new SuccessResponse<>(SUCCESS, authVerifyMessageCodeOutDTO);
     }

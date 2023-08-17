@@ -15,7 +15,7 @@ public class AuthVerifyMessageCodeInDTO {
     private String recipientPhoneNumber;
 
     @Schema(description = "전송 받은 인증번호", example = "123456")
-    private Integer verificationCode;
+    private int verificationCode;
 
 
 }
