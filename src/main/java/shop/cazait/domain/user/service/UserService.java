@@ -255,13 +255,13 @@ public class UserService {
         return UserFindAccountNameOutDTO.of(user);
     }
 
-    public UserUpdatePasswordOutDTO  updateUserPasswordInResetPassword(UUID userId, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public UserUpdatePasswordOutDTO  updateUserPassword(UUID userId, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
         String encryptUserPassword = encryptUserPassword(password);
 
-        User updatePasswordUser = user.updateUserPasswordInResetPassword(encryptUserPassword);
+        User updatePasswordUser = user.updateUserPassword(encryptUserPassword);
         userRepository.save(updatePasswordUser);
 
         return UserUpdatePasswordOutDTO .of(user,password);

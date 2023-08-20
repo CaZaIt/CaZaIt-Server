@@ -78,7 +78,7 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public User updateUserPasswordInResetPassword(String password){
+    public User updateUserPassword(String password){
         this.password = password;
 
         return this;

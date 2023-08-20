@@ -116,7 +116,7 @@ public class UserApiController {
     @PatchMapping("/reset-password/password")
     @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
     public SuccessResponse<UserUpdatePasswordOutDTO > updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserUpdatePasswordOutDTO  userUpdatePasswordOutDTO  = userService.updateUserPasswordInResetPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
+        UserUpdatePasswordOutDTO  userUpdatePasswordOutDTO  = userService.updateUserPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO );
     }
 
