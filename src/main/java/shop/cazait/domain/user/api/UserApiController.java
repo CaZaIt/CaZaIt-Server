@@ -127,6 +127,14 @@ public class UserApiController {
         UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userVerifyUserInfoInResetPasswordInDTO);
         return new SuccessResponse<>(VALID_USER_INFO,userVerifyUserInfoInResetPasswordOutDTO);
     }
+
+    @PostMapping("/verify-password")
+    @Operation(summary = "계정정보 관리 시 비밀번호 검증", description = "로그인한 회원의 비밀번호가 유효한지")
+    public SuccessResponse<UserVerifyPasswordOutDTO> verifyUserPassword(@RequestBody UserVerifyPasswordInDTO userVerifyPasswordInDTO)
+            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserVerifyPasswordOutDTO userVerifyPasswordOutDTO = userService.verifyUserPassword(userVerifyPasswordInDTO);
+        return new SuccessResponse<>(SUCCESS,userVerifyPasswordOutDTO);
+    }
 }
 
 
