@@ -286,4 +286,20 @@ public class UserService {
             throw new UserException(INVALID_USER_INFO);
         }
     }
+    
+    public UserVerifyPasswordOutDTO verifyUserPassword(UserVerifyPasswordInDTO userVerifyPasswordInDTO)
+            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UUID userId = userVerifyPasswordInDTO.getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        String enteredPassword = userVerifyPasswordInDTO.getPassword();
+        String encryptEnteredPassword = encryptUserPassword(enteredPassword);
+        String existPassword = user.getPassword();
+        if(encryptEnteredPassword.equals(existPassword)){
+            return UserVerifyPasswordOutDTO.of(user);
+        }else{
+            throw new UserException(INVALID_USER_PASSWORD);
+        }
+    }
 }
