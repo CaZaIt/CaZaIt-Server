@@ -84,6 +84,12 @@ public class User extends BaseEntity {
         return this;
     }
 
+    public User updateUserNickname(String nickname){
+        this.nickname = nickname;
+
+        return this;
+    }
+
     private static String generateRandomString() {
         return UUID.randomUUID().toString();
     }
