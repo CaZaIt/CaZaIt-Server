@@ -143,6 +143,16 @@ public class UserApiController {
         UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO);
     }
+
+    @PatchMapping("/userinfo/nickname")
+    @Operation(summary = "계정정보 관리 페이지에서의 닉네임 변경")
+    public SuccessResponse<UserUpdateNicknameOutDTO> updateUserNickname(@RequestBody UserUpdateNicknameInDTO userUpdateNicknameInDTO)
+            throws UserException {
+        UserUpdateNicknameOutDTO userUpdateNicknameOutDTO = userService.updateUserNickname(
+                userUpdateNicknameInDTO.getId(), userUpdateNicknameInDTO.getNickname());
+        return new SuccessResponse<>(SUCCESS,userUpdateNicknameOutDTO);
+    }
+
 }
 
 
