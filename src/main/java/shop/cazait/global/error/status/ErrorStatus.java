@@ -36,6 +36,7 @@ public enum ErrorStatus {
     INVALID_PHONENUMBER(400,"FAIL","잘못된 전화번호입니다"),
     SAME_AS_CURRENT_PASSWORD(400,"FAIL","새로운 비밀번호가 현재 비밀번호와 동일합니다. 다른 비밀번호를 입력해주세요."),
     INVALID_USER_INFO(400,"FAIL","인증번호를 발송했습니다. 인증번호가 오지 않으면 입력하신 정보가 회원정보와 일치하는지 확인해주세요."),
+    INVALID_USER_PASSWORD(400,"FAIL","비밀번호가 올바르지 않습니다."),
 
     /**
      * Success Code : 401
