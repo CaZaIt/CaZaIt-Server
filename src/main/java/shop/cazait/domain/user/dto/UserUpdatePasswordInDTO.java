@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "유저 비밀번호 수정시 비밀번호 입력 Request : 비밀번호 재설정")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserUpdatePasswordInResetPasswordInDTO {
+public class UserUpdatePasswordInDTO {
 
     @Schema(description = "회원 id")
     private UUID id;

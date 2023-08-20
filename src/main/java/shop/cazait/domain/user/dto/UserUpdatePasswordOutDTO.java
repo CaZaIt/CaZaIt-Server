@@ -12,7 +12,7 @@ import java.util.UUID;
 @Schema(description = "유저 비밀번호 수정시 비밀번호 입력 Response : 비밀번호 수정된 유저의 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class UserUpdatePasswordInResetPasswordOutDTO {
+public class UserUpdatePasswordOutDTO  {
     @Schema(description = "회원 id")
     private UUID id;
 
@@ -28,8 +28,8 @@ public class UserUpdatePasswordInResetPasswordOutDTO {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public static UserUpdatePasswordInResetPasswordOutDTO of (User user, String password){
-        return UserUpdatePasswordInResetPasswordOutDTO.builder()
+    public static UserUpdatePasswordOutDTO  of (User user, String password){
+        return UserUpdatePasswordOutDTO .builder()
                 .id(user.getId())
                 .accountName(user.getAccountName())
                 .password(password)
