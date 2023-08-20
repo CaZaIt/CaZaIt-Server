@@ -1,6 +1,7 @@
 package shop.cazait.domain.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserUpdatePasswordInResetPasswordInDTO {
 
-    @Schema(description = "비밀번호 재설정 문자 발송 및 인증이 완료된 전화번호", example = "01012345678")
-    private String userPhoneNumber;
+    @Schema(description = "회원 id")
+    private UUID id;
 
     @Schema(description = "변경할 유저의 새로운 비밀번호", example = "abc12345#$")
     private String password;
