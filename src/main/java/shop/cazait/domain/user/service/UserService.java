@@ -135,20 +135,18 @@ public class UserService {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<String> findUserExistAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+    public SuccessResponse<UUID> findUserExistAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
         String isExist = userFindExistAccountNameInDTO.getIsExist();
         String accountName = userFindExistAccountNameInDTO.getAccountName();
         Optional<User> accountNameNullable = userRepository.findByAccountName(accountName);
 
         if(isExist.equals("true")){
-            if(accountNameNullable.isPresent()){
-                    return new SuccessResponse<>(SUCCESS,accountName);
-            }
-            throw new UserException(NOT_EXIST_USER);
+            User user = accountNameNullable.orElseThrow(() -> new UserException(NOT_EXIST_USER));
+            return new SuccessResponse<>(SUCCESS,user.getId());
         }
         else{
             if (accountNameNullable.isEmpty()) {
-                return new SuccessResponse<>(SIGNUP_AVAILABLE, accountName);
+                return new SuccessResponse<>(SIGNUP_AVAILABLE,null);
             }
             throw new UserException(EXIST_ACCOUNTNAME);
         }
