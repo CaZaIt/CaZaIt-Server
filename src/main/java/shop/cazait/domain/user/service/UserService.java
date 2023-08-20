@@ -297,4 +297,15 @@ public class UserService {
             throw new UserException(INVALID_USER_PASSWORD);
         }
     }
+
+    public UserUpdateNicknameOutDTO updateUserNickname(UUID userId, String nickname)
+            throws UserException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        User updateUser = user.updateUserNickname(nickname);
+        userRepository.save(updateUser);
+
+        return UserUpdateNicknameOutDTO.of(updateUser);
+    }
 }
