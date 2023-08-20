@@ -91,8 +91,8 @@ public class UserApiController {
     @NoAuth
     @PostMapping ("/exist/nickname")
     @Operation(summary = "닉네임 DB 조회", description = "입력한 비밀번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
-    public SuccessResponse<String> findUserExistNickname(@RequestBody @Valid UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
-        SuccessResponse<String> userFindExistNicknameSuccessResponse = userService.findUserExistNickname(userFindExistNicknameInDTO);
+    public SuccessResponse<UUID> findUserExistNickname(@RequestBody @Valid UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+        SuccessResponse<UUID> userFindExistNicknameSuccessResponse = userService.findUserExistNickname(userFindExistNicknameInDTO);
         return userFindExistNicknameSuccessResponse;
     }
 

@@ -152,22 +152,20 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserExistNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+    public SuccessResponse<UUID> findUserExistNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
         String isExist = userFindExistNicknameInDTO.getIsExist();
         String nickname = userFindExistNicknameInDTO.getNickname();
         Optional<User> nicknameNullable = userRepository.findByNickname(nickname);
 
         if(isExist.equals("true")){
-            if(nicknameNullable.isPresent()){
-                return new SuccessResponse<>(SUCCESS,nickname);
-            }
-            throw new UserException(NOT_EXIST_USER);
+            User user = nicknameNullable.orElseThrow(() -> new UserException(NOT_EXIST_USER));
+            return new SuccessResponse<>(SUCCESS,user.getId());
         }
         else{
             if (nicknameNullable.isEmpty()) {
-                return new SuccessResponse<>(SIGNUP_AVAILABLE, nickname);
+                return new SuccessResponse<>(SIGNUP_AVAILABLE,null);
             }
-            throw new UserException(EXIST_ACCOUNTNAME);
+            throw new UserException(EXIST_NICKNAME);
         }
     }
 
@@ -185,7 +183,7 @@ public class UserService {
             if (nicknameNullable.isEmpty()) {
                 return new SuccessResponse<>(SIGNUP_AVAILABLE, null);
             }
-            throw new UserException(EXIST_PHONENUMBER); 
+            throw new UserException(EXIST_PHONENUMBER);
         }
     }
 
