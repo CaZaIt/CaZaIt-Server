@@ -171,23 +171,21 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<String> findUserExistPhoneNumber(UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
+    public SuccessResponse<UUID> findUserExistPhoneNumber(UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
             throws UserException {
         String isExist = userFindExistPhoneNumberInDTO.getIsExist();
         String phoneNumber= userFindExistPhoneNumberInDTO.getPhoneNumber();
         Optional<User> nicknameNullable = userRepository.findByPhoneNumber(phoneNumber);
 
         if(isExist.equals("true")){
-            if(nicknameNullable.isPresent()){
-                return new SuccessResponse<>(SUCCESS,phoneNumber);
-            }
-            throw new UserException(NOT_EXIST_USER);
+            User user = nicknameNullable.orElseThrow(() -> new UserException(NOT_EXIST_USER));
+            return new SuccessResponse<>(SUCCESS,user.getId());
         }
         else{
             if (nicknameNullable.isEmpty()) {
-                return new SuccessResponse<>(SIGNUP_AVAILABLE, phoneNumber);
+                return new SuccessResponse<>(SIGNUP_AVAILABLE, null);
             }
-            throw new UserException(EXIST_ACCOUNTNAME);
+            throw new UserException(EXIST_PHONENUMBER); 
         }
     }
 
