@@ -135,6 +135,14 @@ public class UserApiController {
         UserVerifyPasswordOutDTO userVerifyPasswordOutDTO = userService.verifyUserPassword(userVerifyPasswordInDTO);
         return new SuccessResponse<>(SUCCESS,userVerifyPasswordOutDTO);
     }
+
+    @PatchMapping("/userinfo/password")
+    @Operation(summary = "계정정보 관리 페이지에서의 비밀번호 변경")
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInUserInfo(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO)
+            throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO);
+    }
 }
 
 
