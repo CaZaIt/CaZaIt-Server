@@ -259,12 +259,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
-
         String encryptUserPassword = encryptUserPassword(password);
-        if(user.getPassword().equals(encryptUserPassword)){
-            throw new UserException(SAME_AS_CURRENT_PASSWORD);
-        }
-        //비밀번호 암호화
 
         User updatePasswordUser = user.updateUserPasswordInResetPassword(encryptUserPassword);
         userRepository.save(updatePasswordUser);
