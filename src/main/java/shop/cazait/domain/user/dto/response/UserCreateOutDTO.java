@@ -1,4 +1,4 @@
-package shop.cazait.domain.user.dto;
+package shop.cazait.domain.user.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -8,10 +8,10 @@ import shop.cazait.domain.user.entity.User;
 
 import java.util.UUID;
 
-@Schema(description = "유저 수정 Response : 수정 완료된 유저 정보")
+@Schema(description = "유저 정보 Response : 회원 가입된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class UserUpdateOutDTO {
+public class UserCreateOutDTO {
 
     @Schema(description = "회원 id")
     private UUID id;
@@ -25,8 +25,8 @@ public class UserUpdateOutDTO {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public static UserUpdateOutDTO of(User user) {
-        return UserUpdateOutDTO.builder()
+    public static UserCreateOutDTO of(User user) {
+        return UserCreateOutDTO.builder()
                 .id(user.getId())
                 .accountName(user.getAccountName())
                 .phoneNumber(user.getPhoneNumber())

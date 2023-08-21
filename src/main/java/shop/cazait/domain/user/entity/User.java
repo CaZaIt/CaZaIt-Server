@@ -6,11 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
-import shop.cazait.domain.user.dto.UserUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
-import shop.cazait.global.common.status.BaseStatus;
 
 import java.util.UUID;
 
@@ -59,14 +56,6 @@ public class User extends BaseEntity {
         return this;
     }
 
-    public User updateUserProfile(UserUpdateInDTO userUpdateInDTO){
-        this.accountName = userUpdateInDTO.getAccountName();
-        this.password = userUpdateInDTO.getPassword();
-        this.phoneNumber = userUpdateInDTO.getPhoneNumber();
-        this.nickname = userUpdateInDTO.getNickname();
-
-        return this;
-    }
 
     public static User kakaoSignUpUser(long kakaoId){
         return User.builder()
@@ -78,8 +67,14 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public User updateUserPasswordInResetPassword(String password){
+    public User updateUserPassword(String password){
         this.password = password;
+
+        return this;
+    }
+
+    public User updateUserNickname(String nickname){
+        this.nickname = nickname;
 
         return this;
     }

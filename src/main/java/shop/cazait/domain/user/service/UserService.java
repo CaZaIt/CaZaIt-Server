@@ -22,7 +22,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
 import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
-import shop.cazait.domain.user.dto.*;
+import shop.cazait.domain.user.dto.request.UserCreateInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistAccountNameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistNicknameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistPhoneNumberInDTO;
+import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
+import shop.cazait.domain.user.dto.response.UserDeleteOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindAccountNameOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdateNicknameOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdatePasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyPasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyUserInfoInResetPasswordOutDTO;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
@@ -108,21 +119,6 @@ public class UserService {
         return UserFindOutDTO.of(findUser);
     }
 
-    public UserUpdateOutDTO updateUserProfile(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-
-        User existUser = userRepository.findById(userIdx)
-                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
-
-        //DTO의 비밀번호 암호화
-        String encryptedPassword = encryptUserPassword(userUpdateInDTO.getPassword());
-        UserUpdateInDTO encryptedUserUpdateDTO = userUpdateInDTO.encryptUserUpdateDTO(encryptedPassword);
-
-        //유저 정보 수정
-        User modifiedUser = existUser.updateUserProfile(encryptedUserUpdateDTO);
-        userRepository.save(modifiedUser);
-        return UserUpdateOutDTO.of(modifiedUser);
-    }
-
     public UserDeleteOutDTO deleteUserById(UUID userIdx) throws UserException {
         userRepository.findById(userIdx).orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
@@ -135,61 +131,58 @@ public class UserService {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<String> findUserExistAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+    public SuccessResponse<UUID> findUserExistAccountName(
+            UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
         String isExist = userFindExistAccountNameInDTO.getIsExist();
         String accountName = userFindExistAccountNameInDTO.getAccountName();
         Optional<User> accountNameNullable = userRepository.findByAccountName(accountName);
 
         if(isExist.equals("true")){
-            if(accountNameNullable.isPresent()){
-                    return new SuccessResponse<>(SUCCESS,accountName);
-            }
-            throw new UserException(NOT_EXIST_USER);
+            User user = accountNameNullable.orElseThrow(() -> new UserException(NOT_EXIST_USER));
+            return new SuccessResponse<>(SUCCESS,user.getId());
         }
         else{
             if (accountNameNullable.isEmpty()) {
-                return new SuccessResponse<>(SIGNUP_AVAILABLE, accountName);
+                return new SuccessResponse<>(SIGNUP_AVAILABLE,null);
             }
             throw new UserException(EXIST_ACCOUNTNAME);
         }
     }
 
-    public SuccessResponse<String> findUserExistNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+    public SuccessResponse<UUID> findUserExistNickname(
+            UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
         String isExist = userFindExistNicknameInDTO.getIsExist();
         String nickname = userFindExistNicknameInDTO.getNickname();
         Optional<User> nicknameNullable = userRepository.findByNickname(nickname);
 
         if(isExist.equals("true")){
-            if(nicknameNullable.isPresent()){
-                return new SuccessResponse<>(SUCCESS,nickname);
-            }
-            throw new UserException(NOT_EXIST_USER);
+            User user = nicknameNullable.orElseThrow(() -> new UserException(NOT_EXIST_USER));
+            return new SuccessResponse<>(SUCCESS,user.getId());
         }
         else{
             if (nicknameNullable.isEmpty()) {
-                return new SuccessResponse<>(SIGNUP_AVAILABLE, nickname);
+                return new SuccessResponse<>(SIGNUP_AVAILABLE,null);
             }
-            throw new UserException(EXIST_ACCOUNTNAME);
+            throw new UserException(EXIST_NICKNAME);
         }
     }
 
-    public SuccessResponse<String> findUserExistPhoneNumber(UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
+    public SuccessResponse<UUID> findUserExistPhoneNumber(
+            UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
             throws UserException {
         String isExist = userFindExistPhoneNumberInDTO.getIsExist();
         String phoneNumber= userFindExistPhoneNumberInDTO.getPhoneNumber();
         Optional<User> nicknameNullable = userRepository.findByPhoneNumber(phoneNumber);
 
         if(isExist.equals("true")){
-            if(nicknameNullable.isPresent()){
-                return new SuccessResponse<>(SUCCESS,phoneNumber);
-            }
-            throw new UserException(NOT_EXIST_USER);
+            User user = nicknameNullable.orElseThrow(() -> new UserException(NOT_EXIST_USER));
+            return new SuccessResponse<>(SUCCESS,user.getId());
         }
         else{
             if (nicknameNullable.isEmpty()) {
-                return new SuccessResponse<>(SIGNUP_AVAILABLE, phoneNumber);
+                return new SuccessResponse<>(SIGNUP_AVAILABLE, null);
             }
-            throw new UserException(EXIST_ACCOUNTNAME);
+            throw new UserException(EXIST_PHONENUMBER);
         }
     }
 
@@ -255,29 +248,23 @@ public class UserService {
         return UserFindAccountNameOutDTO.of(user);
     }
 
-    public UserUpdatePasswordInResetPasswordOutDTO updateUserPasswordInResetPassword(String phoneNumber, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        User user = userRepository.findByPhoneNumber(phoneNumber)
+    public UserUpdatePasswordOutDTO updateUserPassword(UUID userId, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
-
         String encryptUserPassword = encryptUserPassword(password);
-        if(user.getPassword().equals(encryptUserPassword)){
-            throw new UserException(SAME_AS_CURRENT_PASSWORD);
-        }
-        //비밀번호 암호화
 
-        User updatePasswordUser = user.updateUserPasswordInResetPassword(encryptUserPassword);
+        User updatePasswordUser = user.updateUserPassword(encryptUserPassword);
         userRepository.save(updatePasswordUser);
 
-        return UserUpdatePasswordInResetPasswordOutDTO.of(user,password);
+        return UserUpdatePasswordOutDTO .of(user,password);
     }
 
-    public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO)
+    public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(
+            UUID userId, String phoneNumber)
             throws UserException {
-        String accountName = userVerifyUserInfoInResetPasswordInDTO.getAccountName();
-        String phoneNumber = userVerifyUserInfoInResetPasswordInDTO.getPhoneNumber();
 
-        User user = userRepository.findByAccountName(accountName).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         String existUserPhoneNumber = user.getPhoneNumber();
         if(phoneNumber.equals(existUserPhoneNumber)) {
             return UserVerifyUserInfoInResetPasswordOutDTO.of(user);
@@ -285,5 +272,30 @@ public class UserService {
         else{
             throw new UserException(INVALID_USER_INFO);
         }
+    }
+    
+    public UserVerifyPasswordOutDTO verifyUserPassword(UUID userId, String password)
+            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        String encryptEnteredPassword = encryptUserPassword(password);
+        String existPassword = user.getPassword();
+        if(encryptEnteredPassword.equals(existPassword)){
+            return UserVerifyPasswordOutDTO.of(user);
+        }else{
+            throw new UserException(INVALID_USER_PASSWORD);
+        }
+    }
+
+    public UserUpdateNicknameOutDTO updateUserNickname(UUID userId, String nickname)
+            throws UserException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
+
+        User updateUser = user.updateUserNickname(nickname);
+        userRepository.save(updateUser);
+
+        return UserUpdateNicknameOutDTO.of(updateUser);
     }
 }

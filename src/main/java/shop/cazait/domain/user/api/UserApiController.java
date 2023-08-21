@@ -21,7 +21,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import shop.cazait.domain.user.dto.*;
+import shop.cazait.domain.user.dto.request.UserCreateInDTO;
+import shop.cazait.domain.user.dto.request.UserFindAccountNameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistAccountNameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistNicknameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistPhoneNumberInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdateNicknameInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdatePasswordInDTO;
+import shop.cazait.domain.user.dto.request.UserVerifyPasswordInDTO;
+import shop.cazait.domain.user.dto.request.UserVerifyUserInfoInResetPasswordInDTO;
+import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
+import shop.cazait.domain.user.dto.response.UserDeleteOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindAccountNameOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdateNicknameOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdatePasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyPasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyUserInfoInResetPasswordOutDTO;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
@@ -59,18 +75,7 @@ public class UserApiController {
         UserFindOutDTO userInfoRes = userService.getUser(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
-
-    @PatchMapping("/{userId}")
-    @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
-    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
-    public SuccessResponse<UserUpdateOutDTO> updateUserProfile(
-            @PathVariable(name = "userId") UUID userIdx,
-            @RequestBody @Valid UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-
-            UserUpdateOutDTO userUpdateOutDTO = userService.updateUserProfile(userIdx, userUpdateInDTO);
-            return new SuccessResponse<>(SUCCESS, userUpdateOutDTO);
-
-    }
+    
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
@@ -83,24 +88,24 @@ public class UserApiController {
     @NoAuth
     @PostMapping ("/exist/accountname")
     @Operation(summary = "아이디 DB 조회", description = "입력한 아이디를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
-    public SuccessResponse<String> findUserExistAccountName(@RequestBody @Valid UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
-        SuccessResponse<String> userFindExistAccountNameSuccessResponse = userService.findUserExistAccountName(userFindExistAccountNameInDTO);
+    public SuccessResponse<UUID> findUserExistAccountName(@RequestBody @Valid UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+        SuccessResponse<UUID> userFindExistAccountNameSuccessResponse = userService.findUserExistAccountName(userFindExistAccountNameInDTO);
         return userFindExistAccountNameSuccessResponse;
     }
 
     @NoAuth
     @PostMapping ("/exist/nickname")
     @Operation(summary = "닉네임 DB 조회", description = "입력한 비밀번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
-    public SuccessResponse<String> findUserExistNickname(@RequestBody @Valid UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
-        SuccessResponse<String> userFindExistNicknameSuccessResponse = userService.findUserExistNickname(userFindExistNicknameInDTO);
+    public SuccessResponse<UUID> findUserExistNickname(@RequestBody @Valid UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+        SuccessResponse<UUID> userFindExistNicknameSuccessResponse = userService.findUserExistNickname(userFindExistNicknameInDTO);
         return userFindExistNicknameSuccessResponse;
     }
 
     @NoAuth
     @PostMapping ("/exist/phonenumber")
     @Operation(summary = "전화번호 DB 조회", description = "입력한 전화번호를 통해 회원 DB를 통해 존재/존재하지 않음 여부를 조회")
-    public SuccessResponse<String> findUserExistPhoneNumber(@RequestBody @Valid UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO) throws UserException {
-        SuccessResponse<String> userFindExistPhonenumber = userService.findUserExistPhoneNumber(userFindExistPhoneNumberInDTO);
+    public SuccessResponse<UUID> findUserExistPhoneNumber(@RequestBody @Valid UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO) throws UserException {
+        SuccessResponse<UUID> userFindExistPhonenumber = userService.findUserExistPhoneNumber(userFindExistPhoneNumberInDTO);
         return userFindExistPhonenumber;
     }
 
@@ -113,20 +118,55 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PatchMapping("/reset-password/password")
-    @Operation(summary = "비밀번호 변경 (새 비밀번호 입력)", description = "변경하려는 새로운 비밀번호를 입력")
-    public SuccessResponse<UserUpdatePasswordInResetPasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInResetPasswordInDTO userUpdatePasswordInResetPasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserUpdatePasswordInResetPasswordOutDTO userUpdatePasswordInResetPasswordOutDTO = userService.updateUserPasswordInResetPassword(userUpdatePasswordInResetPasswordInDTO.getUserPhoneNumber(), userUpdatePasswordInResetPasswordInDTO.getPassword());
-        return new SuccessResponse<>(SUCCESS, userUpdatePasswordInResetPasswordOutDTO);
+    @PatchMapping("/reset-password/password/{userId}")
+    @Operation(summary = "비밀번호 찾기(초기화) 페이지 새 비밀번호 입력", description = "변경하려는 새로운 비밀번호를 입력")
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInResetPassword(
+            @RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO,
+            @PathVariable(name = "userId") UUID userId) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordOutDTO  userUpdatePasswordOutDTO  = userService.updateUserPassword(userId, userUpdatePasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO );
     }
 
     @NoAuth
-    @PostMapping("/reset-password/checkuserinfo")
-    @Operation(summary = "비밀번호 변경 (유저정보 검증)", description = "아이디와 전화번호가 일치하는지")
-    public SuccessResponse<UserVerifyUserInfoInResetPasswordOutDTO> verifyUserInfoInResetPassword(@RequestBody UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO) throws UserException {
-        UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userVerifyUserInfoInResetPasswordInDTO);
+    @PostMapping("/reset-password/checkuserinfo/{userId}")
+    @Operation(summary = "비밀번호 찾기(초기화) 페이지 유저정보 검증", description = "아이디와 전화번호가 일치하는지")
+    public SuccessResponse<UserVerifyUserInfoInResetPasswordOutDTO> verifyUserInfoInResetPassword(
+            @RequestBody UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO,
+            @PathVariable(name = "userId") UUID userId) throws UserException {
+        UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userId, userVerifyUserInfoInResetPasswordInDTO.getPhoneNumber());
         return new SuccessResponse<>(VALID_USER_INFO,userVerifyUserInfoInResetPasswordOutDTO);
     }
+
+    @PostMapping("/verify-password/{userId}")
+    @Operation(summary = "계정정보 관리 페이지 비밀번호 검증", description = "로그인한 회원의 비밀번호가 유효한지")
+    public SuccessResponse<UserVerifyPasswordOutDTO> verifyUserPassword(
+            @RequestBody UserVerifyPasswordInDTO userVerifyPasswordInDTO,
+            @PathVariable(name = "userId") UUID userId)
+            throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserVerifyPasswordOutDTO userVerifyPasswordOutDTO = userService.verifyUserPassword(userId,userVerifyPasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS,userVerifyPasswordOutDTO);
+    }
+
+    @PatchMapping("/userinfo/password/{userId}")
+    @Operation(summary = "계정정보 관리 페이지 비밀번호 변경")
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInUserInfo(
+            @RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO,
+            @PathVariable(name = "userId") UUID userId)
+            throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userId, userUpdatePasswordInDTO.getPassword());
+        return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO);
+    }
+
+    @PatchMapping("/userinfo/nickname/{userId}")
+    @Operation(summary = "계정정보 관리 페이지 닉네임 변경")
+    public SuccessResponse<UserUpdateNicknameOutDTO> updateUserNickname(
+            @RequestBody UserUpdateNicknameInDTO userUpdateNicknameInDTO,
+            @PathVariable(name = "userId") UUID userId) throws UserException {
+        UserUpdateNicknameOutDTO userUpdateNicknameOutDTO = userService.updateUserNickname(
+                userId, userUpdateNicknameInDTO.getNickname());
+        return new SuccessResponse<>(SUCCESS,userUpdateNicknameOutDTO);
+    }
+
 }
 
 

@@ -1,19 +1,19 @@
-package shop.cazait.domain.user.dto;
+package shop.cazait.domain.user.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
-import java.util.UUID;
 
-@Schema(description = "유저 삭제 Response : 삭제 완료된 유저 정보")
+@Schema(description = "유저 정보 Response : 회원 가입된 유저 정보")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class UserDeleteOutDTO {
+public class UserVerifyPasswordOutDTO {
 
-    @Schema(name = "회원 id")
+    @Schema(description = "회원 id")
     private UUID id;
 
     @Schema(description = "로그인 아이디", example = "cazait1234")
@@ -22,17 +22,16 @@ public class UserDeleteOutDTO {
     @Schema(description = "휴대전화 번호", example = "01012345678")
     private String phoneNumber;
 
-    @Schema(name = "닉네임", example = "토마스")
+    @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-
-
-    public static UserDeleteOutDTO of(User user){
-        return UserDeleteOutDTO.builder()
+    public static UserVerifyPasswordOutDTO of(User user) {
+        return UserVerifyPasswordOutDTO.builder()
                 .id(user.getId())
                 .accountName(user.getAccountName())
                 .phoneNumber(user.getPhoneNumber())
                 .nickname(user.getNickname())
                 .build();
     }
+
 }

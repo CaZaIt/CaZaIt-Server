@@ -1,4 +1,4 @@
-package shop.cazait.domain.user.dto;
+package shop.cazait.domain.user.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
