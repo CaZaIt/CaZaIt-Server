@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder(access = AccessLevel.PRIVATE)
 public class UserCreateOutDTO {
 
-    @Schema(description = "회원 id", example = "1")
+    @Schema(description = "회원 id")
     private UUID id;
 
     @Schema(description = "로그인 아이디", example = "cazait1234")
