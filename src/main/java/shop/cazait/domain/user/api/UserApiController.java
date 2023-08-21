@@ -131,43 +131,52 @@ public class UserApiController {
     }
 
     @NoAuth
-    @PatchMapping("/reset-password/password")
+    @PatchMapping("/reset-password/password/{userId}")
     @Operation(summary = "비밀번호 찾기(초기화) 페이지 새 비밀번호 입력", description = "변경하려는 새로운 비밀번호를 입력")
-    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserUpdatePasswordOutDTO  userUpdatePasswordOutDTO  = userService.updateUserPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInResetPassword(
+            @RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO,
+            @PathVariable(name = "userId") UUID userId) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserUpdatePasswordOutDTO  userUpdatePasswordOutDTO  = userService.updateUserPassword(userId, userUpdatePasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO );
     }
 
     @NoAuth
-    @PostMapping("/reset-password/checkuserinfo")
+    @PostMapping("/reset-password/checkuserinfo/{userId}")
     @Operation(summary = "비밀번호 찾기(초기화) 페이지 유저정보 검증", description = "아이디와 전화번호가 일치하는지")
-    public SuccessResponse<UserVerifyUserInfoInResetPasswordOutDTO> verifyUserInfoInResetPassword(@RequestBody UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO) throws UserException {
-        UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userVerifyUserInfoInResetPasswordInDTO);
+    public SuccessResponse<UserVerifyUserInfoInResetPasswordOutDTO> verifyUserInfoInResetPassword(
+            @RequestBody UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO,
+            @PathVariable(name = "userId") UUID userId) throws UserException {
+        UserVerifyUserInfoInResetPasswordOutDTO userVerifyUserInfoInResetPasswordOutDTO = userService.verifyUserInfoInResetPassword(userId, userVerifyUserInfoInResetPasswordInDTO.getPhoneNumber());
         return new SuccessResponse<>(VALID_USER_INFO,userVerifyUserInfoInResetPasswordOutDTO);
     }
 
-    @PostMapping("/verify-password")
+    @PostMapping("/verify-password/{userId}")
     @Operation(summary = "계정정보 관리 페이지 비밀번호 검증", description = "로그인한 회원의 비밀번호가 유효한지")
-    public SuccessResponse<UserVerifyPasswordOutDTO> verifyUserPassword(@RequestBody UserVerifyPasswordInDTO userVerifyPasswordInDTO)
+    public SuccessResponse<UserVerifyPasswordOutDTO> verifyUserPassword(
+            @RequestBody UserVerifyPasswordInDTO userVerifyPasswordInDTO,
+            @PathVariable(name = "userId") UUID userId)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserVerifyPasswordOutDTO userVerifyPasswordOutDTO = userService.verifyUserPassword(userVerifyPasswordInDTO);
+        UserVerifyPasswordOutDTO userVerifyPasswordOutDTO = userService.verifyUserPassword(userId,userVerifyPasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS,userVerifyPasswordOutDTO);
     }
 
-    @PatchMapping("/userinfo/password")
+    @PatchMapping("/userinfo/password/{userId}")
     @Operation(summary = "계정정보 관리 페이지 비밀번호 변경")
-    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInUserInfo(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO)
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInUserInfo(
+            @RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO,
+            @PathVariable(name = "userId") UUID userId)
             throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
+        UserUpdatePasswordOutDTO userUpdatePasswordOutDTO = userService.updateUserPassword(userId, userUpdatePasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO);
     }
 
-    @PatchMapping("/userinfo/nickname")
+    @PatchMapping("/userinfo/nickname/{userId}")
     @Operation(summary = "계정정보 관리 페이지 닉네임 변경")
-    public SuccessResponse<UserUpdateNicknameOutDTO> updateUserNickname(@RequestBody UserUpdateNicknameInDTO userUpdateNicknameInDTO)
-            throws UserException {
+    public SuccessResponse<UserUpdateNicknameOutDTO> updateUserNickname(
+            @RequestBody UserUpdateNicknameInDTO userUpdateNicknameInDTO,
+            @PathVariable(name = "userId") UUID userId) throws UserException {
         UserUpdateNicknameOutDTO userUpdateNicknameOutDTO = userService.updateUserNickname(
-                userUpdateNicknameInDTO.getId(), userUpdateNicknameInDTO.getNickname());
+                userId, userUpdateNicknameInDTO.getNickname());
         return new SuccessResponse<>(SUCCESS,userUpdateNicknameOutDTO);
     }
 

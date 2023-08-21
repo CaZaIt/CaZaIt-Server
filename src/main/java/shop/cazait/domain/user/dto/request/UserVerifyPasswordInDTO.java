@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserVerifyPasswordInDTO {
 
-    @Schema(description = "로그인한 회원의 id")
-    private UUID id;
-
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
     @NotBlank
     @Schema(description = "회원이 입력한 비밀번호", example = "abc12345#!")

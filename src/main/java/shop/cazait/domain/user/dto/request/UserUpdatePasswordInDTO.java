@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserUpdatePasswordInDTO {
 
-    @Schema(description = "회원 id")
-    private UUID id;
-
     @Schema(description = "변경할 유저의 새로운 비밀번호", example = "abc12345#$")
     private String password;
 }

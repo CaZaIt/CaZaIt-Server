@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 public class UserUpdateNicknameInDTO {
 
 
-    @Schema(description = "회원 id")
-    private UUID id;
-
     @Schema(description = "변경하려는 유저 닉네임")
     private String nickname;
 

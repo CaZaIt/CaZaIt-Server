@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserVerifyUserInfoInResetPasswordInDTO {
-    @Schema(description = "아이디", example = "cazait1234")
-    private String accountName;
+
     @NotBlank
     @Schema(description = "전화번호", example = "01012345678")
     private String phoneNumber;

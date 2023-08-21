@@ -280,12 +280,10 @@ public class UserService {
     }
 
     public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(
-            UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO)
+            UUID userId, String phoneNumber)
             throws UserException {
-        String accountName = userVerifyUserInfoInResetPasswordInDTO.getAccountName();
-        String phoneNumber = userVerifyUserInfoInResetPasswordInDTO.getPhoneNumber();
 
-        User user = userRepository.findByAccountName(accountName).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         String existUserPhoneNumber = user.getPhoneNumber();
         if(phoneNumber.equals(existUserPhoneNumber)) {
             return UserVerifyUserInfoInResetPasswordOutDTO.of(user);
@@ -295,15 +293,12 @@ public class UserService {
         }
     }
     
-    public UserVerifyPasswordOutDTO verifyUserPassword(
-            UserVerifyPasswordInDTO userVerifyPasswordInDTO)
+    public UserVerifyPasswordOutDTO verifyUserPassword(UUID userId, String password)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UUID userId = userVerifyPasswordInDTO.getId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
-        String enteredPassword = userVerifyPasswordInDTO.getPassword();
-        String encryptEnteredPassword = encryptUserPassword(enteredPassword);
+        String encryptEnteredPassword = encryptUserPassword(password);
         String existPassword = user.getPassword();
         if(encryptEnteredPassword.equals(existPassword)){
             return UserVerifyPasswordOutDTO.of(user);
