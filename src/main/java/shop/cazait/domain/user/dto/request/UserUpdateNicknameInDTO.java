@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserUpdateNicknameInDTO {
 
 
-    @Schema(description = "변경하려는 유저 닉네임")
+    @Schema(description = "변경하려는 유저 닉네임",example = "카자잇")
     private String nickname;
 
 }
