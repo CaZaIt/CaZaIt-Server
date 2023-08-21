@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "유저 비밀번호 수정시 비밀번호 입력 Request : 비밀번호 재설정")
+@Schema(description = "유저 비밀번호 수정 Request")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserUpdatePasswordInDTO {
