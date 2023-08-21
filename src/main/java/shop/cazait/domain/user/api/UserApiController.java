@@ -75,7 +75,7 @@ public class UserApiController {
         UserFindOutDTO userInfoRes = userService.getUser(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
-    
+
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")
