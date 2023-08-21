@@ -62,13 +62,13 @@ public class KakaoService {
         }
     }
 
-    public UserCreateOutDTO kakaoSignUpnUser(long kakaoId){
+    public UserCreateOutDTO kakaoSignUpnUser(Long kakaoId){
         User user = User.kakaoSignUpUser(kakaoId);
         User signUpUser = userRepository.save(user);
         return UserCreateOutDTO.of(signUpUser);
     }
 
-    public UserAuthenticateOutDTO kakaoLoginUser(long kakaoId){
+    public UserAuthenticateOutDTO kakaoLoginUser(Long kakaoId){
         User user = userRepository.findByKakaoId(kakaoId).get();
         UUID id = user.getId();
 

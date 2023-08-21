@@ -38,10 +38,10 @@ public class User extends BaseEntity {
     private String refreshToken;
 
     @Column(nullable = true)
-    private long kakaoId;
+    private Long kakaoId;
 
     @Builder
-    public User(UUID id, String accountName, String phoneNumber, String password, String nickname, String refreshToken, long kakaoId) {
+    public User(UUID id, String accountName, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
         this.id = id;
         this.accountName = accountName;
         this.phoneNumber = phoneNumber;
@@ -57,7 +57,7 @@ public class User extends BaseEntity {
     }
 
 
-    public static User kakaoSignUpUser(long kakaoId){
+    public static User kakaoSignUpUser(Long kakaoId){
         return User.builder()
                 .accountName(generateRandomString())
                 .password(generateRandomString())
