@@ -26,7 +26,6 @@ import shop.cazait.domain.user.dto.request.UserFindAccountNameInDTO;
 import shop.cazait.domain.user.dto.request.UserFindExistAccountNameInDTO;
 import shop.cazait.domain.user.dto.request.UserFindExistNicknameInDTO;
 import shop.cazait.domain.user.dto.request.UserFindExistPhoneNumberInDTO;
-import shop.cazait.domain.user.dto.request.UserUpdateInDTO;
 import shop.cazait.domain.user.dto.request.UserUpdateNicknameInDTO;
 import shop.cazait.domain.user.dto.request.UserUpdatePasswordInDTO;
 import shop.cazait.domain.user.dto.request.UserVerifyPasswordInDTO;
@@ -36,7 +35,6 @@ import shop.cazait.domain.user.dto.response.UserDeleteOutDTO;
 import shop.cazait.domain.user.dto.response.UserFindAccountNameOutDTO;
 import shop.cazait.domain.user.dto.response.UserFindOutDTO;
 import shop.cazait.domain.user.dto.response.UserUpdateNicknameOutDTO;
-import shop.cazait.domain.user.dto.response.UserUpdateOutDTO;
 import shop.cazait.domain.user.dto.response.UserUpdatePasswordOutDTO;
 import shop.cazait.domain.user.dto.response.UserVerifyPasswordOutDTO;
 import shop.cazait.domain.user.dto.response.UserVerifyUserInfoInResetPasswordOutDTO;
@@ -77,18 +75,7 @@ public class UserApiController {
         UserFindOutDTO userInfoRes = userService.getUser(userIdx);
         return new SuccessResponse<>(SUCCESS, userInfoRes);
     }
-
-    @PatchMapping("/{userId}")
-    @Operation(summary="특정한 회원 정보를 수정", description = "자신의 계정 정보를 수정")
-    @Parameter(name = "userId", description = "response로 발급 받은 계정 ID번호")
-    public SuccessResponse<UserUpdateOutDTO> updateUserProfile(
-            @PathVariable(name = "userId") UUID userIdx,
-            @RequestBody @Valid UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-
-            UserUpdateOutDTO userUpdateOutDTO = userService.updateUserProfile(userIdx, userUpdateInDTO);
-            return new SuccessResponse<>(SUCCESS, userUpdateOutDTO);
-
-    }
+    
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "특정한 회원 정보를 삭제", description = "자신의 계정 정보를 삭제")

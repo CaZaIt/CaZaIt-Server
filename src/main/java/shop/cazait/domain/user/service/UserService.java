@@ -26,15 +26,11 @@ import shop.cazait.domain.user.dto.request.UserCreateInDTO;
 import shop.cazait.domain.user.dto.request.UserFindExistAccountNameInDTO;
 import shop.cazait.domain.user.dto.request.UserFindExistNicknameInDTO;
 import shop.cazait.domain.user.dto.request.UserFindExistPhoneNumberInDTO;
-import shop.cazait.domain.user.dto.request.UserUpdateInDTO;
-import shop.cazait.domain.user.dto.request.UserVerifyPasswordInDTO;
-import shop.cazait.domain.user.dto.request.UserVerifyUserInfoInResetPasswordInDTO;
 import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
 import shop.cazait.domain.user.dto.response.UserDeleteOutDTO;
 import shop.cazait.domain.user.dto.response.UserFindAccountNameOutDTO;
 import shop.cazait.domain.user.dto.response.UserFindOutDTO;
 import shop.cazait.domain.user.dto.response.UserUpdateNicknameOutDTO;
-import shop.cazait.domain.user.dto.response.UserUpdateOutDTO;
 import shop.cazait.domain.user.dto.response.UserUpdatePasswordOutDTO;
 import shop.cazait.domain.user.dto.response.UserVerifyPasswordOutDTO;
 import shop.cazait.domain.user.dto.response.UserVerifyUserInfoInResetPasswordOutDTO;
@@ -121,21 +117,6 @@ public class UserService {
         userRepository.findById(userIdx).orElseThrow(() -> new UserException(NOT_EXIST_USER));
         User findUser = userRepository.findById(userIdx).get();
         return UserFindOutDTO.of(findUser);
-    }
-
-    public UserUpdateOutDTO updateUserProfile(UUID userIdx, UserUpdateInDTO userUpdateInDTO) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-
-        User existUser = userRepository.findById(userIdx)
-                .orElseThrow(() -> new UserException(NOT_EXIST_USER));
-
-        //DTO의 비밀번호 암호화
-        String encryptedPassword = encryptUserPassword(userUpdateInDTO.getPassword());
-        UserUpdateInDTO encryptedUserUpdateDTO = userUpdateInDTO.encryptUserUpdateDTO(encryptedPassword);
-
-        //유저 정보 수정
-        User modifiedUser = existUser.updateUserProfile(encryptedUserUpdateDTO);
-        userRepository.save(modifiedUser);
-        return UserUpdateOutDTO.of(modifiedUser);
     }
 
     public UserDeleteOutDTO deleteUserById(UUID userIdx) throws UserException {
