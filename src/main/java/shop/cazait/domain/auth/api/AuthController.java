@@ -33,7 +33,7 @@ import shop.cazait.domain.auth.dto.sens.*;
 import shop.cazait.domain.auth.service.AuthService;
 import shop.cazait.domain.auth.service.KakaoService;
 import shop.cazait.domain.master.exception.MasterException;
-import shop.cazait.domain.user.dto.UserCreateOutDTO;
+import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.global.common.dto.response.SuccessResponse;
