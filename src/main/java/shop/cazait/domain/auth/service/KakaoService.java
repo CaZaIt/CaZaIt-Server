@@ -12,7 +12,7 @@ import shop.cazait.domain.auth.client.KakaoClient;
 import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
 import shop.cazait.domain.auth.dto.kakao.ExtKakaoUserTokenOutDTO;
 import shop.cazait.domain.auth.dto.kakao.ExtKakaoUserInfoOutDTO;
-import shop.cazait.domain.user.dto.UserCreateOutDTO;
+import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.repository.UserRepository;
 import shop.cazait.global.config.encrypt.JwtService;

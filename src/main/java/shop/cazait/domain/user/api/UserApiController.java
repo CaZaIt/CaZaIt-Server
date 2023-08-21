@@ -21,7 +21,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import shop.cazait.domain.user.dto.*;
+import shop.cazait.domain.user.dto.request.UserCreateInDTO;
+import shop.cazait.domain.user.dto.request.UserFindAccountNameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistAccountNameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistNicknameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistPhoneNumberInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdateInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdateNicknameInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdatePasswordInDTO;
+import shop.cazait.domain.user.dto.request.UserVerifyPasswordInDTO;
+import shop.cazait.domain.user.dto.request.UserVerifyUserInfoInResetPasswordInDTO;
+import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
+import shop.cazait.domain.user.dto.response.UserDeleteOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindAccountNameOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdateNicknameOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdateOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdatePasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyPasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyUserInfoInResetPasswordOutDTO;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.service.UserService;
 import shop.cazait.global.common.dto.response.SuccessResponse;
@@ -115,7 +133,7 @@ public class UserApiController {
     @NoAuth
     @PatchMapping("/reset-password/password")
     @Operation(summary = "비밀번호 찾기(초기화) 페이지 새 비밀번호 입력", description = "변경하려는 새로운 비밀번호를 입력")
-    public SuccessResponse<UserUpdatePasswordOutDTO > updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public SuccessResponse<UserUpdatePasswordOutDTO> updateUserPasswordInResetPassword(@RequestBody UserUpdatePasswordInDTO userUpdatePasswordInDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, UserException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         UserUpdatePasswordOutDTO  userUpdatePasswordOutDTO  = userService.updateUserPassword(userUpdatePasswordInDTO.getId(), userUpdatePasswordInDTO.getPassword());
         return new SuccessResponse<>(SUCCESS, userUpdatePasswordOutDTO );
     }

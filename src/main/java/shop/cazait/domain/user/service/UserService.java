@@ -22,7 +22,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.cazait.domain.auth.dto.UserAuthenticateInDTO;
 import shop.cazait.domain.auth.dto.UserAuthenticateOutDTO;
-import shop.cazait.domain.user.dto.*;
+import shop.cazait.domain.user.dto.request.UserCreateInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistAccountNameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistNicknameInDTO;
+import shop.cazait.domain.user.dto.request.UserFindExistPhoneNumberInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdateInDTO;
+import shop.cazait.domain.user.dto.request.UserVerifyPasswordInDTO;
+import shop.cazait.domain.user.dto.request.UserVerifyUserInfoInResetPasswordInDTO;
+import shop.cazait.domain.user.dto.response.UserCreateOutDTO;
+import shop.cazait.domain.user.dto.response.UserDeleteOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindAccountNameOutDTO;
+import shop.cazait.domain.user.dto.response.UserFindOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdateNicknameOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdateOutDTO;
+import shop.cazait.domain.user.dto.response.UserUpdatePasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyPasswordOutDTO;
+import shop.cazait.domain.user.dto.response.UserVerifyUserInfoInResetPasswordOutDTO;
 import shop.cazait.domain.user.entity.User;
 import shop.cazait.domain.user.exception.UserException;
 import shop.cazait.domain.user.repository.UserRepository;
@@ -135,7 +150,8 @@ public class UserService {
         return new AES128(PASSWORD_SECRET_KEY).encrypt(password);
     }
 
-    public SuccessResponse<UUID> findUserExistAccountName(UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
+    public SuccessResponse<UUID> findUserExistAccountName(
+            UserFindExistAccountNameInDTO userFindExistAccountNameInDTO) throws UserException {
         String isExist = userFindExistAccountNameInDTO.getIsExist();
         String accountName = userFindExistAccountNameInDTO.getAccountName();
         Optional<User> accountNameNullable = userRepository.findByAccountName(accountName);
@@ -152,7 +168,8 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<UUID> findUserExistNickname(UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
+    public SuccessResponse<UUID> findUserExistNickname(
+            UserFindExistNicknameInDTO userFindExistNicknameInDTO) throws UserException {
         String isExist = userFindExistNicknameInDTO.getIsExist();
         String nickname = userFindExistNicknameInDTO.getNickname();
         Optional<User> nicknameNullable = userRepository.findByNickname(nickname);
@@ -169,7 +186,8 @@ public class UserService {
         }
     }
 
-    public SuccessResponse<UUID> findUserExistPhoneNumber(UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
+    public SuccessResponse<UUID> findUserExistPhoneNumber(
+            UserFindExistPhoneNumberInDTO userFindExistPhoneNumberInDTO)
             throws UserException {
         String isExist = userFindExistPhoneNumberInDTO.getIsExist();
         String phoneNumber= userFindExistPhoneNumberInDTO.getPhoneNumber();
@@ -249,7 +267,7 @@ public class UserService {
         return UserFindAccountNameOutDTO.of(user);
     }
 
-    public UserUpdatePasswordOutDTO  updateUserPassword(UUID userId, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public UserUpdatePasswordOutDTO updateUserPassword(UUID userId, String password) throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(NOT_EXIST_USER));
 
@@ -261,7 +279,8 @@ public class UserService {
         return UserUpdatePasswordOutDTO .of(user,password);
     }
 
-    public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO)
+    public UserVerifyUserInfoInResetPasswordOutDTO verifyUserInfoInResetPassword(
+            UserVerifyUserInfoInResetPasswordInDTO userVerifyUserInfoInResetPasswordInDTO)
             throws UserException {
         String accountName = userVerifyUserInfoInResetPasswordInDTO.getAccountName();
         String phoneNumber = userVerifyUserInfoInResetPasswordInDTO.getPhoneNumber();
@@ -276,7 +295,8 @@ public class UserService {
         }
     }
     
-    public UserVerifyPasswordOutDTO verifyUserPassword(UserVerifyPasswordInDTO userVerifyPasswordInDTO)
+    public UserVerifyPasswordOutDTO verifyUserPassword(
+            UserVerifyPasswordInDTO userVerifyPasswordInDTO)
             throws UserException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         UUID userId = userVerifyPasswordInDTO.getId();
         User user = userRepository.findById(userId)

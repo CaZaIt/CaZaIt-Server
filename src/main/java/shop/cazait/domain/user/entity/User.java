@@ -6,11 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
-import shop.cazait.domain.user.dto.UserUpdateInDTO;
+import shop.cazait.domain.user.dto.request.UserUpdateInDTO;
 import shop.cazait.global.common.entity.BaseEntity;
-import shop.cazait.global.common.status.BaseStatus;
 
 import java.util.UUID;
 

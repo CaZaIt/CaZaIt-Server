@@ -1,4 +1,5 @@
-package shop.cazait.domain.user.dto;
+package shop.cazait.domain.user.dto.response;
+
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
@@ -7,11 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import shop.cazait.domain.user.entity.User;
 
-
-@Schema(description = "유저 정보 Response : 회원 가입된 유저 정보")
+@Schema(description = "유저 닉네임 수정 Response")
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class UserVerifyPasswordOutDTO {
+public class UserUpdateNicknameOutDTO {
 
     @Schema(description = "회원 id")
     private UUID id;
@@ -25,8 +25,8 @@ public class UserVerifyPasswordOutDTO {
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
-    public static UserVerifyPasswordOutDTO of(User user) {
-        return UserVerifyPasswordOutDTO.builder()
+    public static UserUpdateNicknameOutDTO of (User user){
+        return UserUpdateNicknameOutDTO.builder()
                 .id(user.getId())
                 .accountName(user.getAccountName())
                 .phoneNumber(user.getPhoneNumber())
