@@ -16,6 +16,7 @@ import javax.validation.constraints.Pattern;
 public class UserFindExistAccountNameInDTO {
 
 
+    @Pattern(regexp = "^(?!\\d+$)[a-z\\d]{5,20}$", message = "올바른 아이디 형식이 아닙니다")
     @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
     private String accountName;
