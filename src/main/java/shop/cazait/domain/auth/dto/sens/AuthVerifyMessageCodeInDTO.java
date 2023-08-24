@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 @Schema(description = "문자 인증번호 인증 request")
 public class AuthVerifyMessageCodeInDTO {
 
-    @NotBlank
+    @NotBlank(message="전화번호를 입력하세요.")
     @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
     @Schema(description = "인증 번호를 받은 전화번호", example = "01012345678")
     private String recipientPhoneNumber;
 
+    @NotBlank(message="인증번호를 입력하세요.")
     @Schema(description = "전송 받은 인증번호", example = "123456")
     private int verificationCode;
 

@@ -14,9 +14,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AuthSendAuthNumberCodeInDTO {
 
-    @NotBlank
+    @NotBlank(message="전화번호를 입력하세요.")
     @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
-
     @Schema(description = "인증 번호가 발송될 전화번호", example = "01012345678")
     private String recipientPhoneNumber;
 
