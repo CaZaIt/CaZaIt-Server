@@ -97,7 +97,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/send-authnumber")
     @Operation(summary = "문자 인증번호 발송", description = "인증 문자 받을 번호 입력하여, 인증 문자 발송")
-    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody AuthSendAuthNumberCodeInDTO authSendAuthNumberCodeInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
+    public SuccessResponse<AuthSendMessageCodeOutDTO> sendMessageCode(@RequestBody @Valid AuthSendAuthNumberCodeInDTO authSendAuthNumberCodeInDTO) throws NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = authSendAuthNumberCodeInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeOutDTO authSendMessageCodeOutDTO = authService.sendMessageCode(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
@@ -106,7 +106,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/send-authnumber/test")
     @Operation(summary = "문자 인증번호 발송 테스트", description = "실제로 문자 발송은 진행하지 않음")
-    public SuccessResponse<AuthSendMessageCodeTestOutDTO > sendMessageCodeTest(@RequestBody AuthSendAuthNumberCodeInDTO authSendAuthNumberCodeInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
+    public SuccessResponse<AuthSendMessageCodeTestOutDTO > sendMessageCodeTest(@RequestBody @Valid AuthSendAuthNumberCodeInDTO authSendAuthNumberCodeInDTO) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException, UserException {
         String recipientPhoneNumber = authSendAuthNumberCodeInDTO.getRecipientPhoneNumber();
         AuthSendMessageCodeTestOutDTO authSendMessageCodeOutDTO = authService.sendMessageCodeTest(recipientPhoneNumber);
         return new SuccessResponse<>(ACCEPTED_SEND_MESSAGE, authSendMessageCodeOutDTO);
@@ -116,7 +116,7 @@ public class AuthController {
     @NoAuth
     @PostMapping("/verify-authnumber")
     @Operation(summary = "문자 인증번호 인증", description = "문자로 받은 인증 번호를 입력하여, 적절한 인증번호인지 판단")
-    public SuccessResponse<AuthVerifyMessageCodeOutDTO>verifyMessageCode(@RequestBody AuthVerifyMessageCodeInDTO authVerifyMessageCodeInDTO) throws UserException {
+    public SuccessResponse<AuthVerifyMessageCodeOutDTO>verifyMessageCode(@RequestBody @Valid AuthVerifyMessageCodeInDTO authVerifyMessageCodeInDTO) throws UserException {
         String recipientPhoneNumber = authVerifyMessageCodeInDTO.getRecipientPhoneNumber();
         int verificationCode = authVerifyMessageCodeInDTO.getVerificationCode();
         AuthVerifyMessageCodeOutDTO authVerifyMessageCodeOutDTO = authService.verifyMessageCode(recipientPhoneNumber, verificationCode);
