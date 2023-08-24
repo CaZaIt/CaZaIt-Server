@@ -24,6 +24,7 @@ public class UserCreateInDTO {
     private String password;
 
     @NotBlank
+    @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
     @Schema(description = "휴대전화 번호", example = "01012345678")
     private String phoneNumber;
 
