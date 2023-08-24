@@ -19,6 +19,8 @@ public class UserAuthenticateInDTO {
     @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
     private String accountName;
+
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
     @Schema(description = "비밀번호", example = "abc12345#!")
     @NotBlank
     private String password;
