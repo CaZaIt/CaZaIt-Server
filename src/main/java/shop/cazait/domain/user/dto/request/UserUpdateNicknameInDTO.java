@@ -3,6 +3,7 @@ package shop.cazait.domain.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;
+import javax.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class UserUpdateNicknameInDTO {
 
 
+    @NotBlank(message="닉네임을 입력하세요.")
     @Schema(description = "변경하려는 유저 닉네임",example = "카자잇")
     private String nickname;
 
