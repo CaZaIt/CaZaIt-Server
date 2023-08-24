@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserFindAccountNameInDTO {
 
-    @NotBlank
+    @NotBlank(message="전화번호를 입력하세요.")
     @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
     @Schema(description = "아이디 찾기 문자 발송 및 인증이 완료된 전화번호", example = "01012345678")
     private String userPhoneNumber;

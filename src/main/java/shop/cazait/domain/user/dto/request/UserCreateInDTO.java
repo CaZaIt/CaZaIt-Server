@@ -13,17 +13,17 @@ import javax.validation.constraints.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserCreateInDTO {
 
+    @NotBlank(message="아이디를 입력하세요.")
     @Pattern(regexp = "^(?!\\d+$)[a-z\\d]{5,20}$", message = "올바른 아이디 형식이 아닙니다")
-    @NotBlank
     @Schema(description = "로그인 아이디", example = "cazait1234")
     private String accountName;
 
+    @NotBlank(message="비밀번호를 입력하세요.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "비밀번호는최소 8자리에 숫자, 문자, 특수문자 각 1개 이상 포함하여 사용하세요.")
-    @NotBlank
     @Schema(description = "비밀번호", example = "abc12345#!")
     private String password;
 
-    @NotBlank
+    @NotBlank(message="전화번호를 입력하세요.")
     @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
     @Schema(description = "휴대전화 번호", example = "01012345678")
     private String phoneNumber;

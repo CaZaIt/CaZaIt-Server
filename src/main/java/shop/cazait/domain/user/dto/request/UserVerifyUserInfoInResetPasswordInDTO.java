@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserVerifyUserInfoInResetPasswordInDTO {
 
-    @NotBlank
+    @NotBlank(message="전화번호를 입력하세요.")
     @Pattern(regexp = "^010\\d{8}$", message = "올바른 전화번호 형식이 아닙니다")
     @Schema(description = "전화번호", example = "01012345678")
     private String phoneNumber;
