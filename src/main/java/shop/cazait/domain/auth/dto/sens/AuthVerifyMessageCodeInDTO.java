@@ -3,6 +3,7 @@ package shop.cazait.domain.auth.dto.sens;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class AuthVerifyMessageCodeInDTO {
     @Schema(description = "인증 번호를 받은 전화번호", example = "01012345678")
     private String recipientPhoneNumber;
 
-    @NotBlank(message="인증번호를 입력하세요.")
+    @NotNull(message="인증번호를 입력하세요.")
     @Schema(description = "전송 받은 인증번호", example = "123456")
     private int verificationCode;
 
