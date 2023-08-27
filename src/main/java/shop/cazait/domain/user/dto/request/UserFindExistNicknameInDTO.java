@@ -1,6 +1,7 @@
 package shop.cazait.domain.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserFindExistNicknameInDTO {
     @NotBlank(message = "닉네임을 입력하세요.")
+    @Pattern(regexp = "^[가-힣a-zA-Z]{3,15}$",message = "올바른 닉네임 형식이 아닙니다")
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
