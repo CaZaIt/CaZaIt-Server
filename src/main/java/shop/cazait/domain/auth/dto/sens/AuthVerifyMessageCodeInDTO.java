@@ -19,9 +19,7 @@ public class AuthVerifyMessageCodeInDTO {
     @Schema(description = "인증 번호를 받은 전화번호", example = "01012345678")
     private String recipientPhoneNumber;
 
-    @NotNull(message="인증번호를 입력하세요.")
     @Schema(description = "전송 받은 인증번호", example = "123456")
     private int verificationCode;
-
-
+    
 }
