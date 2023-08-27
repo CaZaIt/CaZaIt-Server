@@ -29,6 +29,7 @@ public class UserCreateInDTO {
     private String phoneNumber;
 
     @NotBlank(message="닉네임을 입력하세요.")
+    @Pattern(regexp = "^[가-힣a-zA-Z]{3,15}$",message = "올바른 닉네임 형식이 아닙니다")
     @Schema(description = "닉네임", example = "토마스")
     private String nickname;
 
