@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import shop.cazait.domain.cafe.exception.CafeException;
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    protected FailResponse handleValidException(MethodArgumentNotValidException exception) {
+    protected ResponseEntity<FailResponse> handleValidException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
         StringBuilder description = new StringBuilder();
 
@@ -56,12 +57,12 @@ public class GlobalExceptionHandler {
             description.append(fieldError.getRejectedValue());
             description.append("]\n");
         }
-        return new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString());
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString()));
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-    protected FailResponse handleValidatedException(ConstraintViolationException exception) {
+    protected ResponseEntity<FailResponse> handleValidatedException(ConstraintViolationException exception) {
         Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
         StringBuilder description = new StringBuilder();
 
@@ -75,7 +76,7 @@ public class GlobalExceptionHandler {
                     return description;
                 }).collect(Collectors.toList());
 
-        return new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FailResponse(ErrorStatus.INVALID_REQUEST, description.toString()));
 
     }
 }
