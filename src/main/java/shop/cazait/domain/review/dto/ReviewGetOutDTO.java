@@ -18,6 +18,9 @@ public class ReviewGetOutDTO {
     @Schema(description = "유저 ID")
     private UUID userId;
 
+    @Schema(description = "리뷰 ID")
+    private UUID reviewId;
+
     @Schema(description = "카페명")
     private String cafeName;
 
@@ -36,6 +39,7 @@ public class ReviewGetOutDTO {
 
         return ReviewGetOutDTO.builder()
                 .userId(user.getId())
+                .reviewId(review.getId())
                 .cafeName(cafe.getName())
                 .nickname(user.getNickname())
                 .score(review.getScore())
