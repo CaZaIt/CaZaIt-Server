@@ -1,5 +1,6 @@
 package shop.cazait.domain.user.entity;
 
+import java.util.List;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.GenericGenerator;
+import shop.cazait.domain.favorites.entity.Favorites;
+import shop.cazait.domain.review.entity.Review;
 import shop.cazait.global.common.entity.BaseEntity;
 
 import java.util.UUID;
@@ -39,6 +42,12 @@ public class User extends BaseEntity {
 
     @Column(nullable = true)
     private Long kakaoId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorites> favorites;
 
     @Builder
     public User(UUID id, String accountName, String phoneNumber, String password, String nickname, String refreshToken, Long kakaoId) {
